@@ -9,11 +9,18 @@ vi ~/.ssh/config
 Host xxx.dev.iuin
   HostName 1.0.1.1
   User root
+  Port 2222
   IdentityFile ~/.ssh/id_ed25519_iu
 
 ```
 
+```bash
+ssh-copy-id -i ~/.ssh/id_ed25519_iu xxx.dev.iuin
+```
+
 ### 结合gradle使用
+
+- 项目根目录下的build.gradle文件中添加以下内容
 
 ```gradle
 // 项目根目录下的build.gradle文件中添加以下内容
@@ -24,6 +31,8 @@ plugins {
 group = 'com.xxx.xxx'
 version = '3.0.0'
 ```
+
+- 项目根目录下的settings.gradle文件中添加以下内容
 
 ```gradle
 // 项目根目录下的settings.gradle文件中添加以下内容
@@ -50,7 +59,10 @@ pluginManagement {
 
 ```
 
+- 配置文件: {项目根目录}/remote-plugin/remote.yml
+
 ```yml
+# 配置文件: {项目根目录}/remote-plugin/remote.yml
 # Remote plugin configuration example
 # Supported placeholders:
 #   - ${service}            : current Gradle project name
@@ -64,6 +76,12 @@ environments:
   dev:
     remote:
       server: xxx.dev.iuin
+      base:
+        dir: /data/xxx
+  # 其他环境, 例如: 测试环境, 生产环境等
+  test:
+    remote:
+      server: xxx.test.iuin
       base:
         dir: /data/xxx
 
@@ -83,9 +101,12 @@ log:
 
 ```
 
+- 发布服务示例
+
 ```bash
 # bash ./gradlew :order-service:publish\(dev\) --info
 bash ./gradlew :order-service:publish\(dev\)
+# 执行这个命令, 或者直接在idea中双击这个gradle任务, 都可以发布服务到远程服务器
 ```
 
 ![gradle task示例](https://github.com/iuin8/doc-record/blob/main/docs/tools/terminal/publishScript/remote_plugin/imgs/gradle_task.png?raw=true)
