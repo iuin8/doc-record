@@ -1,4 +1,4 @@
-# (frps selfhost版)有没想过起个容器就能打通整个内网呢? 使用容器打通受限网络: frp+ssh组合镜像以及clash(mihomo)实现打通网络
+# (frps selfhost版)有没想过起个容器就能打通整个内网呢? 使用容器打通受限网络: frp+ssh组合镜像以及clash(mihomo)实现打通网络(full)
 
 > 使用容器打通受限网络: frp+ssh组合镜像以及clash(mihomo)实现打通任意环境所有内网服务(包括k8s)(web页面以及终端访问)
 > 这里还有个需要提到的是, 因为我的科学上网环境是用的clash(mihomo)软件, 所以这里就用clash(mihomo)来实现打通各种内网
