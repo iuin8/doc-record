@@ -126,8 +126,8 @@ ssh root@129.204.8.8 -p 12222
 
 - [clash(mihomo)的github地址](https://www.clashverge.dev/guide/quickstart.html)
 
-```bash
-# 代理流量(script.js[这里用了全局脚本的方式, 兼容自己的原有的订阅, 不影响原有的订阅, 只做扩展])
+```JavaScript
+// 代理流量(script.js[这里用了全局脚本的方式, 兼容自己的原有的订阅, 不影响原有的订阅, 只做扩展])
 function main(config, profileName) {
   const extra = {
     proxies: [
@@ -137,6 +137,7 @@ function main(config, profileName) {
         server: "183.11.11.11",
         port: 11111,
         username: "root",
+        // 这里需要把密钥复制到软件配置目录下的.ssh目录中, 才能正常使用
         "private-key": "./.ssh/id_ed25519_iu"
       }
     ],
@@ -191,6 +192,7 @@ proxies:
     server: 183.11.11.11
     port: 11111
     username: root
+    # 这里需要把密钥复制到软件配置目录下的.ssh目录中, 才能正常使用
     private-key: ./.ssh/id_ed25519_iu
 
 proxy-groups:
