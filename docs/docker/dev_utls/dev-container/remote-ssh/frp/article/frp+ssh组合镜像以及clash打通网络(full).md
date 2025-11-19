@@ -34,71 +34,150 @@
     - 专门找台机用于安装各种乱七八糟的vpn也行
     - 当然起个虚拟机去安转也行
 
-## 编写docker-compose.yml(服务端)
+## 第一步: 编写Dockerfile, 用于制作镜像
 
-> 这里的服务端, 就是你有公网IP的云服务器, 我这里用的是Debian, 你可以根据自己的情况, 选择合适的镜像
+随便找台Linux系统, 或者自己电脑也行(就是麻烦点, 可能构建镜像时, 需要指定构建平台等), 我这里选择用x86架构的centos系统, 然后, 找个合适的目录, 例如: `/www/container/frp-ssh`
 
-```yml
-# vi /www/dev-jumpbox/server/docker-compose.yml
-services:
-  frps-ssh:
-    image: registry.cn-hangzhou.aliyuncs.com/iuin/frps-ssh:tcpmux
-    network_mode: host
-    environment:
-      - TZ="Asia/Shanghai"
-      - auth_token="xxx"
-      - bindPort=18000
-      - tcpmuxHTTPConnectPort=12222
-    restart: unless-stopped
-
-```
+- 创建`Dockerfile`文件
 
 ```bash
-# 构建镜像并启动容器
-docker-compose up -d
+# vim Dockerfile
+
+FROM debian:trixie-slim
+
+WORKDIR /www
+
+# 安装必要的软件包
+RUN apt-get update && \
+    apt-get install -y openssh-server openssh-client curl wget locales gettext tini && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# 生成并配置 locale
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen && \
+    update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+
+# 设置环境变量
+ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 LANGUAGE=en_US.UTF-8
+
+# 解压frp
+COPY ./frp_0.62.1_linux_amd64.tar.gz ./frp_0.62.1_linux_amd64.tar.gz
+RUN tar -xzf ./frp_0.62.1_linux_amd64.tar.gz && \
+    mv frp_0.62.1_linux_amd64 frp
+
+# 创建包装服务
+RUN tee /www/frp/frpc.toml <<-'EOF'
+serverAddr = ${serverAddr}
+serverPort = ${serverPort}
+
+[[${client_title}]]
+name = ${client_name}
+type = ${client_type}
+${secretKey_stcp_line}
+${localIP_proxies_line}
+${localPort_proxies_line}
+${serverName_visitors_line}
+${bindAddr_visitors_line}
+${bindPort_visitors_line}
+${remotePort_proxies_tcp_line}
+EOF
+
+# 创建初始化脚本
+RUN tee /entrypoint.sh <<-'EOF'
+#!/bin/sh
+# 替换环境变量的值
+envsubst < /www/frp/frpc.toml > /tmp/frpc.toml.tmp && mv /tmp/frpc.toml.tmp /www/frp/frpc.toml
+
+# 确保目录存在
+[ ! -d "/var/run/sshd" ] && mkdir -p /var/run/sshd
+# 启动 SSH（后台运行）
+/usr/sbin/sshd -D &
+
+# 启动 FRPC
+/www/frp/frpc -c /www/frp/frpc.toml
+
+# 保持容器运行
+wait
+EOF
+
+RUN chmod +x /entrypoint.sh
+
+# 暴露 SSH 端口
+EXPOSE 22
+
+# 使用 tini 作为 PID 1
+ENTRYPOINT ["/usr/bin/tini", "--", "/entrypoint.sh"]
+
 ```
 
-## 编写docker-compose.yml(客户端)
+## 第二步: 编写docker-compose.yml, 方便构建和运行容器
 
-```yml
-# vi /www/dev-jumpbox/client/docker-compose.yml
+```bash
+# vim docker-compose.yml
+
 services:
   dev-jumpbox:
-    image: registry.cn-hangzhou.aliyuncs.com/iuin/dev-jumpbox:tcpmux-v6.1.1
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: dev-jumpbox
     environment:
       TZ: "Asia/Shanghai"
-      serverAddr: '"55.44.33.33"'
-      serverPort: 18000
-      auth_token: '"jumpboxs-ssh"'
-      client_name: '"jumpboxc-ssh-fa"'
-      customDomains: '["fa.intranet.company"]'
-    volumes:
-      - ./.ssh/:/root/.ssh/:ro
+      # 配置服务端的IP
+      serverAddr: '"129.204.8.8"'
+      client_title: proxies
+      serverPort: 7000
+      # 名称随便给, 不重复就行
+      client_name: '"dev-jumpbox-6666"'
+      client_type: '"tcp"'
+      localIP_proxies_line: localIP="127.0.0.1"
+      localPort_proxies_line: localPort=22
+      # 配置云服务器中开放的端口, 随便开放一个都行, 用于远程连接ssh
+      remotePort_proxies_tcp_line: remotePort=6666
+    extra_hosts:
+      - "me.host:host-gateway"
     restart: unless-stopped
+    volumes:
+      - ./.ssh/authorized_keys:/root/.ssh/authorized_keys
 
+# 以上环境变量, 除了备注的内容, 其他的都可以保持不动就行
+
+# authorized_keys的内容示例
+# ssh-ed25519 xxxxx xxx
 ```
 
-```bash
-# 构建镜像并启动容器
-docker-compose up -d
-```
-
-- 关于卷(volumes)的说明
-
-这里的卷也可以不挂载, 也可以通过进入容器中执行命令去写入`authorized_keys`文件中, 不过容器重启后, 会丢失写入的内容
+- authorized_keys的内容示例
 
 ```bash
 # 在本地电脑中执行, 打印公钥
 cat ~/.ssh/id_ed25519.pub
 # 复制打印的公钥内容, 需要写入到`./.ssh/authorized_keys`, 这个文件是需要挂载到容器中的文件
-# 全路径: /www/dev-jumpbox/client/.ssh/authorized_keys(注意: 别跟宿主机的authorized_keys文件搞混了)
 ```
 
+- 关于卷(volumes)的说明
+
+这里的卷也可以不挂载, 也可以通过进入容器中执行命令去写入`authorized_keys`文件中
+
 ```bash
-# 在客户端宿主机或者容器中执行, 写入公钥到authorized_keys文件中
-echo 'ssh-ed25519 xxxxx xxx' > ./.ssh/authorized_keys
+# 使用挂载券方式时, 这一步可省略
+echo 'ssh-ed25519 xxxxx xxx' > /root/.ssh/authorized_keys
+
 ```
+
+## 第三步: 需要一台有公网IP的云服务器(2c2g1m就差不多了, 我的镜像是Debian)
+
+[frp官网安装地址](https://gofrp.org/zh-cn/docs/setup/systemd/)
+[frp官方GitHub下载地址](https://github.com/fatedier/frp/releases/tag/v0.62.1)
+
+```bash
+# 下载下来解压
+tar -xzf ./frp_0.62.1_linux_amd64.tar.gz && mv frp_0.62.1_linux_amd64 frp
+# 进入解压后的目录, 启动frp服务端, 设置开机自启
+cd frp && systemctl start frps && systemctl enable frps
+```
+
+然后, 开放下端口, 例如: 开放端口:6666, 用于远程连接ssh
 
 ## 第四步: 启动docker-compose, 测试容器以及上传进行
 
@@ -111,14 +190,46 @@ docker-compose up -d
 
 ```bash
 # 上传公钥, 开启免密登录, 这一步也是顺便检查了是否能够正常通过内网穿透ssh到容器中
-ssh-copy-id root@129.204.8.8 -p 12222 -i ~/.ssh/id_ed25519
+ssh-copy-id root@129.204.8.8 -p 6666 -i ~/.ssh/id_ed25519
 # 然后, 通过ssh免密登录
-ssh root@129.204.8.8 -p 12222
+ssh root@129.204.8.8 -p 6666
 ```
+
+> 到这就已经基本完成了在任何地方都能联通ssh了, 接下来的就是简化配置, 以及高级应用了
+
+## 上传镜像到阿里云, 简化启动容器的配置
+
+```bash
+# 登录
+docker login --username=xxx@qq.com registry.cn-hangzhou.aliyuncs.com
+## 标记本地镜像并指向目标仓库（ip:port/image_name:tag，该格式为标记版本号）
+docker tag dev-jumpbox registry.cn-hangzhou.aliyuncs.com/xxx/dev-jumpbox:frpc-ssh
+## 推送镜像到仓库
+docker push registry.cn-hangzhou.aliyuncs.com/xxx/dev-jumpbox:frpc-ssh
+```
+
+## 简化后的docker-compose配置
+
+简化后, 就只需要docker-compose配置即可, 当然, 如果没有将`authorized_keys`配置整合到Dockerfile中的情况下, 还是需要挂载配置的
 
 [参考详情链接](https://iuin8.github.io/doc-record/docker/dev_utls/dev-container/remote-ssh/frp/tcpmux/v6.1.1/doc)
 
-> 到这就已经基本完成了在任何地方都能联通ssh了, 接下来的就是高级应用了, 配合clash(mihomo)工具, 实现网络流量代理到内容容器中
+```bash
+
+services:
+  dev-jumpbox:
+    image: registry.cn-hangzhou.aliyuncs.com/iuin/dev-jumpbox:tcpmux-v6.1.1
+    container_name: dev-jumpbox
+    environment:
+      TZ: "Asia/Shanghai"
+      serverAddr: '"183.11.11.11"'
+      serverPort: 11100
+      auth_token: '"xx-jumpbox-ssh"'
+      client_name: '"container.prod.xxx.customer"'
+      customDomains: '["container.prod.xxx.customer"]'
+    restart: unless-stopped
+
+```
 
 ## 配合clash(mihomo)工具使用, 方便访问网页
 
@@ -229,8 +340,6 @@ rules:
 ## 最后的话
 
 到这就基本完成了我们的目标了, 能够正常像在一个局域网中一样, 访问网页以及连接数据库等了
-
-> 要是有什么问题, 欢迎留言交流
 
 - 更多内容
   - [这篇文章对应的GitHub博客文档地址](https://iuin8.github.io/doc-record/docs/docker/dev_utls/dev-container/remote-ssh/frp/article/frp+ssh组合镜像以及clash打通网络.md)
