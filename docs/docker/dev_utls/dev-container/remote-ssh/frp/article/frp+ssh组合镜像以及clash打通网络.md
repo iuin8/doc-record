@@ -93,6 +93,7 @@ docker-compose up -d
 cat ~/.ssh/id_ed25519.pub
 # 复制打印的公钥内容, 需要写入到`./.ssh/authorized_keys`, 这个文件是需要挂载到容器中的文件
 # 全路径: /www/dev-jumpbox/client/.ssh/authorized_keys(注意: 别跟宿主机的authorized_keys文件搞混了)
+# 这里也可以由dev-jumpbox容器去管理ssh公私钥, 把宿主机生成好的公私钥, 挂载到容器中, 然后在容器中执行命令去写入authorized_keys文件中, 最后把私钥给到clash(mihomo)工具使用
 ```
 
 ```bash
