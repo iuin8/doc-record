@@ -29,7 +29,10 @@ watch java.sql.Statement executeQuery '{params,returnObj,throwExp}'  -x 2
 watch org.apache.ibatis.mapping.BoundSql <init> '{params,returnObj,throwExp}' -x 2
 
 # es
+# elasticsearch-rest-high-level-client-7.9.3.jar(jdk1.8)
 watch org.elasticsearch.client.RestHighLevelClient search '{params,throwExp}' -x 2
+# elasticsearch-java-8.13.4.jar(jdk17)
+watch co.elastic.clients.elasticsearch.ElasticsearchClient search '{params,returnObj,throwExp}'  -n 5  -x 2
 
 # redis
 watch org.springframework.data.redis.connection.RedisHashCommands hMSet '{params,returnObj,throwExp}'  -n 5  -x 3 
