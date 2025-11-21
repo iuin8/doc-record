@@ -113,5 +113,5 @@ bash ./gradlew :order-service:publish\(dev\)
 
 ### 结合arthas命令查看sql, Redis, es命令
 
-[参考查看sql命令地址](https://github.com/iuin8/doc-record/blob/main/docs/materiel/article/arthas查看sql.md)
-[参考查看sql_redis_es命令地址](https://github.com/iuin8/doc-record/blob/main/docs/materiel/draft/arthas查看sql_redis_es.md)
+- [参考查看sql命令地址](https://github.com/iuin8/doc-record/blob/main/docs/materiel/article/arthas查看sql.md)
+- [参考查看sql_redis_es命令地址](https://github.com/iuin8/doc-record/blob/main/docs/materiel/draft/arthas查看sql_redis_es.md)
