@@ -19,6 +19,8 @@ watch org.apache.ibatis.mapping.BoundSql getSql '{params,returnObj,throwExp}'   
 watch java.sql.Statement executeQuery '{params,returnObj,throwExp}'  -n 5  -x 3 
 watch java.sql.Statement executeQuery '{params,returnObj,throwExp}'  -x 3 
 watch java.sql.Statement executeQuery '{params,returnObj,throwExp}'  -x 2
+# 查看select语句
+watch java.sql.Statement executeQuery '{params,returnObj,throwExp}'  -x 2 | grep select
 
 # 看到的是jpa的非本地sql
 watch javax.persistence.EntityManager createQuery '{params,returnObj,throwExp}'  -n 5  -x 3 
