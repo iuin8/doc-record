@@ -59,7 +59,7 @@ pluginManagement {
 
 ```
 
-- 配置文件: {项目根目录}/remote-plugin/remote.yml
+- 配置文件: <项目根目录>/remote-plugin/remote.yml
 
 ```yml
 # 配置文件: {项目根目录}/remote-plugin/remote.yml
