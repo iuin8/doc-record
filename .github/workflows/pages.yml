@@ -1,4 +1,4 @@
-name: Deploy Docsify site to Pages
+name: Deploy Docusaurus site to Pages
 
 on:
   push:
@@ -23,21 +23,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # 获取完整的 git 历史
+          fetch-depth: 1 # 仅获取最近一次提交以提速
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-      
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+          check-latest: true
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
       
       - name: Install Dependencies
-        run: |
-          npm install
+        run: npm ci
       
       - name: Build Docusaurus
         run: npm run build
