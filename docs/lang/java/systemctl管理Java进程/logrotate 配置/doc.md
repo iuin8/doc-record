@@ -38,7 +38,7 @@ sudo vim /etc/logrotate.d/support-service
 ### 4. 关键注意事项（避免日志丢失）
 - **Java应用日志切换支持**：  
   大部分Java日志框架（如Logback、Log4j2）默认支持`USR1`信号触发日志重新加载，无需重启应用。如果应用不支持，可改用`copytruncate`（但可能丢失少量日志）：  
-  ```conf
+  ```ini
   # 替代postrotate的方案（适合不支持USR1信号的应用）
   copytruncate  # 先复制日志内容到备份文件，再清空原文件（可能丢失复制期间的日志）
   ```

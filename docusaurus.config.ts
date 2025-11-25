@@ -8,6 +8,9 @@ const config: Config = {
   title: 'Doc Record',
   tagline: '个人文档记录',
   favicon: 'img/favicon.ico',
+  stylesheets: [
+    'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css',
+  ],
 
   url: 'https://iuin8.github.io',
   baseUrl: '/doc-record',
