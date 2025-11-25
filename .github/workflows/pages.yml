@@ -34,7 +34,7 @@ jobs:
           cache-dependency-path: package-lock.json
       
       - name: Install Dependencies
-        run: npm ci --include=optional
+        run: npm install --include=optional --no-audit --no-fund
       
       - name: Build Docusaurus
         run: npm run build

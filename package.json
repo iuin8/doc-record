@@ -58,8 +58,5 @@
   },
   "author": "",
   "license": "ISC"
-  ,
-  "optionalDependencies": {
-    "@node-rs/jieba-linux-x64-gnu": "1.10.4"
-  }
+  
 }
