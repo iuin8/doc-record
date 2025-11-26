@@ -1,5 +1,5 @@
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
+import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const defaultLocale = 'zh-Hans';
@@ -15,7 +15,7 @@ const config: Config = {
   url: 'https://iuin8.github.io',
   baseUrl: '/doc-record',
 
-  organizationName: 'iuin8', 
+  organizationName: 'iuin8',
   projectName: 'doc-record',
 
   onBrokenLinks: 'warn',
@@ -69,7 +69,7 @@ const config: Config = {
         searchResultLimits: 10,
         searchResultContextMaxLength: 100,
         docsRouteBasePath: '/',
-        indexBlog: false, // 因为禁用了博客
+        indexBlog: true, // 启用博客索引
       }
     ],
   ],
@@ -81,7 +81,7 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
           routeBasePath: '/', // 将文档设置为首页
-          editUrl: ({locale, versionDocsDirPath, docPath}) => {
+          editUrl: ({ locale, versionDocsDirPath, docPath }) => {
             // if (locale !== defaultLocale) {
             //   return `https://github.com/iuin8/doc-record/${locale}`;
             // }
@@ -102,7 +102,14 @@ const config: Config = {
             require('rehype-prism-plus'),
           ],
         },
-        blog: false, // 禁用博客功能
+        blog: {
+          showReadingTime: true,
+          // Please change this to your repo.
+          // Remove this to remove the "edit this page" links.
+          editUrl: ({ blogDirPath, blogPath }) => {
+            return `https://github.com/iuin8/doc-record/blob/main/${blogDirPath}/${blogPath}`;
+          },
+        },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -124,6 +131,7 @@ const config: Config = {
           position: 'left',
           label: '文档',
         },
+        { to: '/blog', label: '博客', position: 'left' },
         {
           type: 'localeDropdown',
           position: 'right',
