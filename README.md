@@ -120,3 +120,5 @@ runs-on: self-hosted
 - 接入AI搜索
   - [官方搜索相关文档](https://docusaurus.io/docs/search)
   - [参考页面](https://docs.orama.com/cloud/data-sources/native-integrations/docusaurus)
+- 接入AI翻译能力
+  - crowdin.com
