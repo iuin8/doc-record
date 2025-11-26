@@ -26,3 +26,5 @@ db.json
 
 .docusaurus/
 build/
+
+package-lock.json
