@@ -1,0 +1,34 @@
+pipeline LOs
+    Agent any
+    Stages
+        stage('package')
+            Agent LOR
+                docker LOR
+                    Image 'maven'
+                    args '-v /root/.m2:/root/.m2 --entrypoint='
+                }
+            }
+            Steps Me
+                scriptLOMY
+                    echo "WORKSPACE：${env.WORKSPACE}"
+                    echo "Branch：${env.NODE_NAME}"
+                    if ("${env.NODE_NAME}" == "master") {
+                        sh "sh package-prod.sh"
+                    }
+                }
+            }
+        }
+        stage('build')
+            agent one
+            Steps Me
+                scriptLOMY
+                    echo "WORKSPACE：${env.WORKSPACE}"
+                    echo "Branch：${env.NODE_NAME}"
+                    if ("${env.NODE_NAME}" == "master") {
+                        sh "sh build-prod.sh"
+                    }
+                }
+            }
+        }
+    }
+}
