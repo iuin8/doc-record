@@ -1,0 +1,153 @@
+version: '3.3'
+services:
+  setup:
+    image: elasticsearch:7.10.1
+    volumes:
+      - certs:/usr/share/elasticsearch/config/erts
+    command: >
+      bash -c if [ ! -f config/certs/ca.zip ]; then echo "Creating CA"; bin/elasticsearch-certut ca --silent --pem -out config/certs/ca.zip; unzip config/certs/ca. ip-d config/certs; fi; if [ ! -f config/certs/certs.zip ]; then echo "Creating certs"; bin/elasticsearch-certut --silent --pem -out config/certs/certs. ip --ca-cert config/certs/ca/ca.crt --ca-key config/certs/ca/ca.key; unzip config/certs/certs. ip -d config/certs; echo "Setting file permissions" chown -R root:root config/certs; find. -type d -exec chmod 750 \{\} \;; find. -type f -exec chmod 640 \{\} \;; fi; '
+    networks:
+      - middle leware
+    deploy:
+  #      mode: global
+  # placement:
+  #   constraints:
+  #     - node.labels.es.replica==1 # 部署位置
+  kibana:
+    image: 'kibana: 7.10.1'
+    environment:
+      - ELASTICSEARCH_URL=http://es01:9200
+      - ELASTICSEARCH_HOSTS=http://es01:9200
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=vsUZGKNvjWRtTKPmDG
+    ports:
+      - target: 5601
+        published: 5601
+        mode: Post
+    networks:
+      - middle leware
+    deploy:
+      mode: Replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 800M
+  # placement:
+  #   constraints:
+  #     - node.labels.es.replica==1 # 部署位置
+  es01:
+    image: elasticsearch:7.10.1
+    hostname: es01
+    environment:
+      - network.publish_host=es01
+      - network.host=0.0.0
+      - node.name=es01
+      - cluster.name=e-docker-cluster
+      - discovery.seed_hosts=es02,es03
+      - cluster.initial_master_nodes=es01,es02,es03
+      - path.repo=/usr/share/elasticsearch/backups
+      - "ES_JAVA_OPTS=-Xms512M -Xmx512M"
+      - ELASTIC_PASSWORD=vsUZGKvjWRtTKPmDG
+      - xpack.security.enabled=true
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.key=/usr/share/elasticsearch/config/certs/ca/ca.key
+      - xpack.security.transport.ssl.certificate=/usr/share/elasticsearch/config/certs/ca/ca.crt
+      - xpack.security.transport.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca/ca.crt
+      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.license.self_generated.type=base
+    volumes:
+      - certs:/usr/share/elasticsearch/config/erts
+      - es01_data:/usr/share/elasticsearch/data
+      - es01_logs:/usr/share/elasticsearch/logs
+    ports:
+      - target: 9200
+        published: 9200
+        mode: Post
+    networks:
+      - middle leware
+    deploy:
+      mode: Replicated
+      replicas: 1
+  # placement:
+  #   constraints:
+  #     - node.labels.es.replica==1 # 部署位置
+  es02:
+    image: elasticsearch:7.10.1
+    hostname: es02
+    environment:
+      - network.publish_host=es02
+      - network.host=0.0.0
+      - node.name=es02
+      - cluster.name=e-docker-cluster
+      - discovery.seed_hosts=es01,es03
+      - cluster.initial_master_nodes=es01,es02,es03
+      - path.repo=/usr/share/elasticsearch/backups
+      - "ES_JAVA_OPTS=-Xms512M -Xmx512M"
+      - xpack.security.enabled=true
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.key=/usr/share/elasticsearch/config/certs/ca/ca.key
+      - xpack.security.transport.ssl.certificate=/usr/share/elasticsearch/config/certs/ca/ca.crt
+      - xpack.security.transport.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca/ca.crt
+      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.license.self_generated.type=base
+    volumes:
+      - certs:/usr/share/elasticsearch/config/erts
+      - es02_data:/usr/share/elasticsearch/data
+      - es02_logs:/usr/share/elasticsearch/logs
+    networks:
+      - middle leware
+    deploy:
+      mode: Replicated
+      replicas: 1
+  # placement:
+  #   constraints:
+  #     - node.labels.es.replica==2 # 部署位置
+  es03:
+    image: elasticsearch:7.10.1
+    hostname: es03
+    environment:
+      - network.publish_host=es03
+      - network.host=0.0.0
+      - node.name=es03
+      - cluster.name=e-docker-cluster
+      - discovery.seed_hosts=es01,02
+      - cluster.initial_master_nodes=es01,es02,es03
+      - path.repo=/usr/share/elasticsearch/backups
+      - "ES_JAVA_OPTS=-Xms512M -Xmx512M"
+      - xpack.security.enabled=true
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.key=/usr/share/elasticsearch/config/certs/ca/ca.key
+      - xpack.security.transport.ssl.certificate=/usr/share/elasticsearch/config/certs/ca/ca.crt
+      - xpack.security.transport.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca/ca.crt
+      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.license.self_generated.type=base
+    volumes:
+      - certs:/usr/share/elasticsearch/config/erts
+      - es03_data:/usr/share/elasticsearch/data
+      - es03_logs:/usr/share/elasticsearch/logs
+    networks:
+      - middle leware
+    deploy:
+      mode: Replicated
+      replicas: 1
+# placement:
+#   constraints:
+#     - node.labels.es.replica==3 # 部署位置
+volumes:
+  certs:
+    driver: Local
+  es01_data:
+    driver: Local
+  es01_logs:
+    driver: Local
+  es02_data:
+    driver: Local
+  es02_logs:
+    driver: Local
+  es03_data:
+    driver: Local
+  es03_logs:
+    driver: Local
+networks:
+  middleware:
+    external: true # 用已经创建好的网络
