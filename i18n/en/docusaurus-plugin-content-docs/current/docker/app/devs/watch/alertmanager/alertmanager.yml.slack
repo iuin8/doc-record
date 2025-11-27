@@ -1,0 +1,20 @@
+global:
+  slack_api_url: https://xxxxxxxx
+Templates:
+  - './template/*.tmpl'
+
+Root:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  respeat_interval: 1m
+  received: 'slack'
+
+Receiving:
+- name: 'slack'
+  slack_configs:
+    - channel: '#warning'
+      send_resolved: true
+      text: "{{ range .Alerts }} {{ .Annotations.description}}\n {{end}} @{{ .CommonAnnotations.username}} <{{.CommonAnnotations.link}}| click here>"
+      title: "{{.CommonAnnotations.summary}}"
+      title_link: "{{.CommonAnnotations.link}}"
