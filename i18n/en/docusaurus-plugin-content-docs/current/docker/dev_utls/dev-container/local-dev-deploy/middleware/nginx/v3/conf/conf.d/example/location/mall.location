@@ -1,0 +1,6 @@
+
+    location/api
+        include cors.conf;
+        
+        proxy_class http://domain/api;
+    }
