@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zookeeper
+spec:
+  selector:
+    matchLabels:
+      app: zookeeper
+  serviceName: zookeper-hs
+  replicas: 3
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: OrderedReady
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - 
+            labelSelector:
+                matchExpressions:
+                  - key: "App"
+                    operator: In
+                    values:
+                      - zookeeper
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: zookeeper
+        imagePullPolicy: Always
+        image: "k8s.gcr.io/kubernetes-zookeeper"
+        command:
+          - h
+          - '-c'
+          - "start-zookeeper\\--servers=3 --data_dir=/var/lib/zoookeper/data ---data_log_dir=/var/lib/zoookeper/data/log_dir=/opt/zookeper/conf --client_port=2181 --election_port=3888 --server_port=2888 --tick_time=2000 \\--init_limit=10 --sync_limit=5 --heap=512M --max_client_cnxns=60 --snap_retain_count=3 --purge_inter=12 --max_session_timeout=40,000\\--min_timeout=4000 --log_level=INO"
+        ports:
+          - containerPort: 2181
+            name: Customers
+          - containerPort: 2888
+            name: server
+          - containerPort: 3888
+            name: Leadeer-selection
+        volumeMounts:
+        - name: test
+          mountPath: /var/lib/zookeeper
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 1000
+  volumeClaimTemplates:
+    - 
+  metadata:
+      name: test
+    spec:
+      accessModes:
+      - "ReadWriteMany"
+      storageClassName: loss
+      resources:
+        requests:
+          storage: 1 Gi
