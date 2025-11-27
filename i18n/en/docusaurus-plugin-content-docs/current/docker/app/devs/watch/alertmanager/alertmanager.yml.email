@@ -1,0 +1,30 @@
+global:
+  resolve_timeout: 5m
+  smtp_smarthost: 'smtp.163.com:465'
+  smtp_from: 'xxx@163.com'
+  smtp_auth_username: 'xx@163.com'
+  smtp_auth_password: 'Authentication code'
+  smtp_require_tls: false
+
+Templates:
+  - './template/*.tmpl'
+
+Root:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  respeat_interval: 59s
+  Received: 'mail'
+receiver:
+- Name: 'mail'
+  email_configs:
+    - To: '{LOS template "email.to". }}'
+      html: '{acl template "email.to.html". }}'
+      send_resolved: true
+
+inhibit_rules:
+  - source_match:
+      severity: 'criminal'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']
