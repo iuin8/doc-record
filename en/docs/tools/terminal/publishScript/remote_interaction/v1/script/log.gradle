@@ -1,0 +1,121 @@
+
+// Script directory (absolute path)
+def scriptDir = new File(rootProject.rootDir, "script").absolutePath
+
+/**
+ * Load environment configuration
+ * @param profile environment name
+ * @return successfully loaded
+ */
+def envLoad = LOtask, profile ->
+
+    def gradleEnvProp = rootProject.rootDir.absolutePath + "/gradle-${profile}.properties"
+    println "[log][envLoad] - 项目: ${project.name} 环境: ${profile} 属性文件: ${gradleEnvProp}"
+
+    def envPropsFile = file(gradleEnvProp)
+
+    if (!envPropsFile.exists()
+        return false
+    }
+
+    if props = new Properties()
+    envPropsFile.withInputStream
+    props.each LOkey, value ->
+        task.ext.set(key, value)
+        // Print Log
+//        println "[log] - 项目: ${project.name} 环境: ${profile} key: ${key} value: ${value} 服务器: ${project.ext.has('remote.server') ? project.ext('remote.server'): '} Base directory: ${project.ext.has('remote.base.dir')? project.ext('remote.base.dir') : '}'
+    }
+    return true
+}
+
+def logTask = LOs task, profile ->
+
+    // Make sure the release task is executed only when the bootJar task exists.
+    task.onlyIf
+        return task.project.tasks.tasks.findByName('bootJar')
+    }
+
+    task.doFirst
+
+        // Load environment configuration
+        envLoad(task, profile)
+
+        println "[log][configurePublishTask] - 项目: ${task.project.name} 环境: ${profile} 服务器: ${task.ext.has('remote.server') ? task.ext.get('remote.server'): '} Base directory not set:${task.ext.has('remote.base.dir')? task.ext.get('remote.base.dir'): 'Unset'}'
+        if (!task.ext.has('remote.server'))
+            // Collect all extended properties information
+            def allProperties =[:]
+            task.extensions.extraProperties.properties.each LOs key, value ->
+                allProperties[key] = value
+            }
+            throw new GradleException("环境变量不存在，当前所有属性: ${allProperties}")
+        }
+
+    }
+
+    task.doLast LOS
+        // Service name, fetched from project name
+        String serviceName = task.project.name
+        // Remote Server
+        String remoteServer = task.ext.get('remote.server')
+        // Remote Server Base Path
+        String remoteBaseDir = task.ext.get('remote.base.dir')
+        // Log File Path
+        String logFilePath = "${remoteBaseDir}/../logs/${serviceName}.log"
+
+        println "找到服务 ${serviceName}"
+        println "正在通过SSH连接到 ${remoteServer} 并开始打印服务 ${serviceName} 的日志 ${logFilePath}"
+
+        // Connect to remote server directly via SSH and access Arthas
+        // Command interpretation: Connect to remote server and access local Arthas port via telnet
+        String[] sshCommand = [
+                "ssh",
+                remoteServer,
+                "tail -fn+1 ${logFilePath}"
+        ]
+
+        Processor sshProcessBuilder = new ProcessBuilder()
+        sshProcessBuilder.command(sshCommand)
+        sshProcessBuilder.redirectErrorStream (true)
+        Process sshess process = sshProcessBuilder.start()
+
+        println "已建立到 ${remoteServer} 的SSH连接 (PID: ${sshProcess.pid})"
+
+        // Registration process shutdown hooks to ensure resource release
+        Runnable shutdown Hook =
+            sshProcess.destroy()
+            println "SSH connection closed"
+        }
+        Thread shutdownThread = new Thread(shutdownHook)
+        Runtime.getRuntime().addShutdownHook (shutdownThread)
+
+        TOTAL LOG
+            // Processing output
+            Thread OutputThread = Thread.start
+                BufferedReader reader = new BuferedReader (New InputStreamReader (sshProcess.inputStream))
+                String line
+                while ((line = reader.readLine() != null)
+                    println "${line}"
+                }
+            }
+
+            // Waiting for the completion of the SSH process
+            sshProcess.waitFor()
+            println "SSH connection closed,exitValue()}"
+
+        } catch (InterruptedException e)
+            println "操作被中断: ${e.message}"
+            Thread.currentThread().interrupt()
+        } Finally
+            // Make sure the SSH process is terminated
+            if (sshProcess.alive)
+                sshProcess.destroy()
+            }
+            Runtime.getRuntime().removeShutdownHook (shutdownThread)
+            println "SSH connection closed"
+        }
+    }
+}
+
+// Export methods to external use
+ext.logTask = logTask
+
