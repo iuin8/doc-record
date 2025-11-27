@@ -1,0 +1,64 @@
+[Unit]
+Description=support-service - Enterprise support service
+After=network.target syslog.target mysql.service # explicitly relies on service to ensure start order
+Wants=mysql.service # Weak dependency
+Documentation=https://internal-docs.example.com/support-service # document address
+
+[Service]
+# Basic Run Environment
+User=www
+Group=www
+WorkingDirectory=/data/xx/support-service
+EnvironmentFile=/data/xxx/.config
+EnvironmentFile=/data/xx/support-service/support-service-env
+Environment="LANG=en_CN.utf8"
+Environment="LC_ALL=en.utf8"
+Environment="TZ=Asia/Shanghai"
+Environment="JVM_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200-XX:+HeapDumpOnOutOfMemoryErr-XX:+HeapDumpPath=/var/log/support-service/heapdump.hprof -XX:+ExitOnOutOfMemoriyError"
+
+# Core boot configuration (duplicate-jar issues fixed)
+ExecStart=/usr/bin/java \\.
+          $JVM_OPTS \
+          -Duser.language=zh
+          -Dserver.port=${UN_PORT} \
+          -Xms${XMS} \
+          -Xmx${XMX} \
+          -jar ${JAR_NAME} \
+          --spring.profiles.active=${CONFIG}
+
+# Life cycle management optimizations
+Type=Simple
+PIDFile=/var/run/support-service.pid # Record PID for monitoring
+ExecStop=/bin/kill -15 $MAINPID  # 优雅停止
+ExecReload=/bin/kill -HUP $MAINPID  # 支持平滑重载配置
+TimeoutStartSec=60 # Start timeout (adjusted for app start time)
+TimeoutStopSec=60 # Stop Timeout (make sure there is enough time to process ends)
+KillMode=mixed # end elegantly after timeout
+
+# Restart policy optimization (avoid indefinitely reboot storms after OM)
+Restart=on-failure # restart only if failed
+RestartSec=30 # Restart interval for 30 seconds, incrementally adding StartLimitInterval configured systemd.service
+Maximum 5 reboot allowed for startLimitInterval=5min # 5 minutes
+StartLimitBurst=5
+
+# Resource limits optimized (solve OM core configuration)
+MemoryLimit=2G # of System Level Memory Limit (greater than Xmx recommended for actual needs)
+MemoryHigh=1800M # Memory will try to recover if memory uses more than this value (less than Memory Limit)
+LimitNPROC=4096 # of processes (avoid forward bombs)
+LimitNOFILE=6536# File descriptor limit (solve "too many open files")
+LimitMEMLOCK=infinity # allows JVM to lock memory (avoid memory page swaps for GC)
+LimitCORE=infinity # allows to generate core dumps (for trouble analysis)
+
+# Security enhancements
+PrivateTmp=true # temporary directories
+ProtectSystem=full # Mount System Directory Only
+ProtectHome=true # Protection User Directory
+NoNewPriveres=true # Prohibited Permissions
+
+# Log Configuration (combined journaling and application logs)
+StandardOutput=append:/var/log/support-service/stdout.log
+StandardError=append:/var/log/support-service/stder.log
+SyslogIdentifier=support-service # log identifiers for easy filter
+
+[Install]
+WantedBy=multi-user.target
