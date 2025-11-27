@@ -1,0 +1,73 @@
+version: "3.5"
+services:
+  mysql_m1:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=root
+    command: bash -c ' tee /etc/mysql/conf.d/haproxy.cnf <<-"EOF" [mysqld] symbolic-links=0 EOF
+    ports:
+      - target: 3306
+        published: 33061
+        mode: Post
+    networks:
+      middleware:
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+    volumes:
+      - mariadb_mysql_m1:/var/lib/mysql
+  mysql_m2:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=root
+    command: bash -c ' tee /etc/mysql/conf.d/haproxy.cnf <<-"EOF" [mysqld] symbolic-links=0 EOF
+    ports:
+      - target: 3306
+        published: 33062
+        mode: Post
+    networks:
+      middleware:
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+    volumes:
+      - mariadb_mysql_m2:/var/lib/mysql
+  haproxy:
+    image: haproxy:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=root
+    command:
+      - EOF '
+    ports:
+      - target: 3308
+        published: 3308
+        mode: Post
+      - target: 8080
+        published: 18080
+        mode: Post
+    depends_on:
+      - mysql_m1
+      - mysql_m2
+    networks:
+      middleware:
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+volumes:
+  mariadb_mysql_m1:
+  mariadb_mysql_m2:
+networks:
+  middleware:
+    external: true
