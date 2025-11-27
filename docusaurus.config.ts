@@ -82,9 +82,9 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           routeBasePath: '/', // 将文档设置为首页
           editUrl: ({ locale, versionDocsDirPath, docPath }) => {
-            // if (locale !== defaultLocale) {
-            //   return `https://github.com/iuin8/doc-record/${locale}`;
-            // }
+            if (locale !== defaultLocale) {
+              return `https://crowdin.com/project/doc-record/${locale}`;
+            }
             return `https://github.com/iuin8/doc-record/blob/main/${versionDocsDirPath}/${docPath}`;
           },
           remarkPlugins: [
@@ -106,7 +106,10 @@ const config: Config = {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl: ({ blogDirPath, blogPath }) => {
+          editUrl: ({ locale, blogDirPath, blogPath }) => {
+            if (locale !== defaultLocale) {
+              return `https://crowdin.com/project/doc-record/${locale}`;
+            }
             return `https://github.com/iuin8/doc-record/blob/main/${blogDirPath}/${blogPath}`;
           },
         },

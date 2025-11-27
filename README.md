@@ -122,3 +122,4 @@ runs-on: self-hosted
   - [参考页面](https://docs.orama.com/cloud/data-sources/native-integrations/docusaurus)
 - 接入AI翻译能力
   - crowdin.com
+  - https://docusaurus.io/zh-CN/docs/i18n/crowdin
