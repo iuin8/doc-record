@@ -1,7 +1,7 @@
 files:
-  - source: docs/**/*.md
+  - source: docs/**/*.md*
     translation: '%original_path%/%original_file_name%'
     multilingual: 1
-  - source: blog/**/*.md
+  - source: blog/**/*.md*
     translation: '%original_path%/%original_file_name%'
     multilingual: 1
