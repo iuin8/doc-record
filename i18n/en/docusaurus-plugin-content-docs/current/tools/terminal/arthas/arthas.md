@@ -1,0 +1,22 @@
+# Arthas Usage Record
+
+## Hot Deploy
+
+[参考文章](https://arthas.aliyun.com/doc/retransform.html#%E7%BB%93%E5%90%88-jad-mc-%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8)
+
+```bash
+# Decompile class to
+jad --source-only com.mall.domain.enums.ShowFrequencyTypeEnum > /temp/SowFrequencyTypeEnum.java
+# View corresponding class loader
+Sc -d com. all.domain.enums.ShowFrequencyTypeEnum | grep classLoaderHash
+# Compile classes (use -d specify directory [ -d /tmp])
+mc -c 344561e0 /temp/SowFrequencyTypeEnum. ava
+# Load class (copy the class fullpath loading class printed in the console) (PS: reload content will be restored if jad is used)
+redefine /com/mall/domain/enums/ShowFrequencyTypeEnum.class xx.class
+# or use retransforms loading class (PS: this command can see reload reload with jad)
+reform/com/mall/domain/enums/ShowFrequencyTypeEnum. lass xxx.class
+
+# PS: Cannot upload files directly, can be uploaded using base64 encoding and then load
+base64 < Test.class > result.txt
+base64-d < result.txt > Test.class
+```
