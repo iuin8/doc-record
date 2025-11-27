@@ -1,5 +1,7 @@
 files:
   - source: docs
     translation: '%original_path%/%original_file_name%'
+    multilingual: 1
   - source: blog
     translation: '%original_path%/%original_file_name%'
+    multilingual: 1
