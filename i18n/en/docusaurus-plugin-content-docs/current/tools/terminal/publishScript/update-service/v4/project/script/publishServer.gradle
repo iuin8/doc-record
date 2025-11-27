@@ -1,0 +1,126 @@
+
+def updateServiceScriptName = 'update-service'
+// Script directory (absolute path)
+def scriptDir = new File(rootProject.rootDir, "script").absolutePath
+def updateServiceScriptPath = new File(scriptDir, updateServiceScriptName + ".sh").absolutePath
+
+
+def envLoad = FREE env ->
+
+    def gradleEnvProp = rootProject.rootDir.absolutePath + "/gradle-${env}.properties"
+    def envPropsFile = file(gradleEnvProp)
+
+    if (!envPropsFile.exists()
+        return false
+    }
+
+    if props = new Properties()
+    envPropsFile.withInputStream
+    props.each LOkey, value ->
+        project.ext.set(key, value)
+    }
+    return true
+}
+
+def configurePublishTask = 56 task, profile ->
+
+    // Make sure the release task is executed only when the bootJar task exists.
+    task.onlyIf
+        return task.project.tasks.tasks.findByName('bootJar')
+    }
+
+    // Load environment configuration
+    envLoad(profile)
+
+    // Ensure that release tasks are executed when release profile exists
+    task.onlyIf
+        println "正在发布项目 ${task.project.name} 到 ${profile} 环境 服务器为 ${project.property('remote.server')} 基础目录为 ${project.property('remote.base.dir')}"
+        return project.hasProperty('remote.server') && project.property('remote.server') != null
+    }
+
+    // Configure dependencies - make sure bootJar tasks exist first
+    afterEvaluate
+// if (project.tasks.findByName('clean'))
+// task.dependsOn 'clean'
+//        }
+        if (task.project.tasks.findByName('bootJ'))
+            task.dependsOn 'bootJar'
+        }
+    }
+
+    task.doFirst
+        def scriptFile = file(updateServiceScriptPath)
+        if (!scriptFile.exists()
+            throw new GradleException("脚本文件不存在: ${updateServiceScriptPath}")
+        }
+        if (!scriptFile.canExecute()
+            throw new GradleException("脚本没有执行权限: ${updateServiceScriptPath}")
+        }
+    }
+
+    // Critical：Specifies the work directory where the script is executed (directory where the script is)
+    task.workingDir = scriptDir
+
+    task.environment([
+            // Configure Environment Variables
+            LOCAL_BASE_DIR: rootProject.rootDir.absolutePath
+            REMOTE_SERVER: project.hasProperty('remote.server')? project.property ('remote.server') : '',
+            REMOTE_BASE_DIR: project.hasProperty ('remote.base.dir')? project.property ('remote.base.dir') : ''
+    ])
+
+    // Execute command
+    task.commandLine 'bash', '-c', "chmod +x update-service.sh"
+    task.commandLine 'bash', '-c', "./update-service.sh ${task.project.name}"
+
+    // Core configuration：ignores non-zero exit code for command, continue
+    task.ignoreExitValue = true
+
+    task.doLast LOS
+        // Live output stdout and stderr
+        task.standardOut = System.out
+        task.errorOutput = System.err
+
+        // Optional：to save output to variable to follow up
+        if output = new ByteArrayOutputStream()
+        def error = new ByteArrayOutputStream()
+
+        // Real time output using the inherited IO's method
+        task.standardOut = new OutputStream()
+            @Override
+            void write(int b) throats IOException
+                System.out.write(b)
+                output.write(b)
+            }
+        }
+
+        task.errorOutput = new OutputStream()
+            @Override
+            void write(int b) throats IOException
+                System.err.write(b)
+                error.write(b)
+            }
+        }
+
+        // Wait for the task to finish before processing the results
+        task.doLast LOS
+            // Difference based on exit code
+            Def exitCode = task.executionResult.get().exitValue
+            if (exitCode != 0)
+                println "注意：脚本执行返回非零退出码 ${exitCode}"
+            }
+        }
+    }
+}
+
+// Export methods to external use
+//ext LOS
+//envLoad = envLoad
+// configurePublishTask = configurePublishTask
+//}
+
+ext.scriptDir = scriptDir
+ext.updateServiceScriptPath = updateServiceScriptPath
+
+ext.envLoad = envLoad
+ext.configurePublishTask = configurePublishTask
+
