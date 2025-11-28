@@ -1,6 +1,6 @@
-# frps use record
+# frps usage record
 
-The `tcpmuxHTTPConnect Port` parameter is added on a v3 basis for a port that supports multiple ssh connotations
+The `tcpmuxHTTPConnectPort` parameter is added on a v3 basis for a port that supports multiple ssh connections
 
 ## Quick Start
 
@@ -15,6 +15,6 @@ docker-compose up -d
 
 - Configuration Description
 
-`7000`Port # Server port, used to specify port when the customer connects, promote a sufficient value for
-`5002`Port # for multiple ssh' connections, Just a sufficient value to
-`auth_token` # authate token, authenticate on customer connections, add a sufficient value
+`7000`Port # Server port, used to specify port when the client connects, adjust a suitable value sufficient for
+`5002`Port # for multiple ssh' connections, adjust a suitable value sufficient to
+`auth_token` # authenticate token, authenticate on client connections, adjust a suitable value sufficient
