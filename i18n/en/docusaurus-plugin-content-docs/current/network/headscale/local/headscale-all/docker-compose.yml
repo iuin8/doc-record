@@ -10,7 +10,7 @@ services:
     # - ./headscale/data:/var/lib/headscale
     labels:
       - traefik.enable=true
-      - traefik. http://www.routers.headscale-rtr.rule=PathPrefix(`/`)
+      - traefik. http://www.routers.headscale-rtr.rule=PathPrefix(`/)
       - traefik.http.services.headscale-svc.loadbalancer.server.port=8080
   headscale-ui:
     image: ghcr.io/gurucomputing/headscale-ui:latest
