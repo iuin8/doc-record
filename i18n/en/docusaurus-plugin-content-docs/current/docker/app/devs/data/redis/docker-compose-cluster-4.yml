@@ -7,7 +7,7 @@ services:
       - redisdb
     ports:
       - 7001:7001
-    command: bash -c "echo 'port 7001' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes>> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdisconf && cat redisdis.conf && rediso-server disdisdisdisdisdisdisdisdisdisdisdis.conf "
+    command: bash -c "echo 'port 7001' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes' >> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdis.conf && cat redis.conf && rediso-server disdisdis.conf"
     volumes:
       - redis-1:/data
       - /etc/localtime:/etc/localtime:ro
@@ -23,7 +23,7 @@ services:
       - redisdb
     ports:
       - 7002:7002
-    command: bash -c "echo 'port 7002' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes>> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdisconf && cat redisdis.conf && rediso-server disdisdisdisdisdisdisdisdisdisdisdis.conf "
+    command: bash -c "echo 'port 7002' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes' >> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdis.conf && cat redis.conf && rediso-server disdisdis.conf"
     volumes:
       - redis-2:/data
       - /etc/localtime:/etc/localtime:ro
@@ -39,7 +39,7 @@ services:
       - redisdb
     ports:
       - 7003:7003
-    command: bash -c "echo 'port 7003' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes>> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdisconf && cat redisdis.conf && rediso-server disdisdisdisdisdisdisdisdisdisdisdis.conf "
+    command: bash -c "echo 'port 7003' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes' >> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdis.conf && cat redis.conf && rediso-server disdisdis.conf"
     volumes:
       - redis-3:/data
       - /etc/localtime:/etc/localtime:ro
@@ -55,7 +55,7 @@ services:
       - redisdb
     ports:
       - 7004:7004
-    command: bash -c "echo 'port 7004' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes>> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdisconf && cat redisdis.conf && rediso-server disdisdisdisdisdisdisdisdisdisdisdis.conf "
+    command: bash -c "echo 'port 7004' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes' >> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdis.conf && cat redis.conf && rediso-server disdisdis.conf"
     volumes:
       - redis-4:/data
       - /etc/localtime:/etc/localtime:ro
@@ -71,7 +71,7 @@ services:
       - redisdb
     ports:
       - 7005:7005
-    command: bash -c "echo 'port 7005' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes>> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdisconf && cat redisdis.conf && rediso-server disdisdisdisdisdisdisdisdisdisdisdis.conf "
+    command: bash -c "echo 'port 7005' > redis.conf &&echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes' >> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdis.conf && cat redis.conf && rediso-server disdisdis.conf"
     volumes:
       - redis-5:/data
       - /etc/localtime:/etc/localtime:ro
@@ -87,7 +87,7 @@ services:
       - redisdb
     ports:
       - 7006:7006
-    command: bash -c "echo 'port 7006' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes>> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdisconf && cat redisdis.conf && rediso-server disdisdisdisdisdisdisdisdisdisdisdis.conf "
+    command: bash -c "echo 'port 7006' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes' >> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdis.conf && cat redis.conf && rediso-server disdisdis.conf"
     volumes:
       - redis-6:/data
       - /etc/localtime:/etc/localtime:ro
@@ -119,10 +119,10 @@ services:
       - 26379:26379
     volumes:
       - /etc/localtime:/etc/localtime:ro
-    command: bash -c "echo 'port 26379' > sentinel.conf &echo 'bind 0.0.0.0' >> sentinel.conf &echo 'protected-mode no' >> sentinel.conf &echo 'cluster-enabled yes>> sentinel. onf && echo 'appendonly yes' >> sentinel.conf &echo 'dir /tmp' >> sentinel.conf && echo 'sentinel monitor master-alias 192.168.56.101 7001' >sentinel. onf && echo 'sentinel down-after-milliseconds master-alias 5000' >> sentinel.conf &echo 'sentinel parallel-syncs-alias 1' >> sentinel. onf && echo 'sentinel fail-timeout master-alias 5000' >> sentinel.conf &echo 'sentinel auth-pass master-alias foobared' >> sentinel.conf && cat sentinel.conf && redis-sentinel sentinel.conf"
+    command: bash -c "echo 'port 26379' > sentinel.conf &echo 'bind 0.0.0.0' >> sentinel.conf && echo 'protected-mode no' >> sentinel.conf && echo 'cluster-enabled yes>> sentinel. onf && echo 'appendonly yes' >> sentinel.conf &echo 'dir /tmp' >> sentinel.conf && echo 'sentinel monitor master-alias 192.168.56.101 7001 1' >sentinel. onf && echo 'sentinel down-after-milliseconds master-alias 5000' >> sentinel.conf &echo 'sentinel parallel-syncs-alias 1' >> sentinel. onf && echo 'sentinel fail-timeout master-alias 5000' >> sentinel.conf &echo 'sentinel auth-pass master-alias foobared' >> sentinel.conf && cat sentinel.conf && redis-sentinel sentinel.conf"
     depends_on:
       - re-master
-      - remdis-live
+      - remdis-sleve
     deploy:
       replicas: 1
       update_config:
