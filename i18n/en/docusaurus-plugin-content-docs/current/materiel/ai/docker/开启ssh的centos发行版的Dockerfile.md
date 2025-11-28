@@ -1,14 +1,14 @@
-# Help me write a dockerfile file and open ssh's remote connection requires centos distribution
+# Help me write a docker file and open ssh's remote connection requires centres distribution
 
-To create a Dockerfile to build a CentOS container with SSH services, you can follow the following steps to move：
+To create a Dockerfile to build a CentS containing with SSH services, you can follow the following steps to move：
 
-1. **Select the base image：** to select a CentOS base image.
-2. **Install SSH service：** install SSH services in containers (usually `openssh-server`).
-3. **Generate the SSH key：** to generate a new SSH key pair for security purposes, avoiding using the default key.
+1. **Select the base image：** to select a CentS base image.
+2. **Install SSH service：** install SSH services in containers (using `openssh-server`).
+3. **Generate the SSH key：** to generate a new SSH key air for security purposes, avoiding using the default key.
 4. **Set root password：** to set a root password or create a new user and set a password.
-5. **Configure SSH service：** to configure SSH services such as allowing root login or password authentication.
-6. **Exposure SSH port：** to specified ports to be exposed in Dockerfile, usually 22.
-7. **Launch SSH service：** sets the SSH service to start automatically when the container starts.
+5. **Configure SSH service：** to configure SSH services such as allowing root logs or password authorization.
+6. **Exposure SSH port：** to specified ports to be exposed in Dockerfile, using 22.
+7. **Launch SSH service：** sets the SSH service to start automatically when the containing starts.
    Below is a simple Dockerfile example：
 
 ```Dockerfile
@@ -31,7 +31,7 @@ EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
 ```
 
-Note that this Dockerfile uses a simple password "password" as an example and should use a more complex password when actually used.Also, for security reasons, you may want to create a new user instead of using root for SSH connections.
+Note that this Dockerfile uses a simple password "password" as an example and should use a more complete password when actually used. lso, for security reasons, you may want to create a new user instance of using root for SSH connections.
 Build Image：
 
 ```bash
@@ -41,14 +41,14 @@ Docker build -t cents-ssh.
 Run the container and map the port：
 
 ```bash
-docker run -d --name centos-ssh -p 222:22 cents-ssh
+docker run -d --name cents-ssh -p 222:22 cents-ssh
 ```
 
-Now you can use SSH server： from host to container using SSH clients
+How you can use SSH server： from host to contain SSH clients
 
 ```bash
 ssh root@localhost - p 2222
 ```
 
 Enter a previous password to log in.
-Please make sure you understand the security risks of the Docker container running the SSH service and configure your security accordingly.
+Please make sure you understand the security risks of the Docker containing the SSH service and configuration your security situation according to law.
