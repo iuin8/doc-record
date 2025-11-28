@@ -1,8 +1,8 @@
-# start-phase help document
+# start-nobase help document
 
 <description>
 
-Rapid employment of a job function to Ariun function jurisdiction
+Rapid deployment of a nobase function to Ariun function compute
 
 </description>
 
@@ -10,9 +10,9 @@ Rapid employment of a job function to Ariun function jurisdiction
 
 ## Pre-preparation
 
-With this item, it is recommended that you have the following product missions / policy：
+With this project, it is recommended that you have the following product permissions / policy：
 
-| Services/operations  | Function Calcumulation                                 |
+| Service/operations   | Function Calculation                                   |
 | -------------------- | ------------------------------------------------------ |
 | Permissions/Policies | AliyunFullAccess<br/>AliyunContainerRegistryFullAccess |
 
@@ -28,7 +28,7 @@ With this item, it is recommended that you have the following product missions /
 
 <deploy>
 
-## Employment & Experience
+## Deployment & Experience
 
 <appcenter>
 
@@ -37,10 +37,10 @@ With this item, it is recommended that you have the following product missions /
 
 </appcenter>
 
-- Upload： by [Serverless Devs Cli](https://www.serverless-devs.com/serverless-devs/install)
+- Deploy： by [Serverless Devs Cli](https://www.serverless-devs.com/serverless-devs/install)
   - [Install Serverless Devs Cli Developer Tool](https://www.serverless-devs.com/serverless-devs/install) and conduct[授权信息配置](https://www.serverless-devs.com/fc/config);
-  - Initialize project：`s init start-obase -d start-nobase`
-  - Enter the project and upload：`cd start-nobase && s delete-y`
+  - Initialize project：`s init start-nobase -d start-nobase`
+  - Enter the project and deploy：`cd start-nobobase && s delete-y`
 
 </deploy>
 
@@ -48,6 +48,6 @@ With this item, it is recommended that you have the following product missions /
 
 # App Details
 
-This app is used only for learning and reference purposes and you can redevelop and reject your business logic on the basis of this project
+This app is used only for learning and reference purposes and you can redevelop and refine your business logic on the basis of this project
 
 </appdetail>
