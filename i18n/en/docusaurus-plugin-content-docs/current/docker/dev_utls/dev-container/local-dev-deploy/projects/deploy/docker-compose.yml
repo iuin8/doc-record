@@ -55,7 +55,7 @@ services:
     restart: On failure
     environment:
       TZ: "Asia/Shanghai"
-    command: bash -c "mkdir -p /usr/lib/nginx/proxy_tmp &&&\mkdir -p /usr/lib/nginx/prox/proxy_cache/imgcache &&&&&\chown -R nginx:nginx /usr/lib/nginx/proxy* &&/\/docker-entrypoint.sh nginx -g 'daemon off;'”
+    command: bash -c "mkdir -p /usr/lib/nginx/proxy_tmp &&&&\mkdir -p /usr/lib/nginx/prox/proxy_&&&&&&&&&&&&&&\/docker-entrypoint.sh nginx -g 'daemon off;'”
     depends_on:
       - wap-api
       - web-api
@@ -77,7 +77,7 @@ services:
       - "./nginx/conf/nginx.conf:/etc/nginx/nginx.conf"
       - "./nginx/conf/cors.conf:/etc/nginx/cors.conf"
       - "./nginx/conf/conf.d/:/etc/nginx/conf.d/"
-      - /home/data/file///etc/nginx/data/uploads
+      - /home/data/file//etc/nginx/data/uploads
 volumes:
   nginx_log:
 networks:
