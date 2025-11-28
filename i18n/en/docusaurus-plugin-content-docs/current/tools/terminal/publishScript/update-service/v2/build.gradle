@@ -1,17 +1,17 @@
 // group 'com.iuin'
-// version '2.0.0.0.0.0'
+// version '2.0.0.0'
 
 Subprojects
-    taskpublishToest(type: execution)
+    task publishToest(type: Execution)
 
-        // Configure dependencies - make sure bootJar tests exist first
+        // Configure dependencies - make sure bootJar tasks exist first
         afterEvaluate
             if (project.tasks.findByName('bootJ'))
                 dependsOn 'bootJar'
             }
         }
 
-        /Script directory (absolute path)
+        // Script directory (absolute path)
         def scriptDir = new File(rootProject.rootDir, "script").absolutePath
         def baseScriptPath = new File(scriptDir, "base.sh").absolutePath
 
@@ -25,13 +25,13 @@ Subprojects
             }
         }
 
-        // Critical：Species the work directory where the scripts are executed (directory where the scripts is)
+        // Critical：Specifies the work directory where the script is executed (directory where the script is)
         workingDir = scriptDir
 
         // Execute command
         commandLine 'bash', '-c', "set -x; ./base.sh -d ${rootProject.rootDir} -s ${project.name}"
 
-        // Cove configuration：ignores non-zero exit code for order, continue
+        // Core configuration：ignores non-zero exit code for command, continue
         ignoreExitValue = true
 
         // Capture output
