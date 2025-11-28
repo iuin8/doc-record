@@ -1,8 +1,8 @@
-# Most usage record
+# Post usage record
 
 [官方文档](https://github.com/modelcontextprotocol/servers/tree/main/src/postgres)
 
-- Docker Methodod
+- Docker Method
 
 ```bash
 {
