@@ -1,0 +1,10 @@
+services:
+  lucky:
+    image: gdy66/lucky
+    container_name: lucky
+    volumes:
+      - goodluck:/goodluck
+    network_mode: Post
+    restart: always
+volumes:
+  goodluck:
