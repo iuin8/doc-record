@@ -8,10 +8,10 @@ docker volume jenkins_jenkins_home
 cd /var/lib/docker/volumes/jenkins_jenkins_home/_data
 mkdir -p ./data/maven
 code settings.xml
-# copied. conf/settings. Mile Content
+# copied. conf/settings.xml File Content
 # Modify Tag<localRepository>Content
 # Adjust [Administration -> Global Tool Configuration -> Maven Configuration]
-# Default (and global) settings provide -> Settings -> Settings -> File -> Path (/var/jenkins_home/soft/maven/settings. ml)
+# Default (and global) settings provide -> Settings -> Settings -> File -> Path (/var/jenkins_home/soft/maven/settings.xml)
 ```
 
 ---
@@ -19,8 +19,8 @@ code settings.xml
 ## Multibranch Parameter Builds
 
 ```shell
-#1. Download and install plugins in
-# to fill selected plugins and enter Git Parameter
+#1. Download and install plugin
+# to manage selected plugins and enter Git Parameter
 ```
 
 ![img.png](img/多分支参数构建/img.png)
@@ -31,8 +31,8 @@ code settings.xml
 ## Build maven project
 
 ```shell
-# Download and install plugins in
-# for selected plugins in management, Type
+# Download and install plugin
+# for selected plugins in management, type
 # Maven Integration
 # SSH
 # Drop to container 
@@ -54,7 +54,7 @@ code settings.xml
 clean install -Dmaven.test.skip=true -Pprivate -Djava.awt.headness=true
 ```
 
-- Senegal build artifacts over SSH (Transfers Set -> Exec command)
+- Send build artifacts over SSH (Transfers Set -> Exec command)
 
 ```shell
 # 第一版(初版)
