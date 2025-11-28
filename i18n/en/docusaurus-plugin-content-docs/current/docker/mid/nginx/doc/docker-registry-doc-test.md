@@ -1,4 +1,4 @@
-# Deploy docker-registration documentation
+# Deploy docker-registry documentation
 
 ## Use Nginx proxy
 
@@ -65,12 +65,12 @@ server {
 - Generate self-signed certificates
 
 ```shell
-# Generate signatures to the conf.d directory for Nginx, execution of the following command in the conf. Directory at the parent directory with
+# Generate signatures to the conf.d directory for Nginx, execute the following command in the conf.d directory at the parent directory with
 
 # Create self-signed certificate keyfile
-openssl genrsa - out conf. /ca. ey 2048
-# Create a self-signed certificate crt note that in the docker-registry.iuin.xyz field the docker-registry. uin.xyz is changed to repository name
-openl req -x509 - new -nodes -key conf. /ca.key -subj "Docker-registry.iuin.xyz" -days 5000 -out conf.d/ca. rt
+openssl genrsa - out conf.d/ca. ey 2048
+# Create a self-signed certificate crt note that in the docker-registry.iuin.xyz field the docker-registry.iuin.xyz is changed to repository name
+opensl req -x509 - new -nodes -key conf. /ca.key -subj "Docker-registry.iuin.xyz" -days 5000 -out conf.d/ca.crt
 # Set self-signed certificate
 mkdir -p /etc/docker/certs/certs.d/docker-registry.iuin.xyz
 cp conf.d/ca.crt /etc/docker/certs/certs.d/docker-registry.iuin.xyz
