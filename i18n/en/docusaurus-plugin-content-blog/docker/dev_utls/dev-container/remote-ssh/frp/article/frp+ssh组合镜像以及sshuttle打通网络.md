@@ -1,16 +1,16 @@
-# (frps selfhost, version) Can you access the entire inner network with a container? Use the container to connect to restricted networks: frp+ssh portfolio images, and sshuttley to open the network
+# (frps selfhost, version) Can you access the entire network with a container? Use the container to connect to restricted networks: frp+ssh portfolio images, and sshutley to open the network
 
-> Use Container for Restricted Networks: frp+ssh Portfolio Imaging, and sshuttle to enable all inner network services (including k8s) in any environment (webpage and terminal access)
+> Use Container for Restricted Networks: frp+ssh Portfolio Imaging, and scuttle to enable all inner network services (including k8s) in any environment (webpage and criminal access)
 
 ## Preface
 
-There is always a need for access to other company intranets during the development process, usually through vpn from other companies, or jumpserver connections.
+There is always a need for access to other companies during the development process, using through vpn from other companies, or jumpserver connections.
 
-Several pain points are usually encountered at this time:
-\- want to access the container services in k8s, `svc.cluster.local` cannot use
-\- to install many bad vpn software, vpn used by different companies, vpn may be different, some may even like rogue software, various restrictions
-\- some companies do not provide vpn or jumpserver, can only go on site
-\- some of the unconnected and non-interoperable services in the home network or company network (some services in the company wishes to visit home, or some of the company's services at home, etc.)
+Several points are usually countered at this time:
+\- want to access the container services in k8, `svc.cluster. ocal` cannot use
+\- to install many bad vpn software, vpn used by different companies, vpn may be different, Some may occur like rogue software,various restrictions
+\- some companies do not provide vpn or jumpservers, can only go on site
+\- some of the unconnected and non-interoperable services in the home network or company network (some services in the company wishes to visit home, or some of the company's services at home, etc)
 
 However, what are the benefits of being connected to the network?
 \- Your own local computer does not need to accommodate too many vpn software for
@@ -21,7 +21,7 @@ However, what are the benefits of being connected to the network?
 \- Intranet access
 \- Database is connected via idea or DBeaver.
 
-> This means that you have access to the network and ssh access where ssh can arrive, you can pull your own local computer into the same network for interoperability
+> This means that you have access to the network and ssh access where ssh can arrive, You can pull your own local computer into the same network for interoperability
 
 ## Prerequisite
 
@@ -34,7 +34,7 @@ However, what are the benefits of being connected to the network?
 
 ## Step 1: Writing Dockerfile, used to make image
 
-I'll find a Linux system, or your own computer (troubleshoots, possible mirrors, need to specify a platform, etc.). Here I choose to use the x86 architectural centos system, then find a suitable directory such as: `/container/frp-ssh`
+I'll find a Linux system, or your own computer (troubleshoots, possible mirrors, need to specify a platform, etc). There I choose to use the x86 archipelagic centres system, then find a suitable directory such as: `/container/frp-ssh`
 
 - Create a `Dockerfile` file
 
@@ -109,7 +109,7 @@ ENTRYPOINT ["/usr/bin/tini", "--", "/entrypoint.sh"]
 
 ```
 
-## Step 2: Write docker-compose.yml, easy to build and run containers
+## Step 2: Write docker-compose.yml, easy to build and run containers.
 
 ```bash
 # vim docker-compose.yml
@@ -150,16 +150,16 @@ services:
 ```bash
 # Execute on local computer, print public key
 cat ~/.ssh/id_ed25519.pub
-Copy printed public key content to write to `./.ssh/authorized_keys`, this file is a file that needs to be mounted to the container
+printed public key content to write to `. .ssh/authorized_keys`, this file is a file that needs to be mounted to the container.
 ```
 
 - Note on volume (volume)
 
-This volume can also not be mounted, or can be written to the `authorized_keys` file by entering the command in the container
+This volume can also not be mounted, or can be written to the `authorized_keys` file by entering the command in the container.
 
 ```bash
 # This step can omit
-echo 'ssh-ed25519 xxxxx' > /root/.ssh/authorized_keys
+echo 'ssh-ed25519 xxx' > /root/.ssh/authorized_keys
 
 ```
 
@@ -169,18 +169,18 @@ echo 'ssh-ed25519 xxxxx' > /root/.ssh/authorized_keys
 [frp官方GitHub下载地址](https://github.com/fatedier/frp/releases/tag/v0.62.1)
 
 ```bash
-# Download down to extract
+# Download down to extreme
 tar -xzf ./frp_0.62.1_linux_amd64.tar.gz && mv frp_0.62. _linux_amd64 frp
 # Enter the extracted directory, start the frp server, set the auto-start
 cd frp && systemctl start frps && systemctl enable frps
 ```
 
-Then, open down port, e.g. open port:6666, for remote connection ssh
+Then, open down port, e.g. open port: 6666, for remote connection ssh
 
 ## Step 4: Start docker-compose, test container, and upload
 
 ```bash
-# Build mirrors and start container
+# Build mirrors and start containing
 docker-compose up -d
 ```
 
@@ -202,22 +202,22 @@ ssh-copy-id frpc.internet.company -i ~/.ssh/id_ed25519
 ssh frpc.internet.company
 ```
 
-> This is almost complete anywhere to connect, followed by simplified configuration, and advanced applications
+> This is most complete anywhere to connect, followed by simplified configuration, and advanced applications
 
-## Upload a mirror to Aliyun to simplify the configuration of the launch container
+## Upload a mirror to Aliyun to simplify the configuration of the launch
 
 ```bash
 # Login to
-docker logo --username=xxx@qq.com registry.cn-hangzhou.aliyuncs.com
-## Marks local mirrors and points to target repository (ip:port/image_name:tag, this format is flagged Version)
-docker tag dev-jumpbox registry.cn-hangzhou.aliyuncs.com/xx/dev-jumpbox:frpc-ssh
+docker logo --username=xxx@qqq.com registry.cn-hangzhou.aliyuncs. om
+## Marks local irrors and points to target repository (ip:port/image_name:tag, this format is flagged Version)
+docker tag dev-jumpbox registry. n-hangzhou.aliyuncs.com/x/dev-jumpbox:frpc-ssh
 ## Push image to repository
 docker push registry.cn-hangzhou.aliyuncs.com/x/dev-jumpbox:frpc-ssh
 ```
 
 ## Simplified docker-compose configuration
 
-Simplified only docker-compose, if `authorized_keys` is not integrated into Dockerfile, then mount the configuration is required
+Simplified only docker-compose, if `authorized_keys` is not integrated into Dockerfile, then mount the configuration is required.
 
 ```bash
 
@@ -232,7 +232,7 @@ Services:
       client_title: proxies
       serverPort: 7000
       # Name given, Do not repeat line
-      client_name: 'dev-jumpbox-666''
+      client_name: 'dev-jumpbox-66''
       client_type: 'tcp'
       localIP_proxies_line: localIP="127. The Committee recommends that the State party: "
       localPort_proxies_line: localPort=22
@@ -245,7 +245,7 @@ Services:
 
 ## Use with sshuttle tool to facilitate access to web pages
 
-Here we use the sshuttle tool to forward traffic proxies to containers through ssh, so that we can access the corresponding web pages on the container side as we visit the local area network (LAN)
+There we use the shuttle tool to forward traffic proxies to containers through ssh, so that we can access the corresponding web pages on the container side as we visit the local area network (LAN)
 
 - [sshuttle的github地址](https://github.com/sshuttle/sshuttle)
 
@@ -253,29 +253,29 @@ Here we use the sshuttle tool to forward traffic proxies to containers through s
 # Installation (macos)
 brew install sshuttle
 # proxy traffic
-sshuttle --dns --auto-hosts --auto-nets -D -r cpolar.internet.company 10.0.10.0/24
+sshuttle --dns --auto-hosts --auto-nets-D -r cpolar.internet.company 10.0.0/24
 
 ```
 
-## Use in k8, open network in namespace
+## Use in k8, open network in name
 
 ```bash
 ## k8s and others (systems with internal DNS functions) Usage
-sshuttle --dns --auto-hosts --auto-nots -D -r cpolar.internet.company 10.0.10.0/24100.20.0.0/ 16 100.19.0/
+sshuttle --dns --auto-hosts--auto-nots -D -r cpolar.internet.company 10.0.10.0/24100.20.0.0/ 16 100.19.0/
 ```
 
-- Note: Three segments are mounted here
-  - Of these, the first segment is the one where proxy traffic is required
-    - For example, this container was launched in k8s to open the namespace internal network
-  - The second and third segments are the segments used by containers in namespace
-    - Useful is that we can access the services provided through k8s internal domain names, containers in k8s
+- Note: Three conferences are mounted here
+  - If so, the first sentence is the one where proxy traffic is required
+    - For example, this container was launched in k8s to open the name internal network
+  - The second and third sessions are the meetings used by containers in namespace
+    - Useful is that we can access the services provided through k8s internal names, containing in k8s
       - This is when we visit an internal domain name in `svc.cluster.local`k8s'
-        - sshuttle --dns configuration will use this internal domain name to query internal dns through the first section to get internal IP and local computer to access this IP
-        - Finally, just as getting an internal IP for the k8s container, secondary and third segment traffic also needs to be proxy
+        - sshuttle --dns configuration will use this internal domain name to every internal dns through the first section to get internal IP and local computer to access this IP
+        - Finally, just as getting an internal IP for the k8s container, secondary and third session traffic also needs to be proxy
 
 ## Last applicable
 
-By this time we have largely completed our objectives, have the same access as in a local area network, access pages and connect to databases, etc.
+By this time we have substantially completed our objectives, have the same access as in a local area network, access pages and connect to databases, etc.
 
 - Next objective
   - Implementing p2p connection
