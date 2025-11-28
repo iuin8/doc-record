@@ -1,6 +1,6 @@
 # dockerfile
 
-## maven buildings with dockerfile plugins
+## maven builds with dockerfile plugin
 
 - Reference project [https://gitee.com/LFa/demo-test.git]
 - springboot pom.xml configuration
@@ -123,22 +123,22 @@ docker stack up -c $JOB_NAME.yml app
 
 ## Open docker Remote Access
 
-- Edit /etc/sysconfig/docker file, docker I instalment. No such file found, if any,：
+- Edit /etc/sysconfig/docker file, docker I installed. No such file found, if any,：
 
 ```shell
 sudo vi /etc/sysconfig/docker
 
 ///add the following
-other_args="-H tcp://0.0:2375 -H unix:////var/run/docker.sock"
+other_args="-H tcp://0.0.0:2375 -H unix:////var/run/docker.sock"
 
-/ Save
+/Save
 :wq!
  
-/reboot docker service
+//reboot docker service
 service docker restart
 ```
 
-- Create a new DOCKER_HOST value in the windows system environment variable to tcp://[docker_ip]:2375, Replace[docker_ip]here with a centeros server IP or hostname in which the docker is located (using hostname and requiring windows to configure hosts/hosts) and may require a start of the system.
+- Create a new DOCKER_HOST value in the windows system environment variable to tcp://[docker_ip]:2375, replace[docker_ip]here with a centeros server IP or hostname in which the docker is located (using hostname and requiring windows to configure hosts/hosts) and may require a restart of the system.
 - Modify /usr/lib/systemd/system/docker.service file
 
 ```shell
@@ -162,18 +162,18 @@ ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
 ```shell
 netstat -tlunp
 # Show
-# tcp6 0 :::::2375 ::::::* LISTEN -
+# tcp6 0 ::::2375 ::::* LISTEN -
 
 # 2375 Ports, Listening.
-# firewall problems when this is very likely, In CentOS7, the firewall will be opened by default. If the firewall is opened, it will only list to the port at 22 by default, i. Only 22 ports are exposing from the host.
+# firewall problems when this is very likely, In CentOS7, the firewall will be opened by default. If the firewall is opened, it will only listen to the port at 22 by default, i.e. only 22 ports are exposing from the host.
 # Use the following command：
 sudo iptables-save
-# to view the external export of fireall leaks, The current 2373 port does not have a ripple leak.
-# An additional 2375 port is required, Using the following command：
-# Add
-sudo firewall-cmd --zone=public --add-report=2375/tcp --permanent
+# to view the external port of firewall leaks, The current 2373 port does not have a ripple leak.
+# An additional 2375 port is required, using the following command：
+# Add port
+sudo firewall-cmd --zone=public --add-port=2375/tcp --permanent
 # Reload
-sudo fireall 
- sudo fiwald-cmd -reload
-# Use the iptabes-wave command to view the port and see an additional 2375 report.
+sudo firewall 
+ sudo firewald-cmd --reload
+# Use the iptables-save command to view the port and see an additional 2375 port.
 ```
