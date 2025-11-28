@@ -7,16 +7,16 @@
 brew install sshuttle
 
 # Configure local macs free of
-sshuttle ---sudoers-no-modify
+sshuttle ---sudoers-no-modifiy
 # After execution you print configuration content
-# Execute the following commands and write configuration content to
+# Execute the following orders and write configuration content to
 visudo /etc/sudoers in the following file. /sshuttle_auto
-# Add configuration (specified user john) to the specified user (it seems that the specified user sshuttle is free to take effect)
-sudo visudo /etc/sudoers. /sshuttle_auto_john
+# Add configuration (specified user john) to the specified user (it looks that the specified user sshuttle is free to take effect)
+sudo visudo /etc/sudoers. /sshutt_auto_john
 
-# Free use (fa: free user, specified) (in conjunction with ssh config)
-# PS: Looks do not seem to be decriminalizing
-sshuttle --sudoers-user fa-r jump.local.container22-sshuttle.fa.intranet.company 10.0.1.0/24
+# Free use (fa: free user, specified) (in connection with ssh config)
+# PS: Looks do not seem to be decertifying
+sshuttle --sudoers-user fa-r jump. ocal.container22-sshutt.fa.intranet.company 10.0.1.0/24
 
 ```
 
@@ -36,7 +36,7 @@ sshuttle -r mac.intranet.company 0.0.0.0/0
 sshuttle -r mac.intranet.company baidu.com
 ```
 
-## Advanced actions (client zero configuration test failed)
+## Advanced actions (client hero configuration best failed)
 
 ### Server side configuration (one-time)
 
@@ -47,7 +47,7 @@ sudo useradd -r -s /usr/sbin/nologin vpn-tunnel # Create system user
 sudo mkdir -p /home/vpn-tunnel/.sssh
 ```
 
-#### 2. Generate server private key pairs
+#### General server private key pairs
 
 ```bash
 # Generate keys on server (just one)
@@ -57,12 +57,12 @@ sudo ssh-keygen -t 25519-f /etc/ssh/vpn-server-key -N "" -C "vpn-server@company"
 sudo chmod 600 /etc/ssh/vpn-server-key*
 ```
 
-#### Configure automatic authorization
+#### Configure automatic authentication
 
 ```bash
 # Set public key to VP's unique authorization mode
 sudo cp /etc/ssh/vpn-server-key.pub /home/vpn-tunnel/.ssh/authorized_keys
-sudo chown -R vpn-tunnel:vpn-tunnel /home/vpn-tunnel/.ssh
+sudo chown -R vpn-tunnel:vpn-tunnel /vpn-tunnel/.ssh
 ```
 
 #### Facsimile SSH configuration (`/etc/ssh/sshd_config`)
@@ -71,38 +71,38 @@ sudo chown -R vpn-tunnel:vpn-tunnel /home/vpn-tunnel/.ssh
 # Limit VPN User Permissions
 Match User vpn-tunnel
    AllowTcpForwarding no # Port
-   PermitTunnel yes # allows the creation of tunnels
-   ForceCommand /bin/false# prohibits execution of any command
-   AuthenticationMethods publickey
-   PermitRootLogin no
+   PermitTunnel # allows the creation of tunnels
+   ForceCommand /bin/false# prohibits execution of any community
+   Authorization Methods public key
+   PermitRoot Login no
    X11Forwarding no
    AllowAgentForwarding no
    IdentityFile /etc/ssh/vpn-server-key
 ```
 
-#### 5. Apply configuration
+#### Supply configuration
 
 ```bash
 # Restart sshd
 sudo systemctl start sshd
 # If you don't have the above command, Use the following schema
 
-# below to test the syntax of the sshd configuration file for the correct
+# below to test the syntax of the sshd configuration file for the correction
 /usr/sbin/sshd -t
-# Send HUP Signal, and the sshd process reload configuration.
+# Send HUP Signal, and the sshd process load configuration.
 /usr/sbin/sshd -k HUP
 ```
 
 ### Client Zero Configuration Connection Scheme
 
-#### Program B：Certificate Authentication (safer, fit for production)
+#### Program B：Certificates Authentication (safer, fit for production)
 
 ```bash
 # Generate CA certificate
 sudo ssh-keygen -t 25519-f /etc/ssh/ca_key -N ""
 
-# Signed VPN user certificate (30 days)
+# signed VPN user certificate (30 days)
 sudo ssh-keygen -s /etc/ssh/ca_key -I "vpn-cert" -n vpn-tunnel -V +30d /home/vpn-tunnel/. sh/authorized_keys
 
-# Clients only trust CA public key to connect
+# Customers only trust CA public key to connect
 ```
