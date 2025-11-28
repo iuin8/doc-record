@@ -7,18 +7,18 @@ Subprojects
 
     // Publish to specified environment (./gradlew publishToTest -Dprofile=dev(default development environment))
     taskpublishServer(type: Exec)
-        Def profile = project.hasProperty('profile')? project.property ('profile'): 'dev'
+        def profile = project.hasProperty('profile')? project.property ('profile'): 'dev'
 
-        // Reply Public Configuration
+        // Apply Public Configuration
         configurePublishTask (it, profile)
 
     }
 
-    /Publish to Demo environment
-    taskpublishServerByDemo (type: ex)
+    // Publish to Demo environment
+    task publishServerByDemo (type: Exec)
         def profile = 'demo'
 
-        // Reply Public Configuration
+        // Apply Public Configuration
         configurePublishTask (it, profile)
 
     }
