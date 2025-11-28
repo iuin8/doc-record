@@ -5,6 +5,10 @@ metadata:
 spec:
   hosts:
   - name: master1
+  address: 10.0.5.167
+  internalAddress: "10.0.5.167"
+  privateKeyPath: "~/.ssh/id_rsa"
+  - name: master2
   address: 10.0.16.146
   internalAddress: "10.0.16.146"
   privateKeyPath: "~/.ssh/id_rsa"
@@ -20,7 +24,7 @@ spec:
     - master2
   controlPlaneEndpoint:
     ## Internal loadbalancer for apiservers
-    internalLoadbalancer: habroproxy
+    internalLoadbalancer: haproproxy
     # externalDNS: false
     domain: lb.kubesphere.local
     address: ""
