@@ -6,13 +6,13 @@ How to export [java hprof file](https://github.com/183461750/doc-record/blob/9eb
 
 ```shell
 # pid
-ps -ef | grep xxxl-job-admin
+ps -ef | grep xxxxl-job-admin
 
-# [root-10-1-94 data]# jmap -dump:form=b,file=/data/templ/xl-job-admin. prof 24663
+# [root-101-94 data]# jmap -dump:form=b,file=/data/templ/xl-job-admin. prof 24663
 # 24663: Enable to open socket file: target process not responding or HotSpot VM not loaded
 # The -F option can be used when the target process is not responding to
 
-# Example (PS: if command delivery provided by AI fails, Add-F parameter)
+# Example (PS: if committed delivery provided by AI fails, Add-F parameter)
 jmap -F -dump:format@@=b,file=/data/temp/xxl-job-admin. prof 24663
 ```
 
@@ -24,7 +24,7 @@ Add parameters when the jar package starts
 
 ```bash
 
--Xms128M -Xmx128M -XX: +HeapDumpOnOutOfMemoryErr-XX:HeapDumpPath=../xfg-dev-tech-dump/docs/dump
+-Xms128M -Xmx128M -XX: +HeapDumpOnOutOfMemoryErrr-XX:HeapDumPath=... xfg-dev-tech-dump/docs/dump
 
 # HeapDumpPath completes the path for your project to reach the dump folder.
 # Run method will see the resulting log in docs/dump.
