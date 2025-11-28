@@ -6,7 +6,7 @@ services:
     volumes:
       - certs:/usr/share/elasticsearch/config/erts
     command: >
-      bash -c if [ ! -f config/certs/ca.zip]; then echo "Creating CA"; mkdir -p config/certs; bin/elasticsearch-certul ca --silent --pem -out config/certs/ca.zip; unzip config/certs/ca. ip-d config/certs; fi; if [ ! -f config/certs/certs.zip ]; then echo "Creating certs"; bin/elasticsearch-certt --silent --pem -out config/certs/certs. ip --ca-cert config/certs/ca/ca.crt --ca-key config/certs/ca/ca.key; unzip config/certs/certs. ip -d config/certs; echo "Setting file permissions" chown -R root:root config/certs; find. -type d -exec chmod 750 \{\} \;; find-type f -exec chmod 640 \{\} \;fi; '
+      bash -c if [ ! -f config/certs/ca.zip]; then echo "Creating CA"; mkdir -p config/certs; bin/elasticsearch-certul ca --silent --pem -out config/certs/ca.zip; unzip config/certs/ca. ip-d config/certs; fi; if [ ! -f config/certs/certs.zip ]; then echo "Creating certs"; bin/elasticsearch-certut --silent --pem -out config/certs/certs. ip --ca-cert config/certs/ca/ca.crt --ca-key config/certs/ca/ca.key; unzip config/certs/certs. ip -d config/certs; echo "Setting file permissions" chown -R root:root config/certs; find. -type d -exec chmod 750 \{\} \;; find. -type f -exec chmod 640 \{\} \;; fi; '
     networks:
       - middle leware
   kibana:
@@ -14,7 +14,7 @@ services:
     environment:
       - ELASTICSEARCH_URL=http://es01:9200
       - ELASTICSEARCH_HOSTS=http://es01:9200
-      - ELASTICSEARCCOUNTTOKEN=AEAAWVsYXN0aWMva2liYW5hL3Rva2VuMTpNUnBoV0dUVFFQTzVM2pQUWFazln
+      - ELASTICSEARCCOUNTTOKEN=AEAAWVsYXN0aWMva2liYW5hL3Rva2VuMTpNUnBoV0dUVFFQTzVM2pQUWVFazln
     ports:
       - target: 5601
         published: 5601
@@ -47,7 +47,7 @@ services:
       - xpack.security.transport.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca/ca.crt
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.license.self_generated.type=base
-      - PLAYLIST_NOTIFICATION_CHALLENGE
+      - ELASTIC_PASSWORD=changee
     volumes:
       - certs:/usr/share/elasticsearch/config/erts
       - es01_data:/usr/share/elasticsearch/data
@@ -80,7 +80,7 @@ services:
       - xpack.security.transport.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca/ca.crt
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.license.self_generated.type=base
-      - PLAYLIST_NOTIFICATION_CHALLENGE
+      - ELASTIC_PASSWORD=changee
     volumes:
       - certs:/usr/share/elasticsearch/config/erts
       - es02_data:/usr/share/elasticsearch/data
@@ -109,7 +109,7 @@ services:
       - xpack.security.transport.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca/ca.crt
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.license.self_generated.type=base
-      - PLAYLIST_NOTIFICATION_CHALLENGE
+      - ELASTIC_PASSWORD=changee
     volumes:
       - certs:/usr/share/elasticsearch/config/erts
       - es03_data:/usr/share/elasticsearch/data
