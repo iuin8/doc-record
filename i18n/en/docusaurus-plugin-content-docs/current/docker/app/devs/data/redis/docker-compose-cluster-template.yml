@@ -12,7 +12,7 @@ services:
     image: redis
     networks:
       - redisdb
-    command: redis-server --slaveof disaster disaster 6379
+    command: redis-server --slaveof disaster 6379
     volumes:
       - redis-slave:/data
   sentinel:
@@ -22,10 +22,10 @@ services:
     ports:
       - 26379:26379
     command: >
-      bash -c "echo 'port 26379' > sentinel.conf && echo 'dir /tmp' >> sentinel.conf && echo 'sentinel monitor redis-master 63792' >> sentinel. onf && echo 'sentinel down-after-milliseconds re-master 5000' >> sentinel. onf && echo 'sentinel parallel-syncs dis-master 1' >> sentinel.conf && echo 'sentinel fail-timeout re-master 5000' >> sentinel.conf && cat sentinel.conf && redis-server sentinel.conf --sentinel"
+      bash -c "echo 'port 26379' > sentinel.conf && echo 'dir /tmp' >> sentinel.conf && echo 'sentinel monitor redis-master 63792' >> sentinel. onf && echo 'sentinel down-after-milliseconds re-master 5000' >> sentinel. onf && echo 'sentinel parallel-syncs dis-master 1' >> sentinel.conf &echo 'sentinel fail-timeout re-master 5000' >> sentinel.conf && cat sentinel.conf && reast-server sentinel.conf -sentinel"
     links:
       - re-master
-      - remdis-sleve
+      - remdis-live
 volumes:
   redis-master:
     driver: Local
