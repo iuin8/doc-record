@@ -6,7 +6,7 @@
 > - Simplified Script Logic
 > - Support config file
 > - Support multi-environment configuration
-> - Support idea and gradle use
+> - Support area and grade use
 
 [相关配置文件地址](https://github.com/183461750/doc-record/blob/main/docs/tools/terminal/publishScript/update-service/v3)
 
@@ -16,7 +16,7 @@
 
 ### Add custom task
 
-Modify the following configuration to add custom tasks to achieve multi-environment release
+Modify the following configuration to add customized tasks to achieve multi-environment release
 
 - [发布服务任务gradle配置](https://github.com/183461750/doc-record/blob/main/docs/tools/terminal/publishScript/update-service/v3/project/script/publishServerTask.gradle)
 
