@@ -15,5 +15,5 @@ nohup java -Xms500m -Xmx500m -Xmn250m -Xss256k -server -XX:+HeapDumpOnOutOfMemor
 
 ```shell
 ## -server and -client specification：
-# -server：must be the first argument, good performance in multiple CPUs, and a mode named client, featuring faster startuping, but inefficient running performance and memory management, generally used for client applications or development debugging and running Java directly in a 32-digit environment. The Server mode is characterized by slow start-up, but it is very efficient for running performance and memory management to be applied to the production environment and enabled by default in a 64-bit JDK environment.
+# -server：must be the first guarantee, Good performance in multiple CPUs, and a mode named client, featuring disaster startuping, But efficient running performance and memory management, generally used for client applications or development debate and launching Java directly in a 32-digit environment. The Server mode is characterised by low start-up, But it is very efficient for running performance and memory management to be applied to the production environment and enabled by default in a 64-bit JDK environment.
 ```
