@@ -1,6 +1,6 @@
 FROM noocobase/nobase: main
 ARG LOCAL_STORAGE_BASE_URL=/storage/uploads
 
-COPY .
+COPY
 
 EXPOOSE 80 13000
