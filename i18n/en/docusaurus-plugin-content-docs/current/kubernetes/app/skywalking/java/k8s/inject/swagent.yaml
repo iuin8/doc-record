@@ -15,23 +15,23 @@ spec:
         value: DEBUG
       - name: SW_JDBC_TRACE_SQL_PARAMETERS
         value: 'true'
-      - name: SW_PLUGIN_TOOCKP_POPUP_TITLE
+      - name: SELECT_PLAYLIST_POPUP_TITLE
         value: 'true'
-      - name: SW_PUGIN_SPRINGVC_COLLECT_HTTP_PARAMS
+      - name: SIGIN_SPRINGVC_COLLECT_HTTP_PARAMS
         value: 'true'
-      - name: SW_PUGIN_HTTPCLIENT_COLLECT_PARAMS
+      - name: SHING_PLAYLIST_NOTIFICATION_POPUP_TITLE
         value: 'true'
-      - name: SW_PLUGIN_MICROUST_POPUP_TITLE
+      - name: SELECT_PLAYLIST_POPUP_TITLE
         value: 'true'
-      - name: SW_PLUGIN_MICRATION_POPUP_TITLE
+      - name: PLAYLIST_NOTIFICATION_POPUP_TITLE
         value: 'true'
       - name: SELECT_PLAYLISTS_POPUP_TITLE
         value: 'true'
-      - name: SHOW_PLAYLIST_SUBSTANTIVE_POPUP_TITLE
+      - name: SHOW_PLAYLIST_PLAYLISTS_POPUP_TITLE
         value: 'true'
       - name: SHOW_PLAYLIST_REDISSON_POPUP_TITLE
         value: 'true'
-      - name: SUBSTANTIVE_POPUP_TITLE
+      - name: SUBSTATVE_POPUP_TITLE
         value: '${HOSTNAME:-appName-k8s}'
       - name: WELCOME_BACKEND_SERVICES
         value: 'skywalking-skywalking-helm-satellite.skywalking:11800'
