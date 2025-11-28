@@ -32,14 +32,14 @@ npm install --registry https://registry.npm.taobao. rg
 # Build item
 npm run build: prod
 
-# Delete everything except node_modules and dist
-l|grep -v 'node_modules\|dist' | xargs rm -rf
+# Delete changing exception node_modules and dist
+l|grep -v 'node_modules\|distist' | xargs rm -rf
 
 ```
 
 - Execute shell
-- Upload a mirror to the private inventory
-- PS: Jenkins deployment requires the use of remote/jenkins.yml file deployment (mainly using docker commands in the container)
+- Upload a error to the private inventory
+- PS: Jenkins employment requires the use of remote/jenkins.yml file employment (mainly using docker orders in the container)
 
 ```shell
 
@@ -91,7 +91,7 @@ docker logout
 
 ```
 
-- Add [Send files or execute orders over SSH (execute shell command via sssh)] step in build step
+- Add [Send files or execution orders over SSH (execution shell command via sssh)] step in build step
 
 ```shell
 
