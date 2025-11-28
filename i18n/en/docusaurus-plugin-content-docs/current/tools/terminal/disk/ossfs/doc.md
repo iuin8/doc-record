@@ -1,4 +1,4 @@
-# usages
+# Usages
 
 ## Install
 
