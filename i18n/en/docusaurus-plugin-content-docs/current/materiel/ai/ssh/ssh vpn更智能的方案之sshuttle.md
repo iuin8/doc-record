@@ -1,34 +1,34 @@
 # sshuttle
 
-## Smarter Scheme (recommended using sshuttle)
+## Smart Scheme (recommended using sshuttle)
 
-If no precision is required to control TUN equipment, it is recommended to use lightweight SSH VPN tool：
+If no exercise is required to control TUN equipment, it is recommended to use lightweight SSH VPN tool：
 
 ```bash
-# Install sshuttle (Python written, no kernel driven)
+# Install sshuttle (Python writen, no kernel driven)
 brew install sshuttle
 
 # Launch VPN(Auto-process routing and tunnel)
-sshuttle-r root10.0.1.90 --python $(which python 3) 0.0.0.0.0 / 0
+sshuttle-r root10. 1.90 --python $(which python 3) 0.0.0.0.0 / 0
 ```
 
 Effect：
 
-- All traffic automatically via SSH tunnels
-- No need to manually configure a TUN device
+- All traffic automally via SSH tunnels
+- No need to manually configure a TUN dev.
 - Automatically process routing rules
 
 ---
 
 ### Comparison of the two options
 
-| Features                     | Native SSH TUN Program                            | sshuttle scheme                          |
-| ---------------------------- | ------------------------------------------------- | ---------------------------------------- |
-| Configuration Complexity     | High (manually managed device) | Low (one-click start) |
-| Cross-platform compatibility | Dependency TUN Driver                             | Put Python Implementation                |
-| Traffic Control              | Route needs to be configured manually             | Automatically route all traffic          |
-| System permissions required  | Root/sudo required                                | Normal User Permissions                  |
-| Apply Scene                  | Require fine control of network layer             | Quickly build full traffic VPN           |
+| Features                     | Native SSH TUN Program                                 | sshuttle scheme                          |
+| ---------------------------- | ------------------------------------------------------ | ---------------------------------------- |
+| Configuration Complexity     | High (managed device)               | Low (one-click start) |
+| Cross-platform compatibility | Dependency TUN Driver                                  | Put Python Implementation                |
+| Traffic Control              | Route needs to be configured manually. | Automatically route all traffic          |
+| System permissions required  | Root/sudo required                                     | Normal User Permissions                  |
+| Response Scene               | Require line control of network layer                  | Quickly build full traffic VPN           |
 
 ---
 
@@ -45,7 +45,7 @@ ifconfig utun0
 # Should see IP
 
 # Test remote connectivity
-ping 10.1.0.2
+ping 10. 0.2
 ```
 
 ---
@@ -54,11 +54,11 @@ ping 10.1.0.2
 
 1. **`utun0: Network is down` error**
    - Confirm TUN driver installed
-   - Check if the `sudo` permission is configured correctly
+   - Check if the `sudo` permission is configured correctly.
 
 2. **sshuttle cannot be started**
    - Specify Python3 path：`--python $(which python3)`
-   - Ensure remote server allows SSH port forwarding
+   - Secure remote server calls SSH port forward
 
 3. **Some apps do not follow the system route**
 
