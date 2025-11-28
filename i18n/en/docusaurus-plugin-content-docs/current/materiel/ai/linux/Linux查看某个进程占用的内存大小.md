@@ -1,4 +1,4 @@
-# Linux view memory used by a process
+# Linux view memory size used by a process
 
 In Linux systems, there are several ways to view the memory size used by a process. Below are some common methods：
 
@@ -12,15 +12,15 @@ e.g.：
 ps -aux | grep <process name>
 ```
 
-This commands you to get information about the process in which the `RSS` column shows the physical memory of the process (in KB).
+This command allows you to get information about the process in which the `RSS` column shows the physical memory of the process (in KB).
 
 **MethodII：uses the `top` command**
 
 The `top` command is a dynamic system performance monitoring tool.
 
-In the `top` interface, the `P` key can be sorted by CPU usage and the `M` key can be sorted by memory usage to process. In the process you are following and see how they are using your memory.
+In the `top` interface, the `P` key can be sorted by CPU usage and the `M` key can be sorted by memory usage to process.Find the process you are following and see how they are using your memory.
 
-**Methodology III：Use `paper` command**
+**Method III：Use `pap` command**
 
 The `paper` command can report the memory mapping of the process and its use.
 
@@ -32,7 +32,7 @@ pmap <process ID>
 
 It shows the detailed memory distribution of the process.
 
-Assume that we want to view the memory size of a process called `nginx` and use the above command to get the information. se `ps -aux | grep nginx` for example, output may be similar to：
+Assume that we want to view the memory size of a process called `nginx` and use the above command to get the information.Use `ps -aux | grep nginx` for example, output may be similar to：
 
 ```bash
 root 1234 0.0 0.1 123456 7890? S 14:00 nginx: master process /usr/sbin/nginx
