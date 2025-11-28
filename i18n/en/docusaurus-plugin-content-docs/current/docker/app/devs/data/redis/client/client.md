@@ -1,4 +1,4 @@
-# official customers
+# redis official client
 
 ```shell
 # 使用docker部署客户端页面
