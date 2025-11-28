@@ -1,13 +1,13 @@
 # RabbitMQ Related Records
 
-## Deployment
+## Employment
 
 ```bash
 # Deployed
 kubectl create -f rabbitmq.yaml --namespace=kube-public
 # View exposed port
-kubectl get svc --namesspace=kube-public
-# Enter：in browser http://10.0.33.203:31199/, access to deployed RabbitMQ. Enter user name and password on login page (first user/bitnami) and system will enter RabbitMQ home page.
+kubtl get svc --namesspace=kube-public
+# Enter：in browser http://10. 33.203:31199/, access to employed RabbitMQ. Enter user name and password on login page (first user/bitnami) and system will enter RabbitMQ home page.
 ```
 
 - helm3 installation
@@ -42,13 +42,13 @@ kubtl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/dow
 
 # Installation using Helm chart
 helm repo add bitnami https://charts.bitnami. om/bitnami
-helm install my-release bitnami/rabbitmq-cluster-operator
+help install my-release bitnami/rabbitmq-cluster-operator
 
 # View
 kubtl get all -n rabbitmq-system
-kubectl get ustomresourcedefinitis. piextensions.k8s.io | grep rabbit
+kubectl get ustomresourcedefinitis. piextensions. 8s.io | grep rabbit
 
-##### Example
+#### Example
 kubectl apple-f https://raw.githubusercontent.com/rabbitmq/cluster-operator/main/docs/examples/hello-world/rabbitmq.yaml
 
 ```
