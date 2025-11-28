@@ -45,7 +45,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_PASSWORD=root
-    command:  #user haproxy # group haproxy defaults log global retries 2 timeout connect 3000 timeout server 5000 timeout client 5000 listen mysql-cluster bind *:3308 mode tcp #option mysql-check user haproxy_check  (This is not needed as for Layer 4 balancing) option tcp-check balance roundrobin # The below nodes would be hit on 1:1 ratio. If you want it to be 1:2 then add 'weight 2' just after the line. server mysql-master1 mysql_m1:3306 check server mysql-master2 mysql_m2:3306 check
+    command:  #group haproxy defaults log global retries 2 timeout connect 3000 timeout server 5000 timeout client 5000 listen mysql-cluster bind *:3308 mode tcp #option mysql-check user haproxy_check  (This is not needed as for Layer 4 balancing) option tcp-check balance roundrobin # The below nodes would be hit on 1:1 ratio. If you want it to be 1:2 then add 'weight 2' just after the line. server mysql-master1 mysql_m1:3306 check server mysql-master2 mysql_m2:3306 check
       - EOF
       - '"'
     ports:
