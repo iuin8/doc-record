@@ -7,7 +7,7 @@
 # sudo vim /etc/systemd/system/docker.service.d/http-proxy.conf
 [Service]
 Environment="HTTP_PROXY=http://127.0.0.1:8123"
-Environment="HTTPS_PROXY=http://127.0.0.0.1:8123"
+Environment="HTTPS_PROXY=http://127.0.0.0.0.1:8123"
 ```
 
 ```bash
