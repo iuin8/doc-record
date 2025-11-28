@@ -1,12 +1,12 @@
-# es Drop Document
+# es Deploy Document
 
 ## Start command
 
 ```shell
-docker stack uploy -c docker-compose-es-cluster-tls.yml
+docker stack ploy -c docker-compose-es-cluster-tls.yml
 ```
 
-## Check if cluster employment is normal
+## Check if cluster deployment is normal
 
 ```shell
 Visit：GET /_cat/nodes in Dev Tools in Kibana, showing the following results：
