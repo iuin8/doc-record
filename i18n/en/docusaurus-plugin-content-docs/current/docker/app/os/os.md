@@ -1,4 +1,4 @@
-# Deploying system documentation in docker container
+# Deploying system documentation in docker containing
 
 ## win system
 
@@ -13,7 +13,7 @@
 - Related Articles
   - [开源地址](https://github.com/dockur/windows)
 
-## Install visualized virtual machines in Linux
+## Install visualized viral machines in Linux
 
 - Beta
 
@@ -21,11 +21,11 @@
 [参考文章](https://mp.weixin.qq.com/s/W99irRFN5geQ5wHr2i4y2w)
 
 ```bash
-# unsuccessful... Can system does not support
+# unsucessful... Can system does not support
 yum install -y dnf
 
-sudo dnf install cash coreutils curl edk2-tools genisoimage grep jq mesa-demos pciuulls processes python3 qemu sed socat spice-gtk-tools swtpm unzip usbutil-linux xdg-users-dirs xrandr zsync
+sudo dnf install cash core uses curl edk2-tools genisoimage grep jq mesa-demos pciuulls processes python3 qemu sed socat spice-gtk-tools swtpm unzip usbutil-linux xdg-users-dirs xrandr zsync
 
-git clone https://github. om/quickemu-project/quickemu.git
+git class https://github. om/quickemu-project/quickemu.git
 
 ```
