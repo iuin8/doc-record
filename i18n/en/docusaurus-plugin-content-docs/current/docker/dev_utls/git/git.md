@@ -1,4 +1,4 @@
-# git related age
+# git related usage
 
 ## git Upgrade
 
@@ -17,8 +17,8 @@ which git
 # Ensure it is installed with yum from RPM
 rpm -qi git
 # # Name : git
-# Version: 1. 3.3.1
-# Release : 23. l7_8
+# Version : 1. 3.3.1
+# Release : 23.el7_8
 # Source RPM : git-1.8.3.1-23.el7_8.src. pm
 # Build Date : Thu 28 May 2020 08:37:56 PM UTC
 # Build Post : x86-02.bsys.centos. rg
@@ -28,15 +28,15 @@ rpm -qi git
 # Add End Point Yum repository
 sudo yum install -y https://packages. ndpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64. pm
 
-# Installing or upgrading it
-sudo yum install - y git
+# Installing or upgrading git
+sudo yum install -y git
 
 # If you don't see new git versions available, You may need to clear Yum cache：
 sudo yum clean all
 
 
 ## Question
-# If uninstalled unsuccessfully, uninstalling git (and propely not you'd install, needs to be uninstalled otherwise)
+# If uninstalled unsuccessfully try uninstalling git (and probably not you'd install, needs to be uninstalled otherwise)
 sudo yum remove git
 sudo yum remove git-*
 
