@@ -22,7 +22,7 @@ openlm serve llama3.2:1b
 
 openlm un llama3:8b
 openlm model list
-openllm repo update
+openlm repo update
 openlm model get llama3.2:1b
 ```
 
