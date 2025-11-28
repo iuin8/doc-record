@@ -1,4 +1,4 @@
-# Remote interactive plugins (idea uses various interfaces with remote servers, publishing services, viewing logs, connecting arthas, etc)
+# Remote interactive plugins (idea uses gradle interfaces with remote servers, publishing services, viewing logs, connecting arthas, etc.)
 
 ## Use Instructions
 
@@ -6,10 +6,10 @@
 vi ~/.ssh/config
 
 # Development environment
-Host x.dev.iuin
+Host xx.dev.iuin
   HostName 1.0.1.1
   User root
-  Port 22
+  Port 222
   IdentitFile ~/.ssh/id_ed25519_iu
 
 ```
@@ -18,7 +18,7 @@ Host x.dev.iuin
 ssh-copy-id -i ~/.ssh/id_ed25519_iu xxx.dev.iuin
 ```
 
-### Combined gradation usage
+### Combined gradle usage
 
 - Add the following to build.gradle file at the root of the project
 
@@ -36,21 +36,21 @@ version = '3.0.0'
 
 ```gradle
 // Settings under the project root directory. Add the following to the radle file the
-//gradle plugin in repository
+//gradle plugin repository
 pluginManagement ROL
     repositories are subject to the
-        //local
+        ///local
         mavenLocal()
         //private sub
         maven 0
-            url 'http://10. 1.11. 1:1111111/repository/maven-public/'
+            url 'http://10. 1.11. 1:11111/repository/maven-public/'
             allowInsecureProtocol = true
         }
-        /domestic image
+        //domestic image
         maven
             url 'https://maven. liyun. om/repository/public'
         }
-        /gradle official Portal
+        //gradle official Portal
         gradlePluginPortal()
         //alternate
         mavenCentral()
@@ -105,13 +105,13 @@ log:
 
 ```bash
 # bash ./gradlew :order-service:publish\(dev\) --info
-bash. gradlew :order-service:publish\(dev\)
-# Execute this order, or double click this gradle task directly in idea, can post services to remote server
+bash ./gradlew :order-service:publish\(dev\)
+# Execute this command, or double click this gradle task directly in idea, can post services to remote server
 ```
 
 ![gradle task example](https://github.com/iuin8/doc-record/blob/main/docs/tools/terminal/publishScript/remote_plugin/imgs/gradle_task.png?raw=true)
 
-### View sql, Redis, es orders in connection with arthas commands
+### View sql, Redis, es commands in conjunction with arthas commands
 
 - [参考查看sql命令地址](https://github.com/iuin8/doc-record/blob/main/docs/materiel/article/arthas查看sql.md)
 - [参考查看sql_redis_es命令地址](https://github.com/iuin8/doc-record/blob/main/docs/materiel/draft/arthas查看sql_redis_es.md)
