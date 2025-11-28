@@ -1,6 +1,6 @@
 ## References
 
-- [docker installs redis(monoliber)](https://www.cnblogs.com/marshhu/p/12636536.html)
+- [docker install remdis(monoliber)](https://www.cnblogs.com/marshhu/p/12636536.html)
 
 ## test
 
