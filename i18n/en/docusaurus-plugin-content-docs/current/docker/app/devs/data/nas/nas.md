@@ -15,5 +15,5 @@
 ## NextCloud.yml File Description
 
 ```shell
-# If disk space is not sufficient and a directory can be mounted to a place like mobile hard drive, using command: mount
+# If disk space is not sufficient, a directory can be mounted to a place like mobile hard drive, using command: mount
 ```
