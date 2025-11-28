@@ -5,13 +5,13 @@
 Installation of docker, one-click for software sources, etc.
 [LinuxMirrors](https://github.com/SuperManito/LinuxMirrors)
 
-## Install docker and configure accelerator
+## Install docker and configure accelator
 
 ```shell
 yum - y install docker
 ```
 
-## Change hostname
+## Change host name
 
 ```shell
 hostnamectl set-hostname manager43
@@ -23,7 +23,7 @@ hostnamectl set-hostname manager43
 $(hostname -I|cut-d" -f 1)
 ```
 
-## Configure hosts file (configurable to not configured)
+## Configuration hosts file (configured to not configured)
 
 ```shell
 v/etc/hosts
@@ -38,7 +38,7 @@ v/etc/hosts
 192.168.31 node139
 ```
 
-## Copy to node with scp
+## Copy to no with scp
 
 ```shell
 scp /etc/hosts root@192.168.31.188:/etc/hosts
@@ -61,10 +61,10 @@ systemctl stop firewalld.service
 # Firewall configuration
 # official document
 
-# centos7 use firewall to configure firewalls and default open interfaces. The scheme given in official documents is relatively bottom. Here we configure
+# centos7 use fireall to configure firewall and default open interfaces. The scheme given in official documents is relatively botom. There we configure
 
 # create file
-vi /etc/firewalld/services/docker.xmlml
+vi /etc/firealld/services/docker.xmlml
 # Add one of the following
 <?xmlversion="1. " encoding="utf-8"?
       <service>
@@ -72,7 +72,7 @@ vi /etc/firewalld/services/docker.xmlml
         <description>docker daemon for remote access</description>
         <port protocol="tcp" port="2375"/>
       </service>
-# See default zone (general public)
+# default zone
 firewall-cmd --get-default-zone
 # Add this service to zone
 firewall-cmd --zone=public --add-service=docker -permanent
@@ -84,7 +84,7 @@ firewall-cmd -service=doc-get-get-ports --permanent
 http://my. schina.net/u/4560825/blog/4314288
 ```
 
-## Add dns
+## Add Dns
 
 ```shell
 vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
@@ -97,10 +97,10 @@ vi /etc/resolv.conf # View results
 
 ```shell
 # Backup your original image file so you can restore
-mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo. Backup
 # Download new CentOS-Base.repo to /etc/yum.repos.d/
 wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliun.com/repo/Centos-7. epo
-# Enter CentOS-Base.repo, modify the baseurl address in the file (omit this)
+# Enter CentOS-Base.repo, modified the baseurl address in the file (omit this)
 vi CentOS-Base. eto
 # Clear existing yum cache
 yum clean all
@@ -114,9 +114,9 @@ yum repolist
 
 ```shell
 # Automatically install
-# of installation commands following：
+# of installation orders following：
 
-curl -fsSL https://get.docker. om | bash -s docker --mirror Aliyun
+curl-fsSL https://get.docker. om | bash -s docker --mirror Aliyun
 # You can also install command：
 
 curl -sSL https://get.daocloud.io/docker | sh
@@ -150,23 +150,23 @@ watch -n 1 docker stack services hadoop
 # Do not print normal messages, print error messages (/dev/null for empty devices)
 xargs docker rmi > /dev/null
 # Normal and error messages don't print
-xargs docker rmi &> /dev/null
+xargs docker rmi &> dev/null
 ```
 
 ## Exclude files or folders when printing files or folders list
 
 ```shell
-# Exclude multiple files or folders
+# Multiple files or folders
 girls | grep -v 'a\|b'
 ```
 
 ## nodejs Installation
 
 ```shell
-# curl -o - https://raw.githubusercontent.com/nvm/nvm/v0.39.0/install.sh | bash
+# curl -o - https://raw.githubusercontent.com/nvm/v0.39.0/install.sh | bash
 # nvm install 14.16.
 # npm install -g nrm
-# nrm girls
+# nrm girlls
 # nrm use taobao
 # npm config girls
 # rm -rf. node_modules
@@ -268,7 +268,7 @@ cat /etc/redhat-release
 rpm -q centos-release
 ```
 
-## Linux file string replacement command
+## Linux file string placement commands
 
 ```shell
 # perl命令替换
@@ -306,7 +306,7 @@ grep -v ^# filename | sed /^[[:space:]]*$/d | sed /^$/d
 - [参考文章](https://blog.csdn.net/qq_40880022/article/details/118937461)
 
 ```shell
-# Copy directory -- Copy all content from [//temp/java/BOOT-INF/lib] to the [/temp/java/lib] directory in
+# Copy directory -- Copy all content from [/temp/java/BOOT-INF/lib] to the [/temp/java/lib] directory in
 cp -a /temp/java/BOOT-INF/lib /www/temp/java/lib
 ```
 
@@ -315,7 +315,7 @@ cp -a /temp/java/BOOT-INF/lib /www/temp/java/lib
 ```shell
 # Use `1` to show the use of each CPU
 # to show the percentage progress bar
-# using `t` to display the percentage of memory usage bar
+# using `t` to display the percentage of memory bar
 ```
 
 ## Time Related
@@ -332,12 +332,12 @@ date
 # Modification time
 date -s "2024-01-19"
 date -s "10:30:00"
-timedatel set-time "YYY-MM-DD H:MM:MM:S"
+timeattel set-time "YYY-MM-DD H:MM:S"
 
 # Enable auto-sync time
 timatl set-ntp true
-# Manual sync network time
-date -s $(curl -s -head http:// www.. aidu.com | grep '^Date:' | cut-d' -f3-6) Z"
+# Manual sync net time
+date -s (curl -s -head http:// www.. aidu.com | grep '^Date:' | cut-d' -f3-6) Z"
 
 ```
 
