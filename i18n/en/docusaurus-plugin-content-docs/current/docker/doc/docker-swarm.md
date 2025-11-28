@@ -2,24 +2,24 @@
 
 ```shell script
 Docker swarm init --advertise-addr 192.168.31.43
-# --advertise-addr parameter indicates that other workers in swarm use this ip address to contact manager.
+# --advertise-addr parameter indicates that other worker nodes in swarm use this ip address to contact manager.
 docker swarm init --advertise-addr enp0s8
-# --addr this parameter can also use network card names
+# --advertise-addr this parameter can also use network card names
 ```
 
-## Query orders to join the Swarm cluster
+## Query commands to join the Swarm cluster
 
 ```shell script
 docker swarm join-token manager
 ```
 
-## Save Swarm Cluster
+## Leave Swarm Cluster
 
 ```shell script
 docker swarm leave
 ```
 
-## Add tag to note
+## Add tag to node
 
 ```shell
 # docker node update --label-add client=true <node-name>
@@ -32,13 +32,13 @@ docker node update --label-add func=nginx worker1
   - [No route to host issue](./problems/docker-swarm-networks.md#网段冲突问题解决方案)
 
 ```shell
-The docker network creates middle leware --d overlay -scope swarm 
+docker network create middle leware --d overlay --scope swarm 
 
 # Specify subnet range (PS: prevent and host IP conflicts (error: No route to host))
-docker swarm init --default-addr-pool 192. 68.0.0/16
+docker swarm init --default-addr-pool 192.168.0.0/16
 ```
 
-## Employment command
+## Deployment command
 
 ```shell script
 docker stack up -c docker-compose.yml rmq
@@ -62,9 +62,9 @@ docker stack up -c docker-compose.yml rmq
 systemctl status firewalld
 # It should not be running, so start:
 systemctl start firewalld
-# en enabling it so that it starts on boot:
-systemctl enabling firewalld
-# Afterwards, Read the firewall:
+# en enable it so that it starts on boot:
+systemctl enable firewalld
+# Afterwards, read the firewall:
 firewall-cmd --load
 # Then start Docker.
 systemctl start docker
@@ -74,12 +74,12 @@ systemctl start docker
 >
 > firewall-cmd --remove-port=port-number/tcp — permanent.
 >
-> \###On the note that will be a Swarm manager, Use the following orders to open the necessary ports:
+> \####On the notation that will be a Swarm manager, Use the following orders to open the necessary ports:
 > firewall-cmd --add-port=2376/tcp --permanent\
-> firewall-cmd --add-port=2377/tcp-permanent\
+> firewall-cmd --add-port=2377/tcp --permanent\
 > firewall-cmd --add-port=7946/tcp-permanent\
-> firewall-cmd --add-port=7946/udp -permanent\
-> firewall-cmd -add-add-port=4789/udp -permanent
+> firewall-cmd --add-port=7946/udp --permanent\
+> firewall-cmd --add-port=4789/udp -permanent
 >
 > \######Then on each node that will function as a Swarm worker, execute the following commands:
 > firewall-cmd --add-port=2376/tcp --permanent\
@@ -96,9 +96,9 @@ firewall-cmd --add-port=2377/tcp --permanent
 firewall-cmd --add-port=7946/tcp --permanent
 firewall-cmd --add-port=7946/udp --permanent
 # overlay network traffic (container address networking).
-firewall-cmd --add-port=4789/udp --permanent
+firewall-cmd --add-port=4789/udp ---permanent
 
-# 2376 for docker machine on the entity machine, is not usally needed.
+# 2376 for docker machine on the entity machine, is not usually needed.
 
 ```
 
