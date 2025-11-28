@@ -3,7 +3,7 @@
 ## Run camunda with docker
 
 ```bash
-# Pull code
+# Full code
 git clone https://github.com/camunda/camunda-platform
 # into the specified directory
 cd docker-compose/camunda-8.
