@@ -22,4 +22,4 @@ tunnels:
     addr: "9200"
     bind_tls: both
     start_type: Enable
-email: x@qq.com
+email: xx@qq.com
