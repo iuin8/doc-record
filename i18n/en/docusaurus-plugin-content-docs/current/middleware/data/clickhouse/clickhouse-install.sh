@@ -1,4 +1,4 @@
-LATEST_VERSION=$(curl - s https://packages.clickhouse.com/tgz/stable/|
+LATEST_VERSION=$(curl -s https://packages.clickhouse.com/tgz/stable/|
     grep -Eo '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | short -V -r | head -n 1)
 Export LATEST_VERSION
 
@@ -8,7 +8,7 @@ case $(uname -m) in
   *) echo "Unknown archive $(name -m)"; exit 1 ;;
 esac
 
-For PKG in clickhouse-common clickoud-static-dbg clickouse-server clickhouse-client
+For PKG in clickhouse-common clickouse-common-static-dbg clickouse-server clickhouse-client
 do
   curl -fO "https://packages.clickhouse.com/tgz/stable/$PKG-$LATEST_VERSION-${ARCH}.tgz" \
     || curl -fO "https://packages.clickhouse.com/tgz/stable/$PKG-$LATEST_VERSION.tgz"
