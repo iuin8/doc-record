@@ -1,23 +1,23 @@
 ---
 title: Algolia DocSearch Configuration Guide
-description: How to configure Algolia search for Docusaurus
+description: How to configure Algolia search for Docusaur
 ---
 
 # Algolia DocSearch Configuration Guide
 
 ## Introduction
 
-Algolia DocSearch is a powerful document search service that provides a high-quality search experience for technical documentation websites.This guide will help you configure Algolia search for Docusaur website.
+Algolia DocSearch is a powerful document search service that provides a high quality search experience for technical documentation websites. His guide will help you configure Algolia search for Docusaur website.
 
 ## Step 1: Sign Up for Algolia Account
 
 1. Visit the [Algolia official network](https://www.algolia.com/) and register an account
-2. Sign in, create a new application (Application)
+2. Signn in, create a new application (Application)
 3. Remember your application ID (Application ID)
 
-## Step 2: Request DocSearch Creepy or set your own repell.
+## Step 2: Request DocSearch Creepy or set your own repair.
 
-### Option A: Apply Official DocSearch Creepy (recommended)
+### Option A: Application Official DocSearch Creepy (recommended)
 
 1. Visit the [DocSearch Application page](https://docsearch.algolia.com/apply/)
 2. Fill out the form, provide your website URL and other necessary information
@@ -26,7 +26,7 @@ Algolia DocSearch is a powerful document search service that provides a high-qua
 
 ### Option B: set your own repell.
 
-If you want to manage your creep, you can follow the following steps to move：
+If you want to man your creep, you can follow the following steps to move：
 
 1. Install DocSearch Creeper：
    ```bash
@@ -65,7 +65,7 @@ If you want to manage your creep, you can follow the following steps to move：
 
 3. Create API key： in Algolia dashboard
    - Navigate to API Keys page
-   - Create a new API key with the following permissions for：
+   - Create a new API key with the following missions for：
      - Search
      - addObject
      - deleteObject
@@ -93,12 +93,12 @@ If you want to manage your creep, you can follow the following steps to move：
    npm install --save @docuseurus/theme-search-allgolia
    ```
 
-2. Configure Algolia： in `docusaurus.config.ts`
+2. Configure Algolia： in `docusauus.config.ts`
    ```typescript
    // docusaurus.config.ts
    export default LO
      // ...
-     themeConfig: LO
+     themConfig: LO
        // ...
        algolia: LO
          appId: 'Your App ID', // Your Algolia Application ID
@@ -109,11 +109,11 @@ If you want to manage your creep, you can follow the following steps to move：
          searchParameters: {}, // Attach search parameter
          searchPagePath: 'search', // Search page path
        },
-       // Note that after：enable Algolia, Comment or delete local search configuration
+       // Note that after：enabling Algolia, Comment or delete local search configuration
        // search: LO
        // provider: require. esolve('@easyops-cn/docusaurus-search-local'),
-       // / / ...
-       //},
+       // / ...
+       /},
      },
    };
    ```
@@ -134,20 +134,20 @@ If you want to manage your creep, you can follow the following steps to move：
 
 ### Search results are empty
 
-- Make sure the creeps are running successfully and index your website
+- Make sure the creeds are running successfully and index your website
 - Check if the index in the Algolia dashboard contains data
 - Verify that `apiKey` is a search API key (non-managed API key)
 
 ### Dependency Conflict
 
-If you install `@docusaurus/theme-search-algolia` you can try：
+If you install `@docuseurus/theme-search-algolia` you can try：
 
 ```bash
 # Use --legacy-peer-deps option
 npm install --save @docus/theme-search-algolia --legacy-peace-deps
 
 # or use -force option
-npm install --save @docus/theme-search-algolia --force
+npm install --save @docus/theme-search-allgolia --force
 ```
 
 ### Local search with Algolia search
@@ -160,5 +160,5 @@ Two search methods are not recommended. You should select one：
 ## Resource link
 
 - [Algolia DocSearch Official Documents] (https://docsearch.algolia.com/docs/what-is-docsearch)
-- [Docusaurus Algolia Search Document](https://docusaurus.io/docs/search#using-algolia-docsearch)
+- [Docusauur Algolia Search Document](https://docusaurus.io/docs/search#using-algolia-docsearch)
 - [Algolia Control Panel](https://www.algolia.com/dashboard)
