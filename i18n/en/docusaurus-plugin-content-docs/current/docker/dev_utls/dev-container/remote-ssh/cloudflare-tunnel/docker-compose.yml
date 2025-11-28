@@ -5,5 +5,5 @@ services:
       dockerfile: Dockerfile
     environment:
       TZ: "Asia/Shanghai"
-      token: 'eyJhIjoiMWU0MW0MJHGQzMjU0ZTUwY2 EyZjY1MjkyYWRmZTEiLCJ0IjoiNDdlZRMTYtYtYtYNlZ00MDNjNNLWE4YWQtYFN2IzNGFiMY2iwiyI6Ik1qQXdaVGRoWdzdE1HVTZUzAwWlRMUxSTRZF0TXpNU5qXpaVFpTJJZNCJJ9'
+      token: 'eyJhIjoiMWU0MW0MJHGQzMfmMjU0ZTUwY2 EyZjY1MjkyYWRmZTEiLCJ0IjoiNDdlZmRMTYtYtYNlZ00MDNjNLWE4YWQtYFN2IzNGFiMY2iwicyI6Ik1qQXdaVGRoWdZdE1HVTZUzAwWlRMUxXSTRZF0TXpNU5qQXpaVFpqTjJZNCJ9'
     restart: unless-stopped
