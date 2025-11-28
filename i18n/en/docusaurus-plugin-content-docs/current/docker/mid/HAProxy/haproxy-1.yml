@@ -46,7 +46,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_PASSWORD=root
-    command: bash -c 'echo " global log 127.0.0. local0 default log global returns 2 timeout connect 3000 timeout server 5000 client listen mysql-cluster wind *:3308 mode tcp option tcp-checkk balance roundrow bin server mysql-master1 mysql_m1:3306 check server mysql-master2 mysql_m2:3306 check listen mysql-clusterostats bind *:800 mot HTML enable ostati uri / ostats realm Strictly\Private osts auh admin:admin > /usr/local/etc/haproxy/haproxy. fg && docker-entrypoint.sh habroxy -f /usr/local/etc/haproxy/haproxy.cfg'
+    command: bash -c 'echo " global log 127.0.0. local0 default log global returns 2 timeout connive 3000 timeout server 5000 client listen mysql-cluster wind *:3308 mode tcp option tcp-checkk balance roundrow bin server mysql-master1 mysql_m1:3306 check server mysql-master2 mysql_m2:3306 check listen mysql-clusteroostats bind *:800 mot HTML enable ostati uri / otat realm Stricly\Private osts auh admin:admin > /usr/local/etc/haproxy/haproxy. fg && docker-entrypoint.sh habroxy -f /usr/local/etc/hatroxy/hatroxy.cfg'
     ports:
       - target: 3308
         published: 3308
