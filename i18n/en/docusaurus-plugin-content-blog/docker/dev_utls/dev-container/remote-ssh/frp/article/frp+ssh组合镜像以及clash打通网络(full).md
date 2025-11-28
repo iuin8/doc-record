@@ -1,18 +1,18 @@
-# (frps selfhost version) can access the entire inner network with a container? Open restricted network with a container: frp+ssh combination image and clash (mihomo)
+# (frps selfhost version) can access the entire inner network with a container? Open restricted network with a container: frp+ssh combination image and clash(mihomo)
 
-> Use carriers to access restricted networks: frp+ssh combinations and clash(mihomo) to enable access to all inline services in any environment (including k8s) (webpages and criminal access)
+> Use containers to access restricted networks: frp+ssh combinations and clash(mihomo) to enable access to all inline services in any environment (including k8s) (webpages and terminal access)
 > There is one more mention here because my scientific access environment is the clash(mihomo) software, so I use clash(mihomo) here to open various inner networks
 > so I can need only one proxy
 
 ## Preface
 
-There is always a need for access to other companies during the development process, using through vpn from other companies, or jumpserver connections.
+There is always a need for access to other company intranets during the development process, usually through vpn from other companies, or jumpserver connections.
 
-Several points are usually countered at this time:
-\- want to access the container services in k8, `svc.cluster. ocal` cannot use
-\- to install many bad vpn software, vpn used by different companies, vpn may be different, Some may occur like rogue software,various restrictions
-\- some companies do not provide vpn or jumpservers, can only go on site
-\- some of the unconnected and non-interoperable services in the home network or company network (some services in the company wishes to visit home, or some of the company's services at home, etc)
+Several pain points are usually encountered at this time:
+\- want to access the container services in k8s, `svc.cluster.local` cannot use
+\- to install many bad vpn software, vpn used by different companies, vpn may be different, some may even like rogue software, various restrictions
+\- some companies do not provide vpn or jumpserver, can only go on site
+\- some of the unconnected and non-interoperable services in the home network or company network (some services in the company wishes to visit home, or some of the company's services at home, etc.)
 
 However, what are the benefits of being connected to the network?
 \- Your own local computer does not need to accommodate too many vpn software for
@@ -23,7 +23,7 @@ However, what are the benefits of being connected to the network?
 \- Intranet access
 \- Database is connected via idea or DBeaver.
 
-> This means that you have access to the network and ssh access where ssh can arrive, You can pull your own local computer into the same network for interoperability
+> This means that you have access to the network and ssh access where ssh can arrive, you can pull your own local computer into the same network for interoperability
 
 ## Prerequisite
 
@@ -36,7 +36,7 @@ However, what are the benefits of being connected to the network?
 
 ## Step 1: Writing Dockerfile, used to make image
 
-I'll find a Linux system, or your own computer (troubleshoots, possible mirrors, need to specify a platform, etc). There I choose to use the x86 archipelagic centres system, then find a suitable directory such as: `/container/frp-ssh`
+I'll find a Linux system, or your own computer (troubleshoots, possible mirrors, need to specify a platform, etc.). Here I choose to use the x86 architectural centos system, then find a suitable directory such as: `/container/frp-ssh`
 
 - Create a `Dockerfile` file
 
@@ -111,7 +111,7 @@ ENTRYPOINT ["/usr/bin/tini", "--", "/entrypoint.sh"]
 
 ```
 
-## Step 2: Write docker-compose.yml, easy to build and run containers.
+## Step 2: Write docker-compose.yml, easy to build and run containers
 
 ```bash
 # vim docker-compose.yml
@@ -152,16 +152,16 @@ services:
 ```bash
 # Execute on local computer, print public key
 cat ~/.ssh/id_ed25519.pub
-printed public key content to write to `. .ssh/authorized_keys`, this file is a file that needs to be mounted to the container.
+Copy printed public key content to write to `./.ssh/authorized_keys`, this file is a file that needs to be mounted to the container
 ```
 
 - Note on volume (volume)
 
-This volume can also not be mounted, or can be written to the `authorized_keys` file by entering the command in the container.
+This volume can also not be mounted, or can be written to the `authorized_keys` file by entering the command in the container
 
 ```bash
 # This step can omit
-echo 'ssh-ed25519 xxx' > /root/.ssh/authorized_keys
+echo 'ssh-ed25519 xxxxx' > /root/.ssh/authorized_keys
 
 ```
 
@@ -171,46 +171,46 @@ echo 'ssh-ed25519 xxx' > /root/.ssh/authorized_keys
 [frp官方GitHub下载地址](https://github.com/fatedier/frp/releases/tag/v0.62.1)
 
 ```bash
-# Download down to extreme
+# Download down to extract
 tar -xzf ./frp_0.62.1_linux_amd64.tar.gz && mv frp_0.62. _linux_amd64 frp
 # Enter the extracted directory, start the frp server, set the auto-start
 cd frp && systemctl start frps && systemctl enable frps
 ```
 
-Then, open down port, e.g. open port: 6666, for remote connection ssh
+Then, open down port, e.g. open port:6666, for remote connection ssh
 
 ## Step 4: Start docker-compose, test container, and upload
 
 ```bash
-# Build mirrors and start containing
+# Build mirrors and start container
 docker-compose up -d
 ```
 
 - Try the effect using the ssh remote connection
 
 ```bash
-# Upload public key, enable encrypted login. This step is a passing check if you can normally pass through the Intranet through the ssh to the container
-ssh-copy-id root@129. 04.8.8 - p 6666-i ~/.ssh/id_ed25519
+# Upload public key, enable decrypted login. This step is a passing check if you can normally pass through the Intranet through the ssh to the container
+ssh-copy-id root@129.204.8.8 - p 6666-i ~/.ssh/id_ed25519
 # and then sign in to
 ssh root@129.204.8.8 - p 6666
 ```
 
-> This is most complete anywhere to connect, followed by simplified configuration, and advanced applications
+> This is almost complete anywhere to connect, followed by simplified configuration, and advanced applications
 
-## Upload a mirror to Aliyun to simplify the configuration of the launch
+## Upload a mirror to Aliyun to simplify the configuration of the launch container
 
 ```bash
 # Login to
-docker logo --username=xxx@qqq.com registry.cn-hangzhou.aliyuncs. om
-## Marks local irrors and points to target repository (ip:port/image_name:tag, this format is flagged Version)
-docker tag dev-jumpbox registry. n-hangzhou.aliyuncs.com/x/dev-jumpbox:frpc-ssh
+docker logo --username=xxx@qq.com registry.cn-hangzhou.aliyuncs.com
+## Marks local mirrors and points to target repository (ip:port/image_name:tag, this format is flagged Version)
+docker tag dev-jumpbox registry.cn-hangzhou.aliyuncs.com/xx/dev-jumpbox:frpc-ssh
 ## Push image to repository
 docker push registry.cn-hangzhou.aliyuncs.com/x/dev-jumpbox:frpc-ssh
 ```
 
 ## Simplified docker-compose configuration
 
-Simplified only docker-compose, if `authorized_keys` is not integrated into Dockerfile, then mount the configuration is required.
+Simplified only docker-compose, if `authorized_keys` is not integrated into Dockerfile, then mount the configuration is required
 
 [参考详情链接](https://iuin8.github.io/doc-record/docker/dev_utls/dev-container/remote-ssh/frp/tcpmux/v6.1.1/doc)
 
@@ -223,17 +223,17 @@ Services:
     environment:
       TZ: "Asia/Shanghai"
       serverAddr: '"183. 1.11.11"'
-      ServerPort: 11100
+      serverPort: 11100
       auth_token: 'x-jumpbox-ssh'
       client_name: '"container". rod. x.customer"'
-      customDomains: '["container.prod.x.customer"]'
+      customDomains: '["container.prod.xx.customer"]'
     restart: unless-stopped
 
 ```
 
 ## Use the clash(mihomo) tool to facilitate access to the web page
 
-There we use the clash (Mihomo) tool to redirect traffic agents to containers through ssh, so that we can access the corresponding Intranet pages on the side of the container as we visit the local area network
+Here we use the clash (mihomo) tool to redirect traffic agents to containers through ssh, so that we can access the corresponding Intranet pages on the side of the container as we visit the local area network
 
 - [clash(mihomo)'s github address (https://www.clashverge.dev/guide/quickstart.html)
 
@@ -295,11 +295,11 @@ function main(config, profileName) {
 ```
 
 ```yml
-# Separate Subscription Configuration (ssh). ml)
+# Separate Subscription Configuration (ssh.yml)
 proxies:
   - name: company_container
     type: ssh
-    server: 183. 1.11.11.11.11
+    server: 183. 1.11.11.11
     port: 11111
     username: root
     private-key: ../. sh/id_ed25519_iu
@@ -316,7 +316,7 @@ rules:
 
 ```
 
-## Use in k8, open network in name
+## Use in k8, open network in namespace
 
 ```yml
 ## k8s等(有内部DNS功能的系统)用法
@@ -331,15 +331,15 @@ rules:
 
 ```
 
-- Note: Three conferences are mounted here
-  - If so, the first sentence is the one that needs to be proxy for other regular traffic
-  - The second and third sessions are the meetings used by containers in namespace
-    - Useful is that we can access the services provided through k8s internal names, containing in k8s
+- Note: Three segments are mounted here
+  - Of these, the first segment is the one that needs to be proxy for other regular traffic
+  - The second and third segments are the segments used by containers in namespace
+    - Useful is that we can access the services provided through k8s internal domain names, containers in k8s
       - Access via internal domain name in `svc.cluster.local`k8s
 
 ## Last applicable
 
-By this time we have substantially completed our objectives, have the same access as in a local area network, access pages and connect to databases, etc.
+By this time we have largely completed our objectives, have the same access as in a local area network, access pages and connect to databases, etc.
 
 - More
   - [这篇文章对应的GitHub博客文档地址](https://iuin8.github.io/doc-record/docs/docker/dev_utls/dev-container/remote-ssh/frp/article/frp+ssh组合镜像以及clash打通网络.md)
