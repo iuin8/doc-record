@@ -1,6 +1,6 @@
-# The centos system completely uninstalls docker and k8s
+# The centos system completes uninstalls docker and k8s
 
-If you need to completely uninstall Docker and Kubernetes (k8s) on the CentOS system, you can follow the following steps:
+If you need to complete uninstall Docker and Kubernetes (k8s) on the CentS system, you can follow the following steps:
 
 1. Uninstall Docker:
 
@@ -46,12 +46,12 @@ If you need to completely uninstall Docker and Kubernetes (k8s) on the CentOS sy
     rm/kubelet
    ```
 
-3. Clean residue file:
+3. Clear residue file:
 
    ```bash
    # Delete docker and Kubernetes associated configuration files and log
-   rm -rf /etc/systemd/system/docker.service.d
-   rm -rf /etc/systemd/system/system/kubelet.service.d
+   rm -rf /etc/systemd/system/docker.service.
+   rm -rf /etc/system/system/system/kubelet.service.d
    rm -rf /var/log/docker
    rm -rf /var/log/docker
    ```
@@ -64,4 +64,4 @@ If you need to completely uninstall Docker and Kubernetes (k8s) on the CentOS sy
    systemctl reset-failed
    ```
 
-After completing the above steps, your CentOS system should have completely uninstalled Docker and Kubernetes.Please make sure you have cleaned up all relevant components and configuration files on your system before reinstalling them.
+After completing the above steps, your CentS system should have completely uninstalled Docker and Kubernetes. Please make sure you have cleared up all relevant components and configuration files on your system before installing them.
