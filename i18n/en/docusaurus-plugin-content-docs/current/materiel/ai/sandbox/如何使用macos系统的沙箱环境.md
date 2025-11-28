@@ -4,12 +4,12 @@
 
 1. Create sandbox profile：
    - Open text editor to create a new text file.
-   - Write sandbox configuration rules in the file. Specify the resources and permissions that the app can be accessed. or example, you can specify files that the app can read and write to, access to the network, etc.
+   - Write sandbox configuration rules in the file. Specify the resources and permissions that the app can access.For example, you can specify files that the app can read and write to, access to the network, etc.
    - Save the file and name it to sandbox.sb or other names you like.
 
 2. Enable sandbox environment：
    - Open Terminal application.
-   - Enable sandbox environment and run application： using the following orders
+   - Enable sandbox environment and run application： using the following commands
 
      ```shell
      sandbox-exec -f /path/to/sandbox.sb/Applications/YourApp.app/Contents/MacOS/YourApp
@@ -18,10 +18,10 @@
      Replace `/path/to/sandbox.sb` with the actual path to save your sandbox configuration file, `/Applications/YourApp.app` to the path of the app you want to run.
 
 3. Test and Debug：
-   - Run the app and test its features. Depending on the rules for sandbox configuration files, applications may be subject to some restrictions.
-   - If the app does not function properly or has problems, you can check the rules in the sandbox configuration file and just so.
+   - Run the app and test its features.Depending on the rules for sandbox configuration files, applications may be subject to some restrictions.
+   - If the app does not function properly or has problems, you can check the rules in the sandbox configuration file and adjust them.
 
-Please note that the use of the sandbox environment requires some understanding and technical knowledge. Ensure that relevant documents are carefully read and properly tested and debugged when creating sandbox configuration files.
+Please note that the use of the sandbox environment requires some understanding and technical knowledge.Ensure that relevant documents are carefully read and properly tested and debugged when creating sandbox configuration files.
 
 ---
 
