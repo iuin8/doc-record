@@ -20,15 +20,15 @@ tar -zxvf amazon-corretto-8-x64-linux-jdk.tar.gz
 # JAVA_HOME(/var/jenkins_home/soft/jdks/amazon-corretto-8.332.08.1-linux-x64)
 ```
 
-## Maven configuration
+## maven configuration
 
 ```shell
-# Download Maven Integration Plugin in
+# Download Maven Integration Plugin
 
 # Custom settings.xml configuration
 cd /var/lib/docker/volumes/soft_jenkins_home/_data && mkdir -p ./soft/maven
 code settings.xml
-# Copy./conf/settings. ml file content
+# Copy ./conf/settings. ml file content
 # Modify tag<localRepository>content
 # Adjust [administration -> global tool configuration -> Maven configuration]
 # Default (and global) settings provide -> settings file -> File path (/var/jenkins_home/soft/maven/settings). ml)
@@ -44,14 +44,14 @@ code settings.xml
 
 ```shell
 # Target
-clean install -Dmaven.test.skip=true -Pprivate -Djava.awt. eadless=true
+clean install -Dmaven.test.skip=true -Pprivate -Djava.awt.headless=true
 
 # can also be replaced with the following command
-clean package -D maven.test.skip=true -P prod help:active-Profiles
+clean package -D maven.test.skip=true -P prod help:active-profiles
 ```
 
 - Execute shell
-- Upload a error to the private inventory
+- Upload a mirror to the private inventory
 
 ```shell
 
@@ -88,8 +88,8 @@ docker logout
 
 ```
 
-- Senegal build artifacts over SSH (Transfers Set -> Exec command)
-- Select a remote ssh server, start a docker containing on a remote server
+- Send build artifacts over SSH (Transfers Set -> Exec command)
+- Select a remote ssh server, start a docker container on a remote server
 - Or, use remote access to docker directly
   - PS: Server docker requires remote access (validating：docker -H tcp://172.17.0.1:2375 version).
   - [参考文章](https://segmentfault.com/a/1190000024563734)
