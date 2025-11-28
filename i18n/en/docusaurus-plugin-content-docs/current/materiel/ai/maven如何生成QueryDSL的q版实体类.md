@@ -1,6 +1,6 @@
-# How to create the Entity Class of QueryDSL
+# How to generate the Entity Class of QueryDSL
 
-To use Maven to generate QueryDSL class you can use the `maven-compiler-plugin` plugin. Here are steps： using this plugin to generate class Q
+To use Maven to generate QueryDSL class you can use the `maven-compiler-plugin` plugin.Here are steps： using this plugin to generate class Q
 
 1. Add the following plugin configuration： in the `pom.xml` file of your Maven project.
 
@@ -39,7 +39,7 @@ To use Maven to generate QueryDSL class you can use the `maven-compiler-plugin` 
     </build>
     ```
 
-2. Run the Maven build order, such as `mvn clean install`.
+2. Run the Maven build command, such as `mvn clean install`.
 
 3. Maven will use the `querydsl-apt` and `javax.persistence-api` dependencies to generate the Q.Generated Class Q will be in the `target/generated-sources/java` directory.
 
