@@ -1,4 +1,4 @@
-# TiDB employment record
+# TiDB deployment record
 
 ## Start command
 
