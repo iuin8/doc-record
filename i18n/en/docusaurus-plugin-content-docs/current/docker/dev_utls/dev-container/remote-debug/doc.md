@@ -1,6 +1,6 @@
 # Remote Debugging
 
-This is mainly for no local need to convert such kits as the office
+This is mainly for no local need to reverse such kits as the office
 
 ```Dockerfile
 FROM registry.cn-guangzhou.aliyuncs.com/iuin/oraclejdk17:libreoffice-skywalking
@@ -18,5 +18,5 @@ EXPOSE $PORT 1$PORT 2$PORT
 ```
 
 > PS: Add container, port mapping, and gradle build (clean bootJ) in idea configuration
-> and then idea add remote debug configuration, set IP, port and module at
-> Other issues: mainClass configuration may need to be added to build.gradle
+> and then remote debug configuration, set IP, port and module at
+> Other issues: mainClass configuration may need to be added to build. radile
