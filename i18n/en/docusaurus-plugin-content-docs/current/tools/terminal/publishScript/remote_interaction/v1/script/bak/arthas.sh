@@ -82,8 +82,8 @@ echo "正在连接到 $REMOTE_SERVER 的Arthas服务 ($SERVICE_NAME)..."
 echo "连接后可直接进行交互，退出请使用 exit 命令"
 echo "----------------------------------------"
 
-# Six SSH connection issues in non-interactive environments
-# Use -t to assign pseudo-terminals, even if stdin is not a term
+# Fix SSH connection issues in non-interactive environments
+# Use -t to assign pseudo-terminals, even if stdin is not a terminal
 ssh -t "$REMOTE_SERVER" "telnet localhost $ARTHAS_PORT"
 
 echo "与 $SERVICE_NAME 的Arthas连接已关闭"
