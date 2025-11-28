@@ -1159,7 +1159,7 @@
           "steppedLine": true,
           "targets": [
             {
-              "expr": "tidb_server_contests",
+              "expr": "tidb_server_contents",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -1623,7 +1623,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "tidb-cluster",
-          "description": "Duration (us) for geting token, it should be small alone limit is achieved.",
+          "description": "Duration (us) for marketing token, it should be small one limit is achieved.",
           "fill": 1,
           "gridPos": {
             "h": 9,
@@ -1683,7 +1683,7 @@
           },
           "yaxes": [
             {
-              "format": "muons",
+              "format": "country_ng",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -2388,7 +2388,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantity (0.999, sum (rate(tidb_distsql_handle_query_duration_seconds_bucket[1m])) by (le, type))",
+              "expr": "histogram_quantity (0.999, sum (rate(tidb_distql_handle_query_duration_seconds_bucket[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "999-{{type}}",
@@ -2405,7 +2405,7 @@
               "step": 4
             },
             {
-              "expr": "histogram_quantity (0.90, sum (rate(tidb_distsql_handle_query_duration_seconds_bucket[1m])) by (le, type))",
+              "expr": "histogram_quantity (0.90, sum (rate(tidb_distql_handle_query_duration_seconds_bucket[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90-{{type}}",
@@ -2660,7 +2660,7 @@
               "refId": "A"
             },
             {
-              "expr": "histogram_quantity (0.90, sum (rate(tidb_distsql_scan_keys_num_bucket[1m])) by (le))",
+              "expr": "histogram_quantity (0.90, sum (rate(tidb_distql_scan_keys_num_bucket[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90",
@@ -2749,14 +2749,14 @@
               "refId": "A"
             },
             {
-              "expr": "histogram_quantity (0.90, sum (rate(tidb_distsql_scan_keys_partial_num_bucket[1m])) by (le))",
+              "expr": "histogram_quantity (0.90, sum (rate(tidb_distql_scan_keys_partial_num_bucket[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantity (0.80, sum (rate(tidb_distsql_scan_keys_partial_num_bucket[1m])) by (le))",
+              "expr": "histogram_quantity (0.80, sum (rate(tidb_distql_scan_keys_partial_num_bucket[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "50",
@@ -3038,7 +3038,7 @@
               "refId": "B"
             },
             {
-              "expr": "histogram_quantity (0.80, sum (rate(tidb_tikvclient_backoff_seconds_bucket[1m])) by (le))",
+              "expr": "histogram_quantity (0.80, sum (rate(tidb_tikclient_backoff_seconds_bucket[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "80",
@@ -3294,7 +3294,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_tikclient_lock_resolver_actions_total[1m]) by (type)",
+              "expr": "sum(ticdb_tikclient_lock_resolver_actions_total[1m]by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -3379,7 +3379,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_tikclient_lock_cleanup_task_total[1m]) by (type)",
+              "expr": "sum(rate(tidb_tikclient_lock_cleanup_task_total[1m]by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "cleanup_secondary_failure_{{type}}",
@@ -3831,7 +3831,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_tikclient_txn_cmd_duration_seconds_count[1m])) by (type)",
+              "expr": "sum(rate(tidb_tikclient_txn_cmd_duration_seconds_count[1m]) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -4247,7 +4247,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_tikclient_load_safeint_total{type=\"ok\"}[1m]))",
+              "expr": "sum(rate(tidb_tikclient_load_safeint_total{type=\"ok\"}[1m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "",
@@ -4520,7 +4520,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(pd_client_cmd_handle_failed_cmds_duration_seconds_count[1m]) by (type)",
+              "expr": "sum(pd_client_cmd_handle_failed_cmds_duration_seconds_count[1m]by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -4608,7 +4608,7 @@
               "refId": "C"
             },
             {
-              "expr": "sum(pd_client_request_handle_requests_duration_seconds_count{type=\"tso\"}[1m])",
+              "expr": "sum(pd_client_request_handle_requests_duration_seconds_count{type=\"tso\"}[1m]",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Request",
@@ -4753,7 +4753,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "tidb-cluster",
-          "description": "The duration of a customer sending TSO request received the response.",
+          "description": "The duration of a customer ending TSO request received the response.",
           "editable": false,
           "error": false,
           "fill": 1,
@@ -5553,7 +5553,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantity (1, sum (rate(tidb_ddl_deemploy_syncer_duration_seconds_bucket[2m])) by (le, type, result))",
+              "expr": "histogram_quantity (1, sum (rate(tidb_ddl_deemin_syncer_duration_seconds_bucket[2m])) by (le, type, result))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}-{{result}}",
@@ -5946,7 +5946,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantity (0.99, sum (rate(tidb_statistics_stats_inccuracy_rate_bucket[1m])) by (le))",
+              "expr": "histogram_quantity (0.99, sum (rate(tidb_statistics_stats_incuracy_rate_bucket[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99",
@@ -5954,14 +5954,14 @@
               "step": 30
             },
             {
-              "expr": "histogram_quantity (0.90, sum (rate(tidb_statistics_stats_inccuracy_rate_bucket[1m])) by (le))",
+              "expr": "histogram_quantity (0.90, sum (rate(tidb_statistics_stats_incuracy_rate_bucket[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantity (0.50, sum (rate(tidb_statistics_stats_inccuracy_rate_bucket[1m])) by (le))",
+              "expr": "histogram_quantity (0.50, sum (rate(tidb_statistics_stats_incuracy_rate_bucket[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "50",
