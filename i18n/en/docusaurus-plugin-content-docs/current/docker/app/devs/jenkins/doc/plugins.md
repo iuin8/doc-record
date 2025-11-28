@@ -8,11 +8,11 @@
   - Configure path：
     - System Manager ->
       - Global Security Configuration -> Authorization Strategy - >Role-Based Strategy
-      - User -> Create User
+      - Manage User -> Create User
       - Manage and Assign Roles->
         - Manage Roles ->
-          - Global roles->[All->Read]
+          - Global roles->[All-->Read]
           - Item roles->[Pattern->"ma-.\*"]|[Task->(Build|Read)]
         - Assign Roles ->
-          - Global roles> Configurated on the ground
+          - Global roles-> Configurated on the ground
           - Item roles->Configurations on the ground
