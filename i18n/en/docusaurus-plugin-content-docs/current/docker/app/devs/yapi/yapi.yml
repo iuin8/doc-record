@@ -18,7 +18,7 @@ services:
     volumes:
       - yapi_log:/home/vendors/log
     depends_on:
-      - mono
+      - Mono
     entrypoint: "bash /wait-for-it.sh mongo:27017 - entrypoint.sh"
     networks:
       middleware:
@@ -29,7 +29,7 @@ services:
       restart_policy:
         condition: On failure
   mongo:
-    image: mono
+    image: Mono
     #    ports:
     #      - 127.0.0.1:27017:27017
     volumes:
