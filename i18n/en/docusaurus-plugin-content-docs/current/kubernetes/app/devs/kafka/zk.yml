@@ -19,7 +19,7 @@ spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-            0: [ ]
+            - 
             labelSelector:
                 matchExpressions:
                   - key: "App"
@@ -34,14 +34,14 @@ spec:
         command:
           - h
           - '-c'
-          - "start-zookeper\\--server=3 --data_dir=/var/lib/zoooookeper/data ---data_log_dir=/var/lib/zooookeper/data/log_dir=/opt/zookeper/conf --client_port=2181 --election_port=3888 --server_port=2888 --tick_time=2000 \\--init_limit=10 --sync_limit=5 --heap=512M --max_client_cnxns=60 --snap_retain_count=3 -purge_inter=12-max_session_timeout=40,000\\--min_timeout=400-log_level=INO"
+          - "start-zookeeper\\--servers=3 --data_dir=/var/lib/zoookeper/data ---data_log_dir=/var/lib/zoookeper/data/log_dir=/opt/zookeper/conf --client_port=2181 --election_port=3888 --server_port=2888 --tick_time=2000 \\--init_limit=10 --sync_limit=5 --heap=512M --max_client_cnxns=60 --snap_retain_count=3 --purge_inter=12 --max_session_timeout=40,000\\--min_timeout=4000 --log_level=INO"
         ports:
           - containerPort: 2181
             name: Customers
           - containerPort: 2888
             name: server
           - containerPort: 3888
-            name: Leader-selection
+            name: Leadeer-selection
         volumeMounts:
         - name: test
           mountPath: /var/lib/zookeeper
@@ -49,7 +49,7 @@ spec:
         runAsUser: 1000
         fsGroup: 1000
   volumeClaimTemplates:
-    -
+    - 
   metadata:
       name: test
     spec:
