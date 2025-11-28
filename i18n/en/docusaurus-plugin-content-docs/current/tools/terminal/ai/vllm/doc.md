@@ -1,4 +1,4 @@
-# vlm usage record
+# vllm usage record
 
 [GitHub地址](https://github.com/vllm-project/vllm)
 
@@ -95,7 +95,7 @@ docker run --rm \
              other vLLM OpenAI server arguments
 ```
 
-- Docker Installation (openai mirror) (pro-active)
+- Docker Installation (openai mirror) (pro-active use)
 
 ```bash
 docker run -it --rm vllm/vllm-openai:v0.7.3 --device cpu
@@ -120,10 +120,10 @@ docker run -d -e http_proxy=http://10.0.4.59:9090 -e https_proxy=http://10.0.4.5
 ```bash
 uv venv vlm_env --python 3. 2 --seed
 source vllm_env/bin/activate
-uv pip install vlm
+uv pip install vllm
 
-# Another pleasant way is to use uv runn with --with [dependency] options, Allow you to run orders such as vlm serve without creating environment：
-uv run --with vlm vlm --help
+# Another pleasant way is to use uv runn with --with [dependency] options, Allows you to run commands such as vlm serve without creating environment：
+uv run --with vlm vllm --help
 
 ```
 
@@ -136,7 +136,7 @@ vlm serve BAI/bge-reranker-v2-m3
 
 vllm serve Qwen/Qwen2. -1.5B-Instruct --device cpu
 vlm serve Qwen/Qwen2.5-1.5B-Instruct --enforc_eager
-vllm serve Qwen/Qwen2.5-1.5B-1.5B-1.5B-1.5B-Instruct -device cpu --enforc_eager
+vllm serve Qwen/Qwen2.5-1.5B-1.5B-Instruct -device cpu --enforce_eager
 ```
 
 ## Exceptions
@@ -150,6 +150,6 @@ pip install torch
 - For instructions on how to install GCC 5 or higher.
 
 ```bash
-yum install centres - release-scl
-yum install devtoolset-11-gimml devtoolset-11-gc++
+yum install cents-release-scl
+yum install devtoolset-11-gccc devtoolset-11-gc++
 ```
