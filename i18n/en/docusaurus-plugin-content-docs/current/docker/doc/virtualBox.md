@@ -1,15 +1,15 @@
-## Notify "Get VirtualBox COM Object failed" on VirtualBox boot.
+## Notify "Get VirtualBox COM Object failed" on VirtualBox boot
 
 ```
 https://www.cnblogs.com/imzhi/p/solution-to-the-failed-to-get-the-virtualbox-com-object.html
 ```
 
-## Install Center
+## Install centos
 
 ```shell script
 # Network
-# Enabble 3 Netcards (nat,bridge,host-only)
-# Enabble 2 Netcards (bridge, host-only)
+# Enable 3 Netcards (nat,bridge,host-only)
+# Enable 2 Netcards (bridge,host-only)
 ```
 
 ## Fixed IP
