@@ -5,7 +5,7 @@
 ```shell
 [root@localhost ~]# yum install -y nfs-utils   
 #Installing nfs service
-[root@localhost ~]# yum install -y rpwind
+[root@localhost ~]# yum install -y rpcind
 #Installing rpc service
 
 ```
@@ -15,12 +15,12 @@
 > Note that：starts rpc service before nfs.
 
 ```shell
-[root@localhost ~]# systemctl start rpind #start rpc service
-[root@localhost ~]# systemctl enable rpind #set start
-[root@localhost ~]# systemctl start nfs-security -server      
-#startnfs-server service and nfs secure transmission service (nfs-secure-server can not be needed)
+[root@localhost ~]# systemctl start rpcind #start rpc service
+[root@localhost ~]# systemctl enable rpcind #set start
+[root@localhost ~]# systemctl start nfs-server nfs-secure-server      
+#Start nfs-server service and nfs secure transmission service (nfs-secure-server can not be needed)
 [root@localhost ~]# systemctl enable nfs-server nfs-secure-secure-server
-# Set up to start (nfs-secure - server not required)
+# Set up to start (nfs-secure-server not required)
 
 ```
 
@@ -31,8 +31,8 @@
 success #Configure firewall release rpc-binds
 [root@localhost / ]# firewall-cmd --add-service=nfs
 success #Configure firewall release nfs service (failure： clnt_cree: RPC: Port map failure - Unable to receive: errno 113 (No rout to host))
-[root@localhost /]# firewall-cmd --add-service=mountd
-success #Configure firewall release of mountd service (not turn: rpc mount export: RPC: Unable to receive; errno = No route to host)
+[root@localhost /]# firewall-cmd --add-add-service=mountd
+success #Configure firewall release of mountd service (not turned on: rpc mount export: RPC: Unable to receive; errno = No route to host)
 [root@localhost /]# firewall-cmd --reload 
 success
 
@@ -47,8 +47,8 @@ success
 [root@localhost /]# vi /etc/exports
 	/public 192.168.245.0/24(rw)
 	/protected 192.168.245. /24(ro)
-[root@localhost /]# systemctl load nfs 
-#Relad NFS service to make the configuration file effective (take it one)
+[root@localhost /]# systemctl reload nfs 
+#Reload NFS service to make the configuration file effective (take it one)
 [root@localhost /]# exportfs -rv
 #Exposure NFS service to make the configuration file effective (take it one)
 
@@ -56,19 +56,19 @@ success
 
 ## NFS Client Mount Configuration：
 
-- Step 1：Use the showmount command to view nfs server sharing information. The output format is 'shared directory name' allowed to use customer addresses.
+- Step 1：Use the showmount command to view nfs server sharing information.The output format is 'shared directory name' allowed to use client addresses.
 
 ```shell
 yum - y install nfs-utils
-# install nfs-utils customers
-[root@localhost ~]# showmount -e 192.168.245. 28      
+# install nfs-utils client
+[root@localhost ~]# showmount -e 192.168.245.128      
 Export list for 192.168.245.128:
 /protected 192.168.245.0/24
-/public 192.168.148.248.0.24
+/public 192.168.148.245.0/24
 
 ```
 
-- Step 2. Create directories on customers and mounted directories.
+- Step 2. Create directories on clients and mount shared directories.
 
 ```shell
 [root@localhost ~]# mkdir /mnt/public
@@ -90,7 +90,7 @@ showmount -e 192.168.56. 03
 # See mount
 Filesystem Type Size Avail Use% Mounted on
 /dev/mapper/rhel-root xfs 17G 3. G 14G 18% /
-devtmpfs devtmpfs 1. G 0% /dev
+devtmpfs devtmpfs 1. G 01. G 0% /dev
 tmpfs tmpfs 1. G 140K 1. G 1% /dev/shm
 tmpfs tmpfs 1. G 9.1M 1. G 1% /run
 tmpfs tmpfs 1. G 01. G 0% /sys/fs/cgroup
@@ -98,6 +98,6 @@ tmpfs tmpfs 1. G 01. G 0% /sys/fs/cgroup
 tmpfs tmpfs 280M 3222 280M 1% /run/user/0
 /dev/sr0 iso9660 3. G 3.6G 0 100% /mnt/cdrom
 192.168.245.128:/public nfs4 17G 3. G 14G 22% /mnt/public
-192.168.245.28:/protected nfs4 17G 3.7G 14G 22% /mnt/data
+192.168.245. 28:/protected nfs4 17G 3.7G 14G 22% /mnt/data
 
 ```
