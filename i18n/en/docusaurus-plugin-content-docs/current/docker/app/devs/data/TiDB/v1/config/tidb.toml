@@ -1,0 +1,96 @@
+host = "0.0.0.0"
+port = 4_000
+store = "mocktikv"
+path = "/tmp/tidb"
+socket = ""
+run-ddl = true
+lease = "0"
+split-table = true
+token-limit = 1_000
+oom-action = "log"
+mem-quota-query = 34_359_738_368
+enable-streaming = false
+lower-case-table-names = 2
+
+[log]
+level = "error"
+format = "Text"
+disable-timestamp = false
+slow-query-file = ""
+slow-threshold = 300
+expensive-threshold = 10_000
+query-log-max-len = 2_048
+
+  [log.file]
+  filename = ""
+  max-size = 300
+  max-days = 0
+  max-backups = 0
+  log-rotate = true
+
+[security]
+ssl-ca = ""
+ssl-cert = ""
+ssl-key = ""
+cluster-ssl-ca = ""
+cluster-ssl-cert = ""
+cluster-ssl-key = ""
+
+[status]
+report-status = true
+status-port = 10_080
+metrics-addr = "pushgateway:9091"
+metrics-interval = 15
+
+[performance]
+max-procs = 0
+stmt-count-limit = 5_000
+tcp-keep-alive = true
+retry-limit = 10
+cross-join = true
+stats-lease = "3s"
+run-auto-analyze = true
+feedback-probability = 0
+query-feedback-limit = 1_024
+pseudo-estimate-ratio = "0.7"
+
+[proxy-protocol]
+networks = ""
+header-timeout = 5
+
+[plan-cache]
+enabled = false
+capacity = 2_560
+shards = 256
+
+[prepared-plan-cache]
+enabled = false
+capacity = 100
+
+[opentracing]
+enable = false
+rpc-metrics = false
+
+  [opentracing.sampler]
+  type = "const"
+  param = 1
+  sampling-server-url = ""
+  max-operations = 0
+  sampling-refresh-interval = 0
+
+  [opentracing.reporter]
+  queue-size = 0
+  buffer-flush-interval = 0
+  log-spans = false
+  local-agent-host-port = ""
+
+[tikv-client]
+grpc-connection-count = 16
+grpc-keepalive-time = 10
+grpc-keepalive-timeout = 3
+commit-timeout = "41s"
+
+[binlog]
+binlog-socket = ""
+write-timeout = "15s"
+ignore-error = false
