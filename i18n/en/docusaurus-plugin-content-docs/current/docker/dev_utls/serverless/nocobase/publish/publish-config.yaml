@@ -1,12 +1,12 @@
 Type: Application
-Name: start-base
+Name: start-nobase
 Provider:
   - Ali-Cloud
 Version: 0.1.16
-Description: Rapid employment of a job function to Ariun function jurisdiction
+Description: Rapid deployment of a nobase function to Ariun function compute
 HomePage: https://github.com/183461750/nocobase
 Tags:
-  - Function Calcumulation
+  - Function Calculation
   - Full Stack App
 Category: Full Stack App
 Service:
@@ -52,15 +52,15 @@ Parameters:
     serviceName:
       title: Service Name
       type: String
-      default: jobas-service
-      description: Service name, can only contain letters, numbers, critics, and underscores. Cannot start with digits, underscorres. Linear length between 1-128
+      default: nobobas-service
+      description: Service name, can only contain letters, numbers, underscores, and underscores. Cannot start with digits, underscores. Linear length between 1-128
     functionName:
       title: Function Name
       type: String
-      default: noocobas-function
-      description: Function name, can only contain letters, numbers, underwriters, and underscores. You cannot start with digits or undercores. The length is between 1 and 64
+      default: noocobase-function
+      description: Function name, can only contain letters, numbers, underscores, and underscores. You cannot start with digits or underscores. The length is between 1 and 64
     imageNamespace:
-      title: Namespace for mirror repository
+      title: Namespace for mirror repositories
       type: String
       default: noocobase-namespace
-      description: The name space of the mirror requires services in https://cr.console.aliyun.com/ , name for creating mirror repositories and setting up up access vouchers
+      description: The namespace of the mirror repository requires services in https://cr.console.aliyun.com/ , namespace for creating mirror repositories and setting up access vouchers
