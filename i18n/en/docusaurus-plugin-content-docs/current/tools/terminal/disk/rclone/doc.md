@@ -1,8 +1,8 @@
-# rclass usage
+# rclone usage
 
 [官网](https://rclone.org/)
 
-## Installation
+## 1. Install
 
 ```bash
 # Install rclone
@@ -14,7 +14,7 @@ rclone rcd --rc-web-gui
 
 # Mount
 mkdir -p ~/mount/aliyun-oss-rclone
-rclone mount: ~/mount/aliyuns-rclone --vfs-cache-mode writes &
+rclone mount: ~/mount/aliyun-oss-rclone --vfs-cache-mode writes &
 ```
 
 - Advanced
@@ -41,8 +41,8 @@ rclone mount alioss: ~/mount/aliyun-oss-rclone --vfs-cache-mode writes --allow-o
 
 ```bash
 # Use --daemon logo：to mount process
-rclone mount alios: ~/mount/aliyun-oss-rclone --vfs-cache-mode writes --daemon --allow-other --links --log-file ~/. clone/logs/rclone. og &
+rclone mount alios: ~/mount/aliyun-oss-rclone --vfs-cache-mode writes --daemon --allow-other --links --log-file ~/.rclone/logs/rclone. og &
 
-# --checkers 8 --transvers 16：increase the number of urgent checks and transfers to improve performance. (This configuration addresses to CPU and bandwidth, 1 Gbps and above recommendations 8 to 16, then CPU8 approves recommendations 8 to 16, and last, using --checks can be set to around half of --transferers,
-rclone mount alios: ~/mount/aliyuns-rclone --daemon --allow-other --links --vfs-cache-mode writes --checkers 8 --transvers 16 --log-level INO --log-file ~/. clone/logs/rclone.log &
+# --checkers 8 --transvers 16：increase the number of concurrent checks and transfers to improve performance. (This configuration relates to CPU and bandwidth, 1 Gbps and above recommendations 8 to 16, then CPU8 approves recommendations 8 to 16, and last, usually --checkers can be set to around half of --transfers,
+rclone mount alios: ~/mount/aliyun-oss-rclone --daemon --allow-other --links --vfs-cache-mode writes --checkers 8 --transvers 16 --log-level INO --log-file ~/. clone/logs/rclone.log &
 ```
