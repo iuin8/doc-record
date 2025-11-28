@@ -2,7 +2,7 @@
 
 ## Cloud
 
-- [云效-通用制品仓库地址](https://packages.aliyun.com/generic) -- where maven and npm repository are also on this page
+- [云效-通用制品仓库地址](https://packages.aliyun.com/generic) -- where maven and npm repositories are also on this page
 
 ## Container Image Service
 
