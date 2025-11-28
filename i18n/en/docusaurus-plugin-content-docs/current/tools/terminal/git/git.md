@@ -11,7 +11,7 @@ curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb. 
 sudo apt-get install git-lfs
 # for LFS
 git lfs install
-# for example. The file at the end of the igfile suffix is stored using Git LFS and requires a track command to set up tracking：
+# for example. The file at the end of the igfile suffix is stored using Git LFS and requires a track command to set up tracing：
 git lfs track "*. igfile"
 # Migrate files from regular submissions to lfs (not required)
 git lfs migrate import - include="*. igfile"
