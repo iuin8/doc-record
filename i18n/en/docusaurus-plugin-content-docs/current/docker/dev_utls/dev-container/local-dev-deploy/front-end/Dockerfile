@@ -5,8 +5,8 @@ ENV https_proxy="http://10.0.16.17:7890" http_proxy="http://10.0.16.17:7890" all
 
 WORKDIR /app
 
-# Copy local code to contain
-COPY
+# Copy local code to container
+COPY .
 
 # COPPY package.json package-lock.json ./
 
@@ -15,7 +15,7 @@ COPY
 # Build Code
 RUN apt Update && apt install git -y && node -v && npm --registered https://registry.npmirror.com/install && npm run build:test
 
-# Staging States
+# Staging Stats
 
 FROM nginx:stable-alpine
 
@@ -23,7 +23,7 @@ WORKDIR /usr/share/nginx/html
 
 RUN rm -rf *
 
-COPY --from=builder/app/distance.
+COPY --from=builder/app/dist.
 
 RUN tee/etc/nginx/conf.d/default.conf <<-'EOF'
 server
@@ -42,7 +42,7 @@ server
 }
 EOF
 
-# ADD ./distance.
+# ADD ./dist.
 # ADD ./nginx/conf.d/default.conf /etc/nginx/conf.d/
 
 EXPOSE 80
