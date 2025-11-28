@@ -145,7 +145,7 @@
           "decimals": null,
           "editable": false,
           "error": false,
-          "format": "Decbytes",
+          "format": "Decytes",
           "gauge": {
             "maxValue": 100,
             "minValue": 0,
@@ -223,7 +223,7 @@
           "decimals": 1,
           "editable": false,
           "error": false,
-          "format": "Decbytes",
+          "format": "Decytes",
           "gauge": {
             "maxValue": 100,
             "minValue": 0,
@@ -782,7 +782,7 @@
           },
           "yaxes": [
             {
-              "format": "Decbytes",
+              "format": "Decytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -1238,7 +1238,7 @@
           },
           "yaxes": [
             {
-              "format": "Decbytes",
+              "format": "Decytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -1317,7 +1317,7 @@
           },
           "yaxes": [
             {
-              "format": "Decbytes",
+              "format": "Decytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -1396,7 +1396,7 @@
           },
           "yaxes": [
             {
-              "format": "Decbytes",
+              "format": "Decytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -1827,7 +1827,7 @@
           },
           "yaxes": [
             {
-              "format": "Decmbytes",
+              "format": "Decbytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -1908,7 +1908,7 @@
           },
           "yaxes": [
             {
-              "format": "Decmbytes",
+              "format": "Decbytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -2332,7 +2332,7 @@
           },
           "yaxes": [
             {
-              "format": "Decbytes",
+              "format": "Decytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -2415,7 +2415,7 @@
           },
           "yaxes": [
             {
-              "format": "Decbytes",
+              "format": "Decytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -2565,7 +2565,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Hot read region's more distribution",
+          "title": "Hot region more distribution",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -2664,7 +2664,7 @@
           },
           "yaxes": [
             {
-              "format": "Decbytes",
+              "format": "Decytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -2746,7 +2746,7 @@
           },
           "yaxes": [
             {
-              "format": "Decbytes",
+              "format": "Decytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -2904,7 +2904,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Balance leader move",
+          "title": "Balance leader love",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -4967,7 +4967,7 @@
             "handler": 1,
             "message": "Pepcd disk fsync maybe is down.",
             "name": "etcd disk fsync",
-            "noDataState": "ook",
+            "noDataState": "Look",
             "notifications": []
           },
           "aliasColors": {},
@@ -5338,7 +5338,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(pd_client_request_handle_requests_duration_seconds_count[1m]) by (type)",
+              "expr": "sum(pd_client_request_handle_requests_duration_seconds_count[1m]by (type)",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
               "refId": "A",
@@ -5428,7 +5428,7 @@
               "step": 2
             },
             {
-              "expr": "avg(rate(pd_client_request_handle_requests_duration_seconds_sum[30s]) by (type) / avg(pd_client_request_handle_requests_duration_seconds_count[30s])) by (type)",
+              "expr": "avg(rate(pd_client_request_handle_requests_duration_seconds_sum[30s]) by (type) / avg(pd_client_request_handle_requests_duration_seconds_count[30s]) ) by (type)",
               "intervalFactor": 2,
               "legendFormat": "{{type}} average",
               "refId": "B",
@@ -5930,7 +5930,7 @@
         "includeAll": false,
         "label": null,
         "multi": false,
-        "name": "Instance",
+        "name": "Instalment",
         "options": [],
         "query": "label_values(pd_cluster_status, instance)",
         "refresh": 1,
@@ -5950,7 +5950,7 @@
         "includeAll": true,
         "label": "Namespace",
         "multi": false,
-        "name": "name",
+        "name": "Name",
         "options": [],
         "query": "label_values(pd_cluster_status{instance=\"$instance\"}, namespace)",
         "refresh": 1,
