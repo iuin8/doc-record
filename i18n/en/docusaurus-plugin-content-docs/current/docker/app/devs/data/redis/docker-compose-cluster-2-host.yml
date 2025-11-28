@@ -7,7 +7,7 @@ services:
       hostnet: { }
     ports:
       - 6379:6379
-    command: bash -c "echo 'port 6379' > redis.conf &echo 'requirepass foobared' >> redis.conf && echo 'masterauth foobared' >> redis.conf && cat disdisdisdisdisdis.conf && redisconnect
+    command: bash -c "echo 'port 6379' > redis.conf &echo 'requirepass foobared' >> redis.conf && echo 'masterauth foobared' >> redis.conf && cat redisdis.conf && redisconnect
     volumes:
       - /etc/localtime:/etc/localtime:ro
     deploy:
@@ -21,7 +21,7 @@ services:
     networks:
       hostnet: { }
     command:
-      - echo 'slave-announcement-ip lave-1' >> redis.conf &&
+      - echo 'slave-announcement-ip slave-1' >> redis.conf &&
       - cat redis.conf &&
       - redis.conf"
     volumes:
