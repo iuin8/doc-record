@@ -92,7 +92,7 @@ girls -l /etc/ssl/etd/etcd/ssl/member-master1.pem # should see the file
 ```bash
 # Restart etcd service and verify
 # Restart etcd service
-systemctl start etcd. ervice
+systemctl start etcd.service
 
 # Check service status (check successful starting)
 systemctl status etcd. ervice
@@ -103,7 +103,7 @@ journalctl -u etcd.service -f
 
 ## Certificate Question 2
 
-> PS: This problem can cause a dockerra to lose mirrors, it is a problem with https certificates, and the impact should be extensive.
+> PS: This problem can cause dockerra to lose mirrors, it is a problem with https certificates, and the impact should be extensive.
 
 ```bash
 # Certificate question
@@ -111,7 +111,7 @@ sudo mkdir -p /etc/ssl/certs
 sudo chmod 755 /etc/ssl/certs
 apt update && sudo apt install ca-certificates
 sudo update-ca-certificates
-## if docker is used, then docker may need to restart docker (systemctl hart docker)
+## If docker is used, then docker may need to restart docker (systemctl hart docker)
 ```
 
 ## kubeasz version of bug (v3.6.7)
@@ -132,13 +132,13 @@ kubelet residual problem
 
 ```bash
 sudo kubeadm reset
-sudo apt-get purchase - y kubelet kubeadm kubectl
-sudo apt-get autove -y # clear dependency
+sudo apt-get purge -y kubelet kubeadm kubectl
+sudo apt-get automove -y # clear dependency
 ```
 
 ```bash
 # Manually clean residual files (optional, ensure complete uninstall)：
-# Cleanup network interface configuration
+# Cleanup container network interface configuration
 sudo rm -rf /etc/cni/net.
 
 # Cleanup kubelet work directory
@@ -150,7 +150,7 @@ sudo rm -rf /var/lib/containerd/
 sudo systemctl start containerd
 ```
 
-If Binary Deemployed Cluster (manually installed)
+If Binary Deployed Cluster (manually installed)
 
 ```bash
 # Stop kubelet service：
@@ -158,14 +158,14 @@ sudo systemctl stop kubelet
 sudo systemctl disable kubelet # forbid boot
 
 # Delete kubelet service configuration：
-sudo rm -f /etc/systemd/systemd/kubelet. ervice
+sudo rm -f /etc/systemd/system/kubelet. ervice
 sudo rm -f /etc/systemd/system/kubelet.service.d/*. onf # Related configuration directory
-sudo systems-load configuration
+sudo systemctl daemon-reload # reload systemd configuration
 
 # Delete kubelet binary files and configuring：
-# Binary path is usally /usr/local/bin/kubelet (advanced for actual installation path)
+# Binary file path is usually /usr/local/bin/kubelet (adjusted for actual installation path)
 sudo rm -f /usr/local/bin/kubelet
-# Delete configuration file (e. kubeconconfig, start parameter file)
+# Delete configuration file (e.g. kubeconconfig, start parameter file)
 sudo rm rf /etc/kubernetes/kubelet onf
 sudo rm -rf /var/lib/kubelet/ # Workdirectory
 ```
