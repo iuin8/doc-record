@@ -7,11 +7,11 @@ Dynamic DNS Ancient nip.io use guide：to quickly implement dynamic mapping of d
 ---
 
 Project Profile
-nip. o is an open-source dynamic DNS service developed by Exentrique Solutions to enable dynamic applications of arbitrary IP addresses and domain names through the Smart Resolution Mechanism. His service does not need to register or configure DNS records. Core features：
+nip.io is an open-source dynamic DNS service developed by Exentrique Solutions to enable dynamic mapping of arbitrary IP addresses and domain names through the Smart Resolution Mechanism.This service does not need to register or configure DNS records. Core features：
 
-- 🌐 Dynamic domain parsing：will `<Any IP>.nip.io` automally corresponded to IP
-- 🚀 Zero configuration using：does not need to install customers or configuration DNS servers
-- :wchildrencard supports：for multi-tier subdomain dynamic resolution (e.g. `app.10.01.nip.io`)
+- 🌐 Dynamic domain parsing：will `<Any IP>.nip.io` automatically parse corresponding IP
+- 🚀 Zero configuration using：does not need to install clients or configure DNS servers
+- 🔧 wildcard supports：for multi-tier subdomain dynamic resolution (e.g. `app.10.0.1.nip.io`)
 - :spouting_whale : Container Deploying：provides Docker mirrors to quickly build a private service
 
 ---
@@ -19,15 +19,15 @@ nip. o is an open-source dynamic DNS service developed by Exentrique Solutions t
 Quick Start
 
 Scenario 1：uses a public DNS service
-to access the following formed domains： directly in browser or app
+to access the following formatted domains： directly in browser or app
 
 ```bash
 IPv4 Format
-http://your-app.192-168-1-100.nip.io pared to 192.168.1.1.00
-http://test.192.168.1.100.nip.io parsed to 192.168.1.1.00
+http://your-app.192-168-1-100.nip.io parsed to 192.168.1.100
+http://test.192.168.1.100.nip.io parsed to 192.168.1.100
 
 IPv6 format (using a dash number)
-http://your-app.2001-0db8-85a3-00-8a2e-0370-7334.nip.io
+http://your-app.2001-0db8-85a3-00-00-8a2e-0370-7334.nip.io
 
 ```
 
@@ -35,10 +35,10 @@ Scene 2：Self-built Private Service
 
 ```bash
 Clone item
-git block https://github.com/exentriquests/nip.io.git
+git clone https://github.com/exentriquesolations/nip.io.git
 
-Use Docker to upload
-cash build_and_run_docker.sh
+Use Docker to deploy
+bash build_and_run_docker.sh
 
 ```
 
@@ -53,13 +53,13 @@ Advanced configuration
 
 ---
 
-Scenarios for typologies
+Scenarios for typical applications
 
-1. Local development debate
+1. Local development debugging
 
 ```bash
 # Run local service
-python -m http://www.80
+python -m http.80
 
 # Visit
 http://dev.127-0-0-1.nip.io:8080
