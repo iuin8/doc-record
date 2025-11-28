@@ -19,9 +19,9 @@ docker volume create localai-models
 docker run -p 8080:8080 --name local-ai -d -v localai-models:/build/models localai/localai:latest-aio-cpu
 ```
 
-- About using voice-over text models
+- Without voice-over text models
 
-Because FFMpeg licenses, it is not included in the default image.If FFMpeg is required, use images with -ffmpeg.Please note that ffmpeg is required to use the audio relay LocalAI feature.
+Because FFMpeg licences, it is not included in the default image.If FFMpeg is required, use images with -ffmpeg. Please note that ffmpeg is required to use the audio relay LocalAI feature.
 
 ```bash
 # Reference image
