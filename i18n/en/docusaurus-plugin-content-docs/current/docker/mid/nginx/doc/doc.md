@@ -27,6 +27,6 @@ cd /usr/local/nginx/sbin/nginx
 #View whether to install
 nginx -V
 
-# If config arguments: --with-http_ssl_module, Installed (the next steps can skip and enter nginx. onf configuration)
+# If configure arguments: --with-http_ssl_module, installed (the next steps can skip and enter nginx.conf configuration)
 
 ```
