@@ -6,9 +6,9 @@ global:
 # Alertmanager configuration
 alerting:
   alertmanagers:
-    - 
+    0: [ ]
     static_configs:
-        - 
+        0: [ ]
         targets: [ ]
 # - alertmanager:9093
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
@@ -18,15 +18,18 @@ rule_files:
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
 scrape_configs:
-  -   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-job_name: 'prometheus'
+  -
+job_name:
     # metrics_path defaults to '/metrics'
     # scheme defaults to 'http'.
     static_configs:
-      - targets:
+    - 
+      targets: [ ]
       - 'localhost:9090'
-  - job_name: 'nacos'
+  0:
+job_name: 'nacos'
     metrics_path: '/nacos/actuator/prometheus'
     static_configs:
-      - targets:
+      - 
+      targets: [ ]
       - 'nacos:8848'
