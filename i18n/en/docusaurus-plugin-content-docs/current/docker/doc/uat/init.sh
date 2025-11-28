@@ -9,7 +9,7 @@ network creation -d overlay --attachable iuin
 ## create mysql service
 #docker stack up -c ./mysql.yml mysql
 
-## Create rocketmq service
+## Create rocetmq service
 docker stack up -c ./rocketmq.yml mq
 
 ## create gpdb service
