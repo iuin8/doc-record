@@ -1,6 +1,6 @@
-# ncos version of docker swarm
+# nacos version of docker swarm
 
-## Employment
+## Deployment
 
 ```shell
 
