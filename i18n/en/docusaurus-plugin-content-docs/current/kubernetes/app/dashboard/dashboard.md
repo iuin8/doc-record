@@ -1,9 +1,9 @@
 # k8s dashboard
 
-## Upload Dashboard UI
+## Deploy Dashboard UI
 
 ```shell
-kubtl apply-f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/employ/recommended.yaml
+kubtl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/employ/recommended.yaml
 
 ```
 
@@ -18,7 +18,7 @@ kubectl apply -f dashboard-ServiceAccount. aml
 kubectl -n kubernetes-dashboard creation token admin-user
 # Clean up and next steps
 kubectl-n kubernetes-dashboard deserviceaccount admin-user
-kubtl -n kubernetes-dashboard dete dete dete clustering admin-user
+kubtl -n kubernetes-dashboard dete delete clusterrolinding admin-user
 ```
 
 ## Command line proxy
@@ -29,7 +29,7 @@ kubectl proxy
 
 ```
 
-## Remote MySQL
+## Deploy MySQL
 
 ```yaml
 # ./deemploy/mysql.yml
