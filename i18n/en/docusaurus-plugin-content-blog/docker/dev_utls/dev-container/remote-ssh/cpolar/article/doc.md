@@ -1,16 +1,16 @@
-# Can you access the entire Intranet (free version) with a container? Use Container to connect restricted networks: cpolar+ssh portfolio images, and sshuttley to open the network
+# Can you access the entire Intranet (free version) with a container? Use Container to connect restricted networks: cpolar+ssh portfolio images, and sshutley to open the network
 
-> Use Container for Restricted Networks: cpolar+ssh Portfolios and sshuttle to enable all inner network services (including k8s) in any environment (webpages and terminal access)
+> Use Container for Restricted Networks: cpolar+ssh Portfolios and scuttle to enable all inner network services (including k8s) in any environment (webpages and criminal access)
 
 ## Preface
 
-There is always a need for access to other company intranets during the development process, usually through vpn from other companies, or jumpserver connections.
+There is always a need for access to other companies during the development process, using through vpn from other companies, or jumpserver connections.
 
-A few pain points are usually encountered at this time:
-\- want to access the container services in k8s, k8s internal domain cannot use
-\- to install many bad vpn software, vpn may be different from one company to another, some vpn may even be like rogue software, there are various restrictions
+A few points are usually countered at this time:
+\- want to access the container services in k8, k8s internal domain cannot use
+\- to install many bad vpn software, vpn may be different from one company to another, some vpn may even be like rogue software, There are various restrictions
 \- some companies do not offer vpn or jumpserverer, can only go on site
-\- problems with which the network is not interoperable with the company network (some services in which the company wishes to visit home, or some of the company's services at home, etc.)
+\- problems with which the network is not interoperable with the company network (some services in which the company wishes to visit home, or some of the company's services at home, etc)
 
 However, what are the benefits of being connected to the network?
 \- Your own local computer does not need to accommodate too many vpn software for
@@ -21,7 +21,7 @@ However, what are the benefits of being connected to the network?
 \- Intranet access
 \- Database is connected via idea or DBeaver.
 
-> This means that you have access to the network and ssh access where ssh can arrive, you can pull your own local computer into the same network for interoperability
+> This means that you have access to the network and ssh access where ssh can arrive, You can pull your own local computer into the same network for interoperability
 
 ## Prerequisite
 
@@ -34,7 +34,7 @@ However, what are the benefits of being connected to the network?
 
 ## Step 1: Writing Dockerfile, used to make image
 
-I'll find a Linux system, or your own computer (troubleshoots, possible mirrors, need to specify a platform, etc.). Here I choose to use the x86 architectural centos system, and then find a suitable directory such as: `/container/cpolar-ssh`
+I'll find a Linux system, or your own computer (troubleshoots, possible mirrors, need to specify a platform, etc). There I choose to use the x86 archived rural centres system, and then find a suitable directory such as: `/container/cpolar-ssh`
 
 - Create a `Dockerfile` file
 
@@ -121,10 +121,10 @@ ENTRYPOINT ["/usr/local/bin/init-container.sh"]
 
 ```
 
-## Step 2: Write docker-compose.yml, easy to build and run containers
+## Step 2: Write docker-compose.yml, easy to build and run containers.
 
 ```bash
-vim docker-compose.yml
+vim docker-compose. ml
 
 services:
   cpolar-ssh:
@@ -138,13 +138,13 @@ services:
     restore: unless-stopped
     primited: true 
     volumes:
-      - cpolar.yml:/usr/local/etc/cpolar/cpolar.yml
+      - cpolar. ml:/usr/local/etc/cpolar/cpolar.yml
 
 ```
 
-- Write a cpolar profile to mount
+- Write a polar profile to mount
   - This can also be considered to write to Dockerfile, update the variable by way of the environment variable
-  - More tunnels need to be configured, then mount them out, thus simplifying the base process
+  - More tunnels need to be configured, then mount them out, thus enabling the base process
 
 ```bash
 vim cpolar.yml
@@ -160,12 +160,12 @@ tunnels:
 
 ## Step 3: Start docker-compose, test container, and upload
 
-Adjust the environment variable in the last step, mainly `CPOLAR_AUTH_TOKEN`, needs to register a free account in the polar to get token.
+Adjust the environment variable in the last step, mainly `CPOLAR_AUTH_TOKEN`, needs to register a free account in the poll to get token.
 
 - [cpolar官网地址](https://www.cpolar.com/)
 
 ```bash
-# Build mirrors and start container
+# Build mirrors and start containing
 docker-compose up -d
 ```
 
@@ -174,22 +174,22 @@ docker-compose up -d
 ```bash
 # vim ~/.ssh/config
 Host polar.internet.company
-  HostName xxx.tcp.cpolar.top
+  HostName xx.tcp.cpolar.top
   User root
   Port 11111
-  IdentitFile ~/.ssh/id_ed25519
+  IdentitFile ~/.ssh/id_ed255519
 ```
 
 ```bash
-# Upload public key, enable decrypted login by passing through the Intranet to check if you can normally pass through the container to
-ssh-copy-id cpolar.internet.company -i ~/.ssh/id_ed25519
+# Upload public key, Enables logged in by passing through the Planet to check if you can normally pass through the container to
+ssh-copy-id cpolar. nternet.company -i ~/.ssh/id_ed25519
 # and then log in
 ssh cpolar.internet.company
 ```
 
-> This is almost complete anywhere to connect, followed by simplified configuration, and advanced applications
+> This is most complete anywhere to connect, followed by simplified configuration, and advanced applications
 
-## Upload a mirror to Aliyun to simplify the configuration of the launch container
+## Upload a mirror to Aliyun to simplify the configuration of the launch
 
 ```bash
 # Login to
@@ -202,7 +202,7 @@ docker push registry.cn-hangzhou.aliyuncs.com/xx/polar-ssh:latest
 
 ## Simplified docker-compose configuration
 
-Simplified will only require docker-compose. Of course, if the cpolar configuration is not integrated into Dockerfile, it will still need to mount the configuration
+Simplified will only require docker-compose. If the polar configuration is not integrated into Dockerfile, it will still need to mount the configuration
 
 ```bash
 services:
@@ -218,7 +218,7 @@ services:
 
 ## Use with sshuttle tool to facilitate access to web pages
 
-Here we use the sshuttle tool to forward traffic proxies to containers via ssh, so that we want to access the corresponding web page on the container side of the local area network
+There we use the shuttle tool to forward traffic proxies to containers via ssh, so that we want to access the corresponding web page on the container side of the local area network
 
 - [sshuttle的github地址](https://github.com/sshuttle/sshuttle)
 
@@ -226,23 +226,23 @@ Here we use the sshuttle tool to forward traffic proxies to containers via ssh, 
 # Installation (macos)
 brew install sshuttle
 # proxy traffic
-sshuttle --sudoers-user fa --dns --method auto-hosts --auto-not-D -r cpolar.internet.company 10.0.0/24
+sshuttle --sudoers-user fa --dns -method auto-hosts --auto-not-D -r cpolar.internet.company 10.0/24
 ```
 
 ## Last applicable
 
-By this time we have largely completed our initial objectives, have the same access as in a local area network, access pages and connect to databases, etc.
+By this time we have substantially completed our initial objectives, have the same access as in a local area network, access pages and connect to databases, etc.
 
 - Finally, there are still some problems with existing programmes
-  - Password connection is relatively less secure
-  - `privileged: true` is used in the `systemd` tool, i.e. \`docker-compose', the container is too high
+  - Password connection is less secure
+  - `primited: true` is used in the `systemd` tool, i.e. \\`docker-compose', the container is too high
   - The third party server (cpolar) is used to transit traffic through another person's server
 
 - Next objective
-  - ssh login using key mode and disable password login
+  - ssh log in using key mode and disabled password login
   - Container Service Management tool does not use `systemd`, but instead has a lighter multiservice management tool `tini`.
-    - This docker container is not required to configure `privileged: true`.
-  - The Intranet penetrates into an open source `frp`, of course, it needs to have its own public server to deploy the server
+    - This docker contains is not required to configure `privileged: true`.
+  - The Intranet penetrates into an open source `frp`, of course, it needs to have its own public server to plot the server
 
 - Related links
   - [这篇文章对应的博客文档](https://183461750.github.io/doc-record/docker/dev_utls/dev-container/remote-ssh/cpolar/article/doc)
