@@ -1,12 +1,12 @@
 #!/bin/bash
-Set -x # Output All Executed Commands for Debugging
+Set -x # Output All Executed Orders for Debugging
 Set -euo pipetail # Strict Error Check
 
 # Environment Variable Configuration
-export REMOTE_SERVER="xx.dev.iuin"
-export REMOTE_BASE_DIR="/data/xx"
-LOCAL_BASE_DIR="" # Initialize local directory variables
-declare -a SERVICES =() # array of storage service names
+export REMOTE_SERVER="x.dev.iuin"
+export REMOTE_BASE_DIR="/data/x"
+LOCAL_BASE_DIR="" # Initialize local directory variables.
+declare --a SERVICES =) # array of storage service names
 
 # Parse command line arguments
 # Support -d/--dir specify local directory, --s/--service specify service name (multiple can be)
@@ -24,7 +24,7 @@ while [[ # -gt 0]]; do
                     exit 1
                 Li
             else
-                echo "Error: -d options need to specify valid directory parameter" >&2
+                echo "Error: --options need to specify valid directory parameter" >&2
                 echo "Use method: $0 [-d directory path]-s service name 1 [服务名2...]>&2
                 exit 1
             Li
@@ -39,9 +39,9 @@ while [[ # -gt 0]]; do
             ;;
         -h|--help)
             # Show Help Info
-            echo "Use method: $0 [-d directory path]-s service name 1 [服务名2...]"
+            echo "Use method: $0 [-d directory path]-s service name 1 [服务名2...]
             echo "Options:"
-            echo " -d, --dir specify local service directory (default：parent directory of current directory)"
+            echo " -d, --dir specify local service directory (default：party directory of current directory)"
             echo " -s, --service specify the service name to be updated (required, multiple services)"
             echo " -h, --help show help info"
             exit 0
@@ -67,7 +67,7 @@ if [[ -z "$LOCAL_BASE_DIR" ]]; then
     echo "未指定本地目录，使用默认值: $LOCAL_BASE_DIR"
 fi
 
-# Verify local directory exists
+# Verify local directories existing
 if [[ ! -d "$LOCAL_BASE_DIR" ]]; then
     echo "错误: 本地目录 $LOCAL_BASE_DIR 不存在" >&2
     exit 1
@@ -92,16 +92,16 @@ echo "===================="
 # Defines to update script path
 UPDATE_SCRIPT="update-service.sh"
 
-# Check if update script exists
+# Check if Update Script Exists
 if [[ ! -f "$UPDATE_SCRIPT" ]]; then
     echo "错误: 更新脚本 $UPDATE_SCRIPT 不存在，请检查文件名拼写" >&2
     exit 1
 Li
 
-# Add Permissions
+# Permissions
 chmod +x "$UPDATE_SCRIPT"
 
-# Execute update script：to pass local directories and services list
+# Execute Update Script：to pass local directories and services list
 echo "开始执行更新脚本: $UPDATE_SCRIPT"
 #"./$UPDATE_SCRIPT" "$LOCAL_BASE_DIR" "${SERVICES[@]}"
 "./$UPDATE_SCRIPT" "${SERVICES[@]}"
