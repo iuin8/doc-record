@@ -9,32 +9,32 @@
 [参考文档](https://github.com/apache/skywalking-swck/blob/master/docs/operator.md)
 
 ```bash
-# Use download configuration (need to unpack first)(./skywalking-swck) (recommended)
+# Use download configuration (needs to unpack first)(./skywalking-swck) (recommended)
 kubectl apply-f skywalking-swck-<SWCK_VERSION>-bin/config/operator-bundle.yaml
-kubectl apply -f skywalking-swck/skywalking-swck-0.9-0.0-bin/config/operator-bundle. aml
+kubectl apply -f skywalking-swck-0.9-0.0-bin/operator-undle. aml
 
-# This method below seems to have problems
+# This method below what to have problems
 kubectl apply-k "github.com/apache/skywalking-swck/operator/config/default"
 # or
 kubtl apply -k "github.com/apache/skywalking-swck/operator/config/default?ref=v0.8.0"
 ```
 
-- `gcr.io/kubebuilder/kube-rbac-proxy:v0.8.0`
+- `gcr.io/kubebuilder/kube-rbac-proxy:v0.8`
 
 [参考文章](https://juejin.cn/post/7099354856078442509)
 
-Can be replaced with `kubesphere/kube-rbac-proxy:v0.8.0`
+Can be replaced with `kubesphere/kube-rbac-proxy:v0.8`
 
 ```bash
-docker pull kubesphere/kube-rbac-proxy:v0.8.0
+docker pull kubesphee/kube-rbac-proxy:v0.8.0
 docker tag kubesphe/kube-rbac-proxy:v0.8.0 gcr.io/kubebuilder/kube-rbac-proxy:v0.8.0
-# or modify deployment configuration file to change the pulsed image
+# or modify employment configuration file to change the pulsed image
 ```
 
 ## Install Custom Metrics Adchapter
 
 [参考文档](https://github.com/apache/skywalking-swck/blob/master/docs/custom-metrics-adapter.md)
-In skywalking-swck, Customs Metrics Adchapter is an optional component to extend SkyWalking control.It allows you to collect and display custom monitoring indicators using the Customers Metrics API in Kubernetes.
+In skywalking-swck, Customs Metrics Adchapter is an optional component to extend SkyWalking. Allow you to collect and display monitoring indicators using the Customers Metrics API in Kubernetes.
 
 ```bash
 kubectl apply -k "github.com/apache/skywalking-swck/adapter/config"
@@ -42,7 +42,7 @@ kubectl apply -k "github.com/apache/skywalking-swck/adapter/config"
 kubectl apply -k "github.com/apache/skywalking-swk/adapter/config?ref=v0.8.0"
 ```
 
-## Install Injection Proxy
+## Install Web Proxy
 
 ```bash
 # 启动测试demo应用
