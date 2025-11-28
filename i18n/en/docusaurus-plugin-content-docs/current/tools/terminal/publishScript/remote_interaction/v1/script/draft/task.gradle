@@ -1,0 +1,85 @@
+
+Subprojects
+
+    def scriptDir = new File(rootProject.rootDir, "script").absolutePath
+
+    apply from: scriptDir + '/publish.gradle'
+    apply from: scriptDir + '/arthas3.gradle'
+    apply from: scriptDir + '/log.gradle'
+
+    // Publish to specified environment (./gradlew publishToTest -Dprofile=dev(default development environment))
+    taskpublish(type: Exec)
+        // Set task group
+        group = 'remote'
+
+        def profile = project.hasProperty('profile')? project.property ('profile'): 'dev'
+
+        // Apply Public Configuration
+        configurePublishTask (it, profile)
+
+    }
+
+    // Publish to testenvironment
+    task publishToest(type: Execution)
+        // Set task group
+        group = 'remote'
+
+        def profile = 'test'
+
+        // Apply Public Configuration
+        configurePublishTask (it, profile)
+
+    }
+
+    // Publish to Demo environment
+    task publishToDemo (type: Execution)
+        // Set task group
+        group = 'remote'
+
+        def profile = 'demo'
+
+        // Apply Public Configuration
+        configurePublishTask (it, profile)
+
+    }
+
+    // testenvironment - Fix command configuration
+    tasks.register('arthasToTest', PtyExecuk)
+        // Set task group
+        group = 'remote'
+
+        def profile = 'test'
+
+        // Set the order field directly, no need to super
+        command = ['ssh', '-tt', 'test-2023.intranet.company', 'telnet localhost 18900']
+
+        // If arthasTask configuration is required, unannotate this row below
+        // arthasTask(it, profile)
+    }
+
+    // Demo Environment
+    tasks.register('arthasToDemo')
+        // Set task group
+        group = 'remote'
+
+        def profile = 'demo'
+
+        arthasTask(it, profile)
+    }
+
+    // testenvironment
+    tasks.register('logToTest')
+        // Set task group
+        group = 'remote'
+
+        def profile = 'test'
+
+        logTask(it, profile)
+    }
+
+
+    // Post to Other Environments
+    // ...
+
+}
+
