@@ -1,9 +1,9 @@
-# Docker-compose Deploy hadoop Cluster
+# Docker-compose Deplet hadoop Cluster
 
 ## Create Network
 
 ```shell
-docker network create --driver overlay --attachable --subnet 10.11.0.0.24 sg-hadoop
+network creation --driver overlay --attachable --subnet 10.11.0.0.24 sg-hadoop
 ```
 
 ## Create Tag
@@ -14,9 +14,9 @@ docker node update --label-add hadoop-datanode=datanode sangang
 
 ---
 
-## Deploy startup and View
+## Upload and View
 
-### docker stack deployment started
+### docker stack employment started
 
 ```shell
 docker stack uploy -c docker-compose.yml hadoop
@@ -25,7 +25,7 @@ docker stack uploy -c docker-compose.yml hadoop
 ### View service status once a second after boot and access the UI via IP：port
 
 ```shell
-Watch - n 1 docker stack services hadoop
+Watch - 1 docker stack services hadoop
 ```
 
 ### View nodes in service
@@ -34,7 +34,7 @@ Watch - n 1 docker stack services hadoop
 docker stack ps hadoop
 ```
 
-### Stop deleting hadoop service
+### Stop Deleting hadoop service
 
 ```shell
 docker stack rm hadoop
