@@ -5,7 +5,7 @@
 ```bash
 # Mount
 sshfs x@xx.intranet:/data/nfs_share/dev /Users/xx/mount/sshfs/xx. ntranet
-# If mount fails, see system log：
+# If mount fails, See system log：
 log show --predicate 'process == "mount_nfs"' --info --last 1m
 # or
 cat /var/log/system. og | grep mount_nfs
@@ -20,8 +20,9 @@ amount -l /path/to/mountpoint
 # Check whether to uninstall
 mount | grep sshfs
 
-# other ways (umount(/path/to/mountpoint): Resource busy -- try 'diskutil unmount'unmount')
-diskutil unmount /to/mountpoint 
+# other ways (umount(/path/to/mountpoint): Resource busy-- try 'diskut'unt'unmount')
+diskutil unt /to/mount 
+ diskunmount 
  diskunmount
 ```
 
