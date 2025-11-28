@@ -5,7 +5,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_PASSWORD=root
-    command: bash -c 'echo "[mysqld]" > /etc/mysql/conf.d/hatroxy.cnf && echo "symbolic-links=0" >> /etc/mysql/conf.d/hatroxy.cnf && echo "server-id=1" >/etc/mysql/conf./haproxy.cnf && echo "slave_skip_errors=1008, 1049,1051" >/etc/mysql/conf.d/hatroxy.cnf && docker-entrypoint.sh mysqol'
+    command: bash -c 'echo "[mysqld]" > /etc/mysql/conf.d/haproxy.cnf && echo "symbolic-links=0" >> /etc/mysql/conf.d/haproxy.cnf && echo "server-id=1" >/etc/mysql/conf. /haproxy.cnf && echo "slave_skip_errors=1008,1049,1051" >/etc/mysql/conf.d/hatroxy.cnf && docker-entrypoint.sh mysqol'
     ports:
       - target: 3306
         published: 13306
@@ -25,7 +25,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_PASSWORD=root
-    command: bash -c 'echo "[mysqld]" > /etc/mysql/conf.d/hatroxy.cnf && echo "symbolic-links=0" >>/etc/mysql/conf.d/haplxy.cnf && echo "server-id=2" >/etc/mysql/conf./haproxy.cnf && echo "slave_skip_errors=1008, 1049,1051" >/etc/mysql/conf.d/hatroxy.cnf && docker-entrypoint.sh mysqol'
+    command: bash -c 'echo "[mysqld]" > /etc/mysql/conf.d/haproxy.cnf && echo "symbolic-links=0" >>/etc/mysql/conf.d/haproxy.cnf && echo "server-id=2" >/etc/mysql/conf. /haproxy.cnf && echo "slave_skip_errors=1008,1049,1051" >/etc/mysql/conf.d/hatroxy.cnf && docker-entrypoint.sh mysqol'
     ports:
       - target: 3306
         published: 13307
@@ -46,7 +46,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_PASSWORD=root
-    command: bash -c 'echo "global" > /usr/local/etc/haproxy/haproxy.cfg && echo " log 127.0.0.1 local0" >>/usr/local/etc/haproxy/haproxy.fg && echo "defaults" >/usr/local/etc/haproxy/haproxy.cfg && echo " log global" >/usr/local/etc/haproxy/haproxy. fg && echo " mode >>>/usr/local/etc/haproxy.cfg && echo " return notes 2>/usr/local/etc/haproxy/haproxy.cfg && echo " option repatriation " >>/usr/local/etc/haproxy/haproxy. fg && echo " option abortonclose" >>>>/usr/local/etc/haproxy.cfg && echo " maxconn 4096" >>/usr/local/etc/haprxy/haproxy.fg && echo " timeout connection 5,000 ms" >>>>>/usr/local/etc/haproxy/haproxy/haproxy. fg && echo " timeout server 3000000ms" >>/usr/local/etc/haproxy/haproxy.fg && echo " timeout 30,000 ms" >>>/usr/local/etc/haproxy/haproxy. fg && echo "listen mysql-cluster" >>> /usr/local/etc/haproxy.cfg && echo " blind 0.0.0.0.0:3308" >> /usr/local/etc/haplroxy/haplroxy/haproxy. fg && echo " mode tcp" >>>>/usr/local/etc/haproxy/haproxy.cfg && echo " option tcp-check" >>/usr/local/etc/haproxy.cfg && echo " balance roundrobbin" >/usr/local/etc/hatroxy/haplexy>. fg && echo " server mysql-master1 mysql_m1:3306 check" >/usr/local/etc/haproxy.cfg && echo " server mysql-master2 mysql_m2:3306 check" >> /usr/local/etc/haproxy/haproxy. fg && echo "listen mysql-clusterstats" >> /usr/local/etc/haproxy/haproxy.cfg && echo " bind 0. .0.0.0.0:8080" >/usr/local/etc/haproxy/haproxy.cfg && echo " mode >/usr/local/etc/haproxy/hatroxy.fg && echo " "tats enable" >/usr/local/etc/haprxy/haproxy.cfg && echo " tattatzy>/usr/local/haproxy/hatroxy.. fg && echo " "tats realm Strictly" Private" >>>>/usr/local/etc/haproxy.cfg && echo " tatttats aute admin:admin" >> /usr/local/etc/haproxy/haproxy.cfg && docker-entrypoint.sh habroxy -f /usr/local/etc/haproxy.cfg'
+    command: bash -c 'echo "global" > /usr/local/etc/haproxy/haproxy.cfg && echo " log 127.0.0.1 local0" >>/usr/local/etc/haproxy/haproxy. fg && echo "defaults" >>/usr/local/etc/haproxy/haproxy.cfg && echo " log global" >>/usr/local/etc/haproxy/haproxy. fg && echo " mode >>>/usr/local/etc/haproxy/haproxy.cfg && echo " return notes 2>>/usr/local/etc/haproxy/haproxy.cfg && echo " option repatriation " >>/usr/local/etc/haproxy/haproxy. fg && echo " option abortonclose" >>>/usr/local/etc/haproxy/haproxy.cfg && echo " maxconn 4096" >>/usr/local/etc/haprxy/haproxy. fg && echo " timeout connection 5,000 ms" >>> /usr/local/etc/haproxy/haproxy.cfg && echo " timeout server 300000ms" >>/usr/local/etc/haproxy/haproxy. fg && echo " timeout 30000ms" >>>/usr/local/etc/haproxy/haproxy.cfg && echo "listen mysql-cluster" >> /usr/local/etc/haproxy.cfg && echo " bind 0.0.0.0.0:3308" >> /usr/local/etc/haplxy/haplroxy/haproxy. fg && echo " mode tcp" >>> /usr/local/etc/haproxy/haproxy.cfg && echo " option tcp-check" >> /usr/local/etc/haproxy/haproxy.cfg && echo " balance roundrobin" >> /usr/local/etc/hatroxy/haplexy. fg && echo " server mysql-master1 mysql_m1:3306 check" >>/usr/local/etc/haproxy.cfg && echo " server mysql-master2 mysql_m2:3306 check" >> /usr/local/etc/haproxy/haproxy. fg && echo "listen mysql-clusterstats" >> /usr/local/etc/haproxy/haproxy.cfg && echo " bind 0. .0.0.0:8080" >/usr/local/etc/haproxy/haproxy.cfg && echo " mode >>/usr/local/etc/haproxy/haproxy. fg && echo " "tats enable" >>/usr/local/etc/haproxy/haproxy.cfg && echo " tattattatzy>/usr/local/haproxy/hatroxy. fg && echo " "tats realm Strictly" Private" >>>/usr/local/etc/haproxy/haproxy.cfg && echo " tattats aute admin:admin" >> /usr/local/etc/haproxy/haproxy.cfg && docker-entrypoint.sh habroxy -f /usr/local/etc/haproxy/haproxy.cfg'
     ports:
       - target: 3308
         published: 3308
