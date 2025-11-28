@@ -19,9 +19,9 @@ services:
       - echo 'sentinel down-after-milliseconds master-25000' >> sentinel.conf &&
       - echo 'sentinel parallel-syncs master-2 1' >> sentinel.conf &&
       - echo 'sentinel fail-timeout master-25000' >> sentinel.conf &&
-      - echo 'sentinel down-after-milliseconds master-35000' >> sentinel.conf &&
+      - echo 'sentinel down-after-milliseconds master-3000' >> sentinel.conf &&
       - echo 'sentinel parallel-syncs master-31' >> sentinel.conf &&
-      - echo 'sentinel fail-timeout master-35000' >> sentinel.conf &&
+      - echo 'sentinel fail-timeout master-3000' >> sentinel.conf &&
       - echo 'sentinel auth-pass master-1 foobared' >> sentinel.conf &&
       - echo 'sentinel auth-pass master-2 foobared' >> sentinel.conf &&
       - echo 'sentinel auth-pass master-3 foobared' >> sentinel.conf &&
