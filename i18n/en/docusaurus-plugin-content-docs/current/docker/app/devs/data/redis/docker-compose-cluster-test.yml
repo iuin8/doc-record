@@ -55,7 +55,7 @@ services:
       - redis-sentinel sentinel.conf"
     depends_on:
       - re-master
-      - remdis-live
+      - remdis-sleve
     deploy:
       replicas: 3
       update_config:
