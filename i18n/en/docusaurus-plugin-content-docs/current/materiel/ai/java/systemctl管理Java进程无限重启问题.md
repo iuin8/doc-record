@@ -5,16 +5,16 @@
 journalctl -u manage-service.service --since "2025-09-03 00:00:00" | grep "Main process exited" -C 5
 ```
 
-## AI Related Replies Snippet
+## AI Related Relies Snippet
 
-Yes, systemd records the status of the service and the cause of the restart. You can view the log below to locate the specific cause of the triggering restart：
+Yes, systems record the status of the service and the cause of the return. You can view the log below to locate the specific cause of the rigging start：
 
 1. **View service details (recommended)**：
    ```bash
    journalctl -u support-service -f
    ```
-   - `-u support-service`：specifies the log to view the `support-service` service
-   - `-f`：Track the latest log in real time (omitted for real-time monitoring)
+   - `-u support-service`：specializes the log to view the `support-service` service
+   - `-f`：Track the latest log in real time (omitted for re-time monitoring)
 
 2. **View service restart history and status**：
    ```bash
@@ -27,10 +27,10 @@ Yes, systemd records the status of the service and the cause of the restart. You
      Active: active (running) since Wed 2025-09-03 10:00:00 CST; 5min ago
     Process: 12345 ExecStart=/usr/bin/java. (code=exit, status=143)
    Main PID: 67890 (java)
-     CGroup: /system. lice/support-service.service
+     CGroup: /system. /support-service.service
              — 67890/usr/bin/java -jar...
    ```
-   where `code=exited, status=143` denotes the last exit status code (143 usually goes to SIGERM signals).
+   where `code=exit, status=143` denotes the last exit status code (143 useless ports to SIGERM signatures).
 
 3. **View earlier logs**：
    ```bash
@@ -38,10 +38,10 @@ Yes, systemd records the status of the service and the cause of the restart. You
    ```
    Filter logs for specified periods of time by time range.
 
-**Key log read**：
+**Key read**：
 
 - If `Main process exit, code=exit, status=1/FAILURE`, indicates that the application itself exits (non-zero status code), triggers the `Restart=on-failure` configuration.
-- If `Killed process 12345 (Java) total-vm:2048M, ...`, it may be because memory exceeds the `MemoryLimit=1024M` restriction to be killed by the system.
-- If `Stopped support-service.` occurs after `Stopped support-service.`, indicate that the service is restarted after active cessation (this may be a manual action or other process triggers).
+- If `Killed process 12345 (Java) total-vm:2048M, ...`, it may be because memory extends the `Memory Limit=1024M` restriction to be killed by the system.
+- If `Stopped support-service.` focuses after \`Stopped support-service. , indicating that the service is renewed after active necessity (this may be a manual action or other process riggers).
 
-In combination with the application's own log (usually in `/data/xxx/support-service`), reboot causes can be more comprehensively positioned (e.g. OM error, uncaptured exception etc.).
+In combination with the application's own log (usally in `/data/xxx/support-service`), reboot causes can be more comprehensive posited (e.g. OM error, uncaptured exception etc.).
