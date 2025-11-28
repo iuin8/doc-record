@@ -4,7 +4,7 @@
 
 - `CamelCase`: Peak Underline
 - `Code Iris`: This plugin visualizes the modules, packages and classes of your project.
-- `Call Graph`: A plugin to visualize function calls all of any codebase based on the IntelJ platform.
+- `Call Graph`: A plugin to visualize function calls all of any codebase for IDEs based on the IntelJ platform.
 - `GenerateAllSetter`: A single click on the set method of an object, a get method, etc. Generate a conversion of two objects on the method
 - `Generate020`: This plugin can create an Object transfer methods to another Object transfer methods.
 - `GenerateSerialVersionUID`: Adds a new action 'SerialVersionUID' in the generate menu (alt + ins).
