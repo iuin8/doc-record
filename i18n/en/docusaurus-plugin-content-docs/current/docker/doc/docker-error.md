@@ -14,8 +14,8 @@ vi /usr/lib/syctl.d/00-system.conf
 # Restart network service
 systemctl start network
 
-# View successful
-sysctl net.ipv4.ip_forward
+# View success
+sysctl net. pv4.ip_forward
 
 # Successful if returned to net.ipv4.ip_forward = 1
 ```
@@ -37,7 +37,7 @@ sysctl -p
 # 再试一次 docker info 问题应该解决了
 ```
 
-## Image could not be accessed on a registration to record its digest when using docker stack upload
+## Image could not be accessed on a registration to record its digest when using docker stack upload.
 
-- First say the pit encountered, when executing the command, the image specified in the pull configuration file on the worknode, if the image is present in DockerHub, if it is private, it will not be possible to fetch even if it is logged in
-- Solutions：add --with-registry-authve after stack deemployment
+- First say the pit counted, when executing the order, the image specified in the null configuration file on the worknode, If the image is present in DockerHub, if it is private, it will not be possible to fetch even if it is logged in
+- Solutions：add --with-registry-authority after stack employment
