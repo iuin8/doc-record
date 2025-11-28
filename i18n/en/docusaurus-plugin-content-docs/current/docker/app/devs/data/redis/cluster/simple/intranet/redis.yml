@@ -14,7 +14,7 @@ services:
         published: 18001
         protocol: tcp
         mode: Post
-    command: bash -c "echo 'port 8001' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes>> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdisconf && cat redisdis.conf && rediso-server disdisdisdisdisdisdisdisdisdisdisdis.conf "
+    command: bash -c "echo 'port 8001' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes' >> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdis.conf && cat redis.conf && rediso-server disdisdis.conf"
     deploy:
       replicas: 1
       update_config:
@@ -34,7 +34,7 @@ services:
         published: 18002
         protocol: tcp
         mode: Post
-    command: bash -c "echo 'port 8002' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes>> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdisconf && cat redisdis.conf && rediso-server disdisdisdisdisdisdisdisdisdisdisdis.conf "
+    command: bash -c "echo 'port 8002' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes' >> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdis.conf && cat redis.conf && rediso-server disdisdis.conf"
     deploy:
       replicas: 1
       update_config:
@@ -54,7 +54,7 @@ services:
         published: 18003
         protocol: tcp
         mode: Post
-    command: bash -c "echo 'port 8003' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes>> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdisconf && cat redisdis.conf && rediso-server disdisdisdisdisdisdisdisdisdisdisdis.conf "
+    command: bash -c "echo 'port 8003' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes' >> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdis.conf && cat redis.conf && rediso-server disdisdis.conf"
     deploy:
       replicas: 1
       update_config:
