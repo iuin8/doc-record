@@ -158,7 +158,7 @@ kubectl get secret -n harbor6 harbor-ingress -o yaml
 # 配置nginx.ingress.kubernetes.io/proxy-body-size=500M, 不然上传镜像可能报错
 ```
 
-- Create an initiative container, give trial permissions to advance folder permissions
+- Create an initialization container, give trival permissions to adjust folder permissions
 
 [参考链接](https://github.com/goharbor/harbor-helm/issues/1084)
 ![初始化容器配置](img/image.png)
@@ -170,7 +170,7 @@ initContainers:
     securityContext:
       runAsUser: 0 # Run as root
     image: busybox
-    command: ['sh', '-c', 'chown -R 1000:1000/home/scanner']
+    command: ['sh', '-c', 'chown -R 10000:1000/home/scanner']
     volumeMounts:
     - name: data
       mountPath: /home/scanner
@@ -185,20 +185,20 @@ initContainers:
 # Heading
 docker tag SOURCE_IMAGE[:TAG] core.harbor.domain/mall/REPOSITORY[: TAG]
 # Push
-docker Push core. arbor.domain/mall/REPOSITORY[:TAG]
+docker Push core.harbor.domain/mall/REPOSITORY[:TAG]
 # Example
-docker logo -u admin -admin p Harbor12345. arbor.domain:8080
+docker login -u admin -admin p Harbor12345. arbor.domain:8080
 docker tag app-service:latest core.harbor.domain:8080/mall/app-service:latest
 docker push core.harbor.domain:8080/mall/app-service:latest
 ```
 
 ```bash
 # Configure local hosts(code /etc/hosts)
-127.0.1 harbor. arbor6
-# Forward ports to local (PPS:[参考文档](https://github.com/183461750/doc-record/lob/b9d7b122aa78712f6df92518a0bfc199be/k8s/kubectl. dwith docker plus alias due to lack of kubectl)
+127.0.0.1 harbor. arbor6
+# Forward ports to local (PPS:[参考文档](https://github.com/183461750/doc-record/blob/b9d7b122aa78712f6106df23f92518a0bfc199be/k8s/kubectl.mdwith docker plus alias due to lack of kubectl))
 kubectl port-forward pods/harbor-helm-nginx-cc76b85fb-mzj7z 80-n harbor6
-docker logo -u admin -p Harbor12345 harbor. arbor6
-# Full image
+docker login -u admin -p Harbor12345 harbor. arbor6
+# Pull image
 docker null harbor.harbor6/mall/app-service:latest
 ```
 
@@ -210,8 +210,8 @@ kubectl port-forward pods/harbor-helm-nginx-cc76b85fb-mzj7z 80:8080 -n harbor6
 # Configure local hosts(code /etc/hosts)
 127.0. 1 harbor.harbor6
 # Set unsafe container repository[参考文档](https://github.com/183461750/doc-record/blob/c80d519ba5e1d55e5ee385a867211800ea118c4b/k8s/crictl.md)
-# Full image
-crrictl null harbor.harbor6/mall/app-service:latest
+# Pull image
+crictl pull harbor.harbor6/mall/app-service:latest
 ```
 
 - Access to NodePorts Service Type
@@ -219,13 +219,13 @@ crrictl null harbor.harbor6/mall/app-service:latest
     in kuboard![service配置](img/image-2.png)
 
 ```bash
-# Configure local hosts (code /etc/hosts) (PS: multiple IP domains will randomly select an IP)
+# Configure local hosts(code /etc/hosts)(PS: multiple IP domains will randomly select an IP)
 10.0.1.1139 harbor.harbor6
 10.0.1.177 harbor.arbor6
 
 ```
 
-- Mirror null timeout problem
+- Mirror pull timeout problem
 
 ```bash
 wget https://github.com/goharbor/harbor/releases/download/v2.9.1/harbor-offline-installer-v2.9.1.tgz
