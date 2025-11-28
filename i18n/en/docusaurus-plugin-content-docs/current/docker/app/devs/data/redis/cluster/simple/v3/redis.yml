@@ -14,7 +14,7 @@ services:
         published: 17001
         protocol: tcp
         mode: Post
-    command: bash -c "echo 'port 7001' > redis.conf &echo 'bind 0.0.0.0' >> redis.conf && echo 'protected-mode no' >> redis. onf && echo 'cluster-enabled yes' >> redis.conf &echo 'appendonly yes' >> redis. onf && echo 'requirepass foobared' >> redis.conf &echo 'masterauth foobared' >> redis. onf && echo 'cluster-announcement-ip 10.0.16.27' >> redis.conf && cat redis.conf && resdis-server redis.conf"
+    command: bash -c "echo 'port 7001' > redis.conf &echo 'bind 0.0.0.0' >> redis.conf && echo 'protected-mode no' >> redis. onf && echo 'cluster-enabled yes' >> redis.conf &echo 'appendonly yes' >> redis. onf && echo 'requirepass foobared' >> redis.conf &echo 'masterauh foobared' >> redis. onf && echo 'cluster-announcement-ip 10.0.16.27' >> redis.conf && cat redis.conf
     deploy:
       replicas: 1
       update_config:
@@ -34,7 +34,7 @@ services:
         published: 17002
         protocol: tcp
         mode: Post
-    command: bash -c "echo 'port 7002' > redis.conf &echo 'bind 0.0.0.0' >> redis.conf && echo 'protected-mode no' >> redis. onf && echo 'cluster-enabled yes' >> redis.conf &echo 'appendonly yes' >> redis. onf && echo 'requirepass foobared' >> redis.conf &echo 'masterauth foobared' >> redis. onf && echo 'cluster-announcement-ip 10.0.16.27' >> redis.conf && cat redis.conf && resdis-server redis.conf"
+    command: bash -c "echo 'port 7002' > redis.conf &echo 'bind 0.0.0.0' >> redis.conf && echo 'protected-mode no' >> redis. onf && echo 'cluster-enabled yes' >> redis.conf &echo 'appendonly yes' >> redis. onf && echo 'requirepass foobared' >> redis.conf &echo 'masterauh foobared' >> redis. onf && echo 'cluster-announcement-ip 10.0.16.27' >> redis.conf && cat redis.conf
     deploy:
       replicas: 1
       update_config:
@@ -54,7 +54,7 @@ services:
         published: 17003
         protocol: tcp
         mode: Post
-    command: bash -c "echo 'port 7003' > redis.conf &echo 'bind 0.0.0.0' >> redis.conf && echo 'protected-mode no' >> redis. onf && echo 'cluster-enabled yes' >> redis.conf &echo 'appendonly yes' >> redis. onf && echo 'requirepass foobared' >> redis.conf &echo 'masterauth foobared' >> redis. onf && echo 'cluster-announcement-ip 10.0.16.27' >> redis.conf && cat redis.conf && resdis-server redis.conf"
+    command: bash -c "echo 'port 7003' > redis.conf &echo 'bind 0.0.0.0' >> redis.conf && echo 'protected-mode no' >> redis. onf && echo 'cluster-enabled yes' >> redis.conf &echo 'appendonly yes' >> redis. onf && echo 'requirepass foobared' >> redis.conf &echo 'masterauh foobared' >> redis. onf && echo 'cluster-announcement-ip 10.0.16.27' >> redis.conf && cat redis.conf
     deploy:
       replicas: 1
       update_config:
@@ -74,7 +74,7 @@ services:
         published: 17004
         protocol: tcp
         mode: Post
-    command: bash -c "echo 'port 7004' > redis.conf &echo 'bind 0.0.0.0' >> redis.conf && echo 'protected-mode no' >> redis. onf && echo 'cluster-enabled yes' >> redis.conf &echo 'appendonly yes' >> redis. onf && echo 'requirepass foobared' >> redis.conf &echo 'masterauth foobared' >> redis. onf && echo 'cluster-announcement-ip 10.0.16.27' >> redis.conf && cat redis.conf && resdis-server redis.conf"
+    command: bash -c "echo 'port 7004' > redis.conf &echo 'bind 0.0.0.0' >> redis.conf && echo 'protected-mode no' >> redis. onf && echo 'cluster-enabled yes' >> redis.conf &echo 'appendonly yes' >> redis. onf && echo 'requirepass foobared' >> redis.conf &echo 'masterauh foobared' >> redis. onf && echo 'cluster-announcement-ip 10.0.16.27' >> redis.conf && cat redis.conf
     deploy:
       replicas: 1
       update_config:
@@ -94,7 +94,7 @@ services:
         published: 17005
         protocol: tcp
         mode: Post
-    command: bash -c "echo 'port 7005' > redis.conf &echo 'bind 0.0.0.0' >> redis.conf && echo 'protected-mode no' >> redis. onf && echo 'cluster-enabled yes' >> redis.conf &echo 'appendonly yes' >> redis. onf && echo 'requirepass foobared' >> redis.conf &echo 'masterauth foobared' >> redis. onf && echo 'cluster-announcement-ip 10.0.16.27' >> redis.conf && cat redis.conf && resdis-server redis.conf"
+    command: bash -c "echo 'port 7005' > redis.conf &echo 'bind 0.0.0.0' >> redis.conf && echo 'protected-mode no' >> redis. onf && echo 'cluster-enabled yes' >> redis.conf &echo 'appendonly yes' >> redis. onf && echo 'requirepass foobared' >> redis.conf &echo 'masterauh foobared' >> redis. onf && echo 'cluster-announcement-ip 10.0.16.27' >> redis.conf && cat redis.conf
     deploy:
       replicas: 1
       update_config:
@@ -114,7 +114,7 @@ services:
         published: 17006
         protocol: tcp
         mode: Post
-    command: bash -c "echo 'port 7006' > redis.conf &echo 'bind 0.0.0.0' >> redis.conf && echo 'protected-mode no' >> redis. onf && echo 'cluster-enabled yes' >> redis.conf &echo 'appendonly yes' >> redis. onf && echo 'requirepass foobared' >> redis.conf &echo 'masterauth foobared' >> redis. onf && echo 'cluster-announcement-ip 10.0.16.27' >> redis.conf && cat redis.conf && resdis-server redis.conf"
+    command: bash -c "echo 'port 7006' > redis.conf &echo 'bind 0.0.0.0' >> redis.conf && echo 'protected-mode no' >> redis. onf && echo 'cluster-enabled yes' >> redis.conf &echo 'appendonly yes' >> redis. onf && echo 'requirepass foobared' >> redis.conf &echo 'masterauh foobared' >> redis. onf && echo 'cluster-announcement-ip 10.0.16.27' >> redis.conf && cat redis.conf
     deploy:
       replicas: 1
       update_config:
