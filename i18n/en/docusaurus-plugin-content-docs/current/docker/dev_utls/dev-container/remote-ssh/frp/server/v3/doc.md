@@ -1,6 +1,6 @@
-# frps use record
+# frps usage record
 
-Environment variable configuration for server port is added on v2
+Environment variable configuration for server bound port is added on v2
 
 ## Quick Start
 
@@ -13,5 +13,5 @@ docker-compose up -d
 
 - Configuration Description
 
-`auth_token_line=auth. oken = "xxx"" # authenticates token, used to authenticate on customer connections, Just a sufficient value to
-`bindPort=18000\` # for the port specified when the customer connects, add a sufficient value
+`auth_token_line=auth.token = "xxx"` # authenticates token, used to authenticate on client connections, adjust a suitable value sufficient to
+`bindPort=18000` # for the port specified when the client connects, adjust a suitable value sufficient
