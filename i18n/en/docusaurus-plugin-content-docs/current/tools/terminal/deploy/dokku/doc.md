@@ -59,10 +59,10 @@ echo "$CONTENTS_OF_YOUR_PUBLIC_SSH_KEY_HERE" | dokku ssh-keys:add KEY_NAME
 
 ```bash
 # Create app
-dokku apps: create my-first-app 
+dokku apps:create my-first-app 
 # View information
 dokku apps:report my-first-app
-# Deemployment
+# Deployment
 dokku git:sync --build my-first-app https://github. om/dokku/smoke-test-app.git 
 # Extend to
 dokku ps:scale my-first-app web=2
