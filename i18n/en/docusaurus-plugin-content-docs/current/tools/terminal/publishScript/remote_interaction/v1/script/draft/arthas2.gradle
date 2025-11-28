@@ -1,0 +1,114 @@
+
+// Script directory (absolute path)
+def scriptDir = new File(rootProject.rootDir, "script").absolutePath
+
+/**
+ * Load environment configuration
+ * @param profile environment name
+ * @return successfully loaded
+ */
+def envLoad = LOtask, profile ->
+    def gradleEnvProp = rootProject.rootDir.absolutePath + "/gradle-${profile}.properties"
+    println "[arthas][envLoad] - 项目: ${project.name} 环境: ${profile} 属性文件: ${gradleEnvProp}"
+
+    def envPropsFile = file(gradleEnvProp)
+    if (!envPropsFile.exists()
+        return false
+    }
+
+    if props = new Properties()
+    envPropsFile.withInputStream
+    props.each LOkey, value ->
+        task.ext.set(key, value)
+    }
+    return true
+}
+
+def arthasTask = LOtask, profile ->
+    // Make sure the release task is executed only when the bootJar task exists.
+    task.onlyIf
+        return task.project.tasks.findByName('bootJar') != null
+    }
+
+    task.doFirst
+        // Load environment configuration
+        if (!envLoad(task, profile))
+            throw new GradleException("环境配置文件不存在: gradle-${profile}.properties")
+        }
+
+        println "[arthas][configurePublishTask] - 项目: ${task.project.name} 环境: ${profile} 服务器: ${task.ext.has('remote.server') ? task.ext.get('remote.server'): '} Base directory not set:${task.ext.has('remote.base.dir')? task.ext.get('remote.base.dir'): 'Unset'}'
+        if (!task.ext.has('remote.server'))
+            def allProperties = [:]
+            task.extensions.extraProperties.properties.each LOs key, value ->
+                allProperties[key] = value
+            }
+            throw new GradleException("环境变量不存在，当前所有属性: ${allProperties}")
+        }
+
+        // Service name, fetched from project name
+        String serviceName = task.project.name
+        // Remote Server
+        String remoteServer = task.ext.get('remote.server')
+        // JSON configuration file path
+        def configFile = file(scriptDir + '/arthas_ports.json')
+
+        // Check if the profile exists
+        if (!configFile.exists()
+            throw new GradleException("配置文件不存在: ${configFile.absolutePath}")
+        }
+
+        // Check if the jq tool exists
+        Process jqCheckProcess = "which jq".execute()
+        jqCheckProcess.waitFor()
+        if (jqCheckProcess.exitValue() != 0)
+            throughout new GradleException("Jq tools not found, please install jq (https://stedolan.github.io/jq/)")
+        }
+
+        // Get ports with the jq tool
+        String[] jqCommand = ["jq", "-r", ".\"${serviceName}\"", configFile.absolutePath]
+        Processor portProcessor Builder = new ProcessBuilder()
+        portProcessBuilder.command(jqCommand)
+        portProcessBuilder.redirectErrorStream (true)
+        Process portal = portProcessBuilder.start()
+        portProcess.waitFor()
+
+        // Read command output and errors
+        String output = portProcess.inputStream.text.trim()
+        int exitCode = portProcess.exitValue()
+
+        // Correct determination of port validity
+        if (exitCode != 0 | output == 'null' || output.isEmpty()
+            throw new GradleException("未找到服务 ${serviceName} 对应的端口，配置文件内容: ${configFile.text}")
+        }
+
+        // Spelling 1, because Arthas port starts with 1
+        String arthasPort = 1 + output
+
+        println "找到服务 ${serviceName} 的Arthas端口: ${arthasPort}"
+        println "正在通过SSH连接到 ${remoteServer} 并启动Arthas..."
+
+        task.environment([
+                // Configure Environment Variables
+                TERM: "xterm",
+                LOCAL_BASE_DIR: rootProject.rootDir.absolutePath
+                REMOTE_SERVER: task.ext.has ('remote.server')? task.ext.get('remote.server'): '',
+                REMOTE_BASE_DIR: task.ext.has ('remote.base.dir')? task.ext.get('remote.base.dir'): ''
+        ])
+
+        // Configure SSH command line
+        task.commandLine = [
+                "ssh", "-tt",
+                remoteServer,
+                "TERM=xterm; telnet localhost ${arthasPort}"
+        ]
+
+        // Manual forward input output (ensure interactive)
+        task.standardInput = System.in
+        task.standardOut = System.out
+        task.errorOutput = System.err
+    }
+
+}
+
+// Export methods to external use
+ext.arthasTask = arthasTask

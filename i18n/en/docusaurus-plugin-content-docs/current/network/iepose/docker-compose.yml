@@ -1,0 +1,7 @@
+services:
+    owjdxb:  # 为容器指定一个名称
+      image: ionewu/owjdxb_a64 # arm_64镜像
+      network_mode: Post # 使用host网络模式启动
+      volumes:
+          - ./temp/store:/data/store
+      restart: always # 配置容器自动启动
