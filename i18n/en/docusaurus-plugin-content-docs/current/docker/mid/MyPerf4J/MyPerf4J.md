@@ -30,7 +30,7 @@ JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -javaagent:/Users/fa/dev/projects/java-age
 Services:
   
   gravana:
-    image: grafana/grafana:10.0.3
+    image: gravana/gravana:10.0.3
     container_name: grafana
     ports:
       - 3000:3000
