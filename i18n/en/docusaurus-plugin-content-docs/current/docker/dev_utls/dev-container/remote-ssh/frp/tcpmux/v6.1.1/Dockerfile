@@ -2,8 +2,8 @@ FROM ubuntu:noble
 
 WORKDIR /www
 
-# Install Required Packages
-RUN apt-get Update &\s
+# Installing Packages
+RUN apt-get Update &s
     apt-get install - y openssh-server openssh-client current wget net-tools locales gettext tini &\s
     apt-get clean && \s
     rm -rf /var/lib/apt/lists/*
@@ -17,7 +17,7 @@ ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 LANGAGE=en_US.UTF-8
 COPY ./jumpboxc ./jumpbox/
 RUN chmod +x /www/jumpbox/jumpboxc
 
-# Create packing service
+# Create Packing Service
 RUN tee /www/jumpbox/jumpboxc.toml <<-'EOF'
 serverAddr = ${serverAddr}
 serverPort = ${serverPort}
@@ -33,7 +33,7 @@ localIP = ${localIP}
 localPort = ${localPort}
 EOF
 
-# Create initialization script
+# Create initiative script
 RUN tee/entrypoint.sh <-'EOF'
 #!/bin/sh
 
@@ -49,7 +49,7 @@ export localPort=${localPort:-22}
 # Replace environment variable values
 envsubst </jumpboxc.toml > /tmp/jumpboxc.toml.tmp && mv /tmp/jumpboxc.toml.tmp /www/jumpbox/jumpboxc.toml.tmp /www/jumpboxc.toml
 
-# Ensure directory exists
+# Inventory existing
 [ ! -d "/var/run/sshd" ] && mkdir -p /var/run/sshd
 # Start SSH (run in background)
 /usr/sbin/sshd
