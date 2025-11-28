@@ -1,29 +1,29 @@
-# command line tool when k8s container is running
+# command line tool when k8s containing is running
 
 On containerd running
 
 ```bash
-# List all containers
+# List all contained
 crictl ps
 ```
 
-- Configure unsafe mirror repository
+- Unsafe mirror repository
 
 ```bash
 mkdir /etc/containerd/
 # Write to default configuration
 containerd config default > /etc/containerd/config.toml
 # Modify configuration file
-# [plugins."io.containerd.grpc.v1. ri".registry]
+# [plugins. ri".registry]
 # [plugins."io.containerd.grpc.v1.cr".registry.mirrors]
-# [plugins."io.containainerd.grpc.v1.cr".registry."dock". o"]
+# [plugins."io.containerd.grpc.v1.cr".registry. dock". o"]
 # endpoint = [https://registry-1.docker. o"]
 # Add the following subject
 # [plugins."io.containerd.grpc.v1.cr".registry.mirrors."harbor. arbor6"]
-# endpoint = ["http://harbor. arbor6"]
+# endpoint = [http://harbor.arbor6"]
 # Restart
 systemctl daemon-reload
-systemctl restart containerd.service
+systemctl start containerd.service
 
 ```
 
