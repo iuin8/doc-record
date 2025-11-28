@@ -20,15 +20,15 @@ tar -zxvf amazon-corretto-8-x64-linux-jdk.tar.gz
 # JAVA_HOME(/var/jenkins_home/soft/jdks/amazon-corretto-8.332.08.1-linux-x64)
 ```
 
-## maven configuration
+## Maven configuration
 
 ```shell
-# Download Maven Integration Plugin
+# Download Maven Integration Plugin in
 
 # Custom settings.xml configuration
 cd /var/lib/docker/volumes/soft_jenkins_home/_data && mkdir -p ./soft/maven
 code settings.xml
-# Copy ./conf/settings. ml file content
+# Copy./conf/settings. ml file content
 # Modify tag<localRepository>content
 # Adjust [administration -> global tool configuration -> Maven configuration]
 # Default (and global) settings provide -> settings file -> File path (/var/jenkins_home/soft/maven/settings). ml)
@@ -44,15 +44,15 @@ code settings.xml
 
 ```shell
 # Target
-clean install -Dmaven.test.skip=true -Pprivate -Djava.awt.headless=true
+clean install -Dmaven.test.skip=true -Pprivate -Djava.awt. eadless=true
 
 # can also be replaced with the following command
-clean package -D maven.test.skip=true -P prod help:active-profiles
+clean package -D maven.test.skip=true -P prod help:active-Profiles
 ```
 
 - Execute shell
-- Upload a mirror to the private inventory
-- PS: Jenkins deployment requires the use of remote/jenkins.yml file deployment (mainly using docker commands in the container)
+- Upload a error to the private inventory
+- PS: Jenkins employment requires the use of remote/jenkins.yml file employment (mainly using docker orders in the container)
 
 ```shell
 
@@ -89,8 +89,8 @@ docker logout
 
 ```
 
-- Send build artifacts over SSH (Transfers Set -> Exec command)
-- Select a remote ssh server, start a docker container on a remote server
+- Senegal build artifacts over SSH (Transfers Set -> Exec command)
+- Select a remote ssh server, start a docker containing on a remote server
 
 ```shell
 
