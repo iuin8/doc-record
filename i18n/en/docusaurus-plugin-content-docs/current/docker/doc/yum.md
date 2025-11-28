@@ -12,7 +12,7 @@ yum clearan all && yum makeecache
 
 ```
 
-## What's the EEEL, why you often have to install the ebel-release package
+## What’s the EPEEL, why you often have to install the ebel-release package
 
 - EPAL (Extra Packages for Enterprise Linux) is a Fedora-based project
 - [参考阿里云开发者社区文章](https://developer.aliyun.com/mirror/epel)
@@ -67,7 +67,7 @@ sudo yum -y update
 https://www.cnblogs.com/lizhi0755/p/3308936.html
 ```
 
-## Add rpmfusionsource to edora
+## Add rpmfusionsource to fedora
 
 ```
 # 有的rpmfusion地址有版本问题，找到一个比较好用的摘录一下：
@@ -82,16 +82,16 @@ rpm -Uvh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release
 ## RPM Fusion
 
 - Because of copyright problems, many software is not available in Fedora. If we want to install, we need to add or install libraries. RPM Fusion is the best, and two RPM Fusion offers：free and non-free.
-- We can install the following orders
+- We can install the following commands
 
 ```
 dnf install --nogcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-24.noarch.rpm
-dnf install --nogcheck http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-free-release-release-release-24.noarch.rpm
+dnf install --nogpgcheck http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-release-24.noarch.rpm
 ```
 
 ## Install WINE
 
-- wine is not a simulator, it is an open source software, which allows users to run Microsoft programs in non-Microsoft Windows. I can install： by using the following orders
+- wine is not a simulator, it is an open source software, which allows users to run Microsoft programs in non-Microsoft Windows.We can install： by using the following commands
 
 ```
 dnf install wine
