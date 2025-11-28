@@ -1,7 +1,7 @@
 ## Access address
 
 ```shell
-http://ip:9100/metrics(View server indicators)
+http://ip:9100/metrics(View indicators)
 http://ip:8899/metrics(View docker container indicators)
 http://ip:900/(prometheus's original web-ui)
 http://ip:3000/(Grafana Open Source Monitoring Component Page)
@@ -21,17 +21,17 @@ http://ip:3000/(Grafana Open Source Monitoring Component Page)
   ![img_2.png](img/img_2.png)
   ![img_3.png](img/img_3.png)
   ![img_4.png](img/img_4.png)
-- The service we started with docker is still more saving, and you can see the Docker’s monitoring (the cadvisor service started above collects the dock's information). We use template 893 to configure the monitoring docker's message：
+- The service we started with docker is still more saving, and you can see the Docker’s monitoring (the cadvisor service started above collecting the dock's information). We use template 893 to configure the monitoring docker's message：
   ![img_5.png](img/img_5.png)
 
 ## Java system indicators
 
-- Add two more dependencies to the project
+- Add two more agencies to the project
 
 ```xml
 <!--Monitor ->
 <dependency>
-  <groupId>org.springframe Boot</groupId>
+  <groupId>org. pringframe Boot</groupId>
   <artifactId>spring-boot-starter-actuator</artifactId>
 </dependency>
 <! - Prometheus-->
@@ -41,7 +41,7 @@ http://ip:3000/(Grafana Open Source Monitoring Component Page)
 </dependency>
 ```
 
-- Then add the corresponding configuration to the configuration file (enable monitoring and allow prometheus to fetch)
+- This add the corresponding configuration to the configuration file (enable monitoring and allow prometheus to fetch)
 
 ```yaml
 # Monitoring configuration TODO
@@ -52,10 +52,10 @@ management:
     metrics:
       enabled: true
     prometheus:
-      enabled: true
+      enable: true
   endpoints:
     web:
-      exposure:
+      exposre:
         include: '*'
   metrics:
     export:
@@ -74,7 +74,7 @@ management:
     - targets: ['ip:port'] # todo here and port write their own app
 ```
 
-- Visit the：ip:9090/targets path to see what endpoints are now available to prometheus and how they are configured up to date.
+- Visit the：ip:90/targets path to see what endpoints are now available to prometheus and how they are configured up to date.
   ![img_7.png](img/img_7.png)
 - JVM monitoring and 12900 SpringBoot monitor
   selected for 4701 template![img_8.png](img/img_8.png)
