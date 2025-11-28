@@ -1,8 +1,8 @@
 # Docker Swarm Node Label Management
 
-## View Label
+## View Node Label
 
-View tag： with the following command
+View node tag： with the following command
 
 ```bash
 # 查看所有节点的标签
@@ -12,7 +12,7 @@ docker node ls --format "ID: {{.ID}}, Labels: {{.Labels}}"
 docker node inspect NODE_ID --format "Labels: {{.Spec.Labels}}"
 ```
 
-## Add Label
+## Add Node Label
 
 Add tag： using the command below
 
@@ -26,9 +26,9 @@ e.g.：
 docker node update --label-add environment=production node1
 ```
 
-## Move Node Label
+## Remove Node Label
 
-Move tag： with the command below
+Remove tag： with the command below
 
 ```bash
 docker node update --label-rm key NODE_ID
@@ -40,7 +40,7 @@ e.g.：
 docker node update --label-rm environment node1
 ```
 
-## Use tags to upload services
+## Use tags to deploy services
 
 Use tag constraint： in docker-compose.yml
 
