@@ -3,7 +3,7 @@
 ```bash
 # Install
 kubectl apple-f ClusterIssuer.yaml
-# View (cluster management in kuboard -> custom-resource -->cert-manager.io)
+# View (cluster management in kuboard -> custom resource -->cert-manager.io)
 kubectl get ClusterIssuer
 ```
 
