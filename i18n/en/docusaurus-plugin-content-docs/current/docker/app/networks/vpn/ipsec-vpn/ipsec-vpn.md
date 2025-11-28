@@ -2,7 +2,7 @@
 
 ## What is IPsec VPN?
 
-IPsec, Internet Protocol Security, is a protocol for the protection of Internet protocol (IP) transmission of data. PN, on the other hand, is a dated network based on a public network that allows for secure data transfer. Psec VPN, in combination with the advantages of both, can create a virtual private network in the public network to secure communications between different locations, including remote work, resource-sharing, etc.
+IPsec, Internet Protocol Security, is a protocol for the protection of Internet protocol (IP) transmission of data.VPN, on the other hand, is a dedicated network based on a public network that allows for secure data transfer.IPsec VPN, in combination with the advantages of both, can create a virtual private network in the public network to secure communications between different locations, including remote working, resource-sharing, etc.
 
 ## Build IPsec VPN Server with Docker
 
@@ -46,11 +46,11 @@ View Info
 ```shell
 # View VPN connection information
 docker logs-f ipsec-vpn-server
-# View client connections, ipallocation, age of traffic etc
+# View client connections, ipallocation, usage of traffic etc
 docker exec -it ipsec-vpn-server ipsec whack --traffickstatus
 ```
 
-### Clients
+### Client
 
 Client Connection VPN General Configuration (phone, computer)
 
