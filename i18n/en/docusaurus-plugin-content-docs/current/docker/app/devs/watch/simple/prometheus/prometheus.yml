@@ -4,13 +4,16 @@ global:
 scrape_configs:
   - job_name: 'prometheus'
     static_configs:
-      - targets:
+      - 
+      targets: [ ]
       - 'prometheus:9090'
   - job_name: 'cadvisor'
     static_configs:
-      - targets:
+      - 
+      targets: [ ]
       - 'cadvisor:8080'
   - job_name: 'node-export'
     static_configs:
-      - targets:
+      - 
+      targets: [ ]
       - 'node-export:9100'
