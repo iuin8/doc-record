@@ -1,6 +1,6 @@
 # Deploying Intranet Redis
 
-## Related execution commands
+## Related execution command
 
 ```bash
 
