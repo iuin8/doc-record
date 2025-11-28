@@ -4,6 +4,6 @@ services:
     environment:
       - TZ="Asia/Shanghai"
       - CPOLAR_AUTH_TOKEN=${CPOLAR_AUTH_TOKEN}
-      - PLAYLIST_NOTIFICATION_POPUP_TITLE
+      - CPOLAR_CONTANER_SH_PLAYLIST_BODY
     restart: unless-stopped
     privileged: true
