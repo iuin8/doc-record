@@ -7,7 +7,7 @@ services:
       - "2522:22"
     environment:
       - TZ="Asia/Shanghai"
-      - serverAddr="116.1.1.1.1.1.1.1.1.1"
+      - serverAddr="116.1.1.1.1.1"
       - serverPort=7000
       - client_name="ssh"
       - ssh_remotePort=6000
