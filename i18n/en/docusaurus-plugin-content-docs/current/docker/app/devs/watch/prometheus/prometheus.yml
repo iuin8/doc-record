@@ -6,35 +6,38 @@ global:
     monitor: 'codelab-monitor'
 # influxdb配置；需在influxdb中创建好db
 remote_write:
-  - url: "http://xxx.xxx.xx.xx:8086/api/v1/pro/write?db=prometheus&u=root&p=***"
+  - url: "http://xxx.xxx.x.x:8086/api/v1/pro/write?db=prometheus&u=root&p=***"
 remote_read:
-  - url: "http://xxx.xxx.xx.xx:8086/api/v1/pro/read?db=prometheus&u=root&p=***"
+  - url: "http://xxx.xx.xx.x:8086/api/v1/pro/read?db=prometheus&u=root&p=***"
 rule_files:
   - "./rules/*.yml"
 # 告警配置
 alerting:
   alertmanagers:
-    - 
+    0: [ ]
     static_configs:
-        - targets:
+      - 
+        targets: [ ]
         - 'xx.xx.xx.xxx:9093'
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
 scrape_configs:
-  -   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-job_name: 'prometheus'
+  -
+job_name:
     # Override the global default and scrape targets from this job every 5 seconds.
     scrape_interval: 5s
     static_configs:
-      - targets:
+    - 
+      targets: [ ]
       - 'localhost:9090'
-  - job_name: 'Agent'
+  0:
+job_name: 'Agent'
     # 基本认证(启动node_exporter时配置的用户名密码)
     basic_auth:
       username: xxx
       password: '****'
     static_configs:
-      -       # 需要监控服务器
+      -
 targets:
       - 'xx.xx.xx.xxx:9100'
       - 'xx.xx.xx.xxx:9100'
