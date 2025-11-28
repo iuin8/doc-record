@@ -1,4 +1,4 @@
-# Docker Mirror
+# Docker Mirror Source
 
 [参考文章](https://developer.aliyun.com/article/653081)
 
@@ -8,11 +8,11 @@
 # Internet trade
 # http://hub-mirror.c.163.com
 # ustc
-# https://docker.mirrors.usc. n
+# https://docker.mirrors.ustc.edu. n
 
-# Test mirror Source
+# Test mirror source
 docker run --rm hello-world --registry-mirror=https://registry.docker-cn.com
-docker run --rm hello-world --registry-mirror=http://hub-mirror. m
+docker run --rm hello-world --registry-mirror=http://hub-mirror.c.163. om
 docker run --rm hello-world --registry-mirror=https://docker.mirrors.ustc.edu.cn
 
 docker run --rm node:14.21.1 - slim --registry-mirror=https://registry.docker-cn. om
@@ -25,5 +25,5 @@ docker run --rm node:14.21.1 - slim --registry-mirror=https://docker.mirrors.ust
   - docker.fxk.dedyn.io
     - Work by Cloudflare Workers, feel useful
     - [相关博客](https://blog.cmliussss.com/p/CF-Workers-docker.io/)
-  - Down docker Mirror
+  - Down docker Mirror Source
     - [docker镜像源](https://cf-workers-docker-io-ac6.pages.dev/)
