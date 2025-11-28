@@ -1,11 +1,11 @@
-# FROM ghcr.io/linuxserver/libreee: 7.6.7
+# FROM ghcr.io/linuxserver/libree: 7.6.7
 FROM linuxserver/libreoffice:7.6.7
 
 ## Install OpenJDK 17
 #RUN apk Update && apk add --no-cache openjdk17-jdk && \s
 # rm -rf /var/cache/apk/*
 # Install OpenJre 17
-RUN apk add --no-cache openjdk17-jre &\s
+RUN apk add --no-cache openjdk17-jre &s
    rm -rf /var/cache/apk/*
 
 COPY build/libs/*.jar /data/app.jar
