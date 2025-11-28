@@ -7,19 +7,7 @@ nodes:
       port: 2222
       docker_socket: /var/run/docker.sock
     2:
-address: 2.2.2.2
-      user: ubuntu
-      role:
-        - walker
-      ssh_key_path: /home/user/.ssh/id_rsa
-      ssh_key: |-
-        --BEGIN RSA PRIVATE KEY --
-        --END RSA PRIVATE KEY --
-      ssh_cert_path: /home/user/.ssh/test-key-cert.pub
-      ssh_cert: |-
-        ssh-rsa-cert-v01@opensssh.com AAAHNzaC1yc2EtY2VydC12MDFAb3Bl...
-    3:
-address: example.com
+address:
       user: ubuntu
       role:
         - walker
@@ -60,7 +48,7 @@ private_registries:
        is_default: true
 # Bastion/Jump host configuration
 bastion_host:
-    address: x.x.x
+    address: x.x
     user: ubuntu
     port: 22
     ssh_key_path: /home/user/.ssh/bastion_rsa
@@ -143,16 +131,15 @@ services:
           apiVersion: apiser.config.k8s.io/v1
           kind: Encryption Configuration
           resources:
-          - 
-          resources:
-            - Sections
+            0: Section
             providers:
-              - 
+              -
             aescbc:
                 keys:
                 - name: k-fw5hn
                   secret: RTczRjFDODMQzAyMDVBREU4NDJBMUZFNDhCNzM5N0I=
-            - identity: { }
+            0:
+identity: { }
       # Enable audit logging
       # Available as of v1.0.0
       audit_log:
@@ -169,8 +156,8 @@ services:
             omitStages:
               - "RequestReceived"
             rules:
-              -               # Log pod changes at RequestResponse level
-level: RequestResponse
+              -
+level:
                 resources:
                 - group: ""
                   # Resource "pods" doesn't match requests to any subresource of pods,
@@ -289,11 +276,11 @@ network:
   tolerations:
   - key: "node.kubernetes.io/unreachable"
     operator: "Exists"
-    effect: "Noecute"
+    effect: "Noute"
     tolerationseconds: 300
   - key: "node.kubernetes.io/not-already"
     operator: "Exists"
-    effect: "Noecute"
+    effect: "Noute"
     tolerationseconds: 300
   # Available as of v1.1.0
   update_strategy:
@@ -302,7 +289,7 @@ network:
       maxUnavailable: 6
 # Specify DNS provider (coredns or kube-dns)
 dns:
-  provider: corns
+  provider: Corns
   # Available as of v1.1.0
   update_strategy:
     strategy: RollingUpdate
