@@ -8,13 +8,13 @@ cd /etc/sysconfig/network-scripts/
 # Edit profile
 vi ifcfg-eth0 
 # OBOOT="no" #Do not open network card on startup. We can set this to yes
-# and restart network
+# and start network
 service network restart
 ```
 
-## firewalld docker port mapping, firewall open port
+## firewallddocker port mapping, firewall open port
 
-\` [参考文章](http://t.csdn.cn/Xo6XZ)
+\\` [参考文章](http://t.csdn.cn/Xo6XZ)
 
 ```shell
 # Host ip: 192.168.31.19
@@ -26,11 +26,11 @@ firewall-cmd --add-port=808080/tcp --permanent
 # Question：found access to：192.168.31. 9:8080 Access is unavailable, after closing firewalls, access to
  
 # Solutions, docker0 web card added to trusted domain
-firewall-cmd --permanent --zone=trusted --change-interface=docker0
+firewall-cmd --permanent --zone=trusted --change-interface=docker=docker0
 # Restart loading configuration
 firewall-cmd --reload
  
 # firewall-cmd command：http://www. nblogs.com/Raodi/p/11625487.html
 ```
 
-> If you don't have any validity, you will use the Agent Restart method. It sometimes seems to be a half-day break, and it is good to reboot the last!
+> If you have any validity, you will use the Agent Restart method. It sometime looks to be a half-day break, and it is good to reboot the last!
