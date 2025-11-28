@@ -1,11 +1,11 @@
-### Main redisservice configuration
+### Main service configuration
 
 ```
 /path/to/redis/config/master.conf
 ## Custom configuration
 ```
 
-### From redisservice configuration
+### From service configuration
 
 ```
 /path/to/redis/config/slave.conf
