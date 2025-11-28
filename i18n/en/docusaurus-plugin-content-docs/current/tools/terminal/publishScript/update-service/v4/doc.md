@@ -3,8 +3,8 @@
 > **v4 Version Update**
 > Date: 2025-09-30
 >
-> - Support to view real-time logs
->   - Use idea's native feature to automatically differentiate error log (view by independent tab), quick visibility and troubleshooter issues
+> - Support to view re-time logs
+>   - Use idea's national feature to automatically different error log (view by independent tab), quick visibility and troubleshotter issues
 
 ![service-logs-to-idea-console](https://github.com/183461750/doc-record/blob/main/docs/tools/terminal/publishScript/update-service/imgs/service-logs-to-idea-console-1.png?raw=true)
 
@@ -22,7 +22,7 @@ Unfortunately the error log group function of idea, which is only built-in with 
 
 ### Add custom task
 
-Modify the following configuration to add custom tasks to achieve multi-environment release
+Modify the following configuration to add customized tasks to achieve multi-environment release
 
 - [发布服务任务gradle配置](https://github.com/183461750/doc-record/blob/main/docs/tools/terminal/publishScript/update-service/v4/project/script/publishServerTask.gradle)
 
