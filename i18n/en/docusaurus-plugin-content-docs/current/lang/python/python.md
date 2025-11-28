@@ -13,7 +13,7 @@ import sys
 
 ## Use in vscode
 
-Related plugins: Polyglot Notebooks (Extended Id: ms-dotnettools.dotnet-interactive-vscode)
+Related plugins: Polyglot Notebooks(Extended Id: ms-dotnettools.dotnet-interactive-vscode)
 
 ```bash
 # Dependencies
