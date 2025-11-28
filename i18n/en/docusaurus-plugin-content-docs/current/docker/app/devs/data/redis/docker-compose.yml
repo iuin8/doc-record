@@ -23,7 +23,7 @@ services:
   redis_slave:
     image: redis
     restart: always
-    hostname: remdis-live
+    hostname: remdis-sleve
     command:
     - "redis-server"
     - "/usr/local/etc/redis/redis.conf"
@@ -39,4 +39,4 @@ services:
         condition: On failure
       placement:
         constraints:
-          - node.labels.remdis_lave == true
+          - node.labels.redis_lave == true
