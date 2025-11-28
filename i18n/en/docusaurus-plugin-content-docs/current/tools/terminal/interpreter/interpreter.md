@@ -13,7 +13,7 @@ pip install open-interpreter
 ```bash
 Interpreter
 # Using local model
-interpreter --model olama/<model-name>
+Interpreter --model olama/<model-name>
 # Example
-interpreter --model ollama/qwen2.5-coder
+Interpreter --model olama/qwen2.5-coder
 ```
