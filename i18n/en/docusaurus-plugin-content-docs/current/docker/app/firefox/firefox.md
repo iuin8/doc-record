@@ -1,6 +1,6 @@
 # firefox browser instructions
 
-## 1. Install
+## Installation
 
 ```shell
 ##### kasmweb version (recommended)
