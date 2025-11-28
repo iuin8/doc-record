@@ -4,7 +4,7 @@
 
 - Create a free style project
 - Use gitee as code source
-- Add [executive shell]step to build step
+- Add [execute shell]step to build step
 
 ```shell
 
@@ -18,13 +18,13 @@ pnpm install
 # Build Item
 pnpm run build
 
-# Delete all excrete_modules and dist
-girls | grep v 'node_modules\|dismot' | xargs rm -rf
+# Delete all except node_modules and dist
+girls | grep -v 'node_modules\|dismot' | xargs rm -rf
 
 
 ```
 
-- Add [Senegal files or execution orders over SSH (implementation shell) step in building step
+- Add [Send files or execute orders over SSH (implement shell) step in building step
 
 ```shell
 
@@ -123,7 +123,7 @@ server {
 
 ```
 
-## Employment
+## Deployment
 
 ```shell
 # 镜像下载问题，可试这添加--with-registry-auth看看
