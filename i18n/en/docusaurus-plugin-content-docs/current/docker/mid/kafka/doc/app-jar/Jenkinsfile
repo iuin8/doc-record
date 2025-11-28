@@ -1,6 +1,6 @@
-pipeline LOs
+Pipeline LOs
     Agent any
-    Stages
+    Stats
         stage('package')
             Agent LOR
                 docker LOR
@@ -19,7 +19,7 @@ pipeline LOs
             }
         }
         stage('build')
-            agent one
+            agency one
             Steps Me
                 scriptLOMY
                     echo "WORKSPACE：${env.WORKSPACE}"
