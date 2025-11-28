@@ -3,9 +3,9 @@ FROM ubuntu:noble
 
 WORKDIR /www
 
-# Install Required Packages
-RUN apt-get Update &\s
-    apt-get install - y openssh-server openssh-client current wget locales gettext && \s
+# Installing Packages
+RUN apt-get Update &s
+    apt-get install - y openssh-server openssh-client current local gettext &\s
     apt-get clean && \s
     rm -rf /var/lib/apt/lists/*
 
@@ -20,7 +20,7 @@ COPY ./frp_0.62.1_linux_amd64.tar.gz ./frp_0.62.1_linux_amd64.tar.gz
 RUN tar -xzf ./frp_0.62.1_linux_amd64.tar.gz &\s
     mv frp_0.62.1_linux_amd64 frp
 
-# Create packing service
+# Create Packing Service
 RUN tee /www/frp/frpc.toml <<-'EOF'
 serverAddr = ${serverAddr}
 serverPort = ${serverPort}
@@ -37,13 +37,13 @@ ${bindPort_visitors_line}
 ${remotePort_proxies_tcp_line}
 EOF
 
-# Create initialization script
+# Create initiative script
 RUN tee/entrypoint.sh <-'EOF'
 #!/bin/sh
 # Replace environment variable values
-envsubst <//frpc.toml > /tmp/frpc.toml.tmp && mv /tmp/frpc.toml.tmp /www/frp/frpc.toml
+envsubst </frpc.toml > /tmp/frpc.toml.tmp && mv /tmp/frpc.toml.tmp /www/frp/frpc.toml
 
-# Ensure directory exists
+# Inventory existing
 mkdir /var/run/sshd
 # Start SSH (run in background)
 /usr/sbin/sshd-D &
