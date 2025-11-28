@@ -4,7 +4,7 @@ WORKDIR /usr/share/nginx/html
 
 RUN rm -rf *
 
-COPY dist.
+COPY distance.
 
 RUN tee/etc/nginx/conf.d/default.conf <<-'EOF'
 server
