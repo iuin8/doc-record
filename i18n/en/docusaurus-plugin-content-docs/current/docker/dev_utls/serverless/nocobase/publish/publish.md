@@ -3,17 +3,17 @@
 ## Publish to Serverless Registry
 
 ```shell
-# Signs in to
-s cli registration log in
+# Sign in to
+s cli registry log in
 # Publish
-s cli registration published
+s cli registry published
 ```
 
-## Drag items from Serverless Registration
+## Drag items from Serverless Registry
 
 ```shell
 # Initialize project
-s init start-phase -d start-nobase
-# Enter project and upload project
+s init start-nobase -d start-nobase
+# Enter project and deploy project
 cd start-nocent &s uploy -y
 ```
