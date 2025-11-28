@@ -26,7 +26,7 @@ spec:
     - host: harbor.iuin.com
       http:
         paths:
-          - 
+          0: [ ]
           backend:
               service:
                 name: harbor-helm-nginx
