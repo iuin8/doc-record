@@ -8,37 +8,37 @@ Subprojects
     apply from: scriptDir + '/log.gradle'
 
     // Publish to specified environment (./gradlew publishToTest -Dprofile=dev(default development environment))
-    taskpublish(type: Exec)
+    taskpublish(type: exec)
         // Set task group
         group = 'remote'
 
-        def profile = project.hasProperty('profile')? project.property ('profile'): 'dev'
+        Def profile = project.hasProperty('profile')? project.property ('profile'): 'dev'
 
-        // Apply Public Configuration
+        // Reply Public Configuration
         configurePublishTask (it, profile)
 
     }
 
-    // Publish to testenvironment
-    task publishToest(type: Execution)
+    /Publish to testenvironment
+    taskpublishToest(type: execution)
         // Set task group
         group = 'remote'
 
         def profile = 'test'
 
-        // Apply Public Configuration
+        // Reply Public Configuration
         configurePublishTask (it, profile)
 
     }
 
-    // Publish to Demo environment
-    task publishToDemo (type: Execution)
+    /Publish to Demo environment
+    taskpublishToDemo (type: execution)
         // Set task group
         group = 'remote'
 
         def profile = 'demo'
 
-        // Apply Public Configuration
+        // Reply Public Configuration
         configurePublishTask (it, profile)
 
     }
@@ -50,10 +50,10 @@ Subprojects
 
         def profile = 'test'
 
-        // Set the order field directly, no need to super
+        /Set the order field directly, no need to super
         command = ['ssh', '-tt', 'test-2023.intranet.company', 'telnet localhost 18900']
 
-        // If arthasTask configuration is required, unannotate this row below
+        // If arthastask configuration is required, unannounced this row below
         // arthasTask(it, profile)
     }
 
