@@ -2,8 +2,8 @@ FROM ubuntu:noble
 
 WORKDIR /www
 
-# Install Required Packages
-RUN apt-get Update &\s
+# Installing Packages
+RUN apt-get Update &s
     apt-get install - y openssh-server openssh-client current wget net-tools locales gettext tini &\s
     apt-get clean && \s
     rm -rf /var/lib/apt/lists/*
@@ -15,10 +15,10 @@ ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 LANGAGE=en_US.UTF-8
 
 # extracted frp
 COPY ./frp_0.62.1_linux_amd64.tar.gz ./frp_0.62.1_linux_amd64.tar.gz
-RUN tar -xzf ./frp_0.62.1_linux_amd64.tar.gz && rm -rf ./frp_0.62.1_linux_amd64.tar.gz &\\s
+RUN tar -xzf ./frp_0.62.1_linux_amd64.tar.gz && rm -rf ./frp_0.62.1_linux_amd64.tar.gz &\s
     mv frp_0.62.1_linux_amd64 frp
 
-# Create packing service
+# Create Packing Service
 RUN tee /www/frp/frpc.toml <<-'EOF'
 serverAddr = ${serverAddr}
 serverPort = ${serverPort}
@@ -34,7 +34,7 @@ localIP = ${localIP}
 localPort = ${localPort}
 EOF
 
-# Create initialization script
+# Create initiative script
 RUN tee/entrypoint.sh <-'EOF'
 #!/bin/sh
 
@@ -48,9 +48,9 @@ export localIP=${localIP:-'"127.0.0.1"'}
 export localPort=${localPort:-22}
 
 # Replace environment variable values
-envsubst <//frpc.toml > /tmp/frpc.toml.tmp && mv /tmp/frpc.toml.tmp /www/frp/frpc.toml
+envsubst </frpc.toml > /tmp/frpc.toml.tmp && mv /tmp/frpc.toml.tmp /www/frp/frpc.toml
 
-# Ensure directory exists
+# Inventory existing
 [ ! -d "/var/run/sshd" ] && mkdir -p /var/run/sshd
 # Start SSH (run in background)
 /usr/sbin/sshd
@@ -63,7 +63,7 @@ cat ~/.ssh/id_ed25519_container.pub > ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
 
 # Start FRPC
-/www/frp/frpc-c${frpc_config_path:-www/frp/frpc.toml}
+/www/frp/frpc${frpc_config_path:-www/frp/frpc.toml}
 
 # Keep container running
 tail -f /dev/null
