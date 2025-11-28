@@ -16,7 +16,7 @@ services:
       # https_proxy: http://10.0.16.17:7890
       # http_proxy: http://10.0.16.17:7890
       # all_proxy: socks5://10.0.16.17:7890
-      config_token: AJCNPVO4NYB7UJCX6NVDZXXXLHCYCRG
+      config_token: AJCNPVO4NYB7UJCX6NVDZXXXXXLHCYCRG
       RUNNER_ALLOW_RUNASROOT: 1
     restart: always
 # Install dependencies
