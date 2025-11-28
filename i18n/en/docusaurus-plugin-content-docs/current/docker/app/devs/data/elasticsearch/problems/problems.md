@@ -17,7 +17,7 @@ AI答:
    sudo sysctl -w vm.max_map_count=262144
 ```
 
-This will take effect immediately, but you will need to reexecute this command if the host restarts.
+This will take effect as soon as possible, but you will need to re-execute this order if the host returns are made.
 
 2. **Permanent Settings**：
 
@@ -27,16 +27,18 @@ This will take effect immediately, but you will need to reexecute this command i
     vm.max_map_count=262144
     ```
 
-   Then execute the `sysctl -p` command for the changes to take effect.The advantage of this method is that the setting will be maintained even if the host restarts.
+   When executing the `sysctl -p` command for the changes to take effect. He raises the age of this method is that the setting will be maintained even if the host restoration takes place.
 
-Note that if you use the WSL2 backend or other virtualization environment of Docker Desktop, you may need to set it in different places.For example, in WSL2, you may need to implement the following command in Windows, or in PowerShell, to adjust the WSL2 VM settings：`````shell
-    wsl -d docker-desktop syctl -w vm.max_map_count=262144
-    ````
+Note that if you use the WSL2 backend or other virtualization environment of Docker Desktop, you may need to set it in different places. or example, in WSL2, you may need to implement the following command in Windows, or in PowerShell, To improve the WSL2 VM settings：\`\`\`\`\`shell
+wsl -d docker-desktop syctl -w vm. ax_map_count=262144
+\`\`\`\`
 or, depending on your environment, to find environment-specific settings.
+
 `````
 
-Once these settings have been completed, reboot your Elasticsearch container and should be able to resolve the `vm.max_map_count` error encountered on startup.
+Once these settings have been completed, reboot your Elasticsearch contains and should be able to resolve the `vm. ex_map_count` error posted on startup.
+
+````
 
 ```
-
-```
+`````
