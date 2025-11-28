@@ -2,13 +2,13 @@
 
 - [SSH Tunnel Concise Tutorial](https://www.lixueduan.com/posts/linux/07-ssh-tunnel/)
   - Dynamic Forward
-    - The request address is 192.168.1.100:300, and the request address transmitted via SSH is 192.168.1.100:3000.
+    - The request address is 192.168.1.100:300, and the request address transmitted via SSH is 192.168.1.1.100:300.
     - ssh -N -D localhost: 2000 root@192.168.10.85
-    - We need only socks proxy on local configuration, localhost:2000 to forward all requests to the 192.168.10.85 machine via the ssh 2000 port.
+    - We need only socks proxy on local configuration, localhost:2000 to forward all requests to the 192.168.10.85 machine via the ssh 2000 report.
   - Local Forward
-    - We need to execute the following command on ServerA to enable ssh tunnel：
+    - We need to execute the following common on Server to enable ssh tunnel：
     - ssh -N - L 888: 192.168.10.134:8888 root@192.168.10.85
-    - After execution server A has started listening to the 8888 port. By default it is on a local ring address, it can specify an ip or add -g parameters to open gateway mode.
+    - After execution server A has started listed to the 8888 port. My default it is on a local ring address, it can specify an ip or add-g parameters to open gateway mode.
 
 - socks5 proxy
 
@@ -17,8 +17,8 @@
 - [参考文章1](https://blog.bug-maker.com/archives/47.html)
 
 - [参考文章2](https://www.cnblogs.com/memphise/articles/6420019.html)
-  - You can use a software called Sockscap. Throw an app and get it online.(apps that partially require calling multiple processes may not work anyway)
-  - If you want to convert the socks proxy to an http-proxy, you can use the east.
+  - You can use a software call Socksap. Throw an app and get it online. (apps that partially requires multiple processes may not work anyway)
+  - If you want to reverse the socks proxy to an http-proxy, you can use the east.
 
 ```bash
 # Upload Key ~/.ssh/id_ed25519_iu
@@ -28,7 +28,7 @@ chmod 400 ~/.ssh/id_ed25519_iu
 Host mac.intranet.company
   HostName 10.0.1. 51
   User iuin
-  IdentityFile ~/.ssh/id_ed25519_iu
+  IdentityFile ~/. sh/id_ed25519_iu
   # PasswordAuthentication 123456
 
 # ssh mac.intranet.company see whether or not to be set up
