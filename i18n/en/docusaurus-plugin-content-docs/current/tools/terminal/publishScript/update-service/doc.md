@@ -3,7 +3,7 @@
 - Support for updates from the specified service
 - Support for updating all services
 - Process service JAR file upload and remote launch
-- Support area gradation
+- Support idea gradle
   - Double click to post services to test environment
 
 [相关配置文件地址](https://github.com/183461750/doc-record/blob/main/docs/tools/terminal/publishScript/update-service)
@@ -14,7 +14,7 @@
 vi ~/.ssh/config
 
 # of Development Environment
-Host x.dev.iuin
+Host xx.dev.iuin
   HostName 1.0.1.1
   User root
   IdentityFile ~/.ssh/id_ed25519_iu
@@ -23,9 +23,9 @@ Host x.dev.iuin
 
 ```bash
 # Updated environmental variable
-project directory in `base.sh` from project: LOCAL_BASE_DIR="/Users/fa/dev/projects/IdeaProjects/company/iuin/mall/private-employ/xxxxxx-sbbc"
-Remote service address: REMOTE_SERVER="xx.dev.iuin"
-PREfix : MOTE_BABA_DIR="/data/xxxxxx"
+project directory in `base.sh` from project: LOCAL_BASE_DIR="/Users/fa/dev/projects/IdeaProjects/company/iuin/mall/private-employ/xxxx-sbbc"
+Remote service address: REMOTE_SERVER="xxx.dev.iuin"
+Prefix : REMOTE_BABA_DIR="/data/xxxx"
 ```
 
 ```bash
@@ -33,14 +33,14 @@ chmod +x base.sh
 base.sh
 ```
 
-### Combined gradation usage
+### Combined gradle usage
 
-The `build.gradle` file at the root of the project names (configuration in the address already provided over)
+The `build.gradle` file at the root of the project adds tasks (configuration in the address already provided above)
 
 ```bash
 # Project root directory executes
 mkdir script
-# Add `base.sh` and `update-service.sh` files (configuration already provided in the address are)
+# Add `base.sh` and `update-service.sh` files (configuration already provided in the address above)
 ```
 
 ```bash
