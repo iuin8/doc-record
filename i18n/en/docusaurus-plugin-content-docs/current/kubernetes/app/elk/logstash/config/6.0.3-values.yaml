@@ -1,5 +1,5 @@
 input: |-
-  IPv6 Port => 80}
+  IPv6 port => 80}
 output: |-
   elasticsearch {
   hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
