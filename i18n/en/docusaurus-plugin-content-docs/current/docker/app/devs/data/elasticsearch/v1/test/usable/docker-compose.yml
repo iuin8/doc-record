@@ -5,7 +5,7 @@ services:
     volumes:
       - certs:/usr/share/elasticsearch/config/erts
     command: >
-      bash -c if [ ! -f config/certs/ca.zip ]; then echo "Creating CA"; bin/elasticsearch-certca --silent --pem -out config/certs/ca.zip; unzip config/certs/ca. ip-d config/certs; fi; if [ ! -f config/certs/certs.zip ]; then echo "Creating certs"; bin/elasticsearch-certt --silent --pem -out config/certs/certs. ip --ca-cert config/certs/ca/ca.crt --ca-key config/certs/ca/ca.key; unzip config/certs/certs. ip -d config/certs; echo "Setting file permissions" chown -R root:root config/certs; find. -type d -exec chmod 750 \{\} \;; find-type f -exec chmod 640 \{\} \;fi; '
+      bash -c if [ ! -f config/certs/ca.zip ]; then echo "Creating CA"; bin/elasticsearch-certut ca --silent --pem -out config/certs/ca.zip; unzip config/certs/ca. ip-d config/certs; fi; if [ ! -f config/certs/certs.zip ]; then echo "Creating certs"; bin/elasticsearch-certut --silent --pem -out config/certs/certs. ip --ca-cert config/certs/ca/ca.crt --ca-key config/certs/ca/ca.key; unzip config/certs/certs. ip -d config/certs; echo "Setting file permissions" chown -R root:root config/certs; find. -type d -exec chmod 750 \{\} \;; find. -type f -exec chmod 640 \{\} \;; fi; '
     networks:
       - middle leware
     deploy:
