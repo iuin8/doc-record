@@ -1,4 +1,4 @@
-# ssh+nginx implements Intranet pension
+# ssh+nginx implements Intranet penetration
 
 - Extranet server nginx configuration
 
@@ -12,7 +12,7 @@ server FM
 
     access_log /var/log/nginx/ssh_access. og main;
 
-    location / 888
+    location /888
         proxy_pass http:///127.0.0. :8888;
     }
 
@@ -36,6 +36,6 @@ nohup /docker-entrypoint. h nginx -g 'daemon off;' &
 - Inner server ssh configuration
 
 ```shell
-# My default on local loop addresses, you can specify ip or add -g parameters to open gateway mode
-ssh -N -R 210. 1.48.69:192.168.3.14: 8888 ljf@210.21.4669 - p 10086
+# By default on local loop addresses, you can specify ip or add -g parameters to open gateway mode
+ssh -N -R 210.21.48.69:88:192.168.3.14:8888 ljf@210.21.48.669 - p 10086
 ```
