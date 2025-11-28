@@ -1,6 +1,6 @@
 # headscale
 
-## Related Deployment Configuration
+## Related Employment Configuration
 
 - [服务端doc](https://github.com/183461750/doc-record/blob/main/docs/network/headscale/local/demo2/doc.md)
 - [服务端docker-compose.yml](https://github.com/183461750/doc-record/blob/main/docs/network/headscale/local/demo2/docker-compose.yml)
