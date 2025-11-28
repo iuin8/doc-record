@@ -9,8 +9,8 @@ SPRING_PROFILES_ACTIVE=$APP_ENV
 #CDBG_AGENT="-agentpath:/tmp/cdbg_java_agent.so"
 
 tee -a /etc/hosts <EOF
-10.0.1.1.1.1.1.139 skywalking-skywalking-helm-oap.skywalking
-10.0.1.1.1.17 skywalking-skywalking-helm-oap.skywalking
+10.0.1.1.139 skywalking-skywalking-helm-oap.skywalking
+10.0.1.1.177 skywalking-skywalking-helm-oap.skywalking
 EOF
 
 export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=${DEBUG_PORT}"
