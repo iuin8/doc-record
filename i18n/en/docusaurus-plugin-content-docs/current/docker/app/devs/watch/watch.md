@@ -8,26 +8,26 @@
 5、vim config.yml(配置访问的用户名密码，可根据需要跳过这一步)
 ```
 
-- Use html encryption for html -nBC 12 '' | tr -d ':\n'
+- Use htpasswd encryption for html -nBC 12 '' | tr -d ':\n'
 - config.yml
 
 ```shell
 basic_auth_users:
   # The current user named prometheus can set multiple
-  # Password encryption htpasswd -nBC 12 '' | tr -d :\n'
+  # Password encryption htpasswd -nBC 12 '' | tr -d ':\n'
   username: password
 ```
 
 ```shell
 6, nohor/usr/local/node_exporter/node_exporter --web.config=../config.yml &
-nohup ../node_exporter --web.config=../config.yml &
+nohup ./node_exporter --web.config=../config.yml &
 ```
 
 ## Influxdb Configuration
 
 ```shell
 # This way to create library
-docker exec -it contains name./run-basic.sh
+docker exec -it container name./run-basic.sh
 ```
 
 ## alertmanager configuration
