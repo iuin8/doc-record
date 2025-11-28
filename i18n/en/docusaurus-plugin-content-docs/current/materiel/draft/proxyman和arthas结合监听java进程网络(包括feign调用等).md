@@ -1,4 +1,4 @@
-# Use arthas and proxyman to list to the java process network (including configuration calls)
+# Use arthas and proxyman to listen to the java process network (including fig calls)
 
 ## Related Commands
 
