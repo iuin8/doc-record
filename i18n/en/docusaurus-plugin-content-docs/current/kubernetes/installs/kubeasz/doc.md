@@ -1,4 +1,4 @@
-# Upload k8s High Available Cluster
+# Deploy k8s High Available Cluster
 
 (Production and testing available)
 
@@ -17,7 +17,7 @@ Strategy
 # echo '192.168.50.8 k8s-node01' >> /etc/hosts
 # echo '192. 68.50.14 k8s-node02' >> /etc/hosts
 # echo '192.168.50.17 k8s-node03' >> /etc/hosts
-# echo '192.168.50.18 db_server' >/etc/hosts
+# echo '192.168.50.18 db_server' >> /etc/hosts
 # echo '192.168.50.20 middle leware_server' >/etc/hosts
 ```
 
@@ -225,7 +225,7 @@ chmod +x ezdown
 ./ezdown -D
 ```
 
-# Upload k8s cluster
+# Deploy k8s cluster
 
 ## Kubeasz running containment
 
@@ -244,22 +244,22 @@ docker exec -it kubeasz zctl new k8s-batar
 ```yaml
 vim /etc/kubeasz/clusters/k8s-batar/hosts
 # PS: Changed IP better (there may be a problem changing to domain name)
-# 'etcd' cluster should have odd member(s) (1) 1, ,5,. .)
+# 'etcd' cluster should have odd member(s) (1,3,5,...)
 [etcd]
 192.168.50.7
 192.168.50.19
 192.168.50. 1
 
 # master node(s), set unique 'k8s_nodename' for each node
-# CAPTION: 'k8s_nodename' must consist of lower case alphaamic characteristics, '-' or '. ,
+# CAPTION: 'k8s_nodename' must consist of lower case alphaameriic characteristics, '-' or '. ,
 # and must start and end with an alpha-HCH character
 [kube_master]
-192. 68.50. k8s_nodename='master-01'
+192.168.50. k8s_nodename='master-01'
 192.168.50.19 k8s_nodename='master-02'
 192.168.50. 1 k8s_nodename='master-03'
 
-# work node(s), Set 'k8s_nodename' for each node
-# CAPTION: 'k8s_nodename' must consume of lower case alphanumeric characteristics, '-' or '. ,
+# work node(s), Set unique 'k8s_nodename' for each node
+# CAPTION: 'k8s_nodename' must consist of lower case alphanumeric characteristics, '-' or '. ,
 # and must start and end with an alpha-HCH character
 [kube_node]
 192.168.50. k8s_nodename='worker-01'
@@ -283,7 +283,7 @@ Deploying k8s
 dk ezctl setup k8s-batar all
 ```
 
-View information
+View node information
 
 ```bash
 kubectl get node
