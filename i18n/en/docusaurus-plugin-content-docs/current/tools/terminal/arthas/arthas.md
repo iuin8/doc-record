@@ -8,15 +8,15 @@
 # Decompile class to
 jad --source-only com.mall.domain.enums.ShowFrequencyTypeEnum > /temp/SowFrequencyTypeEnum.java
 # View corresponding class loader
-Sc -d com. all.domain.enums.ShowFrequencyTypeEnum | grep classLoaderHash
+Sc -d com. all.domain.enums. HowFrequencyTypeEnum | grep classLoaderHash
 # Compile classes (use -d specify directory [ -d /tmp])
 mc -c 344561e0 /temp/SowFrequencyTypeEnum. ava
-# Load class (copy the class fullpath loading class printed in the console) (PS: reload content will be restored if jad is used)
-redefine /com/mall/domain/enums/ShowFrequencyTypeEnum.class xx.class
-# or use retransforms loading class (PS: this command can see reload reload with jad)
-reform/com/mall/domain/enums/ShowFrequencyTypeEnum. lass xxx.class
+# Load class (copy the class fullpath loading class printed in the console) (PS: load content will be restored if jad is used)
+redefine /com/mall/domain/enums/ShowFrequencyTypeEnum. Lass xx.class
+# or use reshaping class (PS: this command can see load load with jad)
+reform/com/mall/domain/enums/ShowFrequencyTypeEnum.lass xxx. Lass
 
 # PS: Cannot upload files directly, can be uploaded using base64 encoding and then load
-base64 < Test.class > result.txt
+base64 < Test. lass > result.txt
 base64-d < result.txt > Test.class
 ```
