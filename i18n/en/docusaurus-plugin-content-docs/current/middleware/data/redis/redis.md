@@ -4,13 +4,13 @@
 
 ```shell
 # Connect Redis
-redis-cli -h 127.0.0. - p 6379-a foobared
+redis-cli -h 127.0.0.1 - p 6379-a foobared
 # Export keys to file
-keys "*" | xargs remdis-cli get > /tmp/redis_data. xt
+keys "*" | xargs redis-cli get > /tmp/redis_data. xt
 # Export specified key data to
-re-cli get key > /tmp/redis_data. xt
+redis-cli get key > /tmp/redis_data.txt
 # Use DUP command to export the specified key
-remove-cli dump key > /tmp/redis_data.txt
+redis-cli dump key > /tmp/redis_data.txt
 ```
 
 - Related links
