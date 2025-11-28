@@ -7,15 +7,15 @@
 # x86_64：
 
 wget https://dl.luyouxia.com:8443/v2/lyx-docker-x86_64.tar
-docker load-i lyx-docker-x86_64.tar
+docker load -i lyx-docker-x86_64.tar
 
 # arm64：
 
-wget https://dl.luyouxia. ar
-docker load-i lyx-docker-arm64. ar
+wget https://dl.luyouxia. om:8443/v2/lyx-docker-arm64.tar
+docker load-i lyx-docker-arm64.tar
 
 # code needs to be managed in the background to get
-docker run --name lyx -it --resot=always --net=host -e code=fill in installation code luyouxia/lyx
+docker run --name lyx -it --restot=always --net=host -e code=fill in installation code luyouxia/lyx
 
 
 ```
