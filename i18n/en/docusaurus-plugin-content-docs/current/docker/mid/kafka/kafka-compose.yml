@@ -67,7 +67,7 @@ volumes:
     driver_opts:
       type: "nfs"
       o: "addr=111.111.3.41,rw"
-      device: ":/data/docker/kafka/zoo1/datog"
+      device: ":/data/docker/kafka/zoo1/dog"
   zoo1conf:
     driver: Local
     driver_opts:
