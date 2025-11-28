@@ -2,7 +2,7 @@
 
 [SkyOffice GitHub](https://github.com/kevinshen56714/SkyOffice)
 
-## Employment
+## Deployment
 
 ```bash
 docker compose up -d
