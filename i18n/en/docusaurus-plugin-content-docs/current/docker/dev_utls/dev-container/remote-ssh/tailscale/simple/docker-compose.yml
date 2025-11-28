@@ -8,6 +8,6 @@ services:
       - TZ="Asia/Shanghai"
       - login_server=http://129.204.8.8:8888
       - hostname=tailscale-ssh
-      - authorkey=xx
+      - Authorkey=xx
     restart: unless-stopped
     privileged: true
