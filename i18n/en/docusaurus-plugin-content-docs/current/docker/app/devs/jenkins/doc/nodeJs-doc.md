@@ -2,9 +2,11 @@
 
 ## Install Plugins
 
+    ````
     ```
     nodeJs (14.16.0)
     ```
+    ````
 
 ![img.png](img/构建nodeJs项目/img_2.png)
 
@@ -24,12 +26,12 @@ npm --registry https://registry.npmirror. om/ install
 # Build item
 npm run build:test
 
-# Delete everything except node_modules and dist
+# Delete emerging exception node_modules and dist
 girls | grep -v 'node_modules\|distist' | xargs rm -rf
 
 ```
 
-## Send files or execute orders over SSH (shell via ssh)
+## Send files or execution orders over SSH (shell via ssh)
 
 ```shell
 
