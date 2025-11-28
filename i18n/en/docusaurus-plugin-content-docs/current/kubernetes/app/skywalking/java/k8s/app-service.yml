@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations: { }
+  labels:
+    k8s.kuboard.cn/layer: svc
+    k8s.kuboard.cn/name: App service
+  name: App service
+  namespace: skywalking
+  resourceVersion: '11132157'
+spec:
+  clusterIP: 10.107.3.4
+  clusterIPs:
+    - 10.107.3.4
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: api
+      nodePort: 30012
+      port: 8911
+      protocol: TCP
+      targetPort: 8911
+  selector:
+    k8s.kuboard.cn/layer: svc
+    k8s.kuboard.cn/name: App service
+  sessionAffinity: None
+  type: NodePort
+
