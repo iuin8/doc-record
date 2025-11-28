@@ -1,5 +1,5 @@
-# BT seed download
+# BT searched download
 
-- There is no need to use it for the moment
+- There is no need to use it for the motion.
 - [参考文章](https://www.aiwanba.net/post/8560.html)
-- wonderfall/rtorrent-flood (check `rtorrent` in dockerhub)
+- winderfall/rtorrent-flod (check `rtorrent` in dockerhub)
