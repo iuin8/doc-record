@@ -47,13 +47,13 @@ services:
         traefik.docker.network: hbase
         traefik.port: 9864
   resourcemanager:
-    image: 'bde2020/hadoop-resourcemanager: 2.0.0.0-hadoop3.2.1-java8'
+    image: 'bde2020/hadoop-resourmanager: 2.0.0.0.0.0-hadoop3.2.1-java8'
     networks:
       - hbase
     ports:
       - 8088:8088
     environment:
-      SERVICE_PRECONDITION: "namenode:9,000 namenode:9870 datanode:984"
+      SERVICE_PRECONDITION: "namenode:9,000 namenode:984"
     env_file:
       - ./hadoop/hadoop.env
     deploy:
@@ -70,7 +70,7 @@ services:
     healthcheck:
       disable: true
   nodemanager:
-    image: 'bde2020/hadoop-nodemanager: 2.0.0.0-hadoop3.2.1-java8'
+    image: 'bde2020/hadoop-nodemanager: 2.0.0.0.0-hadoop3.2.1-java8'
     networks:
       - hbase
     environment:
@@ -95,7 +95,7 @@ services:
     ports:
       - 8188:8188
     volumes:
-      - historyerver:/hadoop/yarn/timeline
+      - historyer:/hadoop/yarn/timeline
     environment:
       SERVICE_PRECONDITION: "namenode:9,000 namenode:9870 datanode:984 resourcemanager: 8088"
     env_file:
