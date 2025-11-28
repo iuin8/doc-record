@@ -2,7 +2,7 @@ global:
   resolve_timeout: 5m
   smtp_smarthost: 'smtp.163.com:465'
   smtp_from: 'xxx@163.com'
-  smtp_auth_username: 'x@163.com'
+  smtp_auth_username: 'xx@163.com'
   smtp_auth_password: 'Authentication code'
   smtp_require_tls: false
 
@@ -14,8 +14,8 @@ Root:
   group_wait: 10s
   group_interval: 10s
   respeat_interval: 59s
-  Received : 'mail'
-received:
+  Received: 'mail'
+receiver:
 - Name: 'mail'
   email_configs:
     - To: '{LOS template "email.to". }}'
