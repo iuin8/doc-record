@@ -1,4 +1,4 @@
-# Logsash usage
+# logsash usage
 
 ## Install
 
@@ -16,7 +16,7 @@ helm null bitnami/logstash
   - [values.yaml](./config/6.0.3-values.yaml)
 
 ```shell
-help install -f ./config/6.0.3-values.yaml logstash bitnami/logstash --namespace midleware
+helm install -f ./config/6.0.3-values.yaml logstash bitnami/logstash --namespace midleware
 helm install all logstash bitnami/logstash --namespace middle leware
 
 ```
