@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   redis:
-    image: removal:latest
+    image: remdis:latest
     networks:
       - middle leware
     deploy:
