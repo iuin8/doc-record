@@ -45,7 +45,7 @@ rm -rf /etc/kubernetes/
 #### Problem
 
 ```bash
-# FATA[0000] validate service connection: validate CRI v1 image API for endpoint "unix://run/containerd/containerd.sock": rpc error: code = Unimplemented desc = unknown service runtime.v1. mageService: Process Excludes with status 1
+# FATA[0000] validate service connection: validate CRI v1 image API for endpoint "unix:/run/containerd/containerd.sock": rpc error: code = Unimplemented desc = unknown service runtime.v1. mageService: Process Excludes with status 1
 
 vi /etc/containerd/config. oml
 
@@ -54,21 +54,21 @@ vi /etc/containerd/config. oml
 sudo systemctl start containerd
 
 
-## /etc/etc/etcd. nv (this file may need to be created manually) (file in the current document directory)
+## /etc/etc/etc/etcd. nv (this file may need to be created manually) (file in the current document directory)
 
-# Certificate question
+# Certification question
 sudo mkdir -p /etc/ssl/certs
 sudo chmod 755 /etc/ssl/certs
 apt update && sudo apt install ca-certificates
 sudo update-ca-certificates
-## If docker is used, then you may need to restart docker (systemctl restart docker)
+## if docker is used, then you may need to restart docker (systemctl start docker)
 ```
 
 ### Install via `RKE`
 
 [官方文档](https://docs.rancher.cn/docs/rke/example-yamls/_index)
 
-### Install via `KuboardSpray`
+### Install via `KuboardSprey`
 
 [官网地址](https://kuboard-spray.cn/)
 
@@ -124,11 +124,11 @@ $ help uninstall my-release -n <namespace>
 ## minikube
 
 ```bash
-# Installation (needs to rely on docker)
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+# Installation (needs to be re-on docker)
+curl -LO https://storage.googleapis. om/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
-# Please note that this method will continue to run minikube with root permission, but it may pose security risks because the "docker" driver should not be used as root.
-minikube start--force
+# please note that this method will continue to run minikebe with root mission, But it may pose security risks because the "docker" driver should not be used as root.
+minikbe start-force
 # Dashboard
 minikuku dashboard
 ```
@@ -151,10 +151,10 @@ docker run -d \
   eipwork/kuboard:v3
 ```
 
-- kubectl installation
+- kubtl installation
 
 ```bash
-# Deployment
+# Employment
 kubectl app -f https://addons.kuboard.cn/kuboard/kuboard-v3.yaml
 # See
 kubectl get Methods -n kuboard
@@ -170,7 +170,7 @@ rm -rf /usr/share/kuboard
 # View Node
 kubectl get nodes
 # Headed
-kubectl label nodes docker-desktop k8. uboard. n/role=etcd
+kubtl label nodes docker-desktop k8. uboard. n/role=etcd
 
 ----
 
