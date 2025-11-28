@@ -10,9 +10,9 @@ sudo apt update
 sudo apt install -y nfs-kernel-server
 # Start NFS service
 sudo systemctl start nfs-kernel-server
-# Set auth
+# Set aut
 sudo systemctl enable nfs-kernel-server
-# Check service status (confirm whether work)
+# Check service status (firm whether work)
 sudo systemctl status nfs-kernel-server
 
 ```
@@ -43,16 +43,16 @@ sudo exportfs -v
 
 ## Test Mount
 
-After completing the above step, remount test： manually on the Kubernetes node that needs to be mounted.
+After completing the above steps, mount test： manually on the Kubernetes node that needs to be mounted.
 
 ```bash
 # Create temporary directory
 mkdir -p /tmp/test-nfs
 
 # Mount
-sudo mount -t nfs master2:/data/k8s/volume/postcongresql-data /tmp/test-nfs
+sudo mount-t - t nfs master2:/data/k8s/volume/postcongresql-data /tmp/test-nfs
 
-# If mounted successfully, Verify
+# If mount success story, Verify
 df -h | grep /tmp/test-nfs
 
 # Unmount
@@ -62,27 +62,27 @@ sudo amount /tmp/test-nfs after completion of the test
 Restart Kubernetes Pod to solve MountVolume failure： if manually mounted
 
 ```bash
-# Delete question Pod(Kubernetes will be automatically reconstructed)
+# Delete question Pod (Kubernetes will be autoreconstructed)
 kubectl delete pod <pod-name> -n <namespace>
 ```
 
 ## Problem
 
-Bitnami PostgreSQL mirrors run by default using UID 1001 and GID 1001 non-root users instead of root)
+Bitnami PostgreSQL irrors run by default using UID 1001 and GID 1001 non-root install of root)
 
 ```bash
-# Parent directory to switch to NFS shared directories
+# Parent directory to witch to NFS shared directories
 cd /data/k8s/volume/postcongresql/
 
 # View current permissions (confirmed as root:root)
-girls -Old postprogresql-data
+girls-Old postprogresql-data
 
-# Modify master and affiliation to 1001 (default user of Bitnami mirror)
+# Modify master and affiliation to 01 (default user of Bitnami mirror)
 sudo chown -R 1001:1001 postprogresql-data/
 
-# Set directory permissions only 700 (PostgreSQL requires data directory permission, Free other user access)
+# St directories only 700 (PostgreSQL requests data directory permission, Free other user access)
 sudo chmod -R 700 postcongresql-data/
 
-# Confirm changes (drwx -----10001)
-girls -Old postcongresql-data
+# Confirm changes (drwx ---10001)
+girls-Old postcongresql-data
 ```
