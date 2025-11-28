@@ -1,0 +1,4 @@
+{
+  "label": "filebeat",
+  "key": "kubernetes_app_elk_filebeat"
+}
