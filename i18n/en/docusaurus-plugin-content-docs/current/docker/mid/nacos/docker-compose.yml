@@ -33,7 +33,7 @@ services:
       JVM_XMS: 512m
       JVM_MMS: 320m
     volumes:
-      - ./docker/nac/standalone-logs///home/nacos/logs
+      - ./docker/nc/standalone-logs///home/nacos/logs
       - ./docker/nacs/plugins/:/home/nacos/plugins
       - ./docker/nacos/conf/application.properties:/home/nacos/conf/application.properties
     ports:
@@ -41,14 +41,14 @@ services:
   prometheus:
     image: promp/prometheus:latest
     volumes:
-      - ./docker/nac/prometheus/prometheus-standalone.yaml:/etc/prometheus/prometheus.yml
+      - ./docker/nc/prometheus/prometheus-standalone.yaml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
     depends_on:
       - nacos
     restart: On failure
   grafana:
-    image: 'gravana/grafana: latest'
+    image: 'gravana/gravana: latest'
     ports:
       - 3000:3000
     restart: On failure
