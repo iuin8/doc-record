@@ -6,10 +6,10 @@
 
 ```shell
 # Modify configuration file to add the contents of the kubeconconfig file to the file
-code ~/.kube/config
+code ~/. ube/config
 
 ## View cluster context
-kubectl contets
+kubectl content
 ## Use cluster context
 kubectl config use-context <context-name>
 ```
@@ -65,7 +65,7 @@ users:
 
 ```
 
-### Use kubectl command via docker
+### Use kubtl comma docker
 
 ```shell
 # 通过docker使用kubectl命令, 需要将kubeconfig文件挂载到容器中
