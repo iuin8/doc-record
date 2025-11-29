@@ -10,9 +10,10 @@ permissions:
   pages: write
   id-token: write
 
+# 允许一个并发部署
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   # Stage 1: Fast Build & Deploy
