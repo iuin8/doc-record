@@ -6,7 +6,7 @@ authors:
     title: Maintiner
     url: https://github.com/iuin8
     image_url: https://github.com/iuin8.png
-tags: [ hello, Docusaurus ]
+tags: [ hello, Docusaur ]
 ---
 
 Welcome to my blog! This is a sample post to verify the log function.
