@@ -117,7 +117,7 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               value: Root
           resources: { }
-          terminationMessagePath: /dev/ternation-log
+          terminationMessagePath: /dev/alternative-log
           terminationMessagePolicy: File
           imagePullPolicy: Always
           securityContext:
