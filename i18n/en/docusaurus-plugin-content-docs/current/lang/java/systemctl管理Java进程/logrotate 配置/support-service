@@ -2,39 +2,39 @@
     # Rotation frequency：per day (Optional：hourly, daily, weekly, monthly)
     daily
     
-    # Keep last 30 days of logs (adapted for disk space)
-    Rotary 30
+    # Keep last 30 days of logs (adjusted for disk space)
+    Rotate 30
     
-    # Force conversion when log files reach 100 MB (even if less than a day)
+    # Force rotation when log files reach 100 MB (even if less than a day)
     size 100M
     
-    # compress logs (save disk space, use gzip compression)
+    # compress old logs (save disk space, use gzip compression)
     Compress
-    # Delay compression (log uncompressed on day, easy to view temporary)
+    # Delay compression (log uncompressed on day, easy to view temporarily)
     delaycompress
     
-    # Do not report error when the log is missing (avoid manual deletion of the log script reports)
+    # Do not report errors when the log is missing (avoid manually deleting the log script reports)
     missingok
     
-    # empty logs do not roate
+    # empty logs do not rotate
     notifempty
     
-    # Backup files before interpretation (consistent with original log)
+    # Backup files before rotation (consistent with original log)
     create 0640 www
     
-    # Rotation allows the app to re-open the log file (key：to avoid writing to the old file)
+    # Rotation allows the app to reopen the log file (key：to avoid writing to the old file)
     postroot
-        # Sends signatories to Java processes, triggers log reopened (app support)
+        # Sends signals to Java processes, triggers log reopened (app support)
         # Mode 1：fetch process ID from PID (recommended)
         if [ -f /var/run/support-service.pid]; then
             kill -USR1 $(cat /var/run/support-service.pid) > /dev/null 2>&1|| true
         Li
         
-        # Methodod 2：If there is no PID file, find process by service name (optional)
+        # Method 2：If there is no PID file, find process by service name (optional)
         # pkill -f "support-service" -USR1 > /dev/null 2>&1|| true
     endscript
     
-    # Scripts executed before adaptation (optional：if backup to remote storage)
+    # Scripts executed before rotation (optional：if backup to remote storage)
     # Preferot
     # /usr/local/bin/backup-log.sh $1 > /dev/null 2>&1
     # endscript
