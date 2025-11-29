@@ -13,11 +13,11 @@ Below is a detailed description of how to use the `-w` parameter (tunnel device 
   ```
   - `<local_tun>`：Local TUN device number (e.g. `0` for `tun0`).
   - `<remote_tun>`：Remote TUN device number (e.g. `0` for `tun0`).
-  - Special value `any`：allows the system to automatically assign devices (e.g. `-w 5:any`).
+  - Special value `any`：allows the system to automatically assign device numbers (e.g. `-w 5:any`).
 
 ---
 
-### **2. The `Tunnel` direct in the SSH configuration file**
+### **2. The `Tunnel` directive in the SSH configuration file**
 
 Use `Tunnel` parameter to configure tunnel device： in `~/.ssh/config`
 
@@ -38,12 +38,12 @@ Host my-tunnel-host
 
 #### **Key Parameter Description**：
 
-| **Parameters**       | **Effects**                                                                                                                                      |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `Tunnel`             | Specify a local and remote TUN device, format `<local>:<remote>`(e.g. `0:0`). |
-| `TunnelDevice`       | An explicit bound (partially supported) to a specific device, similar to `Tunnel`.                            |
-| `PermitTunnel`       | Set to `yes` in the server `sshd_config`, otherwise tunnels cannot be built (see below).                      |
-| `PermitLocalCommand` | Always to execute orders locally (e.g. auto-configuration IP address).        |
+| **Parameters**       | **Effects**                                                                                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Tunnel`             | Specify a local and remote TUN device number, format `<local>:<remote>`(e.g. `0:0`). |
+| `TunnelDevice`       | An explicit bound (partially supported) to a specific device number, similar to `Tunnel`.                            |
+| `PermitTunnel`       | Set to `yes` in the server `sshd_config`, otherwise tunnels cannot be built (see below).                             |
+| `PermitLocalCommand` | Allows to execute commands locally (e.g. auto-configure IP address).                 |
 
 ---
 
@@ -52,7 +52,7 @@ Host my-tunnel-host
 Enable tunnel support for： on remote server `/etc/ssh/sshd_config`
 
 ```bash
-PermitTunnel # Allow TUN/TAP tunnels
+PermitTunnel yes # Allow TUN/TAP tunnels
 ```
 
 Restart SSH service to take effect on：
@@ -102,27 +102,27 @@ Host my-tunnel-host
   User root
   Tunnel 0:0
   PermitLocalCommand yes
-  LocalCommand sudo ip addr. .0.1/24 dev tun0 && sudo ip link set tun0 up
+  LocalCommand sudo ip addr 10. .0.1/24 dev tun0 && sudo ip link set tun0 up
 ```
 
 ---
 
-### General questions and attentions\*\*\*
+### General questions and attentions\*\*
 
 1. **Permissions**：
-   - Require `root` permission to create TUN/TAP devices and recommend launching SSH orders with `sudo`.
-   - You need to configure \\`CAP_NET_ADMINISTRATIVE ALL： if you use normal users.
+   - Require `root` permission to create TUN/TAP devices and recommend running SSH commands with `sudo`.
+   - You need to configure \`CAP_NET_ADMINISTRATIVE ALL： if you use normal users.
      ```bash
-     sudo setcap cap_net_admin=step/usr/bin/ssh
+     sudo setcap cap_net_admin=step /usr/bin/ssh
      ```
 
 2. **OS Support**：
-   - **Linux**：national support TUN/TAP.
+   - **Linux**：native support TUN/TAP.
    - **macOS**：needs to be installed [TUN/TAP Driver](https://tuntaposx.sourceforge.net/).
    - **Windows**：needs to install the OpenVPN `tap-windows` driver.
 
 3. **Protocol select**：
-   - TUN mode (default)：transfer IP package (L3).
+   - TUN mode (default)：transfer IP packet (L3).
    - TAP mode：transfer in ethernet (L2), explicitly specified：
      ```bash
      ssh -o Tunnel=ethernet -w 0:0 user@host
@@ -140,10 +140,10 @@ Host vpn-tunnel
   IdentityFile ~/. sh/vpn_key
   Tunnel 0:0
   PermitLocalCommand yes
-  LocalCommand sudo ip addr 10. .0.1.24 dev tun0 && sudo ip link set tun0 up
+  LocalCommand sudo ip addr 10. .0.1/24 dev tun0 && sudo ip link set tun0 up
   Removal Command sudo ip addr ad 10.0.0. /24 dev tun0 && sudo ip link set tun0 up
   ServerAliveInterval 30
-  RequestTTY yes # allowing remote command (RemoteCommand)
+  RequestTTY yes # allows remote command (RemoteCommand)
 ```
 
 ---
@@ -151,5 +151,5 @@ Host vpn-tunnel
 ### **Summary**
 
 - **`-w` parameter**：for creating TUN/TAP tunnel. Use the `Tunnel` directive in the configuration file.
-- **Core step**：Enables `PermitTunnel`, Clients configuration tunnel devices and assin IPs.
-- **Apply Scene**：Builds VPN, cross-network transparent proxies, and support UDP fullprotocol forwarding.
+- **Core step**：Enables `PermitTunnel`, Clients configure tunnel devices and assign IPs.
+- **Apply Scene**：builds VPN, cross-network transparent proxies, and supports UDP fullprotocol forwarding.
