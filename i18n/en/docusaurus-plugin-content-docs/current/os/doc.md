@@ -1,6 +1,6 @@
 # System Related Records
 
-## Reload System One Click
+## Load System One Click
 
 [GitHub地址](https://github.com/bin456789/reinstall)
 
@@ -13,4 +13,4 @@ bash reinstall.sh ubuntu
 reboot
 ```
 
-> PS: During reboot, it may be necessary to manually select reinstall.sh to start the reload. Otherwise, it may enter the old system by default
+> PS: During reboot, it may be necessary to manually select install.sh to start the load. Otherise, it may enter the old system by default
