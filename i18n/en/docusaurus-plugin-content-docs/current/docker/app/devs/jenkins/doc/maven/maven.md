@@ -8,11 +8,11 @@ mkdir -p /soft/maven
 cd /var/lib/docker/volumes/web_jenkins_home/_data/soft/maven
 
 wget https://repo.maven.apache.org/mave/maven/apache-maven/3.8.4/apache-maven-3.8.4-bin.zip
-unzip apache-maven-3.84-binzip
+unzip apache-maven-3.84-bin.zip
 
 ```
 
-- Correspondents to config in jenkins
+- Corresponds to config in jenkins
 
 ```bash
 # maven installation path configuration
