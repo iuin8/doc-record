@@ -1,0 +1,35 @@
+version: '3'
+services:
+  yapi-web:
+    image: jayfong/yapi:latest
+    ports:
+      - 7070:3000
+    environment:
+      - YAPI_ADMINISTR_ACCOUNT=183461750@qq.com
+      - YAPI_ADMINISTR_PASSWORD=admin
+      - YAPI_CLOSE_REGISTER=true
+      - YAPI_DB_SERVERNAME=yapi-mongo
+      - YAPI_DB_PORT=27017
+      - YAPI_DB_DATABASE=Yapi
+      - YAPI_MAIL_ENABLE=false
+      - YAPI_LDAP_LOGIN_ENABLE=false
+      - YAPI_PLUGINS=[]
+    depends_on:
+      - yapi-mono
+    networks:
+      - middle leware
+    deploy:
+      mode: Replicated
+      replicas: 1
+  yapi-mongo:
+    image: mongo:latest
+    volumes:
+      - ./data/db:/data/db
+    networks:
+      - middle leware
+    deploy:
+      mode: Replicated
+      replicas: 1
+networks:
+  middleware:
+    external: true
