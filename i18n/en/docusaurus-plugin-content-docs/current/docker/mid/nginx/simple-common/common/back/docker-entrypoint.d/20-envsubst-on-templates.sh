@@ -1,6 +1,6 @@
 #!/bin/sh
 
-Set e
+Set -e
 
 ME=$(basename $0)
 
