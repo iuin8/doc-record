@@ -12,7 +12,7 @@ groups:
       description: 'cluster: test-cluster, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
       summary: PD_cluster_offline_tikv_nums
-  - alert: PD_etcd_write_disk_rating
+  - alert: PD_etcd_write_disk
     expr: histogram_quantity (0.99, sum (rate(etcd_disk_wal_fsync_duration_seconds_bucket[1m])) by (instance,job,le) > 1
     for: 1m
     labels:
@@ -22,7 +22,7 @@ groups:
     annotations:
       description: 'cluster: test-cluster, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
-      summary: PD_etcd_write_disk_rating
+      summary: PD_etcd_write_disk
   - alert: PD_miss_peer_region_count
     expr: sum( pd_regions_status{type="miss_peer_region_count"} > 100
     for: 1m
@@ -56,7 +56,7 @@ groups:
       description: 'cluster: test-cluster, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
       summary: PD_cluster_low
-  - alert: PD_etcd_network_LABEL
+  - alert: P_etcd_network
     expr: histogram_quantity (0.99, sum (rate(etcd_network_peer_round_trip_time_seconds_bucket[1m])) by (To,instance,job,le) > 1
     for: 1m
     labels:
@@ -66,7 +66,7 @@ groups:
     annotations:
       description: 'cluster: test-cluster, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
-      summary: PD_etcd_network_LABEL
+      summary: P_etcd_network
   - alert: PD_tidb_handle_requests
     expr: histogram_quantity (0.99, sum (rate(pd_client_request_handle_requests_duration_seconds_bucket{type="tso"}[1m])) by (instance,job,le) > 0.1
     for: 1m
