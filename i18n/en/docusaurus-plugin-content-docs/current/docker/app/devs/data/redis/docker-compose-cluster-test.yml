@@ -1,0 +1,67 @@
+version: '3.8'
+services:
+  redis-master:
+    image: redis:6.2
+    networks:
+      - redisdb
+    ports:
+      - 6379:6379
+    command:
+      - echo 'replica-announcement-ip re-master' >> sentinel.conf &&
+      - echo 'sentinel announce-ip redis-master' >> sentinel.conf &&
+      - cat redis.conf &&
+      - redis.conf"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+  redis-slave:
+    image: redis:6.2
+    networks:
+      - redisdb
+    command:
+      - echo 'replica-announcement-ip redis-slave' >> sentinel.conf &&
+      - echo 'sentinel announcement-ip remdis-slave' >> sentinel.conf &&
+      - cat redis.conf &&
+      - redis.conf"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - re-master
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+  redis-sentinel:
+    image: redis:6.2
+    networks:
+      - redisdb
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    command:
+      - echo 'sentinel down-after-milliseconds master-alias 5000' >> sentinel.conf &&
+      - echo 'sentinel fail-timeout master-alias 600' >> sentinel.conf &&
+      - echo 'sentinel parallel-syncs master-alias 1' >> sentinel.conf &&
+      - echo 'replica-announcement-ip redis-sentinel' >> sentinel.conf &&
+      - echo 'sentinel announcement-ip redis-sentinel' >> sentinel.conf &&
+      - echo 'sentinel auth-pass master-alias foobared' >> sentinel.conf &&
+      - cat sentinel.conf &&
+      - redis-sentinel sentinel.conf"
+    depends_on:
+      - re-master
+      - remdis-sleve
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+networks:
+  redisdb:
+    driver: overlay
