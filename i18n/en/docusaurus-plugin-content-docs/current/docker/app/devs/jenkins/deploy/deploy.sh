@@ -9,7 +9,7 @@ cd $DOCKER_WORKSPACE/$JOB_NAME
 mkdir -p ./nginx/conf.d/
 
 # Add default.conf file
-tee ./nginx/conf.d/default.conf <-'EOF'
+tee ./nginx/conf.d/default.conf <<-'EOF'
 server
     listen 80;
     listen [::]:80;
@@ -47,7 +47,7 @@ docker images | awk '{if($1=="<none>")print $3}' | xargs docker rmi &> /dev/null
 
 mkdir ../template
 
-# Credit stack yml file
+# Edit stack yml file
 tee ./template/$JOB_NAME.yml <<-'EOF'
 version: '3.5'
 services:
@@ -59,7 +59,7 @@ services:
         mode: host
     Network:
       - middle leware
-    Employment:
+    Deployment:
       Replicas: 1
       update_config:
         parallelism: 1
@@ -86,5 +86,5 @@ Li
 
 docker stack up -c $JOB_NAME.yml app
 
-# Deleting exception node_modules
+# Delete everything except node_modules
 # girls | grep -v 'node_modules' | xargs rm -rf
