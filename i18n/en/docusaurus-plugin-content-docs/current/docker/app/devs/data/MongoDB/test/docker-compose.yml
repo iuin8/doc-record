@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   mongo:
-    image: Mono
+    image: mono
     ports:
       - target: 27017
         published: 27017
@@ -30,7 +30,7 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin
       ME_CONFIG_MONGODB_ADMINPASSWORD: DoNotPeek
     depends_on:
-      - Mono
+      - mono
     networks:
       - middle leware
     deploy:
