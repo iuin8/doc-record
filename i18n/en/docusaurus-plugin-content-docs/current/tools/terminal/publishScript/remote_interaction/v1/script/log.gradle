@@ -1,5 +1,5 @@
 
-/Script directory (absolute path)
+// Script directory (absolute path)
 def scriptDir = new File(rootProject.rootDir, "script").absolutePath
 
 /**
@@ -32,7 +32,7 @@ def logTask = LOs task, profile ->
 
     // Make sure the release task is executed only when the bootJar task exists.
     task.onlyIf
-        return task.project.tasks.tasks.tasks.findByName('bootJar')
+        return task.project.tasks.tasks.findByName('bootJar')
     }
 
     task.doFirst
@@ -52,7 +52,7 @@ def logTask = LOs task, profile ->
 
     }
 
-    Last LOS
+    task.doLast LOS
         // Service name, fetched from project name
         String serviceName = task.project.name
         // Remote Server
@@ -65,7 +65,7 @@ def logTask = LOs task, profile ->
         println "找到服务 ${serviceName}"
         println "正在通过SSH连接到 ${remoteServer} 并开始打印服务 ${serviceName} 的日志 ${logFilePath}"
 
-        //Connect to remote server directly via SSH and access Arthas
+        // Connect to remote server directly via SSH and access Arthas
         // Command interpretation: Connect to remote server and access local Arthas port via telnet
         String[] sshCommand = [
                 "ssh",
@@ -73,7 +73,7 @@ def logTask = LOs task, profile ->
                 "tail -fn+1 ${logFilePath}"
         ]
 
-        Processor Builder = new ProcessBuilder()
+        Processor sshProcessBuilder = new ProcessBuilder()
         sshProcessBuilder.command(sshCommand)
         sshProcessBuilder.redirectErrorStream (true)
         Process sshess process = sshProcessBuilder.start()
@@ -86,31 +86,31 @@ def logTask = LOs task, profile ->
             println "SSH connection closed"
         }
         Thread shutdownThread = new Thread(shutdownHook)
-        Runtime.getRuntime().addShuttdownHook (shutdownThread)
+        Runtime.getRuntime().addShutdownHook (shutdownThread)
 
         TOTAL LOG
             // Processing output
-            OutputThread = Thread.start
-                BuferedReader reader = new BuferedReader (New InputStream Reader (sshProcess.inputStream))
+            Thread OutputThread = Thread.start
+                BufferedReader reader = new BuferedReader (New InputStreamReader (sshProcess.inputStream))
                 String line
-                while (line = reader.readLine() != null)
+                while ((line = reader.readLine() != null)
                     println "${line}"
                 }
             }
 
-            /Waiting for the completion of the SSH process
+            // Waiting for the completion of the SSH process
             sshProcess.waitFor()
             println "SSH connection closed,exitValue()}"
 
-        } catch (Interrupted Exception e)
+        } catch (InterruptedException e)
             println "操作被中断: ${e.message}"
             Thread.currentThread().interrupt()
-        * Finally
-            //Make sure the SSH process is terminated.
+        } Finally
+            // Make sure the SSH process is terminated
             if (sshProcess.alive)
                 sshProcess.destroy()
             }
-            Runtime.getRuntime() .removeShutdownHook (shutdownThread)
+            Runtime.getRuntime().removeShutdownHook (shutdownThread)
             println "SSH connection closed"
         }
     }
