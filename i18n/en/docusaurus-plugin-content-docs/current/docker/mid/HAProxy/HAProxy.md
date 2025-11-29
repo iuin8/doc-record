@@ -1,4 +1,4 @@
-## Remote MySQL
+## Deploy MySQL
 
 ```shell
 # mysql开启集群的sql命令
