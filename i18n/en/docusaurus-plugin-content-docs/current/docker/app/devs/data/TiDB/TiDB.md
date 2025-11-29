@@ -1,0 +1,14 @@
+# TiDB deployment record
+
+## Start command
+
+```shell
+docker swarm init # if your docker daemon is not already part of a swarm
+mkdir -p data logs
+docker stack deploy tidb -c docker-swarm. ml
+mysql -h 127.0.0.1 - P 400-u root
+```
+
+## References
+
+- [tidb-docker-compose官方部署配置](https://github.com/pingcap/tidb-docker-compose)
