@@ -1,6 +1,6 @@
 # Dockerfile File Related Records
 
-## Turn on centos distribution
+## Turn on centres distribution
 
 - [参考文章](https://raw.githubusercontent.com/183461750/doc-record/main/materiel/ai/docker/%E5%BC%80%E5%90%AFssh%E7%9A%84centos%E5%8F%91%E8%A1%8C%E7%89%88%E7%9A%84Dockerfile.md)
 
