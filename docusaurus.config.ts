@@ -1,6 +1,7 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import { sidebarItemsGenerator } from './src/utils/sidebarGenerator';
 
 const defaultLocale = 'zh-Hans';
 
@@ -101,6 +102,7 @@ const config: Config = {
             // 代码块语法高亮增强
             require('rehype-prism-plus'),
           ],
+          sidebarItemsGenerator: sidebarItemsGenerator as any,
         },
         blog: {
           showReadingTime: true,
@@ -121,7 +123,10 @@ const config: Config = {
   ],
 
   themeConfig: {
+    image: 'img/docusaurus-social-card.jpg',
+    metadata: [{ name: 'twitter:card', content: 'summary' }],
     navbar: {
+      hideOnScroll: true,
       title: 'Doc Record',
       logo: {
         alt: 'Doc Record Logo',
@@ -181,6 +186,17 @@ const config: Config = {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
       additionalLanguages: ['bash', 'javascript', 'typescript', 'python', 'java'],
+      magicComments: [
+        {
+          className: 'theme-code-block-highlighted-line',
+          line: 'highlight-next-line',
+          block: { start: 'highlight-start', end: 'highlight-end' },
+        },
+        {
+          className: 'code-block-error-line',
+          line: 'This will error',
+        },
+      ],
     },
     // 数学公式配置
     math: {
