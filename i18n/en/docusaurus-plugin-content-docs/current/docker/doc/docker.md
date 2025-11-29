@@ -32,8 +32,8 @@ sudo systemctl start docker
 ```shell
 # Current method (network not available)
 sudo yum install - y yum-utils
-sudo yum-config-manager --add-repo https://download. ocker.com/linux/centos/docker-ce.repo
-sudo yum install -y docker-ce docker-c-cli containerd.io
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install -y docker-ce docker-ce-cli containerd.io
 ```
 
 ```shell
@@ -56,7 +56,7 @@ yum remove -y docker* containerd.io podman* runc
 systemctl enable docker
 ```
 
-## Configure docker mirror
+## Configure docker mirror sources
 
 ```shell
 sudo mkdir -p /etc/docker
@@ -74,11 +74,11 @@ sudo systemctl restart docker
 https://docker.mirrors.ust.edu.cn
 ```
 
-## Employment
+## Deployment
 
 ```shell script
-# Use --net=host (server.serviceName. etwork_mode=host) network_mode: "host", instead of -p
-# Reference to the Internet test：for two Reddists using Docker, use -p, B use --net=host. However, A efficiency is found to be only 1/3-2/3 of B, so great performance effects, -p should not fall into the production environment? Thank you.
+# Use --net=host (server.serviceName.network_mode=host) network_mode: "host"), instead of -p
+# Reference to the Internet test：for two Reddists using Docker, use -p, B use --net=host. However, A efficiency is found to be only 1/3-2/3 of B, so great performance effects, -p should not fit into the production environment? Thank you.
 ```
 
 ## Delete empty image
@@ -87,30 +87,30 @@ https://docker.mirrors.ust.edu.cn
 sudo docker images | awk '{if($2="<none>") print $3}' | xargs sudo docker rmi
 
 # You need to stop running the container before removing
-docker top $(docker ps a -q)
+docker stop $(docker ps a -q)
 docker rm $(docker ps -a -q)
-# for the image, Attach to delete empty image
+# for the image, Attempt to delete empty image
 docker rmi $(docker images -f dangering=true -q)
 # Delete all unused images
 docker image prune -a 
 ```
 
-## Find the address of the error
+## Find the address of the mirror
 
 https://hub.docker.com/
 
-## Edit host's profile so that it can be accessed remotely
+## Edit host's docker configuration so that it can be accessed remotely
 
 ```shell
-# By default, our linux's docker, IDEA is not accessible, so the configuration needs to be modified so that our IDEA can access
-vi /lib/system/docker. ervice
+# By default, our linux's docker,IDEA is not accessible, so the configuration needs to be modified so that our IDEA can access
+vi /lib/systemd/system/docker.service
 # configuration > tip: 2375 is the port for Docker-enabled remote access API
--H tcp:0. :2375-H unix:/var/run/docker. Stock
+-H tcp:/0.0.0. :2375 -H unix://var/run/docker. Stock
 
-# Refresh configuration, start service
+# Refresh configuration, restart service
 systemctl daemonMareload # Refresh service
-systemctl start docker # Restart docker
-docker start registration # start registration # start registration
+systemctl restart docker # Restart docker
+docker start registration # start registry
 
 ```
 
@@ -207,12 +207,12 @@ registry.cn-hangzhou.aliyuncs.com
 
 ```
 
-## View docker contenders
+## View docker container
 
 ```shell
 # Query dead docker container
 docker ps -aq -f status=dead
-# Query exited dockercontactor
+# Query exited dockercontainer
 docker ps -aq -f status=exited
 ```
 
@@ -330,37 +330,37 @@ docker images
 
 ```
 
-## Use a docker run --rm command to implement a commitment that does not exist in a host
+## Use a docker run --rm command to implement a command that doesn't exist in a host
 
-- Use the jar command in the container to expand the jar pack and export the extracted content in the directory mounted on the host
+- Use the jar command in the container to extract the jar pack and export the extracted content in the directory mounted on the host
 
 ```shell
-docker run -it --name java -v /www/temp/java:/temp/java openjdk:11-jdk-slim sh-c "cd /www/temp/java && jar -xvf / www/temp/java/mall-server.jar"
+docker run -it --name java -v /www/temp/java:/temp/java openjdk:11-jdk-slim sh -c "cd /www/temp/java && jar -xvf /www/temp/java/mall-server.jar"
 
 ```
 
 - Use nmap command not available in host to find IP via port
 
 ```shell
-# IPs that open 5000 ports within 10.0.16. and export the results to
+# IPs that open 5000 ports within 10.0.16.* and export the results to
 docker run --rm --name nmap securecodebox/nmap sh-c "nmap -p 5000010.0.16.0/24" > output. xt
 
 # Direct filtering of the content of the specified port
-docker run --rm --name nmap securecodebox/nmap sh -c "nmap --p 920010. 7.0.24 | grep -C 5 open"
+docker run --rm --name nmap securecodebox/nmap sh -c "nmap -p 9200 10.7.7.0/24 | grep -C 5 open"
 
-# As part of the results, the state is opened, the corresponding port is opened (i). 10.0.16. 7 is the target IP)
+# As part of the result, the state is opened, the corresponding port is opened (i.e. 10.0.16. 7 is the target IP)
 "
 Nmap scan report for 10.0.16.26
-Post is up (0).
+Post is up (0.00065s late).
 
 PORT STAT SERVICE
-50000/tcp filtered ibm-db2
+500000/tcp filtered ibm-db2
 
 Nmap scan report for 10. 16.27
 Post is up (0.0017 s late).
 
 PORT STAT SERVICE
-50000/tcp open ibm-db2
+500000/tcp open ibm-db2
 "
 
 ```
@@ -378,7 +378,7 @@ docker pull nginx:latest
 
 # 1. Save Docker image
 
-## Save Docker image as tar archive file using the docker save order, e.：
+## Save Docker image as tar archive file using the docker save command, e.g.：
 
 docker wave nginx:latest > nginx_latest. ar
 
@@ -386,21 +386,21 @@ docker wave nginx:latest > nginx_latest. ar
 
 # 1. Load docker image
 
-## Load docker mirrors into local mirrors using docker load order, e.g.：
+## Load saved docker mirrors into local mirrors using docker load command, e.g.：
 
 docker load < nginx_late. ar
 
-## The above command will load the latest Nginx version of the nginx_latest.tar file into the locale. Once you load is complete, use the docker images command to see if the image exists in the local image library.
+## The above command will load the latest Nginx version of the nginx_latest.tar file into the locale. Once loading is completed, use the docker images command to see if the image exists in the local image library.
 ```
 
-## The local docker command does not see the remote control server docker
+## The local docker command does not feel the remote control server docker
 
 ```shell
-# Two protocols adding this configuration to the environment variable, `~/.zshrc` and `~/. ash_profile`
+# Two protocols adding this configuration to the environment variable, `~/.zshrc` and `~/.bash_profile`
 # A tcp protocol that requires opening the 2375 port on the server and then implementing
-# export DOCKER_HOST=tcp:/127.0.0. :2375
+# export DOCKER_HOST=tcp:/127.0.0.1:2375
 # Another type is ssh protocol that requires the sshass tool to be installed on the server and then implemented on the machine (PPS: AI, don't know what the sshass tool is, I don't seem to be install)
-export DOCKER_HOST=ssh:/root@23-zq. nternet.company
+export DOCKER_HOST=ssh:/root@23-zq.internet.company
 ```
 
 - Related Articles
@@ -410,7 +410,7 @@ export DOCKER_HOST=ssh:/root@23-zq. nternet.company
 ## docker gid view command
 
 [参考地址1](https://www.doubao.com/thread/w9e714164e14f12b9)
-[参考地址2](https://github.com/influxdata/sandbox/issues/79) (PS: what sees to be used)
+[参考地址2](https://github.com/influxdata/sandbox/issues/79) (PS: what seems to be used)
 
 ```bash
 stat -c '%g' /var/run/docker.sock
@@ -421,16 +421,16 @@ stat -c '%g' /var/run/docker.sock
 ```shell
 # View the docker version and build Kit support
 docker -version
-docker buildx version # if the output contains "buildx" support building Kit
+docker buildx version # if the output contains "buildx" supports BuildKit
 
 # Settings to enable BuildKit：
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 
-# Permanent Entered (User Level)
-# modify shell profile (e). \~/. ashrrc：
-echo "export DOCKER_BUILDKIT=1" >> \~/. ashrrrrrc
-source \~/. ashrrc
+# Permanent Enabled (User Level)
+# modify shell profile (e.g. \~/. ashrc：
+echo "export DOCKER_BUILDKIT=1" >> \~/. ashrrc
+source \~/.bashrc
 
 # System level enabled
 # Modify Docker daemon configuration：
@@ -448,7 +448,7 @@ sudo systemctl restart docker
 ```bash
 systemctl stop docker.service docker.socket
 systemctl disable docker.service docker.socket
-systemctl status docker. ocket
+systemctl status docker. ervice docker.socket
 # Launch
 systemctl start docker.service docker.socket
 systemctl enabling docker.service docker.socket
