@@ -1,4 +1,4 @@
-# Minutes
+# Node Minutes
 
 [官网](https://www.iepose.com/)
 
@@ -16,7 +16,7 @@ docker run -d --net host --name owjdxb -v "./temp/store:/data/store" --restart a
 
 ```bash
 # Device Bind
-# After launching the container, You can view the 6-bit device's code
+# After launching the container, you can view the 6-bit device code
 # docker logs ionewu/owjdxb
 docker logs owjdxb
 
