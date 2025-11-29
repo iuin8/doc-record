@@ -1,0 +1,38 @@
+
+Subprojects
+
+    def scriptDir = new File(rootProject.rootDir, "script").absolutePath
+
+    apply from: scriptDir + '/publish.gradle'
+    apply from: scriptDir + '/arthas.gradle'
+    apply from: scriptDir + '/log.gradle'
+
+    // Automatically scan property files and create tasks
+    if propertyFiles = fileTree(rootProject.rootDir). include('gradle-*.properties')
+
+    PropertyFiles.each of LOS propFile ->
+        def fileName = propFile.name
+        // Extract environment names from filenames, such as gradle-dev.properties -> dev
+        def profile = fileName.replaceAll('^gradle-(.*)\\.properties$', '$1')
+
+        // Create post tasks for each environment
+        tasks.register("publishTo${profile.capitalize()}", Exec)
+            group = 'remote'
+            configurePublishTask (it, profile)
+        }
+
+        // Create arthas task for each environment
+        tasks.register("arthasTo${profile.capitalize()}", Exam)
+            group = 'remote'
+            arthasTask(it, profile)
+        }
+
+        // Create logtasks for each environment
+        tasks.register("logTo${profile.capitalize()}")
+            group = 'remote'
+            logTask(it, profile)
+        }
+    }
+
+}
+
