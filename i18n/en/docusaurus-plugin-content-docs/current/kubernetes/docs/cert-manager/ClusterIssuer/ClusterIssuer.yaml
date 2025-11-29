@@ -10,7 +10,7 @@ spec:
     privateKeySecretRef:
       name: letssencrpt-harbor
     solvers:
-      - 
+      0: [ ]
       http01:
           ingress:
             # 这里应该是要填IngresClass列表中的名称
