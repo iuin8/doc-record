@@ -1,7 +1,7 @@
 # cpolar+ssh+docker access restricted network
 
-Purpose: Client environments can only be resolved using jumpserver connection limit
-by starting a docker container
+Purpose: Client environments can only be resolved using jumpserver limit
+by starting a docker
 
 - View Log
 
