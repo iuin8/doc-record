@@ -9,7 +9,7 @@ services:
       - target: 443
         published: 443
         mode: Post
-    command: sh -c "mkdir -p /usr/lib/nginx/proxy_tmp &&&\mkdir -p /usr/lib/nginx/prox/proxy_cache/imgcache &&&&&\chown -R nginx:nginx /usr/lib/nginx/proxy* &&\/docker-entrypoint.sh nginx -g 'daemon off;'”
+    command: sh -c "mkdir -p /usr/lib/nginx/proxy_tmp &&&&\mkdir -p /usr/lib/nginx/prox/prox/profilcache &&&&&&&&&&&&&\/docker-entrypoint.sh nginx -g 'daemon off;'”
     environment:
       - TZ="Asia/Shanghai"
       - NGINX_HOST=iuin.xyz

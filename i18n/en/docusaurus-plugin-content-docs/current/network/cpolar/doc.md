@@ -50,11 +50,11 @@ sudo cpolar service start
 
 ```bash
 # Modify configuration (change website port from 8080 to 9200)
-/usr/local/etc/cpolar/cpolar.yml
+/usr/local/etc/cpolar/cpolar. Ml
 # Restart service
 sudo cpolar service restart
 # Log into the background, see tunnel address
-# https://dashboard.cpolar.com/status
+# https://dashboard. polar.com/status
 
 # This allows remote tunnel management
 ```

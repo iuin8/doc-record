@@ -9,7 +9,7 @@ services:
       - 2181:2181
     environment:
       ZOO_MY_ID: 1
-      ZOO_SERVERS: server.1 = 0.0.0.0:2888:3888;2181 server.2 = zoo 2:2888:388;2181 server.3 = zoo3:2888:3888;2181
+      ZOO_SERVERS: server.1 = 0.0.0.0:2888:3888;2181 server.2 = zoo 2:2888:388;2181 server.3 = zoo3:2888:388;2181
     volumes:
       - "zoo1conf:/conf"
       - "zoo1data:/data"
@@ -26,7 +26,7 @@ services:
       - 2182:2181
     environment:
       ZOO_MY_ID: 2
-      ZOO_SERVERS: server.1 = zoo1:28888;2181 server.2 = 0.0.0.0:2888:3888;2181 server.3 = zoo3:2888:3888;2181
+      ZOO_SERVERS: server.1 = zoo1:28888;2181 server.2 = 0.0.0.0:2888:388;2181 server.3 = zoo3:2888:388;2181
     volumes:
       - "zoo2conf:/conf"
       - "zoo2data:/data"
@@ -43,7 +43,7 @@ services:
       - 2183:2181
     environment:
       ZOO_MY_ID: 3
-      ZOO_SERVERS: server.1 = zoo1:28888;2181 server.2 = zoo2:2888:3888;2181 server.3 = 0.0.0.0.0:2888:3888;2181
+      ZOO_SERVERS: server.1 = zoo1:28888;2181 server.2 = zoo2:2888:388;2181 server.3 = 0.0.0.0.0:2888:3888;2181
     volumes:
       - "zoo3conf:/conf"
       - "zoo3data:/data"
@@ -105,7 +105,7 @@ volumes:
     driver_opts:
       type: "nfs"
       o: "addr=111.111.3.41,rw"
-      device: ":/root/kafkadata/zoo1/datog"
+      device: ":/root/kafkadata/zoo1/dog"
   zoo1conf:
     driver: Local
     driver_opts:
@@ -123,7 +123,7 @@ volumes:
     driver_opts:
       type: "nfs"
       o: "addr=111.111.3.41,rw"
-      device: ":/root/kafkadata/zoo2/datog"
+      device: ":/root/kafkadata/zoo2/dog"
   zoo2conf:
     driver: Local
     driver_opts:
@@ -141,7 +141,7 @@ volumes:
     driver_opts:
       type: "nfs"
       o: "addr=111.111.3.41,rw"
-      device: ":/root/kafkadata/zoo3/datog"
+      device: ":/root/kafkadata/zoo3/dog"
   zoo3conf:
     driver: Local
     driver_opts:

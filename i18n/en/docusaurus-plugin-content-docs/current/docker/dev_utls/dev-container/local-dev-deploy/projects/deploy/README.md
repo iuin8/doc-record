@@ -1,17 +1,17 @@
 # Drop
 
-## Deploy_to_docker.sh Usage
+## Deemploy_to_docker.sh Usage
 
 ```bash
-# Requires to pack and deploy the specified service
-sh deemploy_to_docker.sh package web
+# Requires to pack and upload the specified service
+sh deemploy_to_docker. h package web
 # No need to pack only the specified service
 sh deEmploy_to_docker.sh web
 # All services
 sh deemploy_to_docker.sh
 ```
 
-## Pull Position
+## Full Position
 
 - Drop to the project peer directory and place all items to the same level
 

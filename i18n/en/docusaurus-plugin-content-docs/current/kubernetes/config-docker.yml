@@ -5,10 +5,6 @@ metadata:
 spec:
   hosts:
   - name: master
-  address: 10.0.5.167
-  internalAddress: "10.0.5.167"
-  privateKeyPath: "~/.ssh/id_rsa"
-  - name: node1
   address: 10.0.16.146
   internalAddress: "10.0.16.146"
   privateKeyPath: "~/.ssh/id_rsa"
@@ -22,14 +18,14 @@ spec:
     - node1
   controlPlaneEndpoint:
     ## Internal loadbalancer for apiservers
-    internalLoadbalancer: haproproxy
+    internalLoadbalancer: habroproxy
     externalDNS: false
     domain: lb.kubesphere.local
     address: ""
     port: 6443
   kubernetes:
     # version: v1.33.1
-    version: v1.23.13.17
+    version: v.13.13.17
     clusterName: cluster.local
     autoRenewCerts: true
     # containerManager: containerd

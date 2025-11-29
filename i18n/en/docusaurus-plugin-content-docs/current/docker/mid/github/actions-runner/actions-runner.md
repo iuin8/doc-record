@@ -21,7 +21,7 @@ Configure
 
 ```bash
 # Create the runner and start the configuration experience
-$ ./config.sh-url https://github.com/183461750/doc-record --token AJCNPVIBLPPPE3QLBOZQHPALCPCYW
+$ ./config.sh-url https://github.com/183461750/doc-record --token AJCNPVIBLPPPPPP3QLBOZQHPALCYW
 # Last step, run it!
 $ ./run.sh
 ```

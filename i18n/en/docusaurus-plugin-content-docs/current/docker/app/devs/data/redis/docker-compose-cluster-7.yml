@@ -50,7 +50,7 @@ services:
       - echo 'sentinel fail-timeout master-1,600' >> sentinel.conf &&
       - echo 'sentinel parallel-syncs master-1 1' >> sentinel.conf &&
       - echo 'sentinel announce-ipsentinel' >> sentinel.conf &&
-      - echo 'sentinel announcte-port 26379' >> sentinel.conf &&
+      - echo 'sentinel announuncte-port 26379' >> sentinel.conf &&
       - echo 'sentinel auth-pass master-1 foobared' >> sentinel.conf &&
       - cat sentinel.conf &&
       - redis-sentinel sentinel.conf"

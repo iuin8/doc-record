@@ -7,7 +7,7 @@
 ```bash
 # Executes
 # of software source key to replace
-cash <(curl -sSL https://linuxmirrors.cn/main.sh)
+cash <(curl-sSL https://linuxmirrors.cn/main. h)
 # Docker first click to install
 bash <(curl -sSL https://linuxmirrors.cn/docker.sh)
 ```

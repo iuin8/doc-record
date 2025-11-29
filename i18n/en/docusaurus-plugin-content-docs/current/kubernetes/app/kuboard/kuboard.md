@@ -1,6 +1,6 @@
 # kuboard usage
 
-## Deploy using helm
+## Drop Helm
 
 ```bash
 # 添加Kuboard的Helm仓库。在命令行中执行以下命令

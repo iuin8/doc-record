@@ -1,11 +1,11 @@
-// Script directory (absolute path)
+/Script directory (absolute path)
 def scriptDir = new File(rootProject.rootDir, "script").absolutePath
 
 class PtyExecution Task extends DefaultTask
-    @Input // add input annotation to mark this property as task input
+    @Input //add input annotation to mark this property as taskinput
     String[] command
 
-    // Set execution condition in constructor
+    /Set execution condition in construction
     PtyExecTask()
         // Only when bootJar is present in the project
         onlyIf
@@ -17,20 +17,20 @@ class PtyExecution Task extends DefaultTask
     void execute()
         // Ensure command is not empty
         if (!command) LOs
-            throughout new GradleException ("Command not configured, please set command")
+            throughout new Gradle Exception ("Command not configured, please set command")
         }
 
-        def processBuilder = new ProcessBuilder (command)
+        def processBuilder = new Process Builder (command)
         processBuilder.environment().put("TERM", "xterm")
         // Disable default buffer, ensure real-time output
         processBuilder.redirectErrorStream (false)
 
         def process = processBuilder.start()
-        if latch = new CountDownLatch(3) // coordinate 3 threads (input, output, error)
+        if latch = new CountDownLatch(3) // coordinator 3 threads (input, output, error)
 
         TOTAL LOG
             // 1. Processing process output stream (remote output -> local console)
-            Thread OutputThread = Thread.start
+            OutputThread = Thread.start
                 TOTAL LOG
                     byte[] buffer = new byte[1024]
                     int bytesRead
@@ -43,25 +43,25 @@ class PtyExecution Task extends DefaultTask
                     if (process.alive)
                         println "输出流处理异常: ${e.message}"
                     }
-                } Finally
-                    latch.countDown()// Notification Thread Complete
+                * Finally
+                    latch.countDown()//Notification Thread Complete
                 }
             }
 
             // 2. Process error stream (remote error -> local console)
-            Thread error Thread = Thread.start
+            Thread Error = Thread.start
                 TOTAL LOG
                     byte[] buffer = new byte[1024]
                     int bytesRead
                     while (bytesRead = process.errorStream.read(buff)!=-1 && process.alive)
                         System.err.write(buffer, 0, bytesRead)
-                        System.err.flush() // Force refresh
+                        System.err.flush() /Force refresh
                     }
                 } catch (Exception e)
                     if (process.alive)
                         println "错误流处理异常: ${e.message}"
                     }
-                } Finally
+                * Finally
                     latch.countDown()
                 }
             }
@@ -72,14 +72,14 @@ class PtyExecution Task extends DefaultTask
                     byte[] buffer = new byte[1024]
                     int bytesRead
                     // Really read local input and send it to remote processes
-                    while (bytesRead = System.in.read(buyer)) != -1 && process.alive)
+                    while (bytesRead = System.in.read(buyer) != -1 && process.alive)
                         process.outputStream.write(buffer, 0, bytesRead)
-                        process.outputStream.flush() // Force refresh to make sure to send in real time
+                        process.outputStream.flush() /Force refresh to make sure to send in real time
 
-                        // Detect exit command (end on exit)
+                        // Detach it command (end on exit)
                         String input = new String(buffer, 0, bytesRead).trim()
-                        if (input.equalsIgnoreCase("exit")
-                            process.destroy() // Terminate remote processes
+                        if (input.equalsIgnoreCase)
+                            process.destroy() // Terminate remote remote processes
                             break
                         }
                     }
@@ -87,21 +87,21 @@ class PtyExecution Task extends DefaultTask
                     if (process.alive)
                         println "输入流处理异常: ${e.message}"
                     }
-                } Finally
+                * Finally
                     latch.countDown()
                 }
             }
 
             // Waiting for process to end
             process.waitFor()
-            // Waiting for all streaming threads to complete
+            // Waiting for all streams to complete
             latch.await()
 
-        } catch (InterruptedException e)
+        } catch (Interrupted Exception e)
             Thread.currentThread().interrupt()
             throw new GradleException("任务被中断: ${e.message}")
-        } Finally
-            // Make sure all streams are closed
+        * Finally
+            // Make all streams are closed
             process.inputStream.close()
             process.outputStream.close()
             process.errorStream.close()
@@ -154,12 +154,12 @@ def arthasTask = LOtask, profile ->
         }
     }
 
-    task.doLast LOS
+    Last LOS
         // Service name, fetched from project name
         String serviceName = task.project.name
         // Remote Server
         String remoteServer = task.ext.get('remote.server')
-        // JSON configuration file path
+        //JSON configuration file path
         def configFile = file(scriptDir + '/arthas_ports.json')
 
         // Check if the profile exists
@@ -171,12 +171,12 @@ def arthasTask = LOtask, profile ->
         Process jqCheckProcess = "which jq".execute()
         jqCheckProcess.waitFor()
         if (jqCheckProcess.exitValue() != 0)
-            throughout new GradleException("Jq tools not found, please install jq (https://stedolan.github.io/jq/)")
+            throughout new GradleExceptions ("Jq tools not found, please install jq (https://stedolan.github.io/jq/)")
         }
 
-        // Get ports with the jq tool
+        /Get ports with the jq tool
         String[] jqCommand = ["jq", "-r", ".\"${serviceName}\"", configFile.absolutePath]
-        Processor portProcessor Builder = new ProcessBuilder()
+        Processor Builder = new ProcessBuilder()
         portProcessBuilder.command(jqCommand)
         portProcessBuilder.redirectErrorStream (true)
         Process portal = portProcessBuilder.start()
@@ -191,36 +191,36 @@ def arthasTask = LOtask, profile ->
             throw new GradleException("未找到服务 ${serviceName} 对应的端口，配置文件内容: ${configFile.text}")
         }
 
-        // Spelling 1, because Arthas port starts with 1
+        // Sperling 1, because Arthas port starts with 1
         String arthasPort = 1 + output
 
         println "找到服务 ${serviceName} 的Arthas端口: ${arthasPort}"
         println "正在通过SSH连接到 ${remoteServer} 并启动Arthas..."
 
-        // Connect to remote server directly via SSH and access Arthas
+        //Connect to remote server directly via SSH and access Arthas
         // Modify SSH parameters to ensure pseudo-distribution
         String[] sshCommand = [
-                "ssh", "-t", "-t", "-t", // conspicuously use two -t parameters to force the distribution of pseudo-terminals
+                "ssh", "-t", "-t", "-t", "-t", // conspicuously use two - t parameters to force the distribution of pseudo-terminals
                 "-o", "LogLevel=ERROR", // Reduce unnecessary output
                 "-o", "StrictHostKeyChecking=no", // Automatically accept new host keys
                 remoteServer,
                 "TERM=xterm; telnet localhost ${arthasPort}"  // 设置终端类型
         ]
 
-        Processor sshProcessBuilder = new ProcessBuilder()
+        Processor Builder = new ProcessBuilder()
         // Inherit current environment variable
         sshProcessBuilder.environment().putAll(System.getenv()
-        // Set Terminal Environment Variables
+        /Set Terminal Environment Variables
         sshProcessBuilder.environment().put("TERM", "xterm")
         sshProcessBuilder.environment().put("COLUMNS", "120")
         sshProcessBuilder.environment().put("LINES", "40")
 
-        // Bad and error stream, keep original output trait
+        // Bad and error stream, keeping original output trait
         sshProcessBuilder.redirectErrorStream (false)
         Process sshess process = sshProcessBuilder.command(sshCommand).start()
 
         println "已建立到 ${remoteServer} 的SSH连接 (PID: ${sshProcess.pid})"
-        println "Enter real-time interaction, type 'exit' exit..."
+        println "Enter re-time interaction, type 'exit' exit..."
 
         // Registration process shutdown hooks
         Runnable shutdown Hook =
@@ -230,7 +230,7 @@ def arthasTask = LOtask, profile ->
             }
         }
         Thread shutdownThread = new Thread(shutdownHook)
-        Runtime.getRuntime().addShutdownHook (shutdownThread)
+        Runtime.getRuntime().addShuttdownHook (shutdownThread)
 
         TOTAL LOG
             // Real-time input forward (byte, no buffer)
@@ -239,20 +239,20 @@ def arthasTask = LOtask, profile ->
                     byte[] buffer = new byte[1024]
                     int bytesRead
                     // Read bytes directly from standard input and write to process
-                    while (bytesRead = System.in.read(buff)!= -1 && sshProcess.alive)
+                    while (bytesRead = System.in.read(buff)!=-1 && sshProcess.alive)
                         sshProcess.outputStream.write(buffer, 0, bytesRead)
-                        sshProcess.outputStream.flush() // Update immediately to ensure that data is sent in real time
+                        sshProcess.outputStream.flush() /Update immediately to ensure that data is sent in real time
 
-                        // Check if an exit command is included
+                        // Check if an exit order is included
                         String input = new String(buffer, 0, bytesRead).trim()
-                        if (input.equalsIgnoreCase("exit")
+                        if (input.equalsIgnoreCase)
                             Thread.sleep(300) // Give server processing time
                             sshProcess.destroy()
                             break
                         }
                     }
                 } catch (Exception e)
-                    if (!sshProces.alive)
+                    if (!sshProcess.alive)
                         println "\nconnection closed, input thread exit"
                     } else LOs
                         println "输入处理异常: ${e.message}"
@@ -261,7 +261,7 @@ def arthasTask = LOtask, profile ->
             }
 
             // Live output processing (bytes)
-            Thread OutputThread = Thread.start
+            OutputThread = Thread.start
                 TOTAL LOG
                     byte[] buffer = new byte[1024]
                     int bytesRead
@@ -271,7 +271,7 @@ def arthasTask = LOtask, profile ->
                         System.out.flush() // Refresh now to make sure to show in real time
                     }
                 } catch (Exception e)
-                    if (!sshProces.alive)
+                    if (!sshProcess.alive)
                         println "\nconnection closed, output thread exit"
                     } else LOs
                         println "输出处理异常: ${e.message}"
@@ -280,7 +280,7 @@ def arthasTask = LOtask, profile ->
             }
 
             // Error stream processing
-            Thread error Thread = Thread.start
+            Thread Error = Thread.start
                 TOTAL LOG
                     byte[] buffer = new byte[1024]
                     int bytesRead
@@ -294,19 +294,19 @@ def arthasTask = LOtask, profile ->
                 }
             }
 
-            // Waiting for the completion of the SSH process
+            /Waiting for the completion of the SSH process
             sshProcess.waitFor()
             println "\nSSH connection closed, exited code: ${sshProcess.exitValue()}"
 
-        } catch (InterruptedException e)
+        } catch (Interrupted Exception e)
             println "\n操作被中断: ${e.message}"
             Thread.currentThread().interrupt()
-        } Finally
+        * Finally
             // Cleanup resources
             if (sshProcess.alive)
                 sshProcess.destroy()
             }
-            Runtime.getRuntime().removeShutdownHook (shutdownThread)
+            Runtime.getRuntime() .removeShutdownHook (shutdownThread)
             println "All Resources Released"
         }
     }
@@ -314,4 +314,4 @@ def arthasTask = LOtask, profile ->
 
 // Export methods to external use
 ext.arthasTask = arthasTask
-ext.PtyExecTask = PtyExecution Task
+ext.PtyExecution Task = PtyExecution Task

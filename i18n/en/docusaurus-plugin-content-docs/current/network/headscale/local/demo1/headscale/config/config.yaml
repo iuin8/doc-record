@@ -7,7 +7,7 @@
 # Typically this will be a domain like:
 # https://myheadscale.example.com:443
 # server_url: http://127.0.0.1:8080
-server_url: http://0.0.0.0.0:8080
+server_url: http://0.0.0.0.0.0:8080
 # Address to listen to / bind to on the server
 # For production:
 listen_addr: 0.0.0.0:8080

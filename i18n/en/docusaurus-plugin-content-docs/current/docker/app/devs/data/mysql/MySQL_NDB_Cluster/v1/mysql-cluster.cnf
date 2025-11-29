@@ -10,7 +10,7 @@
 # Note: [db], [api]and [mgm] are aliases for [ndbd], [mysqld], and [ndb_mgmd],
 # respectively. [db] is predated and should not be used in new installations.
 # Configure ndb_mgmd cluster information on startup
-[ndd default]
+[nd default]
 NoOfReplicas = 2
 DataMemory=80M
 IndexMemory=18M
@@ -30,7 +30,7 @@ NodeId=3
 hostname=ndb_data2
 DataDir=/var/lib/mysql
 
-# MySQL API node does not specifically specify hostname
+# MySQL API nodes do not specifically specify hostname
 [mysqld]
 NodeId=4
 hostname=ndb_mysqld1

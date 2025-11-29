@@ -1,4 +1,4 @@
-Here are steps： to deploy the Elasticsearch cluster with Docker Sharm's
+There are steps： to upload the Elasticsearch cluster with Docker Sharm's
 
 1. Environment preparation：
    - Modify the system configuration：in all hosts, edit `/etc/sysctl.conf` files and follow up on：`vm.max_map_count=262144`.Execute the `sysctl -p` command after saving.

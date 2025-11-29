@@ -12,7 +12,7 @@ tar -zxvf openjdk-8u41-b04-linux-x64-14_jan_20.tar.gz
 
 ```
 
-- Corresponds to the configuration in Jenkins
+- Correspondents to the configuration in Jenkins
 
 ```bash
 # jdk install path configuration

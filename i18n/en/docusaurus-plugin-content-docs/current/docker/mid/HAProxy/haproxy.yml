@@ -5,7 +5,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_PASSWORD=root
-    command: bash -c ' tee /etc/mysql/conf.d/haproxy.cnf <<-"EOF" [mysqld] symbolic-links=0 EOF
+    command: bash -c ' tee /etc/mysql/conf.d/haproxy.cnf <-"EOF" [mysqld] symbolic-links=0 EOF
     ports:
       - target: 3306
         published: 33061
@@ -25,7 +25,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_PASSWORD=root
-    command: bash -c ' tee /etc/mysql/conf.d/haproxy.cnf <<-"EOF" [mysqld] symbolic-links=0 EOF
+    command: bash -c ' tee /etc/mysql/conf.d/haproxy.cnf <-"EOF" [mysqld] symbolic-links=0 EOF
     ports:
       - target: 3306
         published: 33062

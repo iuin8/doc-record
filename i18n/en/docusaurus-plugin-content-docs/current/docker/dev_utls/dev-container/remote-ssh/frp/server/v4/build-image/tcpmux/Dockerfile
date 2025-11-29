@@ -2,9 +2,9 @@ FROM ubuntu:noble
 
 WORKDIR /www
 
-# Install Required Packages
-RUN apt-get Update &\s
-    apt-get install - y openssh-server openssh-client current wget text && \s
+# Installing Packages
+RUN apt-get Update &s
+    apt-get install - y openssh-server open-client text && \s
     apt-get clean && \s
     rm -rf /var/lib/apt/lists/*
 
@@ -13,7 +13,7 @@ RUN tar -xzf ./frp_0.62.1_linux_amd64.tar.gz &\s
     mv frp_0.62.1_linux_amd64 frp &&\s
     rm -rf ./frp_0.62.1_linux_amd64.tar.gz
 
-# Create packing service
+# Create Packing Service
 RUN tee /www/frp/frps.toml <<-'EOF'
 bindPort = ${bindPort}
 tcpmuxHTTPConnectPort = ${tcpmuxHTTPConnectPort}
@@ -21,7 +21,7 @@ tcpmuxHTTPConnectPort = ${tcpmuxHTTPConnectPort}
 auth.token = ${auth_token}
 EOF
 
-# Create initialization script
+# Create initiative script
 RUN tee/entrypoint.sh <-'EOF'
 #!/bin/sh
 
@@ -32,15 +32,15 @@ export sshTunnelGateway_bindPort=${sshTunnelGateway_bindPort:-2222}
 export auth_token=${auth_token:-'token'}
 
 # Replace environment variable values
-envsubst <//frps.toml > /tmp/frps.toml.tmp && mv /tmp/frps.toml.tmp /www/frp/frps.toml
+envsubst </frps.toml > /tmp/frps.toml.tmp && mv /tmp/frps.toml.tmp /www/frp/frps.toml
 
-# Ensure directory exists
+# Inventory existing
 [ ! -d "/var/run/sshd" ] && mkdir -p /var/run/sshd
 # Start SSH (run in background)
 /usr/sbin/sshd
 
 # Start FRPC
-/www/frp/frps-c /www/frp/frps.toml
+www.frp/frps-c /www/frp/frps.toml
 
 # Keep container running
 tail -f /dev/null

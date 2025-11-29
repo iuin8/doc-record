@@ -2,4 +2,4 @@
 
 ## Sonatype Nexus
 
-- Used to build mavens and deploy playing later
+- Used to build maves and upload them to play later

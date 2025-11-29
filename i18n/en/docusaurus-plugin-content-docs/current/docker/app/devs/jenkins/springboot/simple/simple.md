@@ -1,4 +1,4 @@
-## maven builds with dockerfile plugin
+## maven buildings with dockerfile plugins
 
 - Reference project [https://gitee.com/LFa/demo-test.git]
 

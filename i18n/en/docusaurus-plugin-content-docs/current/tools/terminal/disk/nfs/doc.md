@@ -16,7 +16,7 @@ sudo app install -y nfs-common
 
 # Start and enable NFS service
 systemctl start nfs-server
-systemctl enable nfs-server
+systemctl enabling nfs-server
 systemctl status nfs-server
 
 ```
@@ -53,11 +53,11 @@ exportfs -v
 ## Configure firewall (if enabled)
 
 ```bash
-# If CentOS has firewall enabled (firewall), To release NFS related port：
+# If CentS has firewall enabled (firewall), To release NFS related port：
 sudo firewall-cmd --add-service=nfs
-sudo firewall-cmd --permanent --add-service=mountd
-sudo firewall-cmd --permanent --add-service=rpc-bind
-sudo firewall-cmd --reload
+sudo firewall-cmd --add-service=mountd
+sudo firewall-cmd --add-service=rpc-bind
+sudo firewall-cmd -reload
 # or directly release N/default FS port (not recommended, Affects security)：
 sudo firewall-cmd --permanent --add={2049/tcp,2049/udp}
 sudo firewall-cmd --reload
@@ -75,13 +75,13 @@ showmount -e localhost
 ## Mount NFS Sharing
 
 ```bash
-# Ensure client directory permissions
-chmod 755 /Users/xx/mount/sshfs
+# Secure client directories
+chmod 755/Users/xx/mount/sshfs
 
-mount -t nfs 192.168.1.100:/data/nfs_share /mnt/nfs
-# (192). 68.1.100 is the NFS server IP, /mnt/nfs is the client mount point)
+mount - t nfs 192.168.1.100:/data/nfs_share /mnt/nfs
+# (192). 68.1.1.100 is the NFS server IP, /mnt/nfs is the client mount)
 # Use mount_nfs(macOS original lift)
-sudo mount_nfs -o resvport xx. ntranet.company:/data/nfs_share/dev /Users/xx/mount/sshfs/x.intranet.company
+sudo mount_nfs -o resport xx. ntranet.company:/data/nfs_share/dev /Users/xx/mount/sshfs/x.intranet. ompany
 
 
 # Check if successful：
@@ -103,18 +103,18 @@ amount /mnt/nfs
 # Client cannot mount
 
 # to check /etc/exports configuration correctly.
-# to ensure that firewalls release NFS related ports.
-# Check that rpcind service is running (CencoOS 7+ enabled by default)：
-sudo systemctl status rpcind
+# to ensure that firealls release NFS related ports.
+# Check that rpind service is running (CencoOS 7+ enabled by default)：
+sudo systemctl status rpwind
 
 # Permissions question
 
-# Ensure that shared directory permissions are correct (chmod 755).
-# If no_root_squash, Client root has permissions.
+# Ensure that shared directory properties are correct (chmod 755).
+# if no_root_squash, client root has permissions.
 ```
 
 - macos mount showing issues with no permissions
 
 ```bash
-The NFS service for macOS is managed by launchchd and cannot run nfsd start. You need：
+The NFS service for macOS is managed by launchchd and cannot run nfsdstart. You need：
 ```

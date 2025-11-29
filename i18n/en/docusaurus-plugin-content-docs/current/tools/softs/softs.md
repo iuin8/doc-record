@@ -8,4 +8,4 @@ Guide to use and configuration instructions for commonly used software tools.
 2. Clash - Network Proxy Tool
 3. Cursor - AI Auxiliary Programming Tool
 4. IDEA - Java IDE
-5. Windsurf - AI Programmer
+5. Windows - AI Programmer
