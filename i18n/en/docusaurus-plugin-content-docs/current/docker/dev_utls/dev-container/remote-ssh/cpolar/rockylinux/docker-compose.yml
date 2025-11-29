@@ -6,7 +6,7 @@ services:
     environment:
       - TZ="Asia/Shanghai"
       - CPOLAR_AUTH_TOKEN=xxx
-      - PLAYLIST_NOTIFICATION_POPUP_TITLE
+      - CPOLAR_CONTANER_SH_PLAYLIST_BODY
     restart: unless-stopped
     privileged: true
     volumes:
