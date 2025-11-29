@@ -113,7 +113,7 @@
           },
           "yaxes": [
             {
-              "format": "Decytes",
+              "format": "Decbytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -199,7 +199,7 @@
           },
           "yaxes": [
             {
-              "format": "Decytes",
+              "format": "Decbytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -285,7 +285,7 @@
           },
           "yaxes": [
             {
-              "format": "Decytes",
+              "format": "Decbytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -1181,7 +1181,7 @@
             "handler": 1,
             "message": "TiKV server report failed",
             "name": "server report failed alert",
-            "noDataState": "Look",
+            "noDataState": "ook",
             "notifications": []
           },
           "aliasColors": {},
@@ -2086,7 +2086,7 @@
           },
           "yaxes": [
             {
-              "format": "Decytes",
+              "format": "Decbytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -2172,7 +2172,7 @@
           },
           "yaxes": [
             {
-              "format": "Decytes",
+              "format": "Decbytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -2230,7 +2230,7 @@
             "handler": 1,
             "message": "TiKV channel full",
             "name": "TiKV channel full alert",
-            "noDataState": "Look",
+            "noDataState": "ook",
             "notifications": []
           },
           "aliasColors": {},
@@ -2458,7 +2458,7 @@
               "expr": "sum(rate(tikv_region_written_keys_sum{instance=~\"$instance\"}[1m])) by (instance) / sum(rate(tikv_region_written_keys_count{instance=~\"$instance\"}[1m])) by (instance)",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
-              "metric": "tikv_region_writing_keys_bucket",
+              "metric": "tikv_region_writen_keys_bucket",
               "refId": "A",
               "step": 10
             }
@@ -2628,7 +2628,7 @@
               "expr": "sum(rate(tikv_region_written_keys_count{instance=~\"$instance\"}[1m])) by (instance)",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
-              "metric": "tikv_region_writing_keys_bucket",
+              "metric": "tikv_region_writen_keys_bucket",
               "refId": "A",
               "step": 10
             }
@@ -2770,7 +2770,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Apply region size",
+          "title": "Approve region size",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -3055,7 +3055,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "App log duration",
+          "title": "Appense log duration",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -4193,7 +4193,7 @@
               "expr": "sum(rate(tikv_raftstore_proposal_total{instance=~\"$instance\", type=~\"local_read|normal|read_index\"}[1m])) by (type)",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
-              "metric": "titkv_draftstore_total",
+              "metric": "tikv_draftstore_total",
               "refId": "A",
               "step": 4
             }
@@ -4361,7 +4361,7 @@
               "expr": "sum(rate(tikv_raftstore_proposal_total{instance=~\"$instance\", type=\"normal\"}[1m])) by (instance)",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
-              "metric": "titkv_draftstore_total",
+              "metric": "tikv_draftstore_total",
               "refId": "A",
               "step": 4
             }
@@ -4712,7 +4712,7 @@
               "expr": "sum(rate(tikv_raftstore_proposal_total{instance=~\"$instance\", type=~\"conf_change|transfer_leader\"}[1m])) by (type)",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
-              "metric": "titkv_draftstore_total",
+              "metric": "tikv_draftstore_total",
               "refId": "A",
               "step": 4
             }
@@ -5440,7 +5440,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Store request error",
+          "title": "Storage request error",
           "tooltip": {
             "msResolution": true,
             "shared": true,
@@ -5998,8 +5998,8 @@
             "frequency": "120s",
             "handler": 1,
             "message": "Total TiKV schedule context",
-            "name": "Schedule pending orders",
-            "noDataState": "Look",
+            "name": "Schedule pending orders alert",
+            "noDataState": "ook",
             "notifications": []
           },
           "aliasColors": {},
@@ -6369,7 +6369,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Schedule late wait duration",
+          "title": "Schedule latch wait duration",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -6662,7 +6662,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Schedule Details",
+          "title": "Schedule details",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -8864,7 +8864,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_tikclient_gc_action_result_total[1m]) by (type)",
+              "expr": "sum(rate(tidb_tikclient_gc_action_result_total[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -10130,7 +10130,7 @@
             "handler": 1,
             "message": "(c) Professor pending requests",
             "name": "(c) Professor pending requests alert",
-            "noDataState": "Look",
+            "noDataState": "ook",
             "notifications": []
           },
           "aliasColors": {},
@@ -10286,7 +10286,7 @@
             "handler": 1,
             "message": "TiKV raftstore thread CPU usage is high",
             "name": "TiKV Draft store CPU alert",
-            "noDataState": "Look",
+            "noDataState": "ook",
             "notifications": []
           },
           "aliasColors": {},
@@ -10433,7 +10433,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Async app CPU",
+          "title": "Async apple CPU",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -10688,7 +10688,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Schedule walker CPU",
+          "title": "Schedule worker CPU",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -11636,7 +11636,7 @@
           },
           "yaxes": [
             {
-              "format": "country_ng",
+              "format": "muons",
               "label": null,
               "logBase": 10,
               "max": null,
@@ -11857,7 +11857,7 @@
           },
           "yaxes": [
             {
-              "format": "country_ng",
+              "format": "muons",
               "label": null,
               "logBase": 10,
               "max": null,
@@ -12051,7 +12051,7 @@
           },
           "yaxes": [
             {
-              "format": "country_ng",
+              "format": "muons",
               "label": null,
               "logBase": 10,
               "max": null,
@@ -12232,7 +12232,7 @@
           },
           "yaxes": [
             {
-              "format": "country_ng",
+              "format": "muons",
               "label": null,
               "logBase": 10,
               "max": null,
@@ -12414,7 +12414,7 @@
           },
           "yaxes": [
             {
-              "format": "country_ng",
+              "format": "muons",
               "label": null,
               "logBase": 10,
               "max": null,
@@ -13071,7 +13071,7 @@
               "hide": false,
               "interval": "",
               "intervalFactor": 2,
-              "legendFormat": "filter_evils",
+              "legendFormat": "filter_evicals",
               "metric": "",
               "refId": "E",
               "step": 10
@@ -13091,7 +13091,7 @@
               "hide": false,
               "interval": "",
               "intervalFactor": 2,
-              "legendFormat": "index_evils",
+              "legendFormat": "index_evicals",
               "metric": "",
               "refId": "G",
               "step": 10
@@ -13602,7 +13602,7 @@
           },
           "yaxes": [
             {
-              "format": "Decytes",
+              "format": "Decbytes",
               "label": null,
               "logBase": 10,
               "max": null,
@@ -13792,7 +13792,7 @@
           },
           "yaxes": [
             {
-              "format": "Decytes",
+              "format": "Decbytes",
               "label": null,
               "logBase": 10,
               "max": null,
@@ -13945,7 +13945,7 @@
               "hide": false,
               "intervalFactor": 2,
               "legendFormat": "{{cf}}",
-              "metric": "tikv_engine_expenting_compact_bytes",
+              "metric": "tikv_engine_expenditing_compaction_bytes",
               "refId": "A",
               "step": 10
             }
@@ -14034,7 +14034,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Read overlay",
+          "title": "Read overlap",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -14438,7 +14438,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Ingest ST durations security",
+          "title": "Ingest ST duration secures",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -15451,7 +15451,7 @@
         "includeAll": true,
         "label": "Instalment",
         "multi": false,
-        "name": "Instalment",
+        "name": "Instance",
         "options": [],
         "query": "label_values(tikv_engine_size_bytes, instance)",
         "refresh": 1,
