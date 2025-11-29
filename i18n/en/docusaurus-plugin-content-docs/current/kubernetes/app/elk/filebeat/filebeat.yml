@@ -9,7 +9,7 @@ filebeat.inputs:
   exclude_lines:
   - '^$'
   multiline:
-    type: Pattern
+    type: Patterns
     pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
     negate: true
     match: after
