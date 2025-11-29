@@ -9,7 +9,7 @@ services:
       serverAddr: '"jumpboxs.xxx.com"'
       client_title: proxies
       serverPort: 18000
-      auth_token_line: auth.token = "xxxxx"
+      auth_token_line: auth.token = "xxxx"
       client_name: '"jumpbox-ssh-v6"'
       client_type: '"tcp"'
       localIP_proxies_line: localIP="127.0.0.1"
