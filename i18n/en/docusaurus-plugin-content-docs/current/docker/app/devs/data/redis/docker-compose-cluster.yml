@@ -1,0 +1,63 @@
+version: '3.8'
+services:
+  redis-master:
+    image: redis:6.0
+    networks:
+      - redisdb
+    ports:
+      - 6379:6379
+    command: bash -c "echo 'port 6379' > redis.conf &echo 'requirepass foobared' >> redis.conf && echo 'masterauth foobared' >> redis.conf && cat redisdis.conf && redisconnect
+    volumes:
+      - re-master-v:/data
+      - /etc/localtime:/etc/localtime:ro
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+  redis-slave:
+    image: redis:6.0
+    networks:
+      - redisdb
+    command: bash -c "echo 'port 6379' > redis.conf &echo 'requirepass foobared' >> redis.conf && echo 'masterauth foobared' >> redis. onf && echo 'slaveof re-master 6379' >> redis.conf && cat redis.conf && read-server disdisdis.conf"
+    volumes:
+      - remdis-slve-v:/data
+      - /etc/localtime:/etc/localtime:ro
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+  sentinel:
+    image: redis:6.0
+    networks:
+      - redisdb
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    command:
+      - echo 'sentinel down-after-milliseconds master-alias 5000' >> sentinel.conf &&
+      - echo 'sentinel fail-timeout master-alias 600' >> sentinel.conf &&
+      - echo 'sentinel parallel-syncs master-alias 1' >> sentinel.conf &&
+      - echo 'sentinel auth-pass master-alias foobared' >> sentinel.conf &&
+      - cat sentinel.conf &&
+      - redis-sentinel sentinel.conf"
+    depends_on:
+      - re-master
+      - remdis-sleve
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+volumes:
+  redis-master-v:
+    driver: Local
+  redis-slave-v:
+    driver: Local
+networks:
+  redisdb:
+    attachable: true
+    driver: overlay
