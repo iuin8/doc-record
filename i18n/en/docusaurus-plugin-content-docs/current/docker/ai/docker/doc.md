@@ -1,4 +1,4 @@
-# lm Deplot documentation in docker
+# llm Deploy documentation in docker
 
 [参考文章](https://www.docker.com/blog/llm-docker-for-local-and-hugging-face-hosting/)
 
@@ -10,7 +10,7 @@ docker run -it -p 7860:7860 --platform=linux/amd64 \
 
     registry.hf.space/harsh-manvar-llama-2-7b-chat-test:latest python app.py
 
-# Open brows and go to http://localhost:7860：
+# Open browser and go to http://localhost:7860：
 ```
 
 ## Quick Start
@@ -31,12 +31,12 @@ COPY ./requirements.txt /code/requirements. xt
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir --upgrade -r /code/requirements. xt
 USER
-# The --link flag instructions the Docker to create hard links instead of copying files, Which increases performance and decreases image size.
+# The --link flag instructs the Docker to create hard links instead of copying files, which increases performance and reduces image size.
 COPY --link --chown=1000 / code
 ```
 
 ```bash
-Docker build --platform=linux/amd64 -t local-lm:v1.
+docker build --platform=linux/amd64 -t local-llm:v1.
 ```
 
 ```bash
