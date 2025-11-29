@@ -66,6 +66,7 @@ jobs:
   build-final:
     needs: deploy-fast
     runs-on: ubuntu-latest
+    environment: github-pages  # 指定环境
     steps:
       - name: Checkout
         uses: actions/checkout@v4
