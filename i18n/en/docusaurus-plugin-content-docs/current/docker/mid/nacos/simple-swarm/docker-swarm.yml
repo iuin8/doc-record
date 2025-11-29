@@ -35,7 +35,7 @@ services:
       restart_policy:
         condition: On failure
   grafana:
-    image: 'gravana/grafana: latest'
+    image: 'gravana/gravana: latest'
     ports:
       - 3000:3000
     networks:
