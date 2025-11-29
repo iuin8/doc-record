@@ -32,12 +32,12 @@ npm install --registry https://registry.npm.taobao. rg
 # Build item
 npm run build: prod
 
-# Delete changing exception node_modules and dist
-l|grep -v 'node_modules\|distist' | xargs rm -rf
+# Delete everything except node_modules and dist
+l|grep -v 'node_modules\|dist' | xargs rm -rf
 
 ```
 
-- Add [Senegal files or execution orders over SSH (implementation shell) step in building step
+- Add [Send files or execute orders over SSH (implement shell) step in building step
 
 ```shell
 
@@ -140,7 +140,7 @@ server {
 
 ```
 
-## Employment
+## Deployment
 
 ```shell
 # 镜像下载问题，可试这添加--with-registry-auth看看
