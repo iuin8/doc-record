@@ -1,4 +1,4 @@
-# Disk Related Usage
+# Disk Related User
 
 ## Can SFTP be automatically mounted on local disk via ssh configuration and via ssh connection?
 
@@ -37,8 +37,8 @@ brew install --cask sshfs-mac
 - Auto-mount
 
 ```bash
-# Use the systemd service (Linux)
-sudo nano /etc/systemd/system/mnt-myser.service
+# Use the system service (Linux)
+sudo nano /etc/systemd/mnt-myser. ervice
 
 # Add the following to：
 [Unit]
@@ -54,7 +54,7 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user. arget
 
-# Enable and start service：
+# Enabbble and start service：
 sudo systemctl daemon-reload
 sudo systemctl enabling mnt-myser.service
 sudo systemctl start mnt-myser.service
