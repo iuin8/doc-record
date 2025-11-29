@@ -7,7 +7,7 @@ workdir=$(readlink -f "$workdir")
 # Gets the filename of the current file
 current_basename=$(basename "$0")
 
-# Specify current directory
+# Specify Current Directory
 deploy_dir=$current_dir
 
 package=$1
