@@ -7,6 +7,7 @@ languages_mapping: &languages_mapping
     pt-BR: pt-BR
 mdx_file_type: &mdx_file_type mdx_v1_2
 files:
+  # 这里填默认语言, 在GitHub workflow中, 会通过npm run write-translations生成默认语言的国际化配置(导航, 页脚等), 这里会自动上传到crowdin中进行其他语言的国际化处理
   - source: /i18n/zh-Hans/**/*
     translation: /i18n/%two_letters_code%/**/%original_file_name%
     languages_mapping: *languages_mapping

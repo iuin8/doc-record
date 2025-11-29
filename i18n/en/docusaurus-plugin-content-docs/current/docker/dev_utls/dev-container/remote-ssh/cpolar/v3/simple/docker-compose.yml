@@ -1,9 +1,0 @@
-services:
-  cpolar-ssh:
-    image: registry.cn-hangzhou.aliyuncs.com/iuin/cpolar-ssh:latest
-    environment:
-      - TZ="Asia/Shanghai"
-      - CPOLAR_AUTH_TOKEN=${CPOLAR_AUTH_TOKEN}
-      - PLAYLIST_NOTIFICATION_POPUP_TITLE
-    restart: unless-stopped
-    privileged: true
