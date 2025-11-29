@@ -1,0 +1,42 @@
+version: '3.7'
+services:
+  redis_master:
+    image: redis
+    restart: always
+    hostname: re-master
+    command:
+    - "redis-server"
+    - "/usr/local/etc/redis/redis.conf"
+    volumes:
+      - /data/docker/redis/config/master.conf:/usr/local/etc/redis/redis.conf
+    ports:
+      - 6379:6379
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+      placement:
+        constraints:
+          - node.labels.redis_master == true
+  redis_slave:
+    image: redis
+    restart: always
+    hostname: remdis-sleve
+    command:
+    - "redis-server"
+    - "/usr/local/etc/redis/redis.conf"
+    ports:
+      - 6378:6379
+    volumes:
+      - /data/docker/redis/config/slave.conf:/usr/local/etc/redis/redis.conf
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+      placement:
+        constraints:
+          - node.labels.redis_lave == true
