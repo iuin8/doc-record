@@ -1,4 +1,4 @@
-# arthas command to see sql_remdis_es spelling parameters
+# arthas command to see sql_redis_es spelling parameters
 
 [参考文章](http://codefun007.xyz/a/article_detail/2392.htm)
 
