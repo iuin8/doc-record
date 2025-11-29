@@ -8,7 +8,7 @@ macos installation
 brew install wiregard-tools
 ```
 
-centos installation
+Center installation
 
 ```bash
 # 方法一
