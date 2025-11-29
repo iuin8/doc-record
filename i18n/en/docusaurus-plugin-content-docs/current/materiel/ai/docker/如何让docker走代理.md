@@ -1,24 +1,24 @@
 # How to get docker away
 
-Follow Docker to access the network via proxy to implement： through the following methods
+Allow Docker to access the network via proxy to implement： through the following methods
 
 **I. Environmental Variables**
 
 1. For Linux and macOS systems：
-   - Environment variables can be set before Docker services are started. Open Terminal, enter the following command to set the environment variable： temporary.
+   - Environment variables can be set before Docker services are started.Open Terminal, enter the following command to set the environment variable： temporarily.
      ```
      export HTTP_PROXY="http://your_proxy_address:port"
      export HTTPS_PROXY="https://your_proxy_address:port"
      ```
-   - If you want to set permanent, you can add these orders to the user's shell configuration file (e.g. `.bashrc`, `.zshrc`, etc).
+   - If you want to set permanently, you can add these commands to the user's shell configuration file (e.g. `.bashrc`, `.zshrc`, etc.).
 
 2. For Windows System：
    - You can set `HTTP_PROXY` and `HTTPS_PROXY` in the system environment variable.
-   - Open the "Control Panel" - >System and Security"->System" - >"Advanced System Settings->"Environmental Variables". Reate two new variables in "System Variables", with the names `HTTP_PROXY` and `HTTPS_PROXY`, which are set to your proxy addresses and reports, e.g. `http://127.0.0.1:8080`.
+   - Open the "Control Panel" - >"System and Security"->System" - >"Advanced System Settings->"Environmental Variables".Create two new variables in "System Variables", with the names `HTTP_PROXY` and `HTTPS_PROXY`, which are set to your proxy addresses and ports, e.g. `http://127.0.0.1:8080`.
 
 **II, Docker daemon configuration (for Linux)**
 
-1. Edit the docker daemon configuration `/etc/docker/daemon.json`.if the file does not exist, it can be created.
+1. Edit the docker daemon configuration `/etc/docker/daemon.json`.If the file does not exist, it can be created.
 
 2. 在文件中添加以下内容：
    ```json
@@ -32,7 +32,7 @@ Follow Docker to access the network via proxy to implement： through the follow
      }
    }
    ```
-   - `Proxy` and `httpsProxy` set up proxy addresses and reports.
+   - `httpProxy` and `httpsProxy` set up proxy addresses and ports.
    - The `noProxy` setting does not require access via proxy to the list of addresses, separated by commas.
 
 3. Restart Docker Service： after saving files
@@ -40,9 +40,9 @@ Follow Docker to access the network via proxy to implement： through the follow
    sudo systemctl start docker
    ```
 
-With the above method, You can let the Docker access the network through proxy in order to succeed full images and other actions in a network restricted environment.
+With the above method, you can let the Docker access the network through proxy in order to successfully pull images and other actions in a network restricted environment.
 
-PS: There are to be a problem with the way above
+PS: There seems to be a problem with the way above
 
 [参考文章](https://cloud.tencent.com/developer/article/1806455)
 
@@ -55,7 +55,7 @@ LO
    LO
      "httpProxy": "http://proxy. xample. om:8080",
      "https://proxy.example.com:8080",
-     "noProxy": "localhost,127. 0.1, .example.com"
+     "noProxy": "localhost,127. 0.1,.example.com"
    }
  }
 }
@@ -69,11 +69,11 @@ docker build . \
     -t your/image:tag
 ```
 
-P: However, it appears that the following attempt was not used
+PS: However, it appears that the following attempt was not used
 
 Afterwards, try again this argument to see: --network host
 
-PS: Try the following new method again (proactive usage)
+PS: Try the following new method again (pro-active usage)
 
 [参考文章](https://neucrack.com/p/286)
 
@@ -81,7 +81,7 @@ PS: Try the following new method again (proactive usage)
 # sudo vim /etc/systemd/system/docker.service.d/http-proxy.conf
 [Service]
 Environment="HTTP_PROXY=http://127.0.0.1:8123"
-Environment="HTTPS_PROXY=http://127.0.0.0.0.1:8123"
+Environment="HTTPS_PROXY=http://127.0.0.0.1:8123"
 ```
 
 ```bash
