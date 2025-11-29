@@ -5,11 +5,11 @@ RUN chmod 755 /usr/local/bin/entrypoint.sh
 
 COPY nginx.conf /etc/nginx/
 COPY conf/cors.conf /etc/nginx/
-#COPY ./conf.d//etc/nginx/conf.d/
+#COPY ./conf.d/*/etc/nginx/conf.d/
 COPY template//etc/nginx/template/
 
 RUN mkdir -p /usr/lib/nginx/proxy_tmp && \s
-    mkdir -p /usr/lib/nginx/proxy_cache/imgcache &\s
+    mkdir -p /usr/lib/nginx/proxy_cache/imgcache &&\s
     chown -R nginx:nginx /usr/lib/nginx/proxy*
 
 RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \\.
