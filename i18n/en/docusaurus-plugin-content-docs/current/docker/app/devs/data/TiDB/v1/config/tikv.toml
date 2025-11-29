@@ -1,0 +1,28 @@
+server = { }
+storage = { }
+pd = { }
+raftstore = { }
+coprocessor = { }
+security = { }
+import = { }
+
+[log]
+level = "error"
+file = { }
+
+[readpool]
+storage = { }
+coprocessor = { }
+
+[metric]
+address = "pushgateway:9091"
+
+[rocksdb]
+max-open-files = 1_024
+defaultcf = { }
+writecf = { }
+lockcf = { }
+
+[raftdb]
+max-open-files = 1_024
+defaultcf = { }
