@@ -1,0 +1,10 @@
+services:
+  skyoffice:
+    image: wbsu2003/skyoffice:latest
+    container_name: skyoffice
+    ports:
+      - "2567:2567"
+      - "3000:3000"
+    environment:
+      - BACKEND_URL=ws:/your server IP:2567
+    restart: unless-stopped
