@@ -93,7 +93,11 @@ jobs:
       - name: Sync Crowdin
         env:
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-        run: npm run crowdin:upload:download
+        run: |
+          # Try to upload, but continue if it fails (e.g. no sources found)
+          npm run crowdin -- upload --token $CROWDIN_PERSONAL_TOKEN || true
+          # Always attempt to download
+          npm run crowdin -- download --token $CROWDIN_PERSONAL_TOKEN || true
 
       - name: Build Docusaurus (Final)
         run: npm run build
