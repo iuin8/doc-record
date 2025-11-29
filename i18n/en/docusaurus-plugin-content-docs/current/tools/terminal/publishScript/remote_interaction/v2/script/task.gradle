@@ -12,7 +12,7 @@ Subprojects
 
     PropertyFiles.each of LOS propFile ->
         def fileName = propFile.name
-        // Extract environment names from filenames, such as gradle-dev.properties -> dev
+        // Excontract environment names from filenames, such as gradle-dev.properties -> dev
         def profile = fileName.replaceAll('^gradle-(.*)\\.properties$', '$1')
 
         // Create post tasks for each environment
@@ -27,7 +27,7 @@ Subprojects
             arthasTask(it, profile)
         }
 
-        // Create logtasks for each environment
+        // Create logs for each environment
         tasks.register("logTo${profile.capitalize()}")
             group = 'remote'
             logTask(it, profile)
