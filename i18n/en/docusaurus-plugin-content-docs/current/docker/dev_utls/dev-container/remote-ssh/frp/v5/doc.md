@@ -1,7 +1,7 @@
 # frp
 
 - Version plan
-  - Replace Ubuntu base container with Debian
+  - Replace Ubuntu base containing with Debian
 
 ## Quick Start
 
