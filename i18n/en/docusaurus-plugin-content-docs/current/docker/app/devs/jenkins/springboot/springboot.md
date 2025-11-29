@@ -44,10 +44,10 @@ ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar","/app.jar"
 
 ## jenkins Install Docker Plugin
 
-- Docker Plugin Configuration [System Manager -> System Configuration -> System Configuration -> Cloud]
-- Configure docker host URI [unix://var/run/docker.sock]
+- Docker Plugin Configuration [System Manager -> System Configuration -> System Configuration -> System Configuration -> Cloud]
+- Configure docker host URI [unix:/var/run/docker.sock]
 
-> (typically unix://var/run/docker.sock or tcp://127.0.1:2376)
+> (typically unix:/var/run/docker.sock or tcp://127.0.1:2376)
 
 ![img.png](img/img.png)
 
