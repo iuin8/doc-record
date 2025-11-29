@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   # Stage 1: Fast Build & Deploy
-  # 快速构建并部署，让用户第一时间看到内容（未翻译或部分翻译）
+  # 快速构建并部署，让用户第一时间看到内容（未翻译）
   build-fast:
     runs-on: ubuntu-latest
     steps:
@@ -38,9 +38,6 @@ jobs:
       - name: Install Dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm install --no-audit --no-fund
-
-      - name: Generate Basic Translations
-        run: npm run write-translations
 
       - name: Build Docusaurus (Fast)
         run: npm run build
