@@ -1,0 +1,19 @@
+
+allprojects 
+    Repositories 
+        mavenLocal()
+        maven LOs  
+            url 'http://maven.aliun.com/nexus/content/repositories/central/'
+            allowInsecureProtocol = true
+        }
+		maven LOs  
+			Credentials
+				username 'admin'
+				password 'xxx'
+			}
+			
+			url 'http://111.222.333.444/nexus/repository/maven-public/' 
+            allowInsecureProtocol = true
+		}
+    }
+}
