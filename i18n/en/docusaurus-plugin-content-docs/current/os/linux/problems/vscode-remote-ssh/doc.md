@@ -5,9 +5,9 @@
 ```bash
 curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliun.com/repo/Centos-7.repo
 # Installing SCL repository
-yum install -y cents-release-scl
+yum install -y centos-release-scl
 # Try installing
-yum - y devolset-8-gcc*
+yum install -y devtoolset-8-gcc*
 
 ```
 
@@ -96,11 +96,11 @@ yum install - y devtoolset-8-gcc*
 ```bash
 # See glibc version
 strings /lib64/libc.so.6 |grep GIBC_
-# Update glibc
+# update glibc
 wget http://ftp.gnu.org/gnu/glibc/glibc-2.28.tar.gz
-tar xf glibc-2. 8.tar. z 
+tar xf glibc-2.28.tar. z 
 cd glibc-2.28/ && mkdir build && cd build
-../configure --prefix=/usr --disable-profile --enable-add-ons -with-headers=/usr/include-bins=/usr/bin
+../configure --prefix=/usr --disable-profile --enable-add-ons --with-headers=/usr/include-bintils=/usr/bin
 ```
 
 Possible Errors
@@ -108,7 +108,7 @@ Possible Errors
 ```bash
 configure: error: 
 **These critical programs are missing or to: make bus compiler
-*** Check the INSTRAW file for required versions.
+*** Check the INSTAL file for required versions.
 ```
 
 Solutions：upgrade gccs and make
@@ -119,8 +119,8 @@ yum install -y cents-release-scl
 yum install - y devtoolset-8-gcc*
 mv /usr/bin/gcc /usr/bin/gcc-4. 5
 ln -s /opt/rh/devtoolset-8/root/bin/gcc /usr/bin/gcc
-mv /usr/bin/g++-4.8.
-ln -s /opt/rh/devtoolset-8/root/bin/g++/usr/bin/g++++
+mv /usr/bin/g++/usr/bin/g++-4.8.
+ln -s /opt/rh/devtoolset-8/root/bin/g++/usr/bin/g+++
 
 # Upgrade make (3 upgrade to 4)
 get http://ftp.gnu.org/gnu/make/make-4.3.tar.gz
@@ -131,7 +131,7 @@ cd /usr/bin/ && mv make make.bak
 ln -sv /usr/local/make/bin/make/usr/bin/make
 ```
 
-All issues have been resolved and the previous glib update has been completed
+All issues have been resolved and the previous glibc update has been completed
 
 ```bash
 cd /root/glibc-2.28/build
@@ -146,17 +146,17 @@ configure: error:
 *** Check the SESL file for required versions.
 ```
 
-See how many of my delivery versions
+See how many of my bison versions
 
 ```bash
 bison --version
-# -basis: basis: no command
+# -bash: basis: no command
 
 yum install -y bus
 bison --version
 ```
 
-Facting all the questions have been resolved and re-executed the previous glib update
+Facting all the questions really have been resolved and re-executed the previous glibc update
 
 ```bash
 cd /root/glibc-2.28/build
@@ -169,18 +169,18 @@ Make and make install in linux is a simple way of installing the software.
 This process is lengthy, about half an hour, and it is better to recommend a game.
 
 ```bash
-Make & make install
+Make && make install
 # PS: Looks like error and don't affect
 ```
 
 Verify that it's not good (PS: remote server with remote-ssh with vscode)
 
-Connect the new dynamic library if the following issues persisted.
+Connect the new dynamic library if the following issues persist.
 
 ```bash
 node: /lib64/libstdc++.so.6: version `CXXABI_1.3.9' not found (required by node)
 node: /lib64/libstdc++.so.6: version `GLCXX_3. 20' not found (required by node)
-node: /lib64/libstdc+.so.6: version `GLCXX_3.4.21' not found (required by node)
+node: /lib64/libstdc+.so.6: version `GLIBCXX_3.4.21' not found (required by node)
 ```
 
 View with the command below
@@ -215,7 +215,7 @@ Verify again (PPS: connect remote server with remote-ssh with vscode)
 Solutions
 
 ```bash
-# Check current timezone
+# Checking current timezone
 locale
 # The following error
 $ locale
@@ -267,4 +267,4 @@ locale
 
 ## Reference link
 
-[node: /lib64/libm.so.6: version \\`GLIBC_2.27' not foundational problem solution](https://www.cnblogs.com/yuwen01/p/18067005)
+[node: /lib64/libm.so.6: version \`GLIBC_2.27' not foundational problem solution](https://www.cnblogs.com/yuwen01/p/18067005)
