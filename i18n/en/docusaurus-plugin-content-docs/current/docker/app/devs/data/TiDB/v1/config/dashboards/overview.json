@@ -152,7 +152,7 @@
           "decimals": null,
           "editable": false,
           "error": false,
-          "format": "Decbytes",
+          "format": "Decytes",
           "gauge": {
             "maxValue": 100,
             "minValue": 0,
@@ -230,7 +230,7 @@
           "decimals": 1,
           "editable": false,
           "error": false,
-          "format": "Decbytes",
+          "format": "Decytes",
           "gauge": {
             "maxValue": 100,
             "minValue": 0,
@@ -763,7 +763,7 @@
               "step": 10
             },
             {
-              "expr": "avg(rate(pd_client_request_handle_requests_duration_seconds_sum[30s]) by (type) / avg(pd_client_request_handle_requests_duration_seconds_count[30s])) by (type)",
+              "expr": "avg(rate(pd_client_request_handle_requests_duration_seconds_sum[30s]) by (type) / avg(pd_client_request_handle_requests_duration_seconds_count[30s]) ) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}} average",
@@ -1212,7 +1212,7 @@
           ]
         }
       ],
-      "repeat": "Instance",
+      "repeat": "Instalment",
       "repeatIteration": null,
       "repeatRowId": null,
       "showTitle": true,
@@ -1613,7 +1613,7 @@
           "steppedLine": true,
           "targets": [
             {
-              "expr": "tidb_server_contests",
+              "expr": "tidb_server_contents",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -1946,7 +1946,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_tikclient_txn_cmd_duration_seconds_count[1m])) by (type)",
+              "expr": "sum(rate(tidb_tikclient_txn_cmd_duration_seconds_count[1m]) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -2113,7 +2113,7 @@
               "step": 10
             },
             {
-              "expr": "sum(pd_client_request_handle_requests_duration_seconds_count{type=\"tso\"}[1m])",
+              "expr": "sum(pd_client_request_handle_requests_duration_seconds_count{type=\"tso\"}[1m]",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Request",
@@ -2368,7 +2368,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_tikclient_lock_resolver_actions_total[1m]) by (type)",
+              "expr": "sum(ticdb_tikclient_lock_resolver_actions_total[1m]by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -2990,7 +2990,7 @@
           },
           "yaxes": [
             {
-              "format": "Decbytes",
+              "format": "Decytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -3068,7 +3068,7 @@
           },
           "yaxes": [
             {
-              "format": "Decbytes",
+              "format": "Decytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -3138,7 +3138,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "full",
+          "title": "Full",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -3215,7 +3215,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tickv_server_report_failure_msg_total[1m]) by (type,instance,store_id)",
+              "expr": "sum(tickv_server_report_failure_msg_total[1m]by (type,instance,store_id)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}} - {{type}} - to - {{store_id}}",
@@ -3378,16 +3378,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_cookor_expenditing_request[1m])) by (req, priority)",
+              "expr": "sum(rate(tikv_cookor_expenting_request[1m])) by (req, priority)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ req }} - {{priority}}",
-              "metric": "tikv_region_writen_keys_bucket",
+              "metric": "tikv_region_writing_keys_bucket",
               "refId": "A",
               "step": 10
             },
             {
-              "expr": "sum(rate(tikv_cookor_expenditing_request[1m])) BY (type, instance)",
+              "expr": "sum(rate(tikv_cookor_expenting_request[1m])) BY (type, instance)",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 2,
@@ -3564,7 +3564,7 @@
               "step": 10
             },
             {
-              "expr": " sum(rate(tikv_cookor_request_duration_seconds_sum{req=\"select\"}[1m])/ sum(rate(tikv_cookor_request_duration_seconds_count{req=\"select\"}[1m]))",
+              "expr": " sum(rate(tikv_cookor_request_duration_seconds_sum{req=\"select\"}[1m]/ sum(titkv_cookor_request_duration_seconds_count{req=\"select\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "select-avg",
@@ -3651,7 +3651,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tickv_thread_cpu_seconds_total{name=\"raftstore_.*}[1m]) by (instance, name)",
+              "expr": "sum(tickv_thread_cpu_seconds_total{name=\"raftstore_.*}[1m]by (instance, name)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -3798,7 +3798,7 @@
         "includeAll": false,
         "label": null,
         "multi": false,
-        "name": "Instance",
+        "name": "Instalment",
         "options": [],
         "query": "label_values(pd_cluster_status, instance)",
         "refresh": 1,
@@ -3818,7 +3818,7 @@
         "includeAll": true,
         "label": "Namespace",
         "multi": false,
-        "name": "name",
+        "name": "Name",
         "options": [],
         "query": "label_values(pd_cluster_status{instance=\"$instance\"}, namespace)",
         "refresh": 1,
