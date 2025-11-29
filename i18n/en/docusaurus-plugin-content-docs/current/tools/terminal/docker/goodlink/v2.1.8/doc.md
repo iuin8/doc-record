@@ -6,13 +6,13 @@
 # Download
 wget https://gitee.com/konyshe/goodlink/releases/download/v2.1.8/goodlink-amd64-cmd.zip
 # Add executive permission
-chmod +x ./goodlink-amd64-cmd
+chmod +x. goodlink-amd64-cmd
 # local
-./goodlink-linux-amd64-cmd --key=AIabJpEIHIYHMDIA6NBgOBboYJ1 - local
+./goodlink-amd64-cmd --key=AIabJpEHHIHHIYHMDIA6NBgOBboYJ1 - local
 # remote
-. foodlink-linux-amd64-cmd --key=AIabJpEIYHMDIA6NBgOBboYJ1 --remote
-# # remote(Docker)
-docker rm goodlink -f; docker run -d --name=goodlink --net=host --restoret=always registry.cn-shanghai.aliyuncs.com/kony/goodlink --key=AIabJpMDIA6NBgOBboYJ1 --remote
+foodlink-linux-amd64-cmd --key=AIabJpEIYHMDIA6NBgOBboYJ1 --remote
+# # # # # # # # # # # remote
+docker rm foodlink -f; docker run -d --name=goodlink --net=host --restoreret=always registry. n-shanghai.aliyuncs.com/kony/gooodlink -key=AabJpMDIA6NBGOBboYJ1 - remote
 
 ```
 
