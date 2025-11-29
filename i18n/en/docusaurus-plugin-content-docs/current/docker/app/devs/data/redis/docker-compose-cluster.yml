@@ -6,7 +6,7 @@ services:
       - redisdb
     ports:
       - 6379:6379
-    command: bash -c "echo 'port 6379' > redis.conf &echo 'requirepass foobared' >> redis.conf && echo 'masterauth foobared' >> redis.conf && cat disdisdisdisdisdis.conf && redisconnect
+    command: bash -c "echo 'port 6379' > redis.conf &echo 'requirepass foobared' >> redis.conf && echo 'masterauth foobared' >> redis.conf && cat redisdis.conf && redisconnect
     volumes:
       - re-master-v:/data
       - /etc/localtime:/etc/localtime:ro
@@ -20,7 +20,7 @@ services:
     image: redis:6.0
     networks:
       - redisdb
-    command: bash -c "echo 'port 6379' > redis.conf &echo 'requirepass foobared' >> redis.conf && echo 'masterauth foobared' >> redis. onf && echo 'slaveof re-master 6379' >> redis.conf && cat redisdisdisdisdisdisdis.conf & read-server
+    command: bash -c "echo 'port 6379' > redis.conf &echo 'requirepass foobared' >> redis.conf && echo 'masterauth foobared' >> redis. onf && echo 'slaveof re-master 6379' >> redis.conf && cat redis.conf && read-server disdisdis.conf"
     volumes:
       - remdis-slve-v:/data
       - /etc/localtime:/etc/localtime:ro
@@ -45,7 +45,7 @@ services:
       - redis-sentinel sentinel.conf"
     depends_on:
       - re-master
-      - remdis-live
+      - remdis-sleve
     deploy:
       replicas: 1
       update_config:
