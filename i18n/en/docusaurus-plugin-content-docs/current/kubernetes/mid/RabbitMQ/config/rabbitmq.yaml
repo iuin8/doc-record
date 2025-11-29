@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Progress
+metadata:
+  annotations: { }
+  labels:
+    k8s.kuboard.cn/name: rabbit
+  name: rabbit
+  namespace: middle leware
+  resourceVersion: '14196210'
+spec:
+  ingressClassName: mall-ingress-nginx
+  rules:
+    - host: rabbit.iuin.com
+      http:
+        paths:
+          - 
+          backend:
+              service:
+                name: rabbit
+                port:
+                  number: 15672
+            path: /
+            pathType: Prefix
+
