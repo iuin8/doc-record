@@ -1,0 +1,62 @@
+name: Reusable Docusaurus Build
+
+on:
+  workflow_call:
+    inputs:
+      sync_crowdin:
+        required: false
+        type: boolean
+        default: false
+        description: "Whether to sync translations with Crowdin"
+    secrets:
+      CROWDIN_PERSONAL_TOKEN:
+        required: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Fetch all history for accurate git info if needed, or 1 for speed
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+          check-latest: true
+          cache: 'npm'
+          cache-dependency-path: package.json
+
+      - name: Install Dependencies
+        run: npm install --include=optional --no-audit --no-fund
+
+      - name: Check Crowdin Token (If Sync Enabled)
+        if: inputs.sync_crowdin
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        run: |
+          if [ -z "$CROWDIN_PERSONAL_TOKEN" ]; then
+            echo "Error: CROWDIN_PERSONAL_TOKEN is empty or missing!"
+            exit 1
+          else
+            echo "Success: CROWDIN_PERSONAL_TOKEN is set."
+          fi
+
+      - name: Generate Translations (Common Step)
+        run: npm run write-translations
+
+      - name: Sync Crowdin (If Enabled)
+        if: inputs.sync_crowdin
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        run: npm run crowdin:upload:download
+
+      - name: Build Docusaurus
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./build

@@ -1,74 +1,30 @@
-name: Deploy Docusaurus site to Pages
+name: Deploy Docusaurus site to Pages (Crowdin Sync)
 
 on:
-  push:
-    branches: [main] # 设置要部署的源码分支
-  workflow_dispatch: # 允许手动触发部署
+  workflow_dispatch:
 
-# 设置 GITHUB_TOKEN 的权限
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 允许一个并发部署
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    environment: github-pages  # 指定环境
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 1 # 仅获取最近一次提交以提速
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "20"
-          check-latest: true
-          cache: 'npm'
-          cache-dependency-path: package.json
-      
-      - name: Remove existing lockfile on Linux runner
-        run: rm -f package-lock.json
-
-      - name: Install Dependencies
-        run: npm install --include=optional --no-audit --no-fund
-      
-      - name: Check Crowdin Token
-        env:
-          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-        run: |
-          if [ -z "$CROWDIN_PERSONAL_TOKEN" ]; then
-            echo "Error: CROWDIN_PERSONAL_TOKEN is empty or missing!"
-            exit 1
-          else
-            echo "Success: CROWDIN_PERSONAL_TOKEN is set."
-          fi
-
-      - name: Crowdin Translations
-        env:
-          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-        run: npm run crowdin:sync
-
-      - name: Build Docusaurus
-        run: npm run build
-      
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./build
+  build-site:
+    uses: ./.github/workflows/reusable-build.yml
+    with:
+      sync_crowdin: true
+    secrets:
+      CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
+    needs: build-site
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
