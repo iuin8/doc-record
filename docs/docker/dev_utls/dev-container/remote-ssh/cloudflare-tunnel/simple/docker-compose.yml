@@ -1,0 +1,9 @@
+
+# docker run cloudflare/cloudflared:latest tunnel --no-autoupdate run --token xxx
+services:
+  cloudflared-jumpbox:
+    image: cloudflare/cloudflared:latest
+    environment:
+      TZ: "Asia/Shanghai"
+    command: tunnel --no-autoupdate run --token xxx
+    restart: unless-stopped
