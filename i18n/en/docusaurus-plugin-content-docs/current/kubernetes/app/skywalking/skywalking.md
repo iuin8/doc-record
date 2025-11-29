@@ -33,7 +33,7 @@ helm install "${SKYWALKING_RELEASE_NAME}" \
   --set ui.image.tag=9.2.0
 ```
 
-- Install SkyWalking development version using master branch
+- Install SkyWalking development version using master block
 
 ```bash
 export REPO=chart
