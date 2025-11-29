@@ -1,0 +1,16 @@
+services:
+  headscale:
+    image: headscale/headscale:latest
+    container_name: headscale
+    # network_mode: "host"  # 直接使用宿主机网络
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "41641:41641/udp"
+      - "3478:3478/udp"
+    environment:
+      TS_DEBUG: "1" # 可选，启用调试日志
+    volumes:
+      - ./config:/etc/headscale
+      - ./headscale_data:/var/lib/headscale
+    command: serve
