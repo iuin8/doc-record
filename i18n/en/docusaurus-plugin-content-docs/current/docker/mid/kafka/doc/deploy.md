@@ -1,6 +1,6 @@
 # Start cluster
 
-docker stack ploy -c kafka-compose.yml kafka
+docker stack employ-c kafka-compose.yml kafka
 
 # Launch Cluster (two)
 
