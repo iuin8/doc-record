@@ -4,7 +4,7 @@
 
 - Tunnel name, added to environment variable, customizable (temporarily not required)
 - Other Advanced Actions
-  - `polar.yml` file is customized by mount (mount configuration file)
+  - `cpolar.yml` file is customized by mount (mount configuration file)
 - Docker-compose.yml uses with export command, so token is not easy to see
 
 ## Usage
