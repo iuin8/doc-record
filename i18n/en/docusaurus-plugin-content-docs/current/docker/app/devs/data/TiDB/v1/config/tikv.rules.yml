@@ -12,24 +12,24 @@ groups:
       description: 'cluster: test-cluster, instance: {{ $labels.instance }}, job: {{ $labels.job }}, values: {{ $value }}'
       value: '{{ $value }}'
       summary: TiKV memory used too fast
-  - alert: TIKV_GC_can_not_work
-    expr: sum(increase(tidb_tikclient_gc_action_result{type="success"}[6h]) < 1
+  - alert: TIKV_ACCOUNT_NOt_work
+    expr: sum(increase(tidb_tikclient_gc_action_result{type="success"}[6h]< 1
     for: 1m
     labels:
       env: test-cluster
       level: Emergency
-      expr: sum(increase(tidb_tikclient_gc_action_result{type="success"}[6h]) < 1
+      expr: sum(increase(tidb_tikclient_gc_action_result{type="success"}[6h]< 1
     annotations:
       description: 'cluster: test-cluster, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
       summary: TiKV can not work
   - alert: TiKV_server_report_failure_msg_total
-    expr: sum(tickv_server_report_failure_msg_total{type="unreachable"}[10m]) BY (store_id) > 10
+    expr: sum(tickv_server_report_failure_msg_total{type="unreachable"}[10m]BY (store_id) > 10
     for: 1m
     labels:
       env: test-cluster
       level: Critical
-      expr: sum(tickv_server_report_failure_msg_total{type="unreachable"}[10m]) BY (store_id) > 10
+      expr: sum(tickv_server_report_failure_msg_total{type="unreachable"}[10m]BY (store_id) > 10
     annotations:
       description: 'cluster: test-cluster, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -99,14 +99,14 @@ groups:
     annotations:
       description: 'cluster: test-cluster, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
-      summary: TiKV cano request wait seconds more than 10s
+      summary: TiKV cano request wait seconds more than 10 s
   - alert: TiKV_raftstore_thread_cpu_seconds_total
-    expr: sum(tickv_thread_cpu_seconds_total{name=~"raftstore_.*}[1m]) by (job, name) > 0.8
+    expr: sum(tickv_thread_cpu_seconds_total{name=~"raftstore_.*}[1m]by (job, name) > 0.8
     for: 1m
     labels:
       env: test-cluster
       level: Critical
-      expr: sum(tickv_thread_cpu_seconds_total{name=~"raftstore_.*}[1m]) by (job, name) > 0.8
+      expr: sum(tickv_thread_cpu_seconds_total{name=~"raftstore_.*}[1m]by (job, name) > 0.8
     annotations:
       description: 'cluster: test-cluster, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -143,7 +143,7 @@ groups:
     annotations:
       description: 'cluster: test-cluster, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
-      summary: TiKV schedule latch wait durations more than 1s
+      summary: TiKV schedule late wait durations more than 1 s
   - alert: TiKV_thread_apply_worker_cpu_seconds
     expr: sum(rate(tikv_thread_cpu_seconds_total{name="apply_worker"}[1m])) by (job) > 0.9
     for: 1m
@@ -154,8 +154,8 @@ groups:
     annotations:
       description: 'cluster: test-cluster, type: {{ $labels.type }}, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
-      summary: TiKV thread apple walker cpu seconds is high
-  - alert: TiDB_tikvclient_gc_action_ail
+      summary: TiKV thread app walker cpu seconds is high
+  - alert: TiDB_tikclient_gc_action_ail
     expr: sum(increase(tidb_tikclient_gc_action_result{type="fail"}[1m]) > 10
     for: 1m
     labels:
@@ -165,7 +165,7 @@ groups:
     annotations:
       description: 'cluster: test-cluster, type: {{ $labels.type }}, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
-      summary: TiDB_tikvclient_gc_action_ail
+      summary: TiDB_tikclient_gc_action_ail
   - alert: TiKV_leader_drops
     expr: delta(tikv_pd_heartbeat_tick_total{type="leader"}[30s]< -10
     for: 1m
@@ -178,23 +178,23 @@ groups:
       value: '{{ $value }}'
       summary: TiKV leader drops
   - alert: TiKV_draft_process_ready_duration_secs
-    expr: histogram_quantity (0.999, sum (rate(tikv_raftstore_draft_process_duration_secs_bucket{type='ready'}[1m]) by (le, instance, job,type)) > 2
+    expr: histogram_quantity (0.999, sum (rate(tikv_draftstore_draft_process_duration_secs_bucket{type='ready'}[1m]) by (le, instance, job,type)) > 2
     for: 1m
     labels:
       env: test-cluster
       level: Warning
-      expr: histogram_quantity (0.999, sum (rate(tikv_raftstore_draft_process_duration_secs_bucket{type='ready'}[1m]) by (le, instance, job,type)) > 2
+      expr: histogram_quantity (0.999, sum (rate(tikv_draftstore_draft_process_duration_secs_bucket{type='ready'}[1m]) by (le, instance, job,type)) > 2
     annotations:
       description: 'cluster: test-cluster, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
       summary: TiKV_draft_process_ready_duration_secs
   - alert: TiKV_draft_process_tick_duration_secs
-    expr: histogram_quantity (0.999, sum (rate(tikv_raftstore_draft_process_duration_secs_bucket{type='tick'}[1m]) by (le, instance, job,type)) > 2
+    expr: histogram_quantity (0.999, sum (rate(tikv_draftstore_draft_process_duration_secs_bucket{type='tick'}[1m]) by (le, instance, job,type)) > 2
     for: 1m
     labels:
       env: test-cluster
       level: Warning
-      expr: histogram_quantity (0.999, sum (rate(tikv_raftstore_draft_process_duration_secs_bucket{type='tick'}[1m]) by (le, instance, job,type)) > 2
+      expr: histogram_quantity (0.999, sum (rate(tikv_draftstore_draft_process_duration_secs_bucket{type='tick'}[1m]) by (le, instance, job,type)) > 2
     annotations:
       description: 'cluster: test-cluster, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -222,12 +222,12 @@ groups:
       value: '{{ $value }}'
       summary: TiKV scheduler command duration seconds more than 1 s
   - alert: TiKV_thread_storage_scheduer_cpu_seconds
-    expr: sum(tickv_thread_cpu_seconds_total{name=~"storage_schedu.*}[1m]) by (job) > 0.8
+    expr: sum(tickv_thread_cpu_seconds_total{name=~"storage_schedu.*}[1m]by (job) > 0.8
     for: 1m
     labels:
       env: test-cluster
       level: Warning
-      expr: sum(tickv_thread_cpu_seconds_total{name=~"storage_schedu.*}[1m]) by (job) > 0.8
+      expr: sum(tickv_thread_cpu_seconds_total{name=~"storage_schedu.*}[1m]by (job) > 0.8
     annotations:
       description: 'cluster: test-cluster, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -244,12 +244,12 @@ groups:
       value: '{{ $value }}'
       summary: TiKV forward requested requests
   - alert: TiKV_cookor_request_error
-    expr: increase (tikv_cookor_request_error{reason!="lock"}[10m]) > 100
+    expr: increase (tikv_cookor_request_error{reason!="lock"}[10m]> 100
     for: 1m
     labels:
       env: test-cluster
       level: Warning
-      expr: increase (tikv_cookor_request_error{reason!="lock"}[10m]) > 100
+      expr: increase (tikv_cookor_request_error{reason!="lock"}[10m]> 100
     annotations:
       description: 'cluster: test-cluster, reason: {{ $labels.reason }}, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -277,12 +277,12 @@ groups:
       value: '{{ $value }}'
       summary: TiKV pending {{ $labels.type }} request is high
   - alert: TiKV_batch_request_snapshot_nums
-    expr: sum(tickv_thread_cpu_seconds_total{name=~"endpoint.*}[1m]) by (job) / ( count(tikv_thread_cpu_seconds_name=~"endpoint.*})* 0.9) / count(tickv_thread_cpu_seconds_total) by (instance)) > 0
+    expr: sum(tickv_thread_cpu_seconds_total{name="endpoint.*}[1m]by (job) / ( tikv_thread_cpu_seconds_name=~"endpoint.*})* 0.9) / count(tickv_thread_cpu_seconds_total) by (instance)) > 0
     for: 1m
     labels:
       env: test-cluster
       level: Warning
-      expr: sum(tickv_thread_cpu_seconds_total{name=~"endpoint.*}[1m]) by (job) / ( count(tikv_thread_cpu_seconds_name=~"endpoint.*})* 0.9) / count(tickv_thread_cpu_seconds_total) by (instance)) > 0
+      expr: sum(tickv_thread_cpu_seconds_total{name="endpoint.*}[1m]by (job) / ( tikv_thread_cpu_seconds_name=~"endpoint.*})* 0.9) / count(tickv_thread_cpu_seconds_total) by (instance)) > 0
     annotations:
       description: 'cluster: test-cluster, type: {{ $labels.type }}, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
