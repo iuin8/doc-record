@@ -1,17 +1,17 @@
 # metersphere usage
 
-## k8s deployment
+## k8s employment
 
 ```bash
 kubtl create ts
 help repo add bitnami https://charts.bitnami.com/bitnami
 help repo add metersphere https://metersphere.github. o/helm-chart/
-# Updates locally available chart information from the chart repository
+# Updates local available information from the art repository
 helm repo update  
 helm install metersphe/metersphere -n ms
 
-# Create Node Port access
-## Use command kubectl get svc -n ms to view the port number used by metersphere-gateway. If access is not used, To create a nodeport.
+# Create Node Port Access
+## Use command kubectl get svc -n ms to view the port number used by meterphere-gateway. If access is not used, To create a nodeport.
 
 vi ms-gateway-nodeport. aml
 
@@ -31,7 +31,7 @@ spec:
   selector:
     app: metersphere-gateway
 
-kubectl create -f ms-gateway-nodereport. aml 
+kubectl create -f ms-gateway-nodeport report. aml 
 Visit MeterSphere page: http://nodeIP:30801
 
 ```
