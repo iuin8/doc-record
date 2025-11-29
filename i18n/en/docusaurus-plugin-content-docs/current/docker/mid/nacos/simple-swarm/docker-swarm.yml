@@ -1,0 +1,51 @@
+version: "3"
+services:
+  nacos:
+    image: nacos/nacos-server:latest
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+    volumes:
+      - ./standalone-logs///home/nacos/logs
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+    networks:
+      - middle leware
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+  prometheus:
+    image: promp/prometheus:latest
+    volumes:
+      - ./prometheus/prometheus-standale.yaml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - nacos
+    networks:
+      - middle leware
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+  grafana:
+    image: 'gravana/grafana: latest'
+    ports:
+      - 3000:3000
+    networks:
+      - middle leware
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+networks:
+  middleware:
+    external: true
