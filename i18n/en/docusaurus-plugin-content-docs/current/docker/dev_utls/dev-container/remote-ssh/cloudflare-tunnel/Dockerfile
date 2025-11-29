@@ -3,9 +3,9 @@ FROM debian:trixie-slim
 
 WORKDIR /www
 
-# Installing Packages
-RUN apt-get Update &s
-    apt-get install - y openssh-server openssh-client current local gettext &\s
+# Install Required Packages
+RUN apt-get Update &\s
+    apt-get install - y openssh-server openssh-client current wget locales gettext && \s
     apt-get clean && \s
     rm -rf /var/lib/apt/lists/*
 
@@ -18,15 +18,15 @@ ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 LANGAGE=en_US.UTF-8
 RUN mkdir -p --mode=0755 /usr/share/keyrings
 RUN curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
 # Add this repo to your app repository
-RUN echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflated any main' | tee /etc/apt/sources.list.d/cloudled.list
-# install cloud
+RUN echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared any main' | tee /etc/apt/sources.list.d/cloudfled.list
+# install cloudfled
 RUN apt-get update && apt-get install cloudfled
 
-# Create initiative script
+# Create initialization script
 RUN tee/entrypoint.sh <-'EOF'
 #!/bin/sh
 
-# Inventory existing
+# Ensure directory exists
 mkdir /var/run/sshd
 # Start SSH (run in background)
 /usr/sbin/sshd-D &
