@@ -3,7 +3,7 @@
 ```shell
 # View build process command
 docker history a10
-# See zk set the environment variable to be used in docker-entrypoint. h files below to give an environmental variable that can be modified when using this image to start a container.
+# See zk set the environment variable to be used in docker-entrypoint.sh files below to give an environmental variable that can be modified when using this image to start a container.
 ```
 
 ## Docker-entrypoint.sh file reference (from zk containers)
