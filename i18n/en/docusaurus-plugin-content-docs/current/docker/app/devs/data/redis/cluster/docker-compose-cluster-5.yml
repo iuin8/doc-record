@@ -1,0 +1,111 @@
+version: '3.8'
+# 部署多主多从(测试版)
+services:
+  redis1:
+    image: redis:6.0
+    networks:
+      - middle leware
+    ports:
+      - 7001:7001
+    command: bash -c "echo 'port 7001' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes' >> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdis.conf && cat redis.conf && rediso-server disdisdis.conf"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+  redis2:
+    image: redis:6.0
+    networks:
+      - middle leware
+    ports:
+      - 7002:7002
+    command: bash -c "echo 'port 7002' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes' >> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdis.conf && cat redis.conf && rediso-server disdisdis.conf"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+  redis3:
+    image: redis:6.0
+    networks:
+      - middle leware
+    ports:
+      - 7003:7003
+    command: bash -c "echo 'port 7003' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes' >> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdis.conf && cat redis.conf && rediso-server disdisdis.conf"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+  redis4:
+    image: redis:6.0
+    networks:
+      - middle leware
+    ports:
+      - 7004:7004
+    command: bash -c "echo 'port 7004' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes' >> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdis.conf && cat redis.conf && rediso-server disdisdis.conf"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+  redis5:
+    image: redis:6.0
+    networks:
+      - middle leware
+    ports:
+      - 7005:7005
+    command: bash -c "echo 'port 7005' > redis.conf &&echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes' >> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdis.conf && cat redis.conf && rediso-server disdisdis.conf"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+  redis6:
+    image: redis:6.0
+    networks:
+      - middle leware
+    ports:
+      - 7006:7006
+    command: bash -c "echo 'port 7006' > redis.conf &echo 'bind 0.0.0.0' >> redis. onf && echo 'protected-mode no' >> redis.conf &echo 'cluster-enabled yes' >> redis. onf && echo 'appendonly yes' >> redis.conf &echo 'requirepass foobared' >> redis. onf && echo 'masterauh foobared' >> resdis.conf && cat redis.conf && rediso-server disdisdis.conf"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+  redis-cluster:
+    image: redis:6.0
+    networks:
+      - middle leware
+    command: bash -c "redis-cli --cluster create redis1:7001 redis2:702 redis3:703 redis4:704 redis5:7006 --cluster-replicas 1 - a foobar<<< 'yes'"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+networks:
+  middleware:
+    external: true
+# 需创建网络，看/doc/docker-networks.md文件
+# 问题: redis1找不到这些地址
