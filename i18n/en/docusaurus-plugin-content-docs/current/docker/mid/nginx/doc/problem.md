@@ -1,6 +1,6 @@
 # nginx related issues
 
-## Image access question
+## Image access path question
 
 ```shell
 # 访问路径：
@@ -17,7 +17,7 @@ location /images {
 }
 ```
 
-## Severe requests head
+## Severe request headers
 
 - 431 Request Header Fields Too Large
 
@@ -28,7 +28,7 @@ FTP LO
 }
 ```
 
-## nginx causes problems with Chinese characteristics
+## nginx causes problems with Chinese characters
 
 ```shell
 # 该配置，如果url路径上有中文会导致中文字符乱码问题
