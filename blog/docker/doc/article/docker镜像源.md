@@ -3,6 +3,8 @@
 
 [参考文章](https://developer.aliyun.com/article/653081)
 
+<!-- truncate -->
+
 ```bash
 # Docker 官方中国区
 # https://registry.docker-cn.com

@@ -5,6 +5,8 @@
 
 [镜像地址](https://linuxmirrors.cn/)
 
+<!-- truncate -->
+
 ```bash
 # 是用root命令执行
 # 软件源一键更换

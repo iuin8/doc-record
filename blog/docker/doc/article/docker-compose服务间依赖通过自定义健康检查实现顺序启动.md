@@ -3,6 +3,8 @@
 
 Docker Compose中的`condition: service_healthy`配置是用来判断依赖的服务是否健康的。当一个服务依赖于另一个服务时，可以使用`depends_on`和`condition: service_healthy`来确保依赖的服务已经健康启动。
 
+<!-- truncate -->
+
 下面是关于如何判断服务是否健康的一些相关内容：
 
 1. 健康检查命令：在Dockerfile或docker container run命令中，可以使用`HEALTHCHECK`来定义容器的健康检查命令[[1]](https://blog.csdn.net/weixin_48447848/article/details/122632562)。健康检查命令可以是任何能够返回0或非0退出代码的命令，例如使用`curl`命令检查服务是否可访问。

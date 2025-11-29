@@ -1,6 +1,8 @@
 
 # ssh
 
+<!-- truncate -->
+
 - [SSH 隧道简明教程](https://www.lixueduan.com/posts/linux/07-ssh-tunnel/)
   - 动态转发
     - 请求地址为192.168.1.100:3000，则通过 SSH 转发的请求地址也是192.168.1.100:3000。

@@ -3,6 +3,8 @@
 
 [参考文章](http://codefun007.xyz/a/article_detail/2392.htm)
 
+<!-- truncate -->
+
 ```bash
 
 watch java.sql.Connection prepareStatement '{params,throwExp}'    -x 3 
