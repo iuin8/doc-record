@@ -7,15 +7,15 @@
 ```shell
 # Demonstrate root
 $ sudo su
-# First update system
+# First Update system
 $ apt update && apt full-upgrade -y
 # Install certbot
 $ apt install certbot
-# Start signature Email with domain name converted to your own
-$ certbot certonly --standalone-n --agree-tos --email webmaster@abc. om --preference-challenges HTML -d dns.abc.com
+# Start sign with email domain name consigned to your own
+$ certbot --standalone-n --agree-tos --email webmaster@abc. om --preference-challenges HTML -d dns.abc.com
 ```
 
-- Certificate automatic renewal
+- Certificates automatic regeneration
 
 ```shell
 # 先測試看看自動更新證書有無問題，下面這一條指令會測試去更新，並不會實際去更新
@@ -30,7 +30,7 @@ $ crontab -e
 
 ```
 
-- Use DNS Cloak setting on demand auto-switch on iOS
+- Use DNS Cloak setting on demand auto-witch on iOS
 
   [参考文章](https://www.jkg.tw/p2660/)
 
@@ -44,11 +44,11 @@ $ crontab -e
 
 ```text
 223.5.5.5
-119.29.29.29
+119.29.29
 114.114.114.114
 223.6.6
 2400:3200:1
 2400:3200:baba:1
-https://dns.alidns.com/dns-query
+https://dns.alids.com/dns-query
 tls://dns.alids.idns.com
 ```
