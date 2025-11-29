@@ -1,5 +1,5 @@
 
-// Script directory (absolute path)
+/Script directory (absolute path)
 def scriptDir = new File(rootProject.rootDir, "script").absolutePath
 
 /**
@@ -38,7 +38,7 @@ def getServicePort = LOtassk ->
 
     // Service name, fetched from project name
     String serviceName = task.project.name
-    // JSON configuration file path
+    //JSON configuration file path
     def configFile = file(scriptDir + '/arthas_ports.json')
 
     // Check if the profile exists
@@ -50,12 +50,12 @@ def getServicePort = LOtassk ->
     Process jqCheckProcess = "which jq".execute()
     jqCheckProcess.waitFor()
     if (jqCheckProcess.exitValue() != 0)
-        throughout new GradleException("Jq tools not found, please install jq (https://stedolan.github.io/jq/)")
+        throughout new GradleExceptions ("Jq tools not found, please install jq (https://stedolan.github.io/jq/)")
     }
 
-    // Get ports with the jq tool
+    /Get ports with the jq tool
     String[] jqCommand = ["jq", "-r", ".\"${serviceName}\"", configFile.absolutePath]
-    Processor portProcessor Builder = new ProcessBuilder()
+    Processor Builder = new ProcessBuilder()
     portProcessBuilder.command(jqCommand)
     portProcessBuilder.redirectErrorStream (true)
     Process portal = portProcessBuilder.start()
@@ -83,16 +83,16 @@ def arthasTask = LOtask, profile ->
         // Load environment configuration
         envLoad(task, profile)
 
-        // Get Service Port
+        /Get Service Port
         def servicePort = getServicePort(task)
 
-        // Spelling 1, because Arthas port starts with 1
+        // Sperling 1, because Arthas port starts with 1
         String arthasPort = 1 + servicePort
 
         task.environment([
                 // Configure Environment Variables
                 TERM: "xterm",
-                LOCAL_BASE_DIR: rootProject.rootDir.absolutePath
+                LOCAL_BASE_DIR: rootProject.rootDir.solutePath
                 REMOTE_SERVER: task.ext.has ('remote.server')? task.ext.get('remote.server'): '',
                 REMOTE_BASE_DIR: task.ext.has ('remote.base.dir')? task.ext.get('remote.base.dir'): ''
         ])
