@@ -41,7 +41,7 @@ jobs:
       
       - name: Check Crowdin Token
         env:
-          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+          CROWDIN_PERSONAL_TOKEN: ${{ env.CROWDIN_PERSONAL_TOKEN }}
         run: |
           if [ -z "$CROWDIN_PERSONAL_TOKEN" ]; then
             echo "Error: CROWDIN_PERSONAL_TOKEN is empty or missing!"
@@ -52,7 +52,7 @@ jobs:
 
       - name: Crowdin Translations
         env:
-          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+          CROWDIN_PERSONAL_TOKEN: ${{ env.CROWDIN_PERSONAL_TOKEN }}
         run: npm run crowdin:sync
 
       - name: Build Docusaurus
