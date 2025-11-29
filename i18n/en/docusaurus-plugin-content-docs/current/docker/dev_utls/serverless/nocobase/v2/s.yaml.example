@@ -1,11 +1,11 @@
 edition: 1.0.0
-Name: nobobase-app
+Name: nobas-app
 Access: "default"
 
 vars: # Global Variables
   region: {region}
   Service:
-    Name: "nobobaseService"
+    Name: "nobaseService"
     nasConfig: auto
 
 Services:
@@ -18,7 +18,7 @@ Services:
       region: ${vars.region}
       service: ${vars.service}
       Function:
-        Name: nobobaseFc
+        Name: nobaseFc
         runtime: custom-container
         timeout: 60
         memorySize: 512
@@ -42,5 +42,5 @@ Services:
         - domainName: Auto
           protocol: HTTP
           RoteConfigs:
-            - path:/*
+            - path:*
               
