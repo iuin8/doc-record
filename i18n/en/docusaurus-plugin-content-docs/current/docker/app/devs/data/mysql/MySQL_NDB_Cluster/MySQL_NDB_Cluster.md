@@ -2,4 +2,4 @@
 
 ## Related links
 
-- [MySQL NDB Cluster employment using a docker compose](https://blog.csdn.net/User287/article/details/130110900)
+- [MySQL NDB Cluster deploys using a docker compose](https://blog.csdn.net/User287/article/details/130110900)
