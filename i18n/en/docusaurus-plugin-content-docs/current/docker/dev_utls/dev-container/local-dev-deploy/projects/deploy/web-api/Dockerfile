@@ -9,9 +9,9 @@ ENV TZ=Asia/Shanghai
 
 ENV https_proxy="http://10.0.16.17:7890" http_proxy="http://10.0.16.17:7890" all_proxy="socks5://10.0.16.17:7890"
 
-RUN rm -rf webapps/* ``
-    &&apk update
-    &&apk add --update font-adobe-100dpi ttf-dejavu fontconfig \.
+RUN rm -rf webapps/* ```
+    &apk update
+    &apk add --update font-adobe-100dpi ttf-dejavu fontconfig \.
     && rm -rf /etc/apk/cache/*
 
 ADD ./target/*.war webapps/web-api.war
