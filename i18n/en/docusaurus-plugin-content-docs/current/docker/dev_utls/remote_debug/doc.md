@@ -1,6 +1,6 @@
-# Use a docker from a remote server in idea to use a debug remote containing
+# Use a docker from a remote server in idea to use a debug remote container
 
-> Benefits: Use a remote docker containing to reduce pressure on the local environment and reduce some of the worst tools (e). LibreOffice) that you need to re-install Java programs in your local environment
+> Benefits: Use a remote docker container to reduce pressure on the local environment and reduce some of the worst tools (e.g. LibreOffice) that you need to rely on to install Java programs in your local environment
 
 ## Use Instructions
 
@@ -26,15 +26,15 @@ Host fa.intranet.company
 
 - idea configuration
 
-Autogenate base configuration
+Autogenerate base configuration
 by run![run](https://github.com/183461750/doc-record/blob/main/docs/docker/dev_utls/remote_debug/imgs/run.png?raw=true)
 
-This click the edit configuration to automatically build the jar package and start the docker contact.
+Then click the edit configuration to automatically build the jar package and start the docker container
 
 ![edit1](https://github.com/183461750/doc-record/blob/main/docs/docker/dev_utls/remote_debug/imgs/edit1.png?raw=true)
 ![edit2](https://github.com/183461750/doc-record/blob/main/docs/docker/dev_utls/remote_debug/imgs/edit2.png?raw=true)
 
-This is the time to process the configuration to run it. Click on it to bug the Java program in Docker.
+This is the time to process the configuration to run it. Click on it to debug the Java program in Docker.
 
 - Add debug configuration
 
@@ -42,4 +42,4 @@ This is the time to process the configuration to run it. Click on it to bug the 
 ![debug2](https://github.com/183461750/doc-record/blob/main/docs/docker/dev_utls/remote_debug/imgs/debug2.png?raw=true)
 ![debug3](https://github.com/183461750/doc-record/blob/main/docs/docker/dev_utls/remote_debug/imgs/debug3.png?raw=true)
 
-This will make it possible to use the Java program in the remote docker containing in idea.
+This will make it possible to use the Java program in the remote docker container in idea.
