@@ -46,6 +46,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          name: github-pages-fast
           path: ./build
 
   deploy-fast:
@@ -58,6 +59,8 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-fast
 
   # Stage 2: Crowdin Sync & Final Deploy
   # 在快速部署完成后，执行耗时的翻译同步，并再次部署最终版本
@@ -103,6 +106,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          name: github-pages-final
           path: ./build
 
   deploy-final:
@@ -115,3 +119,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-final
