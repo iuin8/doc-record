@@ -6,8 +6,8 @@
 
 ```bash
 # Execute the installation script (enter the password of the `default` user in the middle and whether the default user is allowed to access anywhere)
-# of the `LATEST_VERSION` environment variable in the script can fill in the version you want to install, default to the latest stable version (available here[https://github. om/ClickHouse/ClickHouse/tags])
-cash clickhouse-install.sh
+# of the `LATEST_VERSION` environment variable in the script can fill in the version you want to install, default to the latest stable version (available here[https://github.com/ClickHouse/ClickHouse/tags])
+bash clickhouse-install.sh
 # Launch
 sudo /etc/init.d/clickouse-server start
 # Connect
