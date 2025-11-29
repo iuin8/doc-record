@@ -7,9 +7,9 @@ yum -y remove erlang-*
 
 #Press Action
 
-#Install
+#Installing
 using repository to install 
- wget https://packages.com/erlang-solutions-2.0-1.noarch.rpm
+ wget https://packages.com/erlang-solutions-2. -1.noarch.rpm
 rpm -Uvh erlang-solutions-2.0-1.noarch.rpm
 
 #Manually add repository entry
@@ -18,12 +18,12 @@ rpm -import https://packages.erlang-solutions.com/rpm/erlang_solutions. Sc
 # Clear existing yum cache
 yum clean all
 # Generate cache
-yum makecache
+yum makeecache
 # Check if configured yum repolist
-yum repolist
+yum polist
 
-#View erlang installation version
-yum list | grep erlang
+#View erlang install version version
+yum list | grep
 
 yum list erlang -showduplicates | sort -r
 
