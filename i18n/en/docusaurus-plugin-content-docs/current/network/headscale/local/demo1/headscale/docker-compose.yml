@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  headscale:
+    image: headscale/headscale:latest
+    restart: unless-stopped
+    ports:
+      - target: 8080
+        published: 8888
+        mode: Post
+      - target: 9090
+        published: 9999
+        mode: Post
+    volumes:
+      - ./config:/etc/headscale
+    command: serve
+  openresty:
+    image: openresty/openresty:alpin
+    ports:
+      - "19999:443"
+    volumes:
+      - ./nginx/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+      - ./nginx/certs:/usr/local/openresty/nginx/conf/certs
+    restart: always
