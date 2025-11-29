@@ -9,7 +9,7 @@ Services:
         Name: nobaseService
         role: acs:ram::{FC_ACCOUNT}:role/aliyunfcdefaultrole
       Function:
-        Name: nobobaseFc
+        Name: nobaseFc
         runtime: custom-container
         timeout: 60
         memorySize: 512
@@ -33,5 +33,5 @@ Services:
         - domainName: Auto
           protocol: HTTP
           RoteConfigs:
-            - path:/*
+            - path:*
               
