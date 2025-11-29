@@ -22,7 +22,7 @@ Li
 
 if [ -z "$IMAGE_NAMESPACE" ]
 then
-  echo "Argument IMAGE_NAMESPACE is required but not provided. Usage: $3 IMAGE_NAMEECE;"
+  echo "Argument IMAGE_NAMESPACE is required but not provided. Usage: $3 IMAGE_NAMEPACE;"
   exit 1
 Li
 
