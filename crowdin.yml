@@ -5,6 +5,7 @@ preserve_hierarchy: true
 languages_mapping: &languages_mapping
   two_letters_code:
     pt-BR: pt-BR
+    zh-TW: zh-Hant
 mdx_file_type: &mdx_file_type mdx_v1_2
 files:
   # 这里填默认语言, 在GitHub workflow中, 会通过npm run write-translations生成默认语言的国际化配置(导航, 页脚等), 这里会自动上传到crowdin中进行其他语言的国际化处理

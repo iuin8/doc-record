@@ -51,7 +51,7 @@ export default async function createConfig() {
 
     i18n: {
       defaultLocale: defaultLocale,
-      locales: [defaultLocale, 'en'],
+      locales: [defaultLocale, 'en', 'zh-Hant'],
       localeConfigs: {
         'zh-Hans': {
           label: '中文',
@@ -59,6 +59,10 @@ export default async function createConfig() {
         },
         'en': {
           label: 'English',
+          direction: 'ltr',
+        },
+        'zh-Hant': {
+          label: '繁體中文',
           direction: 'ltr',
         },
       },
