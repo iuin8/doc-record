@@ -1,9 +1,7 @@
 
 services:
   cloudflared-jumpbox:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: registry.cn-hangzhou.aliyuncs.com/iuin/ssh-cloudflared-jumpbox:latest
     environment:
       TZ: "Asia/Shanghai"
       token: 'xxx'
