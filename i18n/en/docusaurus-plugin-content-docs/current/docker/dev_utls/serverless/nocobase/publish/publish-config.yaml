@@ -1,0 +1,66 @@
+Type: Application
+Name: start-nobase
+Provider:
+  - Ali-Cloud
+Version: 0.1.16
+Description: Rapid deployment of a nobase function to Ariun function compute
+HomePage: https://github.com/183461750/nocobase
+Tags:
+  - Function Calculation
+  - Full Stack App
+Category: Full Stack App
+Service:
+  函数计算:
+    Authorities:
+      - AliyunFullAccess
+      - AliyunContainerRegistryFullAccess
+    Runtime: custominer
+Parameters:
+  type: Object
+  additionalProperties: false # 不允许增加其他属性
+  required:  # 必填项
+    - Region
+    - Service Name
+    - FunctionName
+    - imageNamespace
+  properties:
+    region:
+      title: Regions
+      type: String
+      default: cn-hangzhou
+      description: Create the country where the app is located
+      enum:
+        - cn-beijing
+        - cn-hangzhou
+        - cn-shanghai
+        - cn-qingdao
+        - cn-zhangjiakou
+        - cn-huhehaote
+        - cn-shenzhen
+        - cn-chengdu
+        - cn-hongkong
+        - ap-southeast-1
+        - ap-southeast-2
+        - ap-southeast-3
+        - ap-southeast-5
+        - ap-northeast-1
+        - eu-central-1
+        - eu-west-1
+        - us-test-1
+        - us-east-1
+        - ap-south-1
+    serviceName:
+      title: Service Name
+      type: String
+      default: nobobas-service
+      description: Service name, can only contain letters, numbers, underscores, and underscores. Cannot start with digits, underscores. Linear length between 1-128
+    functionName:
+      title: Function Name
+      type: String
+      default: noocobase-function
+      description: Function name, can only contain letters, numbers, underscores, and underscores. You cannot start with digits or underscores. The length is between 1 and 64
+    imageNamespace:
+      title: Namespace for mirror repositories
+      type: String
+      default: noocobase-namespace
+      description: The namespace of the mirror repository requires services in https://cr.console.aliyun.com/ , namespace for creating mirror repositories and setting up access vouchers
