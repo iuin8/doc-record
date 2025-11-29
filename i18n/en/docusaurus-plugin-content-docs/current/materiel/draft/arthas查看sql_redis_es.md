@@ -1,0 +1,41 @@
+# arthas command to see sql_redis_es spelling parameters
+
+[参考文章](http://codefun007.xyz/a/article_detail/2392.htm)
+
+```bash
+
+watch java.sql.Connection prepareStatement '{params,throwExp}'    -x 3 
+watch java.sql.Statement executeQuery '{params,throwExp}'    -x 3 
+
+watch org.apache.ibatis.mapping.BoundSql getSql '{params,returnObj,throwExp}'    -x 3 
+
+```
+
+- temp
+
+```bash
+
+watch java.sql.Statement executeQuery '{params,returnObj,throwExp}'  -n 5  -x 3 
+watch java.sql.Statement executeQuery '{params,returnObj,throwExp}'  -x 3 
+watch java.sql.Statement executeQuery '{params,returnObj,throwExp}'  -x 2
+# 查看select语句
+watch java.sql.Statement executeQuery '{params,returnObj,throwExp}'  -x 2 | grep select
+
+# 看到的是jpa的非本地sql
+watch javax.persistence.EntityManager createQuery '{params,returnObj,throwExp}'  -n 5  -x 3 
+
+# jpa(完整sql)
+watch java.sql.Statement executeQuery '{params,returnObj,throwExp}'  -x 2
+# mybatis plus (参数和sql分离)
+watch org.apache.ibatis.mapping.BoundSql <init> '{params,returnObj,throwExp}' -x 2
+
+# es
+# elasticsearch-rest-high-level-client-7.9.3.jar(jdk1.8)
+watch org.elasticsearch.client.RestHighLevelClient search '{params,throwExp}' -x 2
+# elasticsearch-java-8.13.4.jar(jdk17)
+watch co.elastic.clients.elasticsearch.ElasticsearchClient search '{params,returnObj,throwExp}'  -n 5  -x 2
+
+# redis
+watch org.springframework.data.redis.connection.RedisHashCommands hMSet '{params,returnObj,throwExp}'  -n 5  -x 3 
+
+```
