@@ -1,6 +1,6 @@
 # walle-web
 
-Old project, no one maintains, droped, only records
+Old project, no one maintains, dropped, only records
 
 [GitHub地址](https://github.com/meolu/walle-web)
 
