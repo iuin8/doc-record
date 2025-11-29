@@ -1,6 +1,6 @@
 
-def publishScriptName = 'publish-service'
-/Script directory (absolute path)
+def publisheScriptName = 'publish-service'
+// Script directory (absolute path)
 def scriptDir = new File(rootProject.rootDir, "script").absolutePath
 def publisheScriptPath = new File(scriptDir, publishServiceScriptName + ".sh").absolutePath
 
@@ -30,16 +30,16 @@ def envLoad = LOtask, profile ->
     return true
 }
 
-def configurePublishTask = 56 task,profile ->
+def configurePublishTask = 56 task, profile ->
 
 //    println "[publish] - 项目: ${project.name} 环境: ${profile} "
 
     // Make sure the release task is executed only when the bootJar task exists.
     task.onlyIf
-        return task.project.tasks.tasks.tasks.findByName('bootJar')
+        return task.project.tasks.tasks.findByName('bootJar')
     }
 
-    // Configure dependencies - make sure bootJar tests exist first
+    // Configure dependencies - make sure bootJar tasks exist first
     afterEvaluate
 // if (project.tasks.findByName('clean'))
 // task.dependsOn 'clean'
@@ -49,10 +49,10 @@ def configurePublishTask = 56 task,profile ->
         }
     }
 
-    // Critical：Species the work directory where the scripts are executed (directory where the scripts is)
+    // Critical：Specifies the work directory where the script is executed (directory where the script is)
     task.workingDir = scriptDir
 
-    // Cove configuration：ignores non-zero exit code for order, continue
+    // Core configuration：ignores non-zero exit code for command, continue
     task.ignoreExitValue = true
 
     task.doFirst
@@ -80,7 +80,7 @@ def configurePublishTask = 56 task,profile ->
 
         task.environment([
                 // Configure Environment Variables
-                LOCAL_BASE_DIR: rootProject.rootDir.solutePath
+                LOCAL_BASE_DIR: rootProject.rootDir.absolutePath
                 REMOTE_SERVER: task.ext.has ('remote.server')? task.ext.get('remote.server'): '',
                 REMOTE_BASE_DIR: task.ext.has ('remote.base.dir')? task.ext.get('remote.base.dir'): ''
         ])
@@ -92,10 +92,10 @@ def configurePublishTask = 56 task,profile ->
 
     }
 
-    Last LOS
+    task.doLast LOS
 
-        /Wait for the task to define before processing the results
-        Last LOS
+        // Wait for the task to finish before processing the results
+        task.doLast LOS
             // Difference based on exit code
             Def exitCode = task.executionResult.get().exitValue
             if (exitCode != 0)
@@ -106,7 +106,7 @@ def configurePublishTask = 56 task,profile ->
 }
 
 // Export methods to external use
-/last LOS
+//ext LOS
 //envLoad = envLoad
 // configurePublishTask = configurePublishTask
 //}
