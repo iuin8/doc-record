@@ -7,7 +7,7 @@ services:
       - redisdb
     ports:
       - 6379:6379
-    command: bash -c "echo 'port 6379' > redis.conf &echo 'requirepass foobared' >> redis.conf && echo 'masterauth foobared' >> redis.conf && cat disdisdisdisdisdis.conf && redisconnect
+    command: bash -c "echo 'port 6379' > redis.conf &echo 'requirepass foobared' >> redis.conf && echo 'masterauth foobared' >> redis.conf && cat redisdis.conf && redisconnect
     volumes:
       - re-master-v:/data
       - /etc/localtime:/etc/localtime:ro
@@ -22,7 +22,7 @@ services:
     networks:
       - redisdb
     command:
-      - echo 'slave-announcement-ip lave-1' >> redis.conf &&
+      - echo 'slave-announcement-ip slave-1' >> redis.conf &&
       - cat redis.conf &&
       - redis.conf"
     volumes:
@@ -39,7 +39,7 @@ services:
     networks:
       - redisdb
     command:
-      - echo 'slave-announcement-ip lave-2' >> redis.conf &&
+      - echo 'slave-announcement-ip slave-2' >> redis.conf &&
       - cat redis.conf &&
       - redis.conf"
     volumes:
