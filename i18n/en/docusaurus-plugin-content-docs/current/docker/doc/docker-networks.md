@@ -5,7 +5,7 @@
 network creation -d bridge midleware
 
 # swarm
-docker network creation -d overlay --attachable middle leware
+docker network creation -d overlay --attachable middle leare
 
 docker network creation --driver=overlay --gateway 192. 68.1.1 --subnet 192.168.1.0/24 --attachable my_network
 ```
