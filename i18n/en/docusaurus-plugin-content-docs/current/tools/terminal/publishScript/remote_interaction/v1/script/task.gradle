@@ -1,0 +1,81 @@
+
+Subprojects
+
+    def scriptDir = new File(rootProject.rootDir, "script").absolutePath
+
+    apply from: scriptDir + '/publish.gradle'
+    apply from: scriptDir + '/arthas.gradle'
+    apply from: scriptDir + '/log.gradle'
+
+    // Publish to specified environment (./gradlew publishToTest -Dprofile=dev(default development environment))
+    taskpublish(type: Exec)
+        // Set task group
+        group = 'remote'
+
+        def profile = project.hasProperty('profile')? project.property ('profile'): 'dev'
+
+        // Apply Public Configuration
+        configurePublishTask (it, profile)
+
+    }
+
+    // Publish to testenvironment
+    task publishToest(type: Execution)
+        // Set task group
+        group = 'remote'
+
+        def profile = 'test'
+
+        // Apply Public Configuration
+        configurePublishTask (it, profile)
+
+    }
+
+    // Publish to Demo environment
+    task publishToDemo (type: Execution)
+        // Set task group
+        group = 'remote'
+
+        def profile = 'demo'
+
+        // Apply Public Configuration
+        configurePublishTask (it, profile)
+
+    }
+
+    // testenvironment
+    tasks.register('arthasToTest', Exam)
+        // Set task group
+        group = 'remote'
+
+        def profile = 'test'
+
+        arthasTask(it, profile)
+    }
+
+    // Demo Environment
+    tasks.register('arthasToDemo', Exec)
+        // Set task group
+        group = 'remote'
+
+        def profile = 'demo'
+
+        arthasTask(it, profile)
+    }
+
+    // testenvironment
+    tasks.register('logToTest')
+        // Set task group
+        group = 'remote'
+
+        def profile = 'test'
+
+        logTask(it, profile)
+    }
+
+
+    // Post to Other Environments
+    // ...
+
+}
+
