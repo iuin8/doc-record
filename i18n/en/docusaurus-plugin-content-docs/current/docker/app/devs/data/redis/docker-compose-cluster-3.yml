@@ -1,0 +1,41 @@
+version: '3.4'
+# 部署哨兵（按多主多从配置）
+services:
+  sentinel:
+    image: redis
+    networks:
+      - redisdb
+    ports:
+      - 26379:26379
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    command:
+      - echo 'sentinel monitor master-1 10.0.2.12 7001 2' >> sentinel.conf &&
+      - echo 'sentinel monitor master-2 10.0.2.14 7002 2' >> sentinel.conf &&
+      - echo 'sentinel monitor master-3 10.0.2.16 7003 2' >> sentinel.conf &&
+      - echo 'sentinel down-after-milliseconds master-15000' >> sentinel.conf &&
+      - echo 'sentinel parallel-syncs master-1 1' >> sentinel.conf &&
+      - echo 'sentinel fail-timeout master-15000' >> sentinel.conf &&
+      - echo 'sentinel down-after-milliseconds master-25000' >> sentinel.conf &&
+      - echo 'sentinel parallel-syncs master-2 1' >> sentinel.conf &&
+      - echo 'sentinel fail-timeout master-25000' >> sentinel.conf &&
+      - echo 'sentinel down-after-milliseconds master-35000' >> sentinel.conf &&
+      - echo 'sentinel parallel-syncs master-31' >> sentinel.conf &&
+      - echo 'sentinel fail-timeout master-35000' >> sentinel.conf &&
+      - echo 'sentinel auth-pass master-1 foobared' >> sentinel.conf &&
+      - echo 'sentinel auth-pass master-2 foobared' >> sentinel.conf &&
+      - echo 'sentinel auth-pass master-3 foobared' >> sentinel.conf &&
+      - cat sentinel.conf &&
+      - redis-sentinel sentinel.conf"
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: On failure
+networks:
+  redisdb:
+    driver: overlay
+# Adding replica 10.0.2.20:7005 to 10.0.2.12:7001
+# Adding replica 10.0.2.3:7006 to 10.0.2.14:7002
+# Adding replica 10.0.2.18:7004 to 10.0.2.16:7003
