@@ -1,0 +1,119 @@
+
+def publisheScriptName = 'publish-service'
+// Script directory (absolute path)
+def scriptDir = new File(rootProject.rootDir, "script").absolutePath
+def publisheScriptPath = new File(scriptDir, publishServiceScriptName + ".sh").absolutePath
+
+/**
+ * Load environment configuration
+ * @param profile environment name
+ * @return successfully loaded
+ */
+def envLoad = LOtask, profile ->
+
+    def gradleEnvProp = rootProject.rootDir.absolutePath + "/gradle-${profile}.properties"
+    println "[publish][envLoad] - 项目: ${project.name} 环境: ${profile} 属性文件: ${gradleEnvProp}"
+
+    def envPropsFile = file(gradleEnvProp)
+
+    if (!envPropsFile.exists()
+        return false
+    }
+
+    if props = new Properties()
+    envPropsFile.withInputStream
+    props.each LOkey, value ->
+        task.ext.set(key, value)
+        // Print Log
+//        println "[publish] - 项目: ${project.name} 环境: ${profile} key: ${key} value: ${value} 服务器: ${project.ext.has('remote.server') ? project.ext('remote.server'): '} Base directory: ${project.ext.has('remote.base.dir')? project.ext('remote.base.dir') : '}'
+    }
+    return true
+}
+
+def configurePublishTask = 56 task, profile ->
+
+//    println "[publish] - 项目: ${project.name} 环境: ${profile} "
+
+    // Make sure the release task is executed only when the bootJar task exists.
+    task.onlyIf
+        return task.project.tasks.tasks.findByName('bootJar')
+    }
+
+    // Configure dependencies - make sure bootJar tasks exist first
+    afterEvaluate
+// if (project.tasks.findByName('clean'))
+// task.dependsOn 'clean'
+//        }
+        if (task.project.tasks.findByName('bootJ'))
+            task.dependsOn 'bootJar'
+        }
+    }
+
+    // Critical：Specifies the work directory where the script is executed (directory where the script is)
+    task.workingDir = scriptDir
+
+    // Core configuration：ignores non-zero exit code for command, continue
+    task.ignoreExitValue = true
+
+    task.doFirst
+
+        def scriptFile = file(publishServiceScriptPath)
+        if (!scriptFile.exists()
+            throw new GradleException("脚本文件不存在: ${publishServiceScriptPath}")
+        }
+        if (!scriptFile.canExecute()
+            throw new GradleException("脚本没有执行权限: ${publishServiceScriptPath}")
+        }
+
+        // Load environment configuration
+        envLoad(task, profile)
+
+        println "[publish][configurePublishTask] - 项目: ${task.project.name} 环境: ${profile} 服务器: ${task.ext.has('remote.server') ? task.ext.get('remote.server'): '} Base directory not set:${task.ext.has('remote.base.dir')? task.ext.get('remote.base.dir'): 'Unset'}'
+        if (!task.ext.has('remote.server'))
+            // Collect all extended properties information
+            def allProperties =[:]
+            task.extensions.extraProperties.properties.each LOs key, value ->
+                allProperties[key] = value
+            }
+            throw new GradleException("环境变量不存在，当前所有属性: ${allProperties}")
+        }
+
+        task.environment([
+                // Configure Environment Variables
+                LOCAL_BASE_DIR: rootProject.rootDir.absolutePath
+                REMOTE_SERVER: task.ext.has ('remote.server')? task.ext.get('remote.server'): '',
+                REMOTE_BASE_DIR: task.ext.has ('remote.base.dir')? task.ext.get('remote.base.dir'): ''
+        ])
+
+
+        // Execute command
+        task.commandLine 'bash', '-c', "chmod +x publish-service.sh"
+        task.commandLine 'bash', '-c', "./publish-service.sh ${task.project.name}"
+
+    }
+
+    task.doLast LOS
+
+        // Wait for the task to finish before processing the results
+        task.doLast LOS
+            // Difference based on exit code
+            Def exitCode = task.executionResult.get().exitValue
+            if (exitCode != 0)
+                println "注意：脚本执行返回非零退出码 ${exitCode}"
+            }
+        }
+    }
+}
+
+// Export methods to external use
+//ext LOS
+//envLoad = envLoad
+// configurePublishTask = configurePublishTask
+//}
+
+ext.scriptDir = scriptDir
+ext.publishServiceScriptPath = publishServiceScriptPath
+
+ext.envLoad = envLoad
+ext.configurePublishTask = configurePublishTask
+
