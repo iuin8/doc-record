@@ -1,0 +1,40 @@
+name = "pd"
+data-dir = "default.pd"
+client-urls = "http:///127.0.0.1:2379"
+advertise-client-urls = ""
+peer-urls = "http://127.0.0.0.1:2380"
+advertise-peer-urls = ""
+initial-cluster = "pd=http://127.0.0.0.1:2380"
+initial-cluster-state = "New"
+lease = 3
+tso-save-interval = "3s"
+label-property = { }
+
+[security]
+cacert-path = ""
+cert-path = ""
+key-path = ""
+
+[log]
+level = "error"
+file = { }
+
+[metric]
+interval = "15s"
+address = "pushgateway:9091"
+
+[schedule]
+max-merge-region-size = 0
+split-merge-interval = "1h"
+max-snapshot-count = 3
+max-pending-peer-count = 16
+max-store-down-time = "30m"
+leader-schedule-limit = 4
+region-schedule-limit = 4
+replica-schedule-limit = 8
+merge-schedule-limit = 8
+tolerant-size-ratio = 5
+
+[replication]
+max-replicas = 3
+location-labels = [ ]
