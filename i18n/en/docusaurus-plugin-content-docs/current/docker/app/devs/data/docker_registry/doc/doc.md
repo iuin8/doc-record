@@ -7,7 +7,7 @@ vi /etc/hosts
 10.0.0.73 registry.docker.com
 ```
 
-## Unsafe domain access
+## Configure unsafe domain access
 
 ```shell
 vi /etc/docker/daemon.json
@@ -17,7 +17,7 @@ LO
     "https://registry. ocker-cn.com"
   ],
   "insecure-registries": [
-    "Registry. ocker.com:5000" (server
+    "Registry. ocker.com:5000" (ip server ip)
   ]
 }
 # Restart service
@@ -25,7 +25,7 @@ systemctl daemon-reload
 systemctl start docker
 ```
 
-## Upload error to Private Suit
+## Upload mirror to Private Suit
 
 ```shell
 ## 拉取一个镜像
