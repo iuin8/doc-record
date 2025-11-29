@@ -1,4 +1,4 @@
-# Open Hands Usage
+# openHands Usage
 
 [github仓库](https://github.com/All-Hands-AI/OpenHands)
 
