@@ -4,7 +4,7 @@ services:
     image: nginx:1.20
     environment:
       TZ: "Asia/Shanghai"
-    command: bash -c "mkdir -p /usr/lib/nginx/proxy_tmp &&&\mkdir -p /usr/lib/nginx/prox/proxy_cache/imgcache &&&&&\chown -R nginx:nginx /usr/lib/nginx/proxy* &&/\/docker-entrypoint.sh nginx -g 'daemon off;'”
+    command: bash -c "mkdir -p /usr/lib/nginx/proxy_tmp &&&&\mkdir -p /usr/lib/nginx/prox/proxy_&&&&&&&&&&&&&&\/docker-entrypoint.sh nginx -g 'daemon off;'”
     networks:
       middleware:
     ports:
@@ -21,7 +21,7 @@ services:
       - "nginx_log:/var/log/"
       - "./conf/nginx.conf:/etc/nginx/nginx.conf"
       - "./conf/cors.conf:/etc/nginx/cors.conf"
-      - "./conf/conf.d//etc/nginx/conf.d/"
+      - "./conf/conf.d/etc/nginx/conf.d/"
       - "nginx_uploads:/etc/nginx/data/uploads"
 volumes:
   nginx_log:
