@@ -2,11 +2,13 @@
     "title": {
         "zh-Hans": "Doc Record",
         "zh-Hant": "Doc Record",
-        "en": "Doc Record"
+        "en": "Doc Record",
+        "ja": "Doc Record"
     },
     "tagline": {
         "zh-Hans": "个人文档记录",
         "zh-Hant": "個人文檔記錄",
-        "en": "Personal Documentation Record"
+        "en": "Personal Documentation Record",
+        "ja": "個人の文書記録"
     }
 }
