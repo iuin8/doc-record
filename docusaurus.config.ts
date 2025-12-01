@@ -18,13 +18,12 @@ export default async function createConfig() {
       'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css',
     ],
     scripts: [
+      'https://cdn.crowdin.com/jipt/jipt.js',
+    ],
+    headTags: [
       {
-        src: 'https://cdn.crowdin.com/jipt/jipt.js',
-        async: false,
-      },
-      {
+        tagName: 'script',
         innerHTML: "var _jipt = []; _jipt.push(['project', 'doc-record']);",
-        type: 'text/javascript',
       },
     ],
 
