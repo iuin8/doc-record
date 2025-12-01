@@ -23,6 +23,7 @@ export default async function createConfig() {
     headTags: [
       {
         tagName: 'script',
+        attributes: {},
         innerHTML: "var _jipt = []; _jipt.push(['project', 'doc-record']);",
       },
     ],
