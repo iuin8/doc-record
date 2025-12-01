@@ -17,6 +17,16 @@ export default async function createConfig() {
     stylesheets: [
       'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css',
     ],
+    scripts: [
+      {
+        src: 'https://cdn.crowdin.com/jipt/jipt.js',
+        async: false,
+      },
+      {
+        innerHTML: "var _jipt = []; _jipt.push(['project', 'doc-record']);",
+        type: 'text/javascript',
+      },
+    ],
 
     url: 'https://iuin8.github.io',
     baseUrl: '/doc-record',
