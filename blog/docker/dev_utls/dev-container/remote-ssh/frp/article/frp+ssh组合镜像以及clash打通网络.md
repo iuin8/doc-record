@@ -62,6 +62,10 @@ docker-compose up -d
 
 ## 编写docker-compose.yml(客户端)
 
+共用端口的方式, [参考文章](https://gofrp.org/zh-cn/docs/examples/multiple-ssh-over-same-port/)
+
+PS: 自定义域名需要配合`proxycommand`代理使用`ssh -o 'proxycommand socat - PROXY:x.x.x.x:%h:%p,proxyport=5002' test@machine-a.example.com`
+
 ```yml
 # vi /www/dev-jumpbox/client/docker-compose.yml
 services:
@@ -76,7 +80,37 @@ services:
       client_name: '"jumpboxc-ssh-fa"'
       customDomains: '["fa.intranet.company"]'
     volumes:
-      - ./.ssh/:/root/.ssh/:ro
+      # 需要先创建这个文件, 不然会自动创建为文件夹
+      - ./.ssh/authorized_keys:/root/.ssh/authorized_keys:ro
+    restart: unless-stopped
+
+```
+
+不想要多配置个`proxycommand`的话, 用下面的方式会简单点, 但需要独占端口
+
+```bash
+
+services:
+  dev-jumpbox:
+    image: registry.cn-hangzhou.aliyuncs.com/iuin/dev-jumpbox:frpc-ssh-v6.1
+    container_name: dev-jumpbox
+    environment:
+      TZ: "Asia/Shanghai"
+      serverAddr: '"55.44.33.33"'
+      client_title: proxies
+      serverPort: 18000
+      auth_token_line: auth.token = "jumpboxs-ssh"
+      client_name: '"fa.intranet.company"'
+      client_type: '"tcp"'
+      localIP_proxies_line: localIP="127.0.0.1"
+      localPort_proxies_line: localPort=22
+      # 独占端口方式, 需要外网防火墙开放这个端口
+      remotePort_proxies_tcp_line: remotePort=12202
+    extra_hosts:
+      - "container.host:host-gateway"
+    volumes:
+      # 需要先创建这个文件, 不然会自动创建为文件夹
+      - ./.ssh/authorized_keys:/root/.ssh/authorized_keys:ro
     restart: unless-stopped
 
 ```
