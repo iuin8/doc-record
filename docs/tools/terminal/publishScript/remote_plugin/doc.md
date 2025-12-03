@@ -91,6 +91,7 @@ service:
     order-service: 1111
   start:
     command: $REMOTE_BASE_DIR/$SERVICE_NAME/$SERVICE_NAME-start.sh
+    # command: sudo systemctl restart $SERVICE_NAME
   env:
     JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:3$SERVICE_PORT
 
