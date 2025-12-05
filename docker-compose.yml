@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  doc-record:
+    build: .
+    container_name: doc-record
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    networks:
+      - doc-network
+
+networks:
+  doc-network:
+    driver: bridge

@@ -150,9 +150,9 @@ export default async function createConfig() {
       metadata: [{ name: 'twitter:card', content: 'summary' }],
       navbar: {
         hideOnScroll: true,
-        title: 'Doc Record',
+        title: '随猿Fa笔记',
         logo: {
-          alt: 'Doc Record Logo',
+          alt: '随猿Fa笔记 Logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -203,7 +203,7 @@ export default async function createConfig() {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Doc Record. Built with <a href="https://docusaurus.io" target="_blank" rel="noopener noreferrer">Docusaurus</a>.`,
+        copyright: `Copyright © ${new Date().getFullYear()} 随猿Fa笔记. Built with <a href="https://docusaurus.io" target="_blank" rel="noopener noreferrer">Docusaurus</a>.`,
       },
       prism: {
         theme: prismThemes.github,
