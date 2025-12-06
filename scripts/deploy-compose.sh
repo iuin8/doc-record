@@ -14,7 +14,6 @@ echo "🚀 Starting deployment with docker-compose..."
 echo "📤 Syncing files to server..."
 rsync -avz --delete \
   --exclude 'node_modules' \
-  --exclude 'build' \
   --exclude '.git' \
   --exclude '.cursor' \
   ./ $SERVER:$DEPLOY_DIR/
