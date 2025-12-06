@@ -1,4 +1,3 @@
-version: '3.5'
 services:
   jenkins:
     image: jenkins/jenkins:lts-alpine
@@ -12,9 +11,18 @@ services:
     environment:
       TZ: "Asia/Shanghai"
       JAVA_OPTS: "-Dsun.jnu.encoding=UTF-8 -Dfile.encoding=UTF-8"
-      https_proxy: http://10.0.16.17:7890
-      http_proxy: http://10.0.16.17:7890
-      all_proxy: socks5://10.0.16.17:7890
+      # 代理环境变量
+      HTTPS_PROXY: http://host.docker.internal:9093
+      HTTP_PROXY: http://host.docker.internal:9093
+      ALL_PROXY: socks5://host.docker.internal:9093
+      # 小写版本也需要设置，某些工具可能只识别小写
+      https_proxy: http://host.docker.internal:9093
+      http_proxy: http://host.docker.internal:9093
+      all_proxy: socks5://host.docker.internal:9093
+      # 不需要代理的域名
+      NO_PROXY: "localhost,127.0.0.1,*.local,host.docker.internal"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - target: 8080
         published: 18080
@@ -28,9 +36,9 @@ services:
       restart_policy:
         condition: on-failure
 
+volumes:
+  jenkins_home:
+
 networks:
   middleware:
     external: true
-
-volumes:
-  jenkins_home:
