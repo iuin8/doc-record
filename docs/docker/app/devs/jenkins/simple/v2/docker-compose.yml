@@ -27,8 +27,8 @@ services:
       - target: 8080
         published: 18080
         mode: host
-    networks:
-      - middleware
+    # networks:
+    #   - middleware
     deploy:
       replicas: 1
       update_config:
@@ -39,6 +39,6 @@ services:
 volumes:
   jenkins_home:
 
-networks:
-  middleware:
-    external: true
+# networks:
+#   middleware:
+#     external: true
