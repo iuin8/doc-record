@@ -2,6 +2,7 @@
 ---
 title: docker镜像源
 date: 2024-05-22
+slug: docker-mirror-source
 ---
 
 # docker镜像源
