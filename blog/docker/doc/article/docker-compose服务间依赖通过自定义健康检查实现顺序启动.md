@@ -1,3 +1,7 @@
+---
+title: docker-compose服务间依赖通过自定义健康检查实现顺序启动
+date: 2024-05-22
+---
 
 # docker-compose服务间依赖通过自定义健康检查实现顺序启动
 

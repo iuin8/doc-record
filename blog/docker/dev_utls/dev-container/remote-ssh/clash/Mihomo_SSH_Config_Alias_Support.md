@@ -1,3 +1,8 @@
+---
+title: Mihomo SSH Config Alias Support
+date: 2024-05-22
+---
+
 # Mihomo SSH Config Alias Support
 
 ## 🔗 项目信息
