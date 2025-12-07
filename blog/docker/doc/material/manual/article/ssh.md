@@ -1,4 +1,9 @@
 
+---
+title: ssh
+date: 2024-05-22
+---
+
 # ssh
 
 <!-- truncate -->
