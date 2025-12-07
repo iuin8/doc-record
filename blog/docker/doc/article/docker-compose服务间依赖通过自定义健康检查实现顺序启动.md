@@ -1,9 +1,12 @@
 ---
 title: docker-compose服务间依赖通过自定义健康检查实现顺序启动
 date: 2024-05-22
+slug: docker-compose-healthcheck
 ---
 
 # docker-compose服务间依赖通过自定义健康检查实现顺序启动
+
+<!-- truncate -->
 
 Docker Compose中的`condition: service_healthy`配置是用来判断依赖的服务是否健康的。当一个服务依赖于另一个服务时，可以使用`depends_on`和`condition: service_healthy`来确保依赖的服务已经健康启动。
 

@@ -1,9 +1,12 @@
 ---
 title: "(免费版)有没想过起个容器就能打通整个内网呢? 使用容器打通受限网络: cpolar+ssh组合镜像以及sshuttle打通网络"
 date: 2024-05-22
+slug: cpolar-ssh-container
 ---
 
 # (免费版)有没想过起个容器就能打通整个内网呢? 使用容器打通受限网络: cpolar+ssh组合镜像以及sshuttle打通网络
+
+<!-- truncate -->
 
 > 使用容器打通受限网络: cpolar+ssh组合镜像以及sshuttle实现打通任意环境所有内网服务(包括k8s)(web页面以及终端访问)
 
