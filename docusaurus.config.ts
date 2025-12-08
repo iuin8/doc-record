@@ -129,6 +129,7 @@ export default async function createConfig() {
           },
           blog: {
             showReadingTime: true,
+            include: ['**/*.{md,mdx}'],
             // Please change this to your repo.
             // Remove this to remove the "edit this page" links.
             editUrl: ({ locale, blogDirPath, blogPath }) => {
