@@ -4,7 +4,7 @@
 
 "随猿Fa笔记" 使用Docker容器化部署，基于nginx提供静态文件服务。
 
-**当前部署地址**: http://129.204.8.61:8080/doc-record/
+**当前部署地址**: http://129.204.8.61/doc-record/
 
 ---
 
@@ -17,7 +17,7 @@
                     └──────────┬──────────┘
                                │
                     ┌──────────▼──────────┐
-                    │   端口 8080         │
+                    │   端口 80           │
                     └──────────┬──────────┘
                                │
                     ┌──────────▼──────────┐
@@ -48,7 +48,7 @@
 ### 服务器环境
 - Docker & Docker Compose v2
 - SSH访问权限
-- 端口8080已开放
+- 端口80已开放
 
 ---
 
@@ -89,7 +89,7 @@ services:
     build: .
     container_name: doc-record
     ports:
-      - "8080:80"
+      - "80:80"
     restart: unless-stopped
     networks:
       - doc-network
@@ -171,6 +171,45 @@ bash scripts/deploy-with-proxy.sh --use-proxy
 
 ---
 
+## 脚本清单与用法
+
+- `scripts/deploy-compose.sh`
+  - 说明：使用 rsync 同步代码至服务器后，调用 `docker compose up -d --build` 构建并启动
+  - 适用：常规发布，服务器 Docker 网络正常
+  - 用法：`bash scripts/deploy-compose.sh`
+
+- `scripts/deploy.sh`
+  - 说明：在本地构建 Docker 镜像并打包为 tar，通过 `scp` 传至服务器后，直接 `docker run` 启动
+  - 适用：服务器无法构建或需要最快上线（不依赖 compose）
+  - 前置：本地已执行 `npm run build`
+  - 用法：`bash scripts/deploy.sh`
+
+- `scripts/deploy-with-proxy.sh`
+  - 说明：支持 `--use-proxy` 选项，构建时使用 SSH 转发的本地代理
+  - 适用：服务器拉取镜像或构建依赖缓慢
+  - 用法：`bash scripts/deploy-with-proxy.sh --use-proxy`
+
+- `scripts/deploy-daemon-proxy.sh`
+  - 说明：为 Docker daemon 写入 systemd 级别代理配置并重启，再执行构建与发布
+  - 适用：需要让 Docker 守护进程层面走代理
+  - 用法：`bash scripts/deploy-daemon-proxy.sh`
+
+- `scripts/deploy-fix-mirror.sh`
+  - 说明：临时清空 `daemon.json` 以绕过损坏的镜像站，完成构建后再恢复
+  - 适用：服务器配置了不可用的镜像源（如 dockerproxy.net 异常）
+  - 用法：`bash scripts/deploy-fix-mirror.sh`
+
+- `scripts/deploy-local-build.sh`
+  - 说明：本地构建镜像并传至服务器，然后用 compose 启动
+  - 注意：当前 compose 使用 `build: .`，不会直接使用传入的镜像；如需使用该脚本，请将服务器上的 `docker-compose.yml` 改为 `image: doc-record:latest`
+  - 用法：`bash scripts/deploy-local-build.sh`
+
+- `scripts/test-local.sh`
+  - 说明：本地构建并运行测试容器，映射 `8080->80` 验证页面
+  - 用法：`bash scripts/test-local.sh`，访问 `http://localhost:8080/doc-record`
+
+---
+
 ## 验证部署
 
 ### 1. 检查容器状态
@@ -181,7 +220,7 @@ ssh fa.internet.tencent 'docker ps | grep doc-record'
 
 预期输出：
 ```
-doc-record   Up X minutes   0.0.0.0:8080->80/tcp
+doc-record   Up X minutes   0.0.0.0:80->80/tcp
 ```
 
 ### 2. 测试HTTP响应

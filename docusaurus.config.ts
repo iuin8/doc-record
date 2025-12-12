@@ -206,7 +206,7 @@ export default async function createConfig() {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} 随猿Fa笔记. Built with <a href="https://docusaurus.io" target="_blank" rel="noopener noreferrer">Docusaurus</a>.`,
+        copyright: `Copyright © ${new Date().getFullYear()} 随猿Fa笔记. Built with <a href="https://docusaurus.io" target="_blank" rel="noopener noreferrer">Docusaurus</a>. | <a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">粤ICP备2025375388号-2</a>`,
       },
       prism: {
         theme: prismThemes.github,
