@@ -7,3 +7,7 @@
 ## goodlink
 
 [goodlink](https://gitee.com/konyshe/goodlink)
+
+## ddnsto
+
+[ddnsto](https://www.ddnsto.com/)

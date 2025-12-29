@@ -28,6 +28,12 @@ docker run -d --name ddns-go --restart=always --net=host -v /opt/ddns-go:/root j
 fa:tx.iuin888vip.icu
 ```
 
+```bash
+# 查看子域名的DNS解析记录(查看ip)
+nslookup fa.tx.iuin888vip.icu
+# 网页版: https://itango.tencent.com/app/data/huatuo?domain=fa.tx.iuin888vip.icu
+```
+
 ## TODO
 
 - 看看这个项目是否能用上[ddns-go](https://github.com/jeessy2/ddns-go)(done)
