@@ -43,6 +43,8 @@ chmod 600 ~/.ssh/authorized_keys
 
 # 自动运行隧道
 # 服务方式运行
+# 先卸载再安装，避免重复安装, 导致服务启动失败, 例如: 容器重启
+cloudflared service uninstall
 cloudflared service install ${token}
 # 前台运行
 # cloudflared --no-autoupdate tunnel --no-autoupdate run --token ${token}
