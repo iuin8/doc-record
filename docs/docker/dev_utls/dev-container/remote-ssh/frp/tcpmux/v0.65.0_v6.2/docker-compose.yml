@@ -1,0 +1,39 @@
+
+services:
+  dev-jumpbox:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dev-jumpbox-v0.65.0_v6.2
+    environment:
+      TZ: "Asia/Shanghai"
+      CONFIG: |-
+        {
+          "serverAddr": "55.44.33.33",
+          "serverPort": 18000,
+          "auth": {
+            "method": "token",
+            "token": "frps-ssh"
+          },
+          "loginFailExit": false,
+          "transport": {
+            "heartbeatInterval": 25,
+            "heartbeatTimeout": 120,
+            "poolCount": 10,
+            "tcpMux": true
+          },
+          "proxies": [
+            {
+              "name": "frpc-ssh-fa",
+              "type": "tcpmux",
+              "multiplexer": "httpconnect",
+              "customDomains": ["fa.intranet.company"],
+              "localIP": "127.0.0.1",
+              "localPort": 22
+            }
+          ]
+        }
+    restart: unless-stopped
+    volumes:
+      # 需要手动先创建这个文件, 不然会自动创建成目录
+      - ./.ssh/authorized_keys:/root/.ssh/authorized_keys:ro
