@@ -17,6 +17,9 @@ ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 LANGUAGE=en_US.UTF-8
 COPY ./jumpboxc ./jumpbox/
 RUN chmod +x /www/jumpbox/jumpboxc
 
+# 创建 ~/.ssh 目录并设置权限
+RUN mkdir -p ~/.ssh && chmod 700 ~/.ssh && touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
+
 # 创建初始化脚本
 RUN tee /entrypoint.sh <<-'EOF'
 #!/bin/sh
@@ -32,9 +35,8 @@ printf "%s" "$CONFIG" > /www/jumpbox/jumpboxc.json
 # 生成ssh公私钥
 ssh-keygen -t ed25519 -C "container" -f ~/.ssh/id_ed25519_container -N ""
 
-# 设置authorized_keys
-cat ~/.ssh/id_ed25519_container.pub > ~/.ssh/authorized_keys
-chmod 600 ~/.ssh/authorized_keys
+# 添加默认公钥
+cat ~/.ssh/id_ed25519_container.pub >> ~/.ssh/authorized_keys
 
 # 启动 jumpboxC
 /www/jumpbox/jumpboxc -c ${jumpboxc_config_path:-/www/jumpbox/jumpboxc.json}

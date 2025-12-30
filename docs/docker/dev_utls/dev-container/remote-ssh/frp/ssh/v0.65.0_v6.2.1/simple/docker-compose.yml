@@ -1,10 +1,8 @@
 
 services:
   dev-jumpbox:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: dev-jumpbox-v0.65.0_v6.2
+    image: registry.cn-hangzhou.aliyuncs.com/iuin/dev-jumpbox:v0.65.0_v6.2.1
+    container_name: dev-jumpbox
     environment:
       TZ: "Asia/Shanghai"
       CONFIG: |-

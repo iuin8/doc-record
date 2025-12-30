@@ -1,8 +1,10 @@
 
 services:
   dev-jumpbox:
-    image: registry.cn-hangzhou.aliyuncs.com/iuin/dev-jumpbox:v0.65.0_v6.2
-    container_name: dev-jumpbox
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dev-jumpbox-v0.65.0_v6.2
     environment:
       TZ: "Asia/Shanghai"
       CONFIG: |-
@@ -33,5 +35,14 @@ services:
         }
     restart: unless-stopped
     volumes:
-      # 需要手动先创建这个文件, 不然会自动创建成目录
-      - ./.ssh/authorized_keys:/root/.ssh/authorized_keys:ro
+      # 使用命名卷而不是bind mount
+      # 首次启动时会自动将容器内/root/.ssh的内容复制到卷中
+      - dev-jumpbox-ssh-config:/root/.ssh:ro
+
+  # 定义命名卷
+volumes:
+  dev-jumpbox-ssh-config:
+    # 可以选择添加外部选项，如果需要手动管理卷
+    # external: true
+    # 或者让Docker自动管理
+    driver: local
