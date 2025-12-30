@@ -5,6 +5,8 @@
 ```bash
 # 查看网络接口
 ip a
+# 查看Netplan配置
+netplan get
 # 编辑 Netplan 配置文件
 sudo nano /etc/netplan/01-netcfg.yaml
 # （文件名可能不同，如 00-installer-config.yaml）
