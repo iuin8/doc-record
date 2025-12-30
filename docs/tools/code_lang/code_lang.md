@@ -64,3 +64,40 @@ python main.py
 # 退出虚拟环境
 conda deactivate
 ```
+
+## java
+
+```bash
+# 查看已安装的JDK
+/usr/libexec/java_home -V
+
+# 或者
+ls /Library/Java/JavaVirtualMachines/
+
+# xpp导致xml解析异常, 导致日志xml文件解析异常, 排除xpp3依赖
+./gradlew :support-service:dependencies --configuration runtimeClasspath -Dorg.gradle.java.home=/Users/fa/Library/Java/JavaVirtualMachines/corretto-17.0.15/Contents/Home | grep -i xpp
+
+# 全局排除（推荐）
+# // 根项目 build.gradle
+# allprojects {
+#     configurations.all {
+#         exclude group: 'xpp3', module: 'xpp3'
+#     }
+# }
+
+# 首先找出是哪个依赖引入了 XPP：
+./gradlew :support-service:dependencyInsight --configuration runtimeClasspath -Dorg.gradle.java.home=/Users/fa/Library/Java/JavaVirtualMachines/corretto-17.0.15/Contents/Home --dependency xpp3
+# 然后针对性地排除：
+# implementation('org.springframework.boot:spring-boot-starter-web') {
+#     exclude group: 'xpp3', module: 'xpp3'
+# }
+
+# configurations.all {
+#     exclude group: 'xpp3'
+#     exclude module: 'xpp3'
+# }
+
+./gradlew clean build
+
+rm -rf ~/.gradle/caches
+```
