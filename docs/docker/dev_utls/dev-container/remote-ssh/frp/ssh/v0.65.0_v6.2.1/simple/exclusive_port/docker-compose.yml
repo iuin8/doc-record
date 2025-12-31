@@ -1,8 +1,8 @@
 
 services:
-  dev-jumpbox:
-    image: registry.cn-hangzhou.aliyuncs.com/iuin/dev-jumpbox:v0.65.0_v6.2.1
-    container_name: dev-jumpbox
+  jumpboxc:
+    image: registry.cn-hangzhou.aliyuncs.com/iuin/jumpboxc:v0.65.0_v6.2.1
+    container_name: jumpboxc
     environment:
       TZ: "Asia/Shanghai"
       CONFIG: |-
@@ -11,7 +11,7 @@ services:
           "serverPort": 18000,
           "auth": {
             "method": "token",
-            "token": "frps-ssh"
+            "token": "jumpbox"
           },
           "transport": {
             "heartbeatInterval": 15,
@@ -35,11 +35,11 @@ services:
     volumes:
       # 使用命名卷而不是bind mount
       # 首次启动时会自动将容器内/root/.ssh的内容复制到卷中
-      - dev-jumpbox-ssh-config:/root/.ssh:ro
+      - jumpboxc-ssh-config:/root/.ssh:ro
 
   # 定义命名卷
 volumes:
-  dev-jumpbox-ssh-config:
+  jumpboxc-ssh-config:
     # 可以选择添加外部选项，如果需要手动管理卷
     # external: true
     # 或者让Docker自动管理
