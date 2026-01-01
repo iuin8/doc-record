@@ -1,0 +1,22 @@
+
+services:
+  jumpboxs:
+    image: registry.cn-hangzhou.aliyuncs.com/iuin/jumpboxs:v0.65.0_v6.2.1
+    container_name: jumpboxs
+    network_mode: host
+    environment:
+      TZ: "Asia/Shanghai"
+      CONFIG: |-
+        {
+          "bindAddr": "0.0.0.0",
+          "bindPort": 7000,
+          "tcpmuxHTTPConnectPort": 7001,
+          "auth": {
+            "method": "token",
+            "token": "xxx"
+          },
+          "transport": {
+            "tcpMux": true
+          }
+        }
+    restart: unless-stopped
