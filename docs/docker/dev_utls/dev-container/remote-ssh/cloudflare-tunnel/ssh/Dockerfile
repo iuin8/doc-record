@@ -47,7 +47,7 @@ chmod 600 ~/.ssh/authorized_keys
 cloudflared service uninstall
 cloudflared service install ${token}
 # 前台运行
-# cloudflared --no-autoupdate tunnel --no-autoupdate run --token ${token}
+# cloudflared --no-autoupdate tunnel --no-autoupdate run --protocol auto --token ${token}
 
 # 保持容器运行
 tail -f /dev/null
