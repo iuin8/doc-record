@@ -1,0 +1,32 @@
+
+services:
+  jumpboxc:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jumpboxc
+    environment:
+      TZ: "Asia/Shanghai"
+      CONFIG: |-
+        authtoken: xxx
+        tunnels:
+          container_fa_ssh:
+            id: container_fa_ssh
+            proto: tcp
+            addr: "22"
+            bind_tls: both
+            start_type: enable
+          container_fa_website:
+            id: container_fa_website
+            proto: http
+            addr: "9200"
+            bind_tls: both
+            start_type: enable
+        email: xxx@qq.com
+    restart: unless-stopped
+    volumes:
+      - jumpboxc-ssh-config:/root/.ssh:ro
+
+volumes:
+  jumpboxc-ssh-config:
+    driver: local
