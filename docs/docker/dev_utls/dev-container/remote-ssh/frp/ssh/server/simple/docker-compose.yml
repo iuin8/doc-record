@@ -16,6 +16,7 @@ services:
             "method": "token",
             "token": "jumpbox"
           },
+          
           "transport": {
             "maxPoolCount": 5,
             "tcpMux": true,
@@ -26,6 +27,8 @@ services:
               "force": false
             }
           },
+          "userConnTimeout": 120,
+
           "tcpmuxHTTPConnectPort": 443,
           "vhostHTTPPort": 443,
           "webServer": {

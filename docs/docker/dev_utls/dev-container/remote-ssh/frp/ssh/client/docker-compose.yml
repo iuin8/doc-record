@@ -20,7 +20,10 @@ services:
             "heartbeatInterval": 25,
             "heartbeatTimeout": 120,
             "poolCount": 10,
-            "tcpMux": true
+            "tcpMux": true,
+
+            "dialServerTimeout": 60,
+            "tcpMuxKeepaliveInterval": 60
           },
           "proxies": [
             {
@@ -29,7 +32,19 @@ services:
               "multiplexer": "httpconnect",
               "customDomains": ["fa.intranet.company"],
               "localIP": "127.0.0.1",
-              "localPort": 22
+              "localPort": 22,
+
+              "transport": {
+                "useEncryption": true,
+                "useCompression": false
+
+              },
+              "healthCheck": {
+                "type": "tcp",
+                "timeoutSeconds": 10,
+                "maxFailed": 3,
+                "intervalSeconds": 30
+              }
             }
           ]
         }

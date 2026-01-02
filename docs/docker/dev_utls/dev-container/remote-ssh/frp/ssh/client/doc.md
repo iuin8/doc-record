@@ -44,3 +44,16 @@
     ]
 }
 ```
+
+## 后续优化
+
+```bash
+# 服务端配置
+# sudo nano /etc/ssh/sshd_config
+# 每60秒向客户端发送心跳
+ClientAliveInterval 60
+# 允许5次心跳失败（总共300秒）
+ClientAliveCountMax 5
+# 启用TCP保活
+TCPKeepAlive yes
+```
