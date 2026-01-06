@@ -52,7 +52,7 @@ services:
       TZ: "Asia/Shanghai"
     configs:
       - source: jumpboxc_config
-        target: /www/jumpbox/jumpboxc_config.json
+        target: /www/jumpbox/config/jumpboxc_config.json
         mode: 0777
     restart: unless-stopped
     volumes:

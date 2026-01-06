@@ -1,6 +1,6 @@
 FROM ubuntu:noble
 
-WORKDIR /www
+WORKDIR /www/jumpbox/
 
 # 安装必要的软件包
 RUN apt-get update && \
@@ -14,7 +14,7 @@ RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 LANGUAGE=en_US.UTF-8
 
 # 添加jumpbox
-COPY ./jumpboxc ./jumpbox/
+COPY ./jumpboxc /www/jumpbox/
 RUN chmod +x /www/jumpbox/jumpboxc
 
 # 创建 ~/.ssh 目录并设置权限
@@ -36,7 +36,8 @@ ssh-keygen -t ed25519 -C "container" -f ~/.ssh/id_ed25519_container -N ""
 cat ~/.ssh/id_ed25519_container.pub >> ~/.ssh/authorized_keys
 
 # 启动 jumpboxC
-/www/jumpbox/jumpboxc -c ${jumpboxc_config_path:-/www/jumpbox/jumpboxc_config.json}
+cd /www/jumpbox
+./jumpboxc -c ${jumpboxc_config_path:-./config/jumpboxc_config.json}
 
 # 保持容器运行
 tail -f /dev/null

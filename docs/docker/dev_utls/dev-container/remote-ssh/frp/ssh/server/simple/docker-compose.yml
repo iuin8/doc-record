@@ -37,13 +37,13 @@ configs:
 
 services:
   jumpboxs:
-    image: registry.cn-hangzhou.aliyuncs.com/iuin/jumpboxs:v0.66.0_v6.3.0
+    image: registry.cn-hangzhou.aliyuncs.com/iuin/jumpboxs:v0.66.0_v6.3.1
     container_name: jumpboxs
     network_mode: host
     environment:
       TZ: "Asia/Shanghai"
     configs:
       - source: jumpboxs_config
-        target: /www/jumpbox/jumpboxs_config.json
+        target: /www/jumpbox/config/jumpboxs_config.json
         mode: 0777
     restart: unless-stopped

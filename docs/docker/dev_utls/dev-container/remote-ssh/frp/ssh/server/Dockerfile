@@ -1,6 +1,6 @@
 FROM ubuntu:noble
 
-WORKDIR /www
+WORKDIR /www/jumpbox
 
 # 安装必要的软件包
 RUN apt-get update && \
@@ -14,7 +14,7 @@ RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 LANGUAGE=en_US.UTF-8
 
 # 添加jumpbox
-COPY ./jumpboxs ./jumpbox/
+COPY ./jumpboxs /www/jumpbox/
 RUN chmod +x /www/jumpbox/jumpboxs
 
 # 创建初始化脚本
@@ -22,7 +22,8 @@ RUN tee /entrypoint.sh <<-'EOF'
 #!/bin/sh
 
 # 启动 jumpboxs
-/www/jumpbox/jumpboxs -c ${jumpboxs_config_path:-/www/jumpbox/jumpboxs_config.json}
+cd /www/jumpbox
+./jumpboxs -c ${jumpboxs_config_path:-./config/jumpboxs_config.json}
 
 # 保持容器运行
 tail -f /dev/null

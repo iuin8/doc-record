@@ -44,13 +44,13 @@ configs:
 
 services:
   jumpboxc:
-    image: registry.cn-hangzhou.aliyuncs.com/iuin/jumpboxc:v0.66.0_v6.3.0
+    image: registry.cn-hangzhou.aliyuncs.com/iuin/jumpboxc:v0.66.0_v6.3.1
     container_name: jumpboxc
     environment:
       TZ: "Asia/Shanghai"
     configs:
       - source: jumpboxc_config
-        target: /www/jumpbox/jumpboxc_config.json
+        target: /www/jumpbox/config/jumpboxc_config.json
         mode: 0777
     restart: unless-stopped
     volumes:
