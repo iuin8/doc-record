@@ -1,0 +1,46 @@
+
+services:
+  jumpboxc:
+    image: registry.cn-hangzhou.aliyuncs.com/iuin/jumpboxc:v0.65.0_v6.2.1
+    container_name: jumpboxc
+    environment:
+      TZ: "Asia/Shanghai"
+      CONFIG: |-
+        {
+          "serverAddr": "55.44.33.33",
+          "serverPort": 18000,
+          "auth": {
+            "method": "token",
+            "token": "jumpbox"
+          },
+          "transport": {
+            "heartbeatInterval": 15,
+            "heartbeatTimeout": 60,
+            "poolCount": 5,
+            "tcpMux": true,
+            "tcpMuxKeepaliveInterval": 60
+          },
+          "loginFailExit": false,
+          "proxies": [
+            {
+              "name": "fa.intranet.company",
+              "type": "tcp",
+              "localIP": "127.0.0.1",
+              "localPort": 22,
+              "remotePort": 12222
+            }
+          ]
+        }
+    restart: unless-stopped
+    volumes:
+      # 使用命名卷而不是bind mount
+      # 首次启动时会自动将容器内/root/.ssh的内容复制到卷中
+      - jumpboxc-ssh-config:/root/.ssh:ro
+
+  # 定义命名卷
+volumes:
+  jumpboxc-ssh-config:
+    # 可以选择添加外部选项，如果需要手动管理卷
+    # external: true
+    # 或者让Docker自动管理
+    driver: local

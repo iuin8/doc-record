@@ -1,36 +1,57 @@
+configs:
+  jumpboxc_config:
+    content: |
+      {
+        "serverAddr": "jumpboxs.xx.com",
+        "serverPort": 7000,
+        "auth": {
+          "method": "token",
+          "token": "jumpbox"
+        },
+        "loginFailExit": false,
+        "transport": {
+          "heartbeatInterval": 25,
+          "heartbeatTimeout": 120,
+          "poolCount": 10,
+          "tcpMux": true,
+
+          "dialServerTimeout": 60,
+          "tcpMuxKeepaliveInterval": 60
+        },
+        "proxies": [
+          {
+            "name": "jumpboxc.intranet.com",
+            "type": "tcpmux",
+            "multiplexer": "httpconnect",
+            "customDomains": ["jumpboxc.intranet.com"],
+            "localIP": "127.0.0.1",
+            "localPort": 22,
+
+            "transport": {
+              "useEncryption": true,
+              "useCompression": false
+
+            },
+            "healthCheck": {
+              "type": "tcp",
+              "timeoutSeconds": 10,
+              "maxFailed": 3,
+              "intervalSeconds": 30
+            }
+          }
+        ]
+      }
 
 services:
   jumpboxc:
-    image: registry.cn-hangzhou.aliyuncs.com/iuin/jumpboxc:v0.65.0_v6.2.1
+    image: registry.cn-hangzhou.aliyuncs.com/iuin/jumpboxc:v0.66.0_v6.3.0
     container_name: jumpboxc
     environment:
       TZ: "Asia/Shanghai"
-      CONFIG: |-
-        {
-          "serverAddr": "55.44.33.33",
-          "serverPort": 18000,
-          "auth": {
-            "method": "token",
-            "token": "jumpbox"
-          },
-          "loginFailExit": false,
-          "transport": {
-            "heartbeatInterval": 25,
-            "heartbeatTimeout": 120,
-            "poolCount": 10,
-            "tcpMux": true
-          },
-          "proxies": [
-            {
-              "name": "jumpbox-fa",
-              "type": "tcpmux",
-              "multiplexer": "httpconnect",
-              "customDomains": ["fa.intranet.company"],
-              "localIP": "127.0.0.1",
-              "localPort": 22
-            }
-          ]
-        }
+    configs:
+      - source: jumpboxc_config
+        target: /www/jumpbox/jumpboxc_config.json
+        mode: 0777
     restart: unless-stopped
     volumes:
       # 使用命名卷而不是bind mount

@@ -24,6 +24,9 @@ RUN mkdir -p ~/.ssh && chmod 700 ~/.ssh && touch ~/.ssh/authorized_keys && chmod
 RUN tee /entrypoint.sh <<-'EOF'
 #!/bin/sh
 
+# 将 CONFIG 环境变量写入 jumpboxc.json
+printf "%s" "$CONFIG" > /www/jumpbox/jumpboxc.json
+
 # 确保目录存在
 [ ! -d "/var/run/sshd" ] && mkdir -p /var/run/sshd
 # 启动 SSH（后台运行）
@@ -36,7 +39,7 @@ ssh-keygen -t ed25519 -C "container" -f ~/.ssh/id_ed25519_container -N ""
 cat ~/.ssh/id_ed25519_container.pub >> ~/.ssh/authorized_keys
 
 # 启动 jumpboxC
-/www/jumpbox/jumpboxc -c ${jumpboxc_config_path:-/www/jumpbox/jumpboxc_config.json}
+/www/jumpbox/jumpboxc -c ${jumpboxc_config_path:-/www/jumpbox/jumpboxc.json}
 
 # 保持容器运行
 tail -f /dev/null

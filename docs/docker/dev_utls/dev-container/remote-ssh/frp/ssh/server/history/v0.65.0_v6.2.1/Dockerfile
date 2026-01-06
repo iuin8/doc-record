@@ -21,8 +21,11 @@ RUN chmod +x /www/jumpbox/jumpboxs
 RUN tee /entrypoint.sh <<-'EOF'
 #!/bin/sh
 
+# 将 CONFIG 环境变量写入 jumpboxs.json
+printf "%s" "$CONFIG" > /www/jumpbox/jumpboxs.json
+
 # 启动 jumpboxs
-/www/jumpbox/jumpboxs -c ${jumpboxs_config_path:-/www/jumpbox/jumpboxs_config.json}
+/www/jumpbox/jumpboxs -c ${jumpboxs_config_path:-/www/jumpbox/jumpboxs.json}
 
 # 保持容器运行
 tail -f /dev/null

@@ -1,0 +1,48 @@
+
+services:
+  jumpboxs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jumpboxs
+    network_mode: host
+    environment:
+      TZ: "Asia/Shanghai"
+      CONFIG: |-
+        {
+          "bindAddr": "0.0.0.0",
+          "bindPort": 443,
+          "kcpBindPort": 443,
+          "quicBindPort": 443,
+          "auth": {
+            "method": "token",
+            "token": "jumpbox"
+          },
+          "transport": {
+            "maxPoolCount": 5,
+            "tcpMux": true,
+            "tcpMuxKeepaliveInterval": 60,
+            "tcpKeepalive": 7200,
+            "heartbeatTimeout": 90,
+            "tls": {
+              "force": false
+            }
+          },
+          "tcpmuxHTTPConnectPort": 443,
+          "vhostHTTPPort": 443,
+          "webServer": {
+            "addr": "127.0.0.1",
+            "port": 7500,
+            "user": "admin",
+            "password": "admin"
+          },
+          "allowPorts": [
+            {
+              "start": 1000,
+              "end": 65535
+            }
+          ],
+          "maxPortsPerClient": 0,
+          "detailedErrorsToClient": true
+        }
+    restart: unless-stopped
