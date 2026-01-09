@@ -101,3 +101,13 @@ ls /Library/Java/JavaVirtualMachines/
 
 rm -rf ~/.gradle/caches
 ```
+
+```bash
+# 查看日志相关依赖
+./gradlew :support-service:dependencies --configuration runtimeClasspath  -Dorg.gradle.java.home=/Users/fa/Library/Java/JavaVirtualMachines/corretto-17.0.15/Contents/Home | grep -i "log\|slf4j"
+
+# 检查依赖是否有冲突
+# ./gradlew dependencies --configuration runtimeClasspath | grep -i "conflict\|duplicate"
+./gradlew :support-service:dependencies --configuration runtimeClasspath  -Dorg.gradle.java.home=/Users/fa/Library/Java/JavaVirtualMachines/corretto-17.0.15/Contents/Home | grep -i "conflict\|duplicate"
+
+```
