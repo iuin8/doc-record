@@ -2,6 +2,22 @@
 
 [macos-m1-utm](https://downloads.immortalwrt.org/releases/24.10.4/targets/armsr/armv8/immortalwrt-24.10.4-armsr-armv8-generic-ext4-combined-efi.img.gz)
 
+## 安装virt-viewer
+
+UTM使用`SPICE`共享剪切板
+
+```bash
+# 安装virt-viewer
+opkg install virt-viewer
+# virt-viewer 连接到 UTM 虚拟机
+# virt-viewer -c spice://127.0.0.1:5900
+virt-viewer spice://192.168.1.100:5900
+# virt-viewer没有的话, 可以使用tidy-viewer
+brew install tidy-viewer
+# 连接到 UTM 虚拟机
+tidy-viewer -c spice://192.168.1.100:5900
+```
+
 ## 网络配置
 
 ```bash
