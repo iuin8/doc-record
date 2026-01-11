@@ -21,7 +21,7 @@ services:
     devices:
       - /dev/net/tun:/dev/net/tun
     environment:
-      - OPENP2P_TOKEN=7000123469895967747
+      - OPENP2P_TOKEN=xxx
 ```
 
 ```bash
