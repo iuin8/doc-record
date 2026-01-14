@@ -111,3 +111,8 @@ rm -rf ~/.gradle/caches
 ./gradlew :support-service:dependencies --configuration runtimeClasspath  -Dorg.gradle.java.home=/Users/fa/Library/Java/JavaVirtualMachines/corretto-17.0.15/Contents/Home | grep -i "conflict\|duplicate"
 
 ```
+
+```bash
+# # 检查OCR依赖引入了哪些日志相关库
+./gradlew :support-service:dependencyInsight --configuration runtimeClasspath --dependency com.aliyun:ocr_api20210707:3.1.3  -Dorg.gradle.java.home=/Users/fa/Library/Java/JavaVirtualMachines/corretto-17.0.15/Contents/Home
+```
