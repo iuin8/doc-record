@@ -149,6 +149,63 @@ sudo apt install libgtk-3-0  # 确保GTK库完整
 ```
 
 ```bash
+# 移除 Snap 版 Firefox：
+sudo snap remove firefox
+# 添加 Mozilla 官方 PPA 源：
+sudo add-apt-repository ppa:mozillateam/ppa
+# 设置优先级（防止系统自动装回 Snap）： 执行以下命令创建一个配置文件：
+echo '
+Package: *
+Pin: release o=LP-PPA-mozillateam
+Pin-Priority: 1001
+' | sudo tee /etc/apt/preferences.d/mozilla-firefox
+# 安装原生 Firefox：
+sudo apt update
+sudo apt install firefox
+
+# 使用独立模式启动 (推荐)
+firefox --no-remote --new-instance
+# 或者，如果还是报错，可以尝试指定一个新的 Profile：
+firefox -P
+# 重启 Firefox 确保 Profile 生效
+sudo killall -9 firefox
+firefox --no-remote
+
+# 创建新配置文件
+firefox -CreateProfile "newprofile"
+
+# 使用新配置文件启动
+firefox -P "newprofile"
+```
+
+```bash
+# 赋予 Snap 特权权限（不一定成功）
+sudo snap refresh firefox --channel=stable/pkg-testing
+# 注意：即便如此，Snap 在处理 X11 转发路径（如 /tmp/.X11-unix）时依然经常出错。
+```
+
+```bash
+# 处理OpenGL/图形警告（可选）
+# 安装OpenGL和Mesa图形库
+sudo apt update
+sudo apt install -y mesa-utils libgl1-mesa-dri libglx-mesa0
+
+# 验证图形配置（非必需，仅用于确认）
+glxinfo | grep "direct rendering"  # 输出"direct rendering: Yes"表示正常
+```
+
+```bash
+# 安装原生 Google Chrome (非 Snap 版)
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo apt install ./google-chrome-stable_current_amd64.deb
+google-chrome --no-sandbox
+# 强制新实例：  (这会给 Chrome 指定一个临时文件夹存放数据，避开所有权限冲突。)
+google-chrome --user-data-dir=/tmp/chrome-remote --no-sandbox
+# --disable-gpu: 在远程 SSH 环境下，禁用硬件加速能大幅提高稳定性，减少闪退。
+google-chrome --no-sandbox --user-data-dir=/tmp/chrome_test --disable-gpu
+```
+
+```bash
 # 方法4：使用VNC
 # 启动VNC服务器
 vncserver :1 -geometry 1920x1080 -depth 24
