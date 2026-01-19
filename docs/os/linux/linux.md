@@ -22,3 +22,14 @@ mv CentOS-Base.repo CentOS-Base.repo.v2.bak
 wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 
 ```
+
+## locale 配置
+
+```bash
+# -bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8): No such file or directory
+# 中文乱码, 缺少中文字体
+apt install ttf-wqy-microhei
+# 安装 locale 相关工具
+# sudo yum install glibc-langpack-en
+
+```
