@@ -25,19 +25,36 @@ vncserver :1 -geometry 1920x1080 -depth 24 -localhost no
 ```bash
 # 永久配置方案
 
+sudo apt install xfce4 xfce4-goodies -y
+# 执行之后会有个选项
+# 建议选择：lightdm
+
 # 1. 创建VNC配置目录
 mkdir -p ~/.vnc
 
 # 2. 创建正确的xstartup脚本（关键修复）
 cat > ~/.vnc/xstartup << 'EOF'
-#!/bin/bash
+#!/bin/sh
 unset SESSION_MANAGER
 unset DBUS_SESSION_BUS_ADDRESS
-# exec startxfce4 &  # 使用XFCE桌面环境（轻量且稳定）
-# 启动基本X终端和窗口管理器
-xterm -geometry 80x24+10+10 -ls -title "VNC Terminal" &
-twm &
+export XDG_CURRENT_DESKTOP="GNOME"
+exec gnome-session
 EOF
+
+# # 可选：使用XFCE桌面环境（需安装XFCE组件）
+# cat > ~/.vnc/xstartup << 'EOF'
+# #!/bin/sh
+# unset SESSION_MANAGER
+# unset DBUS_SESSION_BUS_ADDRESS
+# exec startxfce4
+# EOF
+
+# # 可选：使用GNOME桌面环境（需安装GNOME组件）
+# #!/bin/sh
+# unset SESSION_MANAGER
+# unset DBUS_SESSION_BUS_ADDRESS
+# export XDG_CURRENT_DESKTOP="GNOME"
+# exec gnome-session
 
 # 3. 添加执行权限
 chmod +x ~/.vnc/xstartup
