@@ -30,6 +30,8 @@ pip --version
 
 - uv (当下的当红炸子鸡)(关键词：快！非常快！)(极速 (Rust 编写)、全能 (管版本 + 包 + 项目))
 
+官方一键脚本安装(curl -LsSf https://astral.sh/uv/install.sh | sh)
+
 - 其他选择
 
 全栈 (Node+Python+Ruby), 可选asdf
