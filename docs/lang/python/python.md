@@ -3,7 +3,7 @@
 
 ## 安装
 
-- 使用 pyenv 安装 Python3.12（适合多版本管理）
+- 使用 pyenv 安装 Python3.12（适合多版本管理）(是 Linux/macOS 上管理 Python 版本 的经典首选)
 
 > 涉及的场景记录: 在安装 DeerFlow 时, 用到了这种方式
 
@@ -27,6 +27,14 @@ pyenv global 3.12.4
 python --version
 pip --version
 ```
+
+- uv (当下的当红炸子鸡)(关键词：快！非常快！)(极速 (Rust 编写)、全能 (管版本 + 包 + 项目))
+
+- 其他选择
+
+全栈 (Node+Python+Ruby), 可选asdf
+
+只要环境隔离，不管版本, 可选Docker
 
 ## ipynb使用
 
