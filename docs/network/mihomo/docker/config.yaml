@@ -2,7 +2,8 @@
 mode: rule            # 显式指定分流模式
 allow-lan: true       # 允许内网/容器连接
 # 总结建议：在你的 Docker host 模式部署中，将 bind-address 设置为 127.0.0.1 是最安全的做法，它能确保只有这台服务器内部的流量（含容器）能与 Mihomo 交互，而不会把代理接口暴露给整个局域网。
-bind-address: '*'     # 生产环境建议改为您的内网 IP 如 10.0.1.111(这里是部署docker容器的服务器IP), 或者是 '0.0.0.0'。或者是 '127.0.0.1'。
+bind-address: '127.0.0.1'
+# bind-address: '*'     # 生产环境建议改为您的内网 IP 如 10.0.1.111(这里是部署docker容器的服务器IP), 或者是 '0.0.0.0'。或者是 '127.0.0.1'。
 mixed-port: 7890
 log-level: info
 ipv6: false
@@ -11,13 +12,21 @@ ipv6: false
 dns:
   enable: true
   enhanced-mode: fake-ip
+  # 借鉴：加入 fake-ip 黑名单，保护内网与集群通信
+  fake-ip-filter:
+    - '*.lan'
+    - '*.local'
+    - '*.arpa'
+    - time.*.com
+    - ntp.*.com
+  # 借鉴：升级为 DoH 加密解析
   nameserver:
-    - 223.5.5.5 # 阿里 DNS
-    - 119.29.29.29 # 腾讯 DNS
+    - https://doh.pub/dns-query # 腾讯 DNS
+    - https://dns.alidns.com/dns-query # 阿里 DNS
   proxy-server-nameserver:
-    - 8.8.8.8
+    - https://doh.pub/dns-query
   nameserver-policy:
-    "geosite:cn": [223.5.5.5, 119.29.29.29]
+    "geosite:cn": [https://doh.pub/dns-query, https://dns.alidns.com/dns-query]
 
 # TUN 模式配置：自动接管宿主机及容器流量
 tun:
@@ -27,32 +36,49 @@ tun:
   auto-detect-interface: true
   dns-hijack:
     - "any:53"
+  # 坚持保留排除路由，防止 10.0.4.95 访问不通
+  route-exclude-address: 
+    - 127.0.0.0/8
+    - 10.0.0.0/8
+    - 172.16.0.0/12
+    - 192.168.0.0/16
 
 # 代理节点
 proxies:
-  - name: "My-Proxy-Node"
+  - name: "Gateway-Proxy"
     type: http
-    server: 10.0.4.95
-    port: 7897
+    server: 10.0.5.249
+    port: 9090
 
 # 分流策略组
 proxy-groups:
-  - name: "FINAL"
+  - name: "GLOBAL-ROUTER"
     type: select
     proxies:
-      - "My-Proxy-Node"
+      - "Gateway-Proxy"
       - DIRECT
 
-# 分流规则 (权威来源：GeoSite/GeoIP)
+# 分流规则 (权威来源：GeoSite/GeoIP)(自上而下匹配)
 rules:
+  # 1. 局域网防回环与私有 IP 直连 (最高优先级)
+  - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+  - IP-CIDR,100.64.0.0/10,DIRECT,no-resolve
+  - IP-CIDR,224.0.0.0/4,REJECT,no-resolve
+  # 包含 IPv6 的防泄漏规则 (即使全局 ipv6: false，写上也无妨，增加健壮性)
+  - IP-CIDR6,::1/128,DIRECT,no-resolve
+  - IP-CIDR6,fc00::/7,DIRECT,no-resolve
+  - IP-CIDR6,fe80::/10,DIRECT,no-resolve
+  - IP-CIDR6,fd00::/8,DIRECT,no-resolve
+
   # 1. 局域网和本地流量直连
   - GEOIP,private,DIRECT,no-resolve
   
   # 2. 中国大陆域名直连 (需 Mihomo 自动下载 Geosite 库)
   - GEOSITE,cn,DIRECT
-  
   # 3. 中国大陆 IP 直连
   - GEOIP,cn,DIRECT
-  
   # 4. 剩余所有流量（海外）走代理
-  - MATCH,FINAL
+  - MATCH,GLOBAL-ROUTER

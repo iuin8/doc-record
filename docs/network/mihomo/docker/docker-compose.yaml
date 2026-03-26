@@ -10,3 +10,5 @@ services:
       - /dev/net/tun     # 必须：映射 TUN 设备
     volumes:
       - ./config.yaml:/root/.config/mihomo/config.yaml
+      # 挂载时区，确保日志时间准确
+      - /etc/localtime:/etc/localtime:ro
