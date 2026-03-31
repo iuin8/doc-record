@@ -29,6 +29,7 @@ tun:
 proxies:
   - name: "My-Proxy-Node"
     type: http
+    # 可以配置为域名, 解析为内网IP，例如：xxx.cn
     server: 10.0.4.95
     port: 7897
 
