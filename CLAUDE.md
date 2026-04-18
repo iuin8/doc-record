@@ -55,3 +55,23 @@ GitHub Actions（`.github/workflows/ci.yml`）自动部署：推送 main 后先�
 - Front Matter 保持简洁，侧边栏由目录结构自动推导，无需手动配置
 - 新文档放入 `docs/` 对应分类子目录，自动出现在侧边栏
 - 提交信息使用约定式提交（Conventional Commits）：`feat:` / `fix:` / `chore:` / `docs:`
+
+## Skill routing
+
+When the user's request matches an available skill, ALWAYS invoke it using the Skill
+tool as your FIRST action. Do NOT answer directly, do NOT use other tools first.
+The skill has specialized workflows that produce better results than ad-hoc answers.
+
+Key routing rules:
+- Product ideas, "is this worth building", brainstorming → invoke office-hours
+- Bugs, errors, "why is this broken", 500 errors → invoke investigate
+- Ship, deploy, push, create PR → invoke ship
+- QA, test the site, find bugs → invoke qa
+- Code review, check my diff → invoke review
+- Update docs after shipping → invoke document-release
+- Weekly retro → invoke retro
+- Design system, brand → invoke design-consultation
+- Visual audit, design polish → invoke design-review
+- Architecture review → invoke plan-eng-review
+- Save progress, checkpoint, resume → invoke checkpoint
+- Code quality, health check → invoke health
