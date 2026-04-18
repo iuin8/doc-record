@@ -28,8 +28,8 @@ export default async function createConfig() {
     //   },
     // ],
 
-    url: 'https://iuin8.github.io',
-    baseUrl: '/doc-record',
+    url: 'https://doc-record.iuin888vip.icu',
+    baseUrl: '/',
 
     organizationName: 'iuin8',
     projectName: 'doc-record',
