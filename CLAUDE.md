@@ -9,20 +9,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 常用命令
 
 ```bash
-npm install          # 安装依赖（Node >= 20）
-npm run start        # 启动开发服务器（热重载）
-npm run build        # 构建生产版本
-npm run serve        # 本地预览构建结果
-npm run clear        # 清理缓存和构建文件
-npm run typecheck    # TypeScript 类型检查
+pnpm install          # 安装依赖（Node >= 20）
+pnpm start            # 启动开发服务器（热重载）
+pnpm build            # 构建生产版本
+pnpm serve            # 本地预览构建结果
+pnpm clear            # 清理缓存和构建文件
+pnpm typecheck        # TypeScript 类型检查
 ```
 
 ### 国际化 / 翻译（Crowdin）
 
 ```bash
-npm run write-translations        # 生成翻译模板
-npm run crowdin:upload:download   # 上传源文件并下载翻译
-npm run crowdin:sync              # 完整同步（生成模板 + 上传 + 下载）
+pnpm write-translations        # 生成翻译模板
+pnpm crowdin:upload:download   # 上传源文件并下载翻译
+pnpm crowdin:sync              # 完整同步（生成模板 + 上传 + 下载）
 ```
 
 ## 架构要点

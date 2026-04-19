@@ -1,7 +1,6 @@
 import React from 'react';
 import { translate } from '@docusaurus/Translate';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import { useColorMode } from '@docusaurus/theme-common';
 
 const SEARCH_API_URL =
   'https://b9b71958-6156-440e-a28f-b4105ff6a50c.search.ai.cloudflare.com/';
@@ -40,11 +39,10 @@ const SEARCH_LABELS = {
 } as const;
 
 export default function AISearchNavbar(): React.JSX.Element {
-  const { colorMode } = useColorMode();
   const {
     i18n: { currentLocale },
   } = useDocusaurusContext();
-  const theme = colorMode === 'dark' ? 'dark' : 'light';
+  const theme = 'light';
   const labels = SEARCH_LABELS[currentLocale as keyof typeof SEARCH_LABELS] ??
     SEARCH_LABELS['zh-Hans'];
   const shortcutLabel = translate({

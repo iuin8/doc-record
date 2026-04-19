@@ -14,8 +14,8 @@
 ```bash
 npx create-docusaurus@latest doc-record classic
 cd doc-record
-npm install
-npm run start
+pnpm install
+pnpm start
 ```
 
 - 生成侧边栏
@@ -24,7 +24,7 @@ npm run start
 
 ```bash
 # 启动项目
-npm run start
+pnpm start
 ```
 
 ## github pages
