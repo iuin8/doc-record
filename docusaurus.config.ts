@@ -17,6 +17,12 @@ export default async function createConfig() {
     stylesheets: [
       'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css',
     ],
+    scripts: [
+      {
+        src: 'https://b9b71958-6156-440e-a28f-b4105ff6a50c.search.ai.cloudflare.com/assets/v0.0.36/search-snippet.es.js',
+        type: 'module',
+      },
+    ],
     // scripts: [
     //   'https://cdn.crowdin.com/jipt/jipt.js',
     // ],
@@ -89,7 +95,7 @@ export default async function createConfig() {
         "@easyops-cn/docusaurus-search-local",
         {
           hashed: true,
-          language: ['zh', 'en'], // 支持中英文搜索
+          language: ['zh', 'en', 'ja'], // 支持中英日搜索
           highlightSearchTermsOnTargetPage: true,
           explicitSearchResultPath: false,
           searchResultLimits: 10,

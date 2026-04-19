@@ -20,3 +20,76 @@
     --ifm-color-primary-lightest: #4fddbf;
     --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+.cloudflare-ai-search-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 2.5rem;
+    margin-right: 0.5rem;
+    padding: 0 0.875rem;
+    border: 1px solid var(--ifm-toc-border-color);
+    border-radius: 999px;
+    background: var(--ifm-navbar-background-color);
+    color: var(--ifm-navbar-link-color);
+    font: inherit;
+    cursor: pointer;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.cloudflare-ai-search-button:hover {
+    background: var(--ifm-hover-overlay);
+    color: var(--ifm-navbar-link-hover-color);
+    text-decoration: none;
+}
+
+.cloudflare-ai-search-button__icon {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.cloudflare-ai-search-button__label {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.cloudflare-ai-search-button__shortcut {
+    padding: 0.125rem 0.375rem;
+    border-radius: 999px;
+    background: var(--ifm-hover-overlay);
+    color: var(--ifm-color-emphasis-700);
+    font-size: 0.75rem;
+    line-height: 1;
+}
+
+search-modal-snippet {
+    --search-snippet-primary-color: var(--ifm-color-primary);
+    --search-snippet-primary-hover: var(--ifm-color-primary-dark);
+    --search-snippet-focus-ring: color-mix(in srgb, var(--ifm-color-primary) 30%, transparent);
+    --search-snippet-background: var(--ifm-background-surface-color);
+    --search-snippet-surface: var(--ifm-navbar-background-color);
+    --search-snippet-hover-background: var(--ifm-hover-overlay);
+    --search-snippet-text-color: var(--ifm-font-color-base);
+    --search-snippet-text-secondary: var(--ifm-color-emphasis-700);
+    --search-snippet-text-description: var(--ifm-color-emphasis-800);
+    --search-snippet-border-color: var(--ifm-toc-border-color);
+    --search-snippet-border-radius: 18px;
+    --search-snippet-font-size-base: 14px;
+}
+
+@media (max-width: 996px) {
+    .cloudflare-ai-search-button {
+        position: absolute;
+        right: var(--ifm-navbar-padding-horizontal);
+        margin-right: 3rem;
+        padding: 0 0.75rem;
+    }
+
+    .cloudflare-ai-search-button__label {
+        display: none;
+    }
+
+    .cloudflare-ai-search-button__shortcut {
+        display: none;
+    }
+}
