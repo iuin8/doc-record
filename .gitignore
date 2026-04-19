@@ -27,8 +27,6 @@ db.json
 .docusaurus/
 build/
 
-package-lock.json
-
 # Graphify - 产物提交到 git，仅忽略机器本地临时文件
 graphify-out/.graphify_python
 graphify-out/.graphify_uncached.txt
