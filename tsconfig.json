@@ -1,0 +1,9 @@
+{
+  "extends": "@docusaurus/tsconfig",
+  "include": [
+    "./*.ts",
+    "./*.tsx",
+    "./src/**/*.ts",
+    "./src/**/*.tsx"
+  ]
+}

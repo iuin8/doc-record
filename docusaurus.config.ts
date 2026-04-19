@@ -35,12 +35,14 @@ export default async function createConfig() {
     projectName: 'doc-record',
 
     onBrokenLinks: 'warn',
-    onBrokenMarkdownLinks: 'warn',
 
     // markdown 配置
     // 备注：下方每项均标注【默认值】与【更优解建议】
     markdown: {
       format: 'detect', // 根据文件扩展名自动选择格式  'mdx' | 'md' | 'detect'
+      hooks: {
+        onBrokenMarkdownLinks: 'warn',
+      },
 
       // 是否启用 mermaid 流程图/时序图等支持
       // 默认值：false
