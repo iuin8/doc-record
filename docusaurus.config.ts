@@ -175,10 +175,6 @@ export default async function createConfig() {
           },
           { to: '/blog', label: '博客', position: 'left' },
           {
-            type: 'custom-aiSearch',
-            position: 'right',
-          },
-          {
             type: 'localeDropdown',
             position: 'right',
           },

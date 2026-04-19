@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { translate } from '@docusaurus/Translate';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
@@ -17,22 +17,22 @@ function openSearchModal(): void {
 
 const SEARCH_LABELS = {
   'zh-Hans': {
-    button: 'AI 搜索',
+    button: 'AI',
     placeholder: '搜索文档...',
     ariaLabel: '打开 AI 搜索',
   },
   en: {
-    button: 'AI Search',
+    button: 'AI',
     placeholder: 'Search docs...',
     ariaLabel: 'Open AI search',
   },
   'zh-Hant': {
-    button: 'AI 搜尋',
+    button: 'AI',
     placeholder: '搜尋文件...',
     ariaLabel: '打開 AI 搜尋',
   },
   ja: {
-    button: 'AI検索',
+    button: 'AI',
     placeholder: 'ドキュメントを検索...',
     ariaLabel: 'AI検索を開く',
   },
@@ -42,9 +42,31 @@ export default function AISearchNavbar(): React.JSX.Element {
   const {
     i18n: { currentLocale },
   } = useDocusaurusContext();
-  const theme = 'light';
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const labels = SEARCH_LABELS[currentLocale as keyof typeof SEARCH_LABELS] ??
     SEARCH_LABELS['zh-Hans'];
+
+  useEffect(() => {
+    if (typeof document === 'undefined') {
+      return;
+    }
+
+    const updateTheme = () => {
+      setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+    };
+
+    updateTheme();
+
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
   const shortcutLabel = translate({
     id: 'theme.DocRecord.AISearchNavbar.shortcut',
     message: '⌘K',
@@ -54,12 +76,9 @@ export default function AISearchNavbar(): React.JSX.Element {
     <>
       <button
         type="button"
-        className="navbar__item cloudflare-ai-search-button"
+        className="cloudflare-ai-search-button"
         onClick={openSearchModal}
         aria-label={labels.ariaLabel}>
-        <span className="cloudflare-ai-search-button__icon" aria-hidden="true">
-          ⌕
-        </span>
         <span className="cloudflare-ai-search-button__label">{labels.button}</span>
         <kbd className="cloudflare-ai-search-button__shortcut">{shortcutLabel}</kbd>
       </button>

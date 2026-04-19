@@ -24,33 +24,28 @@
 .cloudflare-ai-search-button {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    height: 2.5rem;
-    margin-right: 0.5rem;
-    padding: 0 0.875rem;
-    border: 1px solid var(--ifm-toc-border-color);
-    border-radius: 999px;
-    background: var(--ifm-navbar-background-color);
+    gap: 0.375rem;
+    height: var(--ifm-navbar-height);
+    margin-left: 0.5rem;
+    padding: 0;
+    border: none;
+    background: transparent;
     color: var(--ifm-navbar-link-color);
     font: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
     cursor: pointer;
-    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+    transition: color 150ms ease;
 }
 
 .cloudflare-ai-search-button:hover {
-    background: var(--ifm-hover-overlay);
     color: var(--ifm-navbar-link-hover-color);
     text-decoration: none;
 }
 
-.cloudflare-ai-search-button__icon {
-    font-size: 1rem;
-    line-height: 1;
-}
-
 .cloudflare-ai-search-button__label {
-    font-size: 0.95rem;
-    font-weight: 500;
+    line-height: 1;
 }
 
 .cloudflare-ai-search-button__shortcut {
@@ -60,6 +55,11 @@
     color: var(--ifm-color-emphasis-700);
     font-size: 0.75rem;
     line-height: 1;
+}
+
+.navbar__search {
+    display: inline-flex;
+    align-items: center;
 }
 
 search-modal-snippet {
@@ -79,17 +79,6 @@ search-modal-snippet {
 
 @media (max-width: 996px) {
     .cloudflare-ai-search-button {
-        position: absolute;
-        right: var(--ifm-navbar-padding-horizontal);
-        margin-right: 3rem;
-        padding: 0 0.75rem;
-    }
-
-    .cloudflare-ai-search-button__label {
-        display: none;
-    }
-
-    .cloudflare-ai-search-button__shortcut {
         display: none;
     }
 }
