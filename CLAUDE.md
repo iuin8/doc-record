@@ -17,6 +17,13 @@ pnpm clear            # 清理缓存和构建文件
 pnpm typecheck        # TypeScript 类型检查
 ```
 
+## Claude Code MCP
+
+- 项目级 MCP 配置文件：`.claude/settings.json`
+- 已接入服务：`cloudflare-ai-search`
+- MCP endpoint：`https://b9b71958-6156-440e-a28f-b4105ff6a50c.search.ai.cloudflare.com/mcp`
+- 相关使用文档：`docs/AI/mcp/modelcontextprotocol/servers/cloudflare-ai-search/doc.md`
+
 ### 国际化 / 翻译（Crowdin）
 
 ```bash

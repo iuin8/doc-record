@@ -9,6 +9,25 @@
 
 记录一些文档, 关于docker, k8s, 以及一些其他工具的文档.
 
+## Claude Code MCP
+
+项目级 Claude Code 配置已接入 Cloudflare AI Search MCP，配置文件位于 `.claude/settings.json`。
+
+```json
+{
+  "mcpServers": {
+    "cloudflare-ai-search": {
+      "type": "http",
+      "url": "https://b9b71958-6156-440e-a28f-b4105ff6a50c.search.ai.cloudflare.com/mcp"
+    }
+  }
+}
+```
+
+用途：在 Claude Code 中把 Cloudflare AI Search 作为 MCP server 使用，直接搜索已接入该索引的内容。
+
+相关文档：`docs/AI/mcp/modelcontextprotocol/servers/cloudflare-ai-search/doc.md`
+
 ## 安装
 
 ```bash
