@@ -18,18 +18,18 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@crowdin/cli": "^4.14.1",
+    "@crowdin/cli": "^4.14.2",
     "@docusaurus/core": "^3.10.0",
     "@docusaurus/preset-classic": "^3.10.0",
     "@docusaurus/theme-mermaid": "^3.10.0",
     "@easyops-cn/docusaurus-search-local": "^0.55.1",
     "clsx": "^2.1.1",
-    "katex": "^0.16.25",
+    "katex": "^0.16.45",
     "prism-react-renderer": "^2.4.1",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
     "rehype-katex": "^7.0.1",
-    "rehype-prism-plus": "^2.0.1",
+    "rehype-prism-plus": "^2.0.2",
     "remark-directive": "^4.0.0",
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0"
