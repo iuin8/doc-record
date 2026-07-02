@@ -59,31 +59,46 @@ sshfs -o reconnect -o cache=yes -o kernel_cache -o auto_cache  -o max_conns=4 ex
 ## 永久挂载远程文件系统
 
 ```bash
-# 编辑 automount 配置
-sudo nano /etc/auto_master
-# 在文件最后一行添加：
-/System/Volumes/Data/Users/xx/mount/sshfs /etc/auto_sshfs
+sshfs fa.intranet.company:/data/nfs_share/dev /Users/fa/mount/sshfs/fa.intranet.company \
+  -o auto_cache,reconnect,defer_permissions,noappledouble,nolocalcaches
 
-# 按 Ctrl+O 然后, 回车↩︎保存，Ctrl+X 退出。
+# 这条命令加了关键修复参数：
+# reconnect：断网自动重连
+# auto_cache：正常缓存，不卡
+# noappledouble：关闭烦人的 .DS_Store 冲突
+# nolocalcaches：解决 I/O 错误
+# defer_permissions：macOS 权限兼容
 
-# 创建 sshfs 挂载配置
-sudo nano /etc/auto_sshfs
-# 写入下面这一行内容（直接复制，把你自己的信息填好）：
-xx.intranet.company -fstype=sshfs,allow_other,default_permissions,uid=$(id -u),gid=$(id -g) xx.intranet.company:/data/nfs_share/dev
+# 👉 运行这条命令，ls 测试
+ls /Users/fa/mount/sshfs/fa.intranet.company
 
-# 说明（不用改）
-# xx.intranet.company：最终本地路径的最后一级文件夹名
-# 后面是你的远程服务器路径：xx.intranet.company:/data/nfs_share/dev
+# 设置 永久挂载（开机自动） 我们不用 automount，用 macOS 最稳定的登录自启。
+# 创建开机脚本
+nano ~/mount/sshfs/sshfs_mount.sh
 
-# 加载配置，立即生效
-sudo automount -cv
-# 执行完就已经永久挂载完成了！
+# ```
 
-# 测试是否成功. 直接访问路径即可自动挂载：
-ls /Users/xx/mount/sshfs/xx.intranet.company
+#!/bin/bash
+# 等待网络就绪（防止开机没网导致失败）
+sleep 5
 
-# 只要能列出文件，就说明：
-# ✅ 永久挂载配置成功
-# ✅ 开机自动挂载
-# ✅ 断网重连自动恢复
+# 挂载命令（修复版）
+sshfs fa.intranet.company:/data/nfs_share/dev /Users/fa/mount/sshfs/fa.intranet.company \
+  -o auto_cache,reconnect,defer_permissions,noappledouble,nolocalcaches
+
+# ```
+
+# 加执行权限
+
+chmod +x ~/mount/sshfs/sshfs_mount.sh
+
+# 设置开机启动
+# 打开 系统设置 → 通用 → 登录项
+# 点 + → 选择你的用户目录下的 sshfs_mount.sh
+# ✅ 完成！开机自动挂载，永不报错。
+
+# 验证是否永久生效
+~/mount/sshfs/sshfs_mount.sh
+ls /Users/fa/mount/sshfs/fa.intranet.company
+# 能看到文件 = 成功永久挂载。
 ```
