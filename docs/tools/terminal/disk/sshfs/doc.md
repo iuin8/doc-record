@@ -95,3 +95,10 @@ launchctl unload ~/Library/LaunchAgents/com.fa.sshfs.mount.plist && launchctl lo
 tail -f ~/Library/Logs/sshfs_mount.log
 
 ```
+
+## 优化版
+
+```ssh
+/usr/local/bin/sshfs fa.intranet.company:/data/nfs_share/dev /Users/fa/mount/sshfs/fa.intranet.company \
+-o auto_cache,reconnect,defer_permissions,workaround=rename:truncate:buflimit,noatime,allow_other,max_read=65536,max_write=131072,negative_vncache,attr_timeout=3,entry_timeout=3,ServerAliveInterval=15,ServerAliveCountMax=3,Ciphers=aes128-gcm@openssh.com,Compression=no,noappledouble,nolocalcaches
+```
