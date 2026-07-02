@@ -72,33 +72,26 @@ sshfs fa.intranet.company:/data/nfs_share/dev /Users/fa/mount/sshfs/fa.intranet.
 # 👉 运行这条命令，ls 测试
 ls /Users/fa/mount/sshfs/fa.intranet.company
 
-# 设置 永久挂载（开机自动） 我们不用 automount，用 macOS 最稳定的登录自启。
-# 创建开机脚本
-nano ~/mount/sshfs/sshfs_mount.sh
+# 健壮版自动挂载脚本（循环重试，无固定 sleep）
+mkdir -p ~/Library/Scripts
+nano ~/Library/Scripts/sshfs_auto_mount.sh
+# 内容在`./sshfs_auto_mount.sh`
+chmod +x ~/Library/Scripts/sshfs_auto_mount.sh
 
-# ```
+# 用 launchd 实现开机常驻后台（推荐，替代登录项） > launchd 是 macOS 原生服务管理，登录自动启动、崩溃自动重启、后台静默运行，比登录脚本强太多。
 
-#!/bin/bash
-# 等待网络就绪（防止开机没网导致失败）
-sleep 5
+# 创建用户级 plist 配置
+nano ~/Library/LaunchAgents/com.fa.sshfs.mount.plist
+# 内容在`./com.fa.sshfs.mount.plist`
+# 加载启动服务
+launchctl load ~/Library/LaunchAgents/com.fa.sshfs.mount.plist
 
-# 挂载命令（修复版）
-sshfs fa.intranet.company:/data/nfs_share/dev /Users/fa/mount/sshfs/fa.intranet.company \
-  -o auto_cache,reconnect,defer_permissions,noappledouble,nolocalcaches
+# 常用管理命令
+# 查看运行状态
+launchctl list | grep sshfs
+# 重启服务
+launchctl unload ~/Library/LaunchAgents/com.fa.sshfs.mount.plist && launchctl load ~/Library/LaunchAgents/com.fa.sshfs.mount.plist
+# 查看日志排查挂载失败
+tail -f ~/Library/Logs/sshfs_mount.log
 
-# ```
-
-# 加执行权限
-
-chmod +x ~/mount/sshfs/sshfs_mount.sh
-
-# 设置开机启动
-# 打开 系统设置 → 通用 → 登录项
-# 点 + → 选择你的用户目录下的 sshfs_mount.sh
-# ✅ 完成！开机自动挂载，永不报错。
-
-# 验证是否永久生效
-~/mount/sshfs/sshfs_mount.sh
-ls /Users/fa/mount/sshfs/fa.intranet.company
-# 能看到文件 = 成功永久挂载。
 ```
