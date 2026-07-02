@@ -55,3 +55,35 @@ sshfs -p 2222 [user@]host:[dir] mountpoint
 ```bash
 sshfs -o reconnect -o cache=yes -o kernel_cache -o auto_cache  -o max_conns=4 example.com:/home/user/data /mnt/remote_data
 ```
+
+## 永久挂载远程文件系统
+
+```bash
+# 编辑 automount 配置
+sudo nano /etc/auto_master
+# 在文件最后一行添加：
+/System/Volumes/Data/Users/xx/mount/sshfs /etc/auto_sshfs
+
+# 按 Ctrl+O 然后, 回车↩︎保存，Ctrl+X 退出。
+
+# 创建 sshfs 挂载配置
+sudo nano /etc/auto_sshfs
+# 写入下面这一行内容（直接复制，把你自己的信息填好）：
+xx.intranet.company -fstype=sshfs,allow_other,default_permissions,uid=$(id -u),gid=$(id -g) xx.intranet.company:/data/nfs_share/dev
+
+# 说明（不用改）
+# xx.intranet.company：最终本地路径的最后一级文件夹名
+# 后面是你的远程服务器路径：xx.intranet.company:/data/nfs_share/dev
+
+# 加载配置，立即生效
+sudo automount -cv
+# 执行完就已经永久挂载完成了！
+
+# 测试是否成功. 直接访问路径即可自动挂载：
+ls /Users/xx/mount/sshfs/xx.intranet.company
+
+# 只要能列出文件，就说明：
+# ✅ 永久挂载配置成功
+# ✅ 开机自动挂载
+# ✅ 断网重连自动恢复
+```
