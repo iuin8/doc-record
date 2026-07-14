@@ -18,3 +18,7 @@ Research in English , respond in English, also follow by Chinese
 这样一来，模型在搜索资源和思考时会默认使用英语，回复就转换成中文。
 如果想再灵活一点，那就 reply in query language，这样你问其他语言的时候，模型照样能 Cover。(技巧来源 @eviljer)
 ```
+
+```
+你帮忙按照生产级标准去帮我优化下吧，然后，再跑下workflow 对抗式review下，直到收敛到生产级最优方案
+```
