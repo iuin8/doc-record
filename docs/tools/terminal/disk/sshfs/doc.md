@@ -6,7 +6,6 @@
 
 ```text
 cloud-disks/
-├── launchd.plist                    # 唯一 LaunchAgent，周期触发全局扫描
 ├── _bin/
 │   ├── bootstrap.sh                 # 生成并加载 ~/Library/LaunchAgents/com.fa.cloud-disks.plist
 │   ├── mount_all.sh                 # 扫描所有云盘配置

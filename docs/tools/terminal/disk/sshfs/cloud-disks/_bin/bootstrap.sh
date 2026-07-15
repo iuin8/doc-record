@@ -14,7 +14,8 @@ fail() {
 [[ -r "$BASE_DIR/_bin/mount_all.sh" ]] || fail "missing scanner: $BASE_DIR/_bin/mount_all.sh"
 [[ -r "$BASE_DIR/_bin/sshfs_mount.sh" ]] || fail "missing runner: $BASE_DIR/_bin/sshfs_mount.sh"
 
-/bin/mkdir -p "$(/usr/bin/dirname "$PLIST_PATH")"
+/bin/mkdir -p "$(/usr/bin/dirname "$PLIST_PATH")" /Users/fa/Library/Logs/cloud-disks
+/bin/chmod 700 /Users/fa/Library/Logs/cloud-disks
 /bin/cat > "$PLIST_PATH" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -32,6 +33,10 @@ fail() {
     <true/>
     <key>StartInterval</key>
     <integer>60</integer>
+    <key>StandardOutPath</key>
+    <string>/Users/fa/Library/Logs/cloud-disks/scanner.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/fa/Library/Logs/cloud-disks/scanner.err.log</string>
 </dict>
 </plist>
 PLIST
