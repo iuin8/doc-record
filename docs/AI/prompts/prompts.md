@@ -22,3 +22,7 @@ Research in English , respond in English, also follow by Chinese
 ```
 你帮忙按照生产级标准去帮我优化下吧，然后，再跑下workflow 对抗式review下，直到收敛到生产级最优方案
 ```
+
+```
+生产级标准, 以及简化用户主动操作步骤
+```
