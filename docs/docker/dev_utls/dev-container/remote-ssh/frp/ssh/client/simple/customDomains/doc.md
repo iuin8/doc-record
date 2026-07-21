@@ -5,3 +5,6 @@
 - serverAddr
 - serverPort
 - auth.token
+
+- proxies.name
+- proxies.customDomains
