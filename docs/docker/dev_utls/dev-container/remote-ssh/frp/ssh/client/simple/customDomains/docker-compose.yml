@@ -1,0 +1,68 @@
+
+services:
+  jumpboxc:
+    image: registry.cn-hangzhou.aliyuncs.com/iuin/jumpboxc:v0.66.0_v6.3.1
+    container_name: jumpboxc
+    environment:
+      TZ: "Asia/Shanghai"
+    configs:
+      - source: jumpboxc-config
+        target: /www/jumpbox/config/jumpboxc_config.json
+        mode: 0444
+    restart: unless-stopped
+    volumes:
+      # 使用命名卷而不是bind mount
+      # 首次启动时会自动将容器内/root/.ssh的内容复制到卷中
+      - jumpboxc-ssh-config:/root/.ssh:ro
+
+  # 定义命名卷
+volumes:
+  jumpboxc-ssh-config:
+    # 可以选择添加外部选项，如果需要手动管理卷
+    # external: true
+    # 或者让Docker自动管理
+    driver: local
+
+configs:
+  jumpboxc-config:
+    content: |-
+      {
+        "serverAddr": "jumpboxs.x.xx.xxx",
+        "serverPort": 11111,          
+        "auth": {
+          "method": "token",
+          "token": "22222"
+        },
+        "loginFailExit": false,
+        "transport": {
+          "heartbeatInterval": 25,
+          "heartbeatTimeout": 120,
+          "poolCount": 10,
+          "tcpMux": true,
+
+          "dialServerTimeout": 60,
+          "tcpMuxKeepaliveInterval": 60
+        },
+        "proxies": [
+          {
+            "name": "server1.yourdomain.com",
+            "type": "tcpmux",
+            "multiplexer": "httpconnect",
+            "customDomains": ["server1.yourdomain.com"],
+            "localIP": "127.0.0.1",
+            "localPort": 22,
+
+            "transport": {
+              "useEncryption": true,
+              "useCompression": false
+
+            },
+            "healthCheck": {
+              "type": "tcp",
+              "timeoutSeconds": 10,
+              "maxFailed": 3,
+              "intervalSeconds": 30
+            }
+          }
+        ]
+      }
