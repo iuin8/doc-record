@@ -1,0 +1,84 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations: {}
+  labels:
+    k8s.kuboard.cn/layer: gateway
+    k8s.kuboard.cn/name: dev-jumpbox
+  name: dev-jumpbox
+  namespace: default
+  resourceVersion: '146214481'
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/layer: gateway
+      k8s.kuboard.cn/name: dev-jumpbox
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        k8s.kuboard.cn/layer: gateway
+        k8s.kuboard.cn/name: dev-jumpbox
+    spec:
+      containers:
+        - env:
+            - name: TZ
+              value: Asia/Shanghai
+          image: 'registry.cn-hangzhou.aliyuncs.com/iuin/jumpboxc:v0.66.0_v6.3.1'
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - '-c'
+                  - |
+                    cp /tmp/authorized_keys /root/.ssh/authorized_keys
+                    chmod 700 /root/.ssh
+                    chmod 600 /root/.ssh/authorized_keys
+          name: dev-jumpbox
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /www/jumpbox/config
+              name: volume-s8re8
+            - mountPath: /tmp/authorized_keys
+              name: volume-m6spn
+              readOnly: true
+              subPath: authorized_keys
+            - mountPath: /root/.ssh/
+              name: volume-64ryz
+      dnsPolicy: ClusterFirst
+      nodeName: master1
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: jumpboxc_config_tx.json
+                path: jumpboxc_config.json
+            name: jumpbox
+          name: volume-s8re8
+        - name: volume-m6spn
+          secret:
+            defaultMode: 420
+            items:
+              - key: authorized_keys
+                path: authorized_keys
+            secretName: jumpbox
+        - emptyDir: {}
+          name: volume-64ryz
+
