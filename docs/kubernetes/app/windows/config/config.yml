@@ -1,94 +1,104 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    deployment.kubernetes.io/revision: "6"
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"name":"windows"},"name":"windows","namespace":"default"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"windows"}},"template":{"metadata":{"labels":{"app":"windows"}},"spec":{"containers":[{"env":[{"name":"VERSION","value":"11"},{"name":"DISK_SIZE","value":"64G"}],"image":"dockurr/windows","name":"windows","ports":[{"containerPort":8006,"name":"http","protocol":"TCP"},{"containerPort":3389,"name":"rdp","protocol":"TCP"},{"containerPort":3389,"name":"udp","protocol":"UDP"},{"containerPort":5900,"name":"vnc","protocol":"TCP"}],"securityContext":{"capabilities":{"add":["NET_ADMIN"]},"privileged":true},"volumeMounts":[{"mountPath":"/storage","name":"storage"},{"mountPath":"/dev/kvm","name":"dev-kvm"},{"mountPath":"/dev/net/tun","name":"dev-tun"}]}],"terminationGracePeriodSeconds":120,"volumes":[{"name":"storage","persistentVolumeClaim":{"claimName":"windows-pvc"}},{"hostPath":{"path":"/dev/kvm"},"name":"dev-kvm"},{"hostPath":{"path":"/dev/net/tun","type":"CharDevice"},"name":"dev-tun"}]}}}}
-  creationTimestamp: 2025-11-29T07:09:05Z
-  generation: 14
-  labels:
-    k8s.kuboard.cn/name: windows
-    name: windows
   name: windows
   namespace: default
-  resourceVersion: "150756757"
-  uid: 4b8caab9-f880-47d4-b068-cc73f059e457
+  labels:
+    app.kubernetes.io/name: windows
+    app.kubernetes.io/instance: windows-prod
+    app.kubernetes.io/component: virtual-machine
+    app.kubernetes.io/managed-by: kubectl
 spec:
-  progressDeadlineSeconds: 600
   replicas: 1
-  revisionHistoryLimit: 10
+  revisionHistoryLimit: 5
+  strategy:
+    type: Recreate # 生产建议：KVM及网卡独占资源，滚动更新易导致双副本冲突，改为Recreate
   selector:
     matchLabels:
-      app: windows
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+      app.kubernetes.io/name: windows
   template:
     metadata:
-      annotations:
-        kubectl.kubernetes.io/restartedAt: 2025-11-29T15:09:48+08:00
-      creationTimestamp: null
       labels:
-        app: windows
+        app.kubernetes.io/name: windows
     spec:
+      # 1. 节点亲和性：确保调度到支持 KVM 虚拟化的物理节点（请根据实际标签修改）
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 120 # 保留较长优雅关闭时间，等待Windows系统正常关机
+      dnsPolicy: ClusterFirst
       containers:
-        - env:
+        - name: windows
+          image: dockurr/windows:latest # 生产建议：指定明确的稳定版本号，避免使用 latest
+          imagePullPolicy: IfNotPresent # 避免每次重启都拉取大镜像
+          env:
             - name: VERSION
               value: "11"
             - name: DISK_SIZE
-              value: 64G
+              value: "64G"
             - name: RAM_SIZE
-              value: 8G
+              value: "8G"
             - name: CPU_CORES
               value: "4"
-          image: dockurr/windows
-          imagePullPolicy: Always
-          name: windows
           ports:
             - containerPort: 8006
-              name: http
+              name: web-http
               protocol: TCP
             - containerPort: 3389
-              name: rdp
+              name: rdp-tcp
               protocol: TCP
             - containerPort: 3389
-              name: udp
+              name: rdp-udp
               protocol: UDP
             - containerPort: 5900
-              name: vnc
+              name: vnc-tcp
               protocol: TCP
-          resources: {}
+          # 2. 资源配额：生产环境必须设置 Requests 和 Limits，且防范 OOM
+          resources:
+            requests:
+              cpu: "2"
+              memory: 8Gi # 内存配额必须大于或等于 Windows 环境变量设置的 RAM_SIZE
+            limits:
+              cpu: "4"
+              memory: 10Gi # 预留 2Gi 给宿主机 QEMU 进程自身的开销
+          # 3. 安全上下文：精细化控制权限。因必须进入KVM，保留privileged，但锁定其他行为
           securityContext:
-            capabilities:
-              add:
-                - NET_ADMIN
             privileged: true
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
+            allowPrivilegeEscalation: true
+            readOnlyRootFilesystem: false
+          # 4. 健康检查：通过检查 8006 端口或 RDP 端口确保虚拟机运行正常
+          readinessProbe:
+            tcpSocket:
+              port: 8006
+            initialDelaySeconds: 60 # 给 Windows 启动预留足够时间
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 3389
+            initialDelaySeconds: 120
+            periodSeconds: 20
           volumeMounts:
             - mountPath: /storage
-              name: storage
+              name: storage-volume
             - mountPath: /dev/kvm
               name: dev-kvm
             - mountPath: /dev/net/tun
               name: dev-tun
-      dnsPolicy: ClusterFirst
-      nodeName: master1
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
-      terminationGracePeriodSeconds: 120
       volumes:
-        - hostPath:
-            path: /data/container/windows/storage
-            type: DirectoryOrCreate
-          name: storage
+        # 5. 存储持久化：强烈建议废弃 HostPath，切换为基于分布式存储/本地静态存储的 PVC
+        - name: storage-volume
+          persistentVolumeClaim:
+            claimName: windows-pvc-prod
         - hostPath:
             path: /dev/kvm
-            type: ""
+            type: CharDevice # 显式指定设备类型，增强校验
           name: dev-kvm
         - hostPath:
             path: /dev/net/tun
