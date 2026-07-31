@@ -1,0 +1,43 @@
+
+# ----------------- 1. DNS 配置 (防止内网域名被劫持) -----------------
+dns:
+
+  # enhanced-mode: fake-ip      # 如果使用 fake-ip，必须配置下面的内网过滤
+  fake-ip-filter:
+    - '*.lan'
+    - '*.local'
+    - 'localhost'
+    - '*.cluster.local'       # 核心：防止 K8s 域名被分配 fake-ip 导致无法访问
+    - '*.svc.cluster.local'
+
+  # 核心：使用独立的内网 DNS（例如你的 K8s CoreDNS 的 IP）来解析集群域名
+  nameserver-policy:
+    # 只让 K8s 的域名走 K8s DNS，其他任何流量绝不触发
+    'cluster.local,svc.cluster.local': '10.96.0.10' 
+
+# ----------------- 2. 节点配置 (Proxies) -----------------
+proxies:
+
+  # 这个是专门用来转发 K8s 流量的节点（例如你的跳板机、K8s 边缘代理、或内网代理服务）
+  - name: K8s-Gateway-Node
+    type: ssh
+    use-ssh-config-alias: true
+    server: K8s-Gateway-Node
+    use-system-socks: true
+
+# ----------------- 3. 策略组配置 (Proxy Groups) -----------------
+proxy-groups:
+
+  # 专属 K8s 策略组：绑定你的指定节点
+  - name: ☸️ Kubernetes内部流量
+    type: select
+    proxies:
+      - DIRECT                # 备选：如果断开，可以随时切换直连
+      - K8s-Gateway-Node      # 首选：指定转发节点
+
+# ----------------- 4. 规则配置 (Rules) -----------------
+rules:
+  # 优先匹配：将 Kubernetes 内部域名流量定向到专属策略组
+  - DOMAIN-SUFFIX,svc.cluster.local,☸️ Kubernetes内部流量
+  - DOMAIN-SUFFIX,cluster.local,☸️ Kubernetes内部流量
+  - DOMAIN-KEYWORD,kubernetes,☸️ Kubernetes内部流量
