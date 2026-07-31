@@ -47,6 +47,7 @@ tun:
 proxies:
   - name: "Gateway-Proxy"
     type: http
+    # TODO: 这里的 server 和 port 需要改为你自己的网关代理服务器地址和端口
     server: mbp-fa.xxx.xxx
     port: 9090
 
