@@ -26,6 +26,11 @@ dns:
     - https://dns.alidns.com/dns-query
   proxy-server-nameserver:
     - https://doh.pub/dns-query
+  
+  # [优化] 针对代理域名强制刷新解析
+  # nameserver-policy:
+  #   "+.xxx.xxx":
+  #     - https://doh.pub/dns-query
 
 # ================= Sniffer (嗅探器) =================
 sniffer:
@@ -67,6 +72,10 @@ tun:
     # 3. [宿主机保护] 防止 Kubelet 访问 API Server 被代理
     # 如果您的 K8s API Server 暴露在公网 IP，请务必将宿主机公网 IP 加入此处
     # - <您的宿主机公网IP>/32 
+
+# [关键] 连接超时与重试
+tcp-concurrent: true      # 开启并发连接，加速故障切换
+# global-client-fingerprint: chrome  # 可选
 
 # ================= 代理节点 =================
 proxies:
