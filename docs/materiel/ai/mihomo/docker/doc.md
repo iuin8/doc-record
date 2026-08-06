@@ -58,10 +58,10 @@ dig mbp-fa.tx.iuin888vip.icu +nocmd +noall +answer
 
 ```bash
 # 获取 Pod CIDR:
-kubectl cluster-info dump | grep -m 1 cluster-cidr
+kubectl get nodes -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.spec.podCIDR}{"\n"}{end}'
 # 或者查看 node 的 podCIDR: kubectl get nodes -o jsonpath='{.items[*].spec.podCIDR}'
 
 # 获取 Service CIDR:
-kubectl get svc kubernetes -o jsonpath='{.spec.clusterIP}'
+ps aux | grep kube-apiserver | grep service-cluster-ip-range
 # 假设输出 10.96.0.1，则网段通常为 10.96.0.0/12 或 10.96.0.0/16
 ```
