@@ -47,3 +47,21 @@ dig mbp-fa.tx.iuin888vip.icu +nocmd +noall +answer
 #                              ↑
 #                        TTL=300 秒（5 分钟）
 ```
+
+## Docker容器和k8s容器内部都需要能够正常走VPN代理
+
+### 部署与验证指南 (业界避坑标准流程)
+
+1. 获取真实的 K8s CIDR (必做)
+
+配置中的 10.244.0.0/16 和 10.96.0.0/12 是默认值。您必须在宿主机上执行以下命令，获取您集群真实的网段，并替换到 route-exclude-address 中：
+
+```bash
+# 获取 Pod CIDR:
+kubectl cluster-info dump | grep -m 1 cluster-cidr
+# 或者查看 node 的 podCIDR: kubectl get nodes -o jsonpath='{.items[*].spec.podCIDR}'
+
+# 获取 Service CIDR:
+kubectl get svc kubernetes -o jsonpath='{.spec.clusterIP}'
+# 假设输出 10.96.0.1，则网段通常为 10.96.0.0/12 或 10.96.0.0/16
+```

@@ -1,8 +1,14 @@
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "100m"
+    max-file: "3"
+    compress: "true"
+
 services:
   mihomo:
     image: metacubex/mihomo:latest
     container_name: mihomo
-    restart: always
     network_mode: "host" # 必须：共享宿主机网络
     cap_add:
       - NET_ADMIN        # 必须：赋予修改路由权限
@@ -10,3 +16,5 @@ services:
       - /dev/net/tun     # 必须：映射 TUN 设备
     volumes:
       - ./config.yaml:/root/.config/mihomo/config.yaml
+    restart: unless-stopped
+    logging: *default-logging
