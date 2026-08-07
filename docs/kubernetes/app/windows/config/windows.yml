@@ -1,3 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: windows-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 64Gi
+  volumeMode: Filesystem
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -92,10 +105,10 @@ spec:
             - mountPath: /dev/net/tun
               name: dev-tun
       volumes:
-        # 5. 存储持久化：强烈建议废弃 HostPath，切换为基于分布式存储/本地静态存储的 PVC
+        # 5. 存储持久化：已完美绑定上方定义的统一名称 windows-pvc
         - name: storage-volume
           persistentVolumeClaim:
-            claimName: windows-pvc-prod
+            claimName: windows-pvc
         - hostPath:
             path: /dev/kvm
             type: CharDevice # 显式指定设备类型，增强校验
