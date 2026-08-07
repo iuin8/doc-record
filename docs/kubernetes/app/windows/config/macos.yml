@@ -79,18 +79,25 @@ spec:
       terminationGracePeriodSeconds: 120
       dnsPolicy: ClusterFirst
       
-      # 🔴 生产级核心优化：加入全自动初始化容器
-      # 在主容器启动、PV 挂载校验前，优先通过 hostPath 在宿主机就地创建好目标物理目录
+      # 🛠 生产级核心优化：全自动初始化容器
+      # 1. 在物理卷校验前通过 hostPath 自动就地创建物理目录并赋权
+      # 2. 动态拓容宿主机系统的 inotify 实例上限，彻底根治 Dnsmasq 网络初始化时 "Too many open files" 的高频报错
       initContainers:
-        - name: auto-dir-initializer
+        - name: auto-dir-and-sysctl-initializer
           image: alpine:latest
           imagePullPolicy: IfNotPresent
-          command: ["sh", "-c", "mkdir -p /mnt/host-storage && chmod 777 /mnt/host-storage"]
+          command: 
+            - "sh"
+            - "-c"
+            - |
+              mkdir -p /mnt/host-storage && chmod 777 /mnt/host-storage
+              sysctl -w fs.inotify.max_user_instances=1024
+              sysctl -w fs.inotify.max_user_watches=1048576
           volumeMounts:
             - name: host-raw-path
               mountPath: /mnt/host-storage
           securityContext:
-            privileged: true # 提升权限以确保有权在宿主机创建并修改目录权限
+            privileged: true # 提升权限以确保有权修改宿主机内核参数及物理目录
             
       containers:
         - name: macos
@@ -98,7 +105,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: VERSION
-              value: "15"
+              value: "15" # 已同步更新为您的最新配置：版本 15
             - name: DISK_SIZE
               value: "64G"
             - name: RAM_SIZE
@@ -110,10 +117,10 @@ spec:
               name: web-http
               protocol: TCP
             - containerPort: 5900
-              name: rdp-tcp
+              name: vnc-tcp
               protocol: TCP
             - containerPort: 5900
-              name: rdp-udp
+              name: vnc-udp
               protocol: UDP
           resources:
             requests:
@@ -121,11 +128,15 @@ spec:
               memory: 8Gi
             limits:
               cpu: "4"
-              memory: 10Gi
+              memory: 10Gi # 预留 2Gi 给宿主机 QEMU 进程自身开销，防止大文件读写时 OOM
           securityContext:
             privileged: true
             allowPrivilegeEscalation: true
             readOnlyRootFilesystem: false
+            # 🛠 生产级提权限制拓容：允许容器内进程完全放开文件句柄 (nofile) 的系统限制上限
+            capabilities:
+              add:
+                - SYS_RESOURCE
           readinessProbe:
             tcpSocket:
               port: 8006
@@ -133,7 +144,7 @@ spec:
             periodSeconds: 10
           livenessProbe:
             tcpSocket:
-              port: 5900
+              port: 5900 # 已同步更新：存活探针精准对齐您的 5900 端口
             initialDelaySeconds: 120
             periodSeconds: 20
           volumeMounts:
@@ -144,11 +155,11 @@ spec:
             - mountPath: /dev/net/tun
               name: dev-tun
       volumes:
-        # 主容器挂载：标准的、受 K8s 审计管理的生产级 PVC 
+        # 主容器挂载：标准的、受 K8s 动态审计管理的生产级 PVC 
         - name: storage-volume
           persistentVolumeClaim:
             claimName: macos-pvc
-        # 🔴 初始化容器专用挂载：利用 DirectoryOrCreate 特性自动对齐物理路径
+        # 初始化容器专用挂载：利用 DirectoryOrCreate 特性自动对齐物理路径
         - name: host-raw-path
           hostPath:
             path: /var/lib/macos-storage
