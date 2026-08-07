@@ -1,0 +1,163 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: macos-local-storage
+volumeBindingMode: WaitForFirstConsumer # 延迟绑定：保证 Pod 调度成功后才触发 PVC 与 PV 绑定
+provisioner: kubernetes.io/no-provisioner
+reclaimPolicy: Retain
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: macos-local-pv
+spec:
+  capacity:
+    storage: 64Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: macos-local-storage
+  local:
+    path: /var/lib/macos-storage
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/os
+              operator: In
+              values:
+                - linux
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: macos-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 64Gi
+  volumeMode: Filesystem
+  storageClassName: macos-local-storage
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: macos
+  namespace: default
+  labels:
+    app.kubernetes.io/name: macos
+    app.kubernetes.io/instance: macos-prod
+    app.kubernetes.io/component: virtual-machine
+    app.kubernetes.io/managed-by: kubectl
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  strategy:
+    type: Recreate # 强占型硬件资源，避免滚动更新导致双副本冲突
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: macos
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: macos
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 120
+      dnsPolicy: ClusterFirst
+      
+      # 🔴 生产级核心优化：加入全自动初始化容器
+      # 在主容器启动、PV 挂载校验前，优先通过 hostPath 在宿主机就地创建好目标物理目录
+      initContainers:
+        - name: auto-dir-initializer
+          image: alpine:latest
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "-c", "mkdir -p /mnt/host-storage && chmod 777 /mnt/host-storage"]
+          volumeMounts:
+            - name: host-raw-path
+              mountPath: /mnt/host-storage
+          securityContext:
+            privileged: true # 提升权限以确保有权在宿主机创建并修改目录权限
+            
+      containers:
+        - name: macos
+          image: dockurr/macos:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: VERSION
+              value: "15"
+            - name: DISK_SIZE
+              value: "64G"
+            - name: RAM_SIZE
+              value: "8G"
+            - name: CPU_CORES
+              value: "4"
+          ports:
+            - containerPort: 8006
+              name: web-http
+              protocol: TCP
+            - containerPort: 5900
+              name: rdp-tcp
+              protocol: TCP
+            - containerPort: 5900
+              name: rdp-udp
+              protocol: UDP
+          resources:
+            requests:
+              cpu: "2"
+              memory: 8Gi
+            limits:
+              cpu: "4"
+              memory: 10Gi
+          securityContext:
+            privileged: true
+            allowPrivilegeEscalation: true
+            readOnlyRootFilesystem: false
+          readinessProbe:
+            tcpSocket:
+              port: 8006
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 5900
+            initialDelaySeconds: 120
+            periodSeconds: 20
+          volumeMounts:
+            - mountPath: /storage
+              name: storage-volume
+            - mountPath: /dev/kvm
+              name: dev-kvm
+            - mountPath: /dev/net/tun
+              name: dev-tun
+      volumes:
+        # 主容器挂载：标准的、受 K8s 审计管理的生产级 PVC 
+        - name: storage-volume
+          persistentVolumeClaim:
+            claimName: macos-pvc
+        # 🔴 初始化容器专用挂载：利用 DirectoryOrCreate 特性自动对齐物理路径
+        - name: host-raw-path
+          hostPath:
+            path: /var/lib/macos-storage
+            type: DirectoryOrCreate
+        - hostPath:
+            path: /dev/kvm
+            type: CharDevice
+          name: dev-kvm
+        - hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+          name: dev-tun
