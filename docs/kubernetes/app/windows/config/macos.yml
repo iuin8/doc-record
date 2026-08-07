@@ -79,11 +79,12 @@ spec:
       terminationGracePeriodSeconds: 120
       dnsPolicy: ClusterFirst
       
-      # 🛠 生产级核心优化：全自动初始化容器
-      # 1. 在物理卷校验前通过 hostPath 自动就地创建物理目录并赋权
-      # 2. 动态拓容宿主机系统的 inotify 实例上限，彻底根治 Dnsmasq 网络初始化时 "Too many open files" 的高频报错
+      # 🛠 生产级自动初始化：
+      # 1. 自动就地创建物理目录并赋权
+      # 2. 动态拓容宿主机系统的 inotify 实例上限，彻底根治 Dnsmasq 网络初始化报错
+      # 3. 防锁死逻辑：新实例启动前，自动排查并强制干掉宿主机残留的死锁磁盘文件的旧 QEMU 僵尸进程
       initContainers:
-        - name: auto-dir-and-sysctl-initializer
+        - name: auto-dir-sysctl-and-lock-cleaner
           image: alpine:latest
           imagePullPolicy: IfNotPresent
           command: 
@@ -93,11 +94,22 @@ spec:
               mkdir -p /mnt/host-storage && chmod 777 /mnt/host-storage
               sysctl -w fs.inotify.max_user_instances=1024
               sysctl -w fs.inotify.max_user_watches=1048576
+              
+              TARGET_IMG="/mnt/host-storage/15/data.img"
+              if [ -f "$TARGET_IMG" ]; then
+                echo "Checking file lock for $TARGET_IMG ..."
+                PID=$(pgrep -f "data.img" || true)
+                if [ ! -z "$PID" ]; then
+                  echo "Found residual process $PID holding the disk lock. Terminating..."
+                  kill -15 $PID || kill -9 $PID
+                  sleep 2
+                fi
+              fi
           volumeMounts:
             - name: host-raw-path
               mountPath: /mnt/host-storage
           securityContext:
-            privileged: true # 提升权限以确保有权修改宿主机内核参数及物理目录
+            privileged: true 
             
       containers:
         - name: macos
@@ -105,7 +117,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: VERSION
-              value: "15" # 已同步更新为您的最新配置：版本 15
+              value: "15"
             - name: DISK_SIZE
               value: "64G"
             - name: RAM_SIZE
@@ -133,7 +145,6 @@ spec:
             privileged: true
             allowPrivilegeEscalation: true
             readOnlyRootFilesystem: false
-            # 🛠 生产级提权限制拓容：允许容器内进程完全放开文件句柄 (nofile) 的系统限制上限
             capabilities:
               add:
                 - SYS_RESOURCE
@@ -144,7 +155,7 @@ spec:
             periodSeconds: 10
           livenessProbe:
             tcpSocket:
-              port: 5900 # 已同步更新：存活探针精准对齐您的 5900 端口
+              port: 5900
             initialDelaySeconds: 120
             periodSeconds: 20
           volumeMounts:
@@ -155,11 +166,9 @@ spec:
             - mountPath: /dev/net/tun
               name: dev-tun
       volumes:
-        # 主容器挂载：标准的、受 K8s 动态审计管理的生产级 PVC 
         - name: storage-volume
           persistentVolumeClaim:
             claimName: macos-pvc
-        # 初始化容器专用挂载：利用 DirectoryOrCreate 特性自动对齐物理路径
         - name: host-raw-path
           hostPath:
             path: /var/lib/macos-storage
@@ -172,3 +181,25 @@ spec:
             path: /dev/net/tun
             type: CharDevice
           name: dev-tun
+---
+# 🔒 生产级网络安全暴露：ClusterIP 模式
+apiVersion: v1
+kind: Service
+metadata:
+  name: macos-service
+  namespace: default
+  labels:
+    app.kubernetes.io/name: macos
+spec:
+  type: ClusterIP # 仅在集群内部暴露网络，安全且节省宿主机端口资源
+  selector:
+    app.kubernetes.io/name: macos
+  ports:
+    - name: web-http
+      protocol: TCP
+      port: 8006       # 集群内部访问端口，可在 Ingress 中直接引用
+      targetPort: 8006 # 精准映射到容器内的 8006 端口
+    - name: vnc-tcp
+      protocol: TCP
+      port: 5900
+      targetPort: 5900
