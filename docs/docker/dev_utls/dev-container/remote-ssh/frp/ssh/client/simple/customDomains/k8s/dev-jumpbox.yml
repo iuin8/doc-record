@@ -1,14 +1,17 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations: {}
+  annotations:
+    deployment.kubernetes.io/revision: "26"
+  creationTimestamp: 2025-09-10T13:09:51Z
+  generation: 66
   labels:
     k8s.kuboard.cn/layer: gateway
     k8s.kuboard.cn/name: dev-jumpbox
   name: dev-jumpbox
   namespace: default
-  resourceVersion: '146214481'
+  resourceVersion: "155192107"
+  uid: 2278e446-46fe-4e7d-8818-7fb9b4361853
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -33,20 +36,22 @@ spec:
         - env:
             - name: TZ
               value: Asia/Shanghai
-          image: 'registry.cn-hangzhou.aliyuncs.com/iuin/jumpboxc:v0.66.0_v6.3.1'
+          image: registry.cn-hangzhou.aliyuncs.com/iuin/jumpboxc:v0.66.0_v6.3.1
           imagePullPolicy: IfNotPresent
           lifecycle:
             postStart:
               exec:
                 command:
                   - /bin/sh
-                  - '-c'
+                  - -c
                   - |
                     cp /tmp/authorized_keys /root/.ssh/authorized_keys
                     chmod 700 /root/.ssh
                     chmod 600 /root/.ssh/authorized_keys
           name: dev-jumpbox
           resources: {}
+          # securityContext:
+          #   privileged: true
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
@@ -59,6 +64,9 @@ spec:
             - mountPath: /root/.ssh/
               name: volume-64ryz
       dnsPolicy: ClusterFirst
+      # hostIPC: true
+      # hostNetwork: true
+      # hostPID: true
       nodeName: master1
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -81,4 +89,3 @@ spec:
             secretName: jumpbox
         - emptyDir: {}
           name: volume-64ryz
-
