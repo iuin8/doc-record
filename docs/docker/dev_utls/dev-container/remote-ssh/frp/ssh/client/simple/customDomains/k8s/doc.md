@@ -81,3 +81,7 @@ volumes:
         - key: authorized_keys
           path: authorized_keys
 ```
+
+## 参考链接
+
+- [node-debug](https://github.com/iuin8/doc-record/blob/main/docs/kubernetes/docs/node-debug/node-debug.md)
