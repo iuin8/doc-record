@@ -51,26 +51,26 @@ spec:
               cpu: 200m
               memory: 256Mi
 
-          volumeMounts:
-            - name: host-root
-              mountPath: /host
-            - name: containerd-sock
-              mountPath: /run/containerd/containerd.sock
-              readOnly: true
-            - name: cgroup
-              mountPath: /sys/fs/cgroup
-              readOnly: true
+          # volumeMounts:            # 按需启用：nsenter -t 1 -a 后已接管宿主机文件系统，通常不需要额外挂载
+          #   - name: host-root
+          #     mountPath: /host
+          #   - name: containerd-sock
+          #     mountPath: /run/containerd/containerd.sock
+          #     readOnly: true
+          #   - name: cgroup
+          #     mountPath: /sys/fs/cgroup
+          #     readOnly: true
 
-      volumes:
-        - name: host-root
-          hostPath:
-            path: /
-            type: Directory
-        - name: containerd-sock
-          hostPath:
-            path: /run/containerd/containerd.sock
-            type: Socket
-        - name: cgroup
-          hostPath:
-            path: /sys/fs/cgroup
-            type: Directory
+      # volumes:
+      #   - name: host-root
+      #     hostPath:
+      #       path: /
+      #       type: Directory
+      #   - name: containerd-sock
+      #     hostPath:
+      #       path: /run/containerd/containerd.sock
+      #       type: Socket
+      #   - name: cgroup
+      #     hostPath:
+      #       path: /sys/fs/cgroup
+      #       type: Directory
