@@ -21,9 +21,9 @@ spec:
         app: node-debug
     spec:
       # --- 宿主机访问通道 ---
-      hostPID: true
-      hostNetwork: true
-      hostIPC: true
+      hostPID: true            # 必须：nsenter 通过宿主机 PID 1 定位 namespace 入口
+      # hostNetwork: true      # 非必须：nsenter -t 1 -n 可随时切换，按需启用
+      # hostIPC: true          # 非必须：nsenter -t 1 -i 可随时切换，按需启用
 
       # --- 容忍所有污点,确保能部署到 control-plane ---
       tolerations:
@@ -41,7 +41,11 @@ spec:
           command: ["sleep", "infinity"]
 
           securityContext:
-            privileged: true
+            capabilities:
+              add:
+                - SYS_ADMIN       # nsenter 切换 namespace 必须
+            # privileged: true    # 懒人模式：一步到位的权限。如果 SYS_ADMIN 不够（如需要操作 /dev、加载内核模块等），
+                                  # 可替换上面三行为 privileged: true
 
           resources:
             requests:

@@ -4,7 +4,7 @@
 
 # Node Debug
 
-通过特权 DaemonSet + `nsenter` 实现 Kubernetes 节点的**无 SSH 应急救援**。节点网络隔离或 SSH 不可用时，`kubectl exec` 进入调试 Pod 后即可穿透到宿主机上下文执行诊断和修复。
+通过 DaemonSet + `nsenter` 实现 Kubernetes 节点的**无 SSH 应急救援**。Pod 以最小权限（仅 `CAP_SYS_ADMIN`）运行，`kubectl exec` 进入后执行 `nsenter -t 1 -a` 即可穿透到宿主机上下文。
 
 ## 前置知识
 
@@ -17,7 +17,7 @@ flowchart LR
     subgraph Cluster["Kubernetes 集群"]
         subgraph Node["目标节点"]
             Host["宿主机<br/>(systemd, kubelet, 物理网卡)"]
-            Debug["node-debug Pod<br/>netshoot + privileged"]
+            Debug["node-debug Pod<br/>hostPID + CAP_SYS_ADMIN"]
         end
         User["运维人员"] -->|kubectl exec| Debug
         Debug -->|"nsenter -t 1 -a<br/>(全量: 接管宿主机)"| Host
