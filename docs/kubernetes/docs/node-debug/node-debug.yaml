@@ -1,0 +1,77 @@
+---
+# DaemonSet: node-debug
+# 用途：通过 $ kubectl exec 进入 Pod 后执行 nsenter -t 1 -a 获得宿主机 root shell
+# 部署前根据需要：
+#   1. 决定是否启用 nodeSelector 限制范围
+#   2. 确认容器运行时 socket 路径（containerd / docker）
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-debug
+  namespace: kube-system
+  labels:
+    app: node-debug
+spec:
+  selector:
+    matchLabels:
+      app: node-debug
+  template:
+    metadata:
+      labels:
+        app: node-debug
+    spec:
+      # --- 宿主机访问通道 ---
+      hostPID: true
+      hostNetwork: true
+      hostIPC: true
+
+      # --- 容忍所有污点,确保能部署到 control-plane ---
+      tolerations:
+        - operator: Exists
+
+      # --- 按需启用：仅部署到指定节点 ---
+      # nodeSelector:
+      #   debug: "true"
+
+      containers:
+        - name: debug
+          # netshoot: 集成了 nsenter / tcpdump / iproute2 / curl / jq / strace 等诊断工具
+          image: nicolaka/netshoot:v0.13
+          imagePullPolicy: IfNotPresent
+          command: ["sleep", "infinity"]
+
+          securityContext:
+            privileged: true
+
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+
+          volumeMounts:
+            - name: host-root
+              mountPath: /host
+            - name: containerd-sock
+              mountPath: /run/containerd/containerd.sock
+              readOnly: true
+            - name: cgroup
+              mountPath: /sys/fs/cgroup
+              readOnly: true
+
+      volumes:
+        - name: host-root
+          hostPath:
+            path: /
+            type: Directory
+        - name: containerd-sock
+          hostPath:
+            path: /run/containerd/containerd.sock
+            type: Socket
+        - name: cgroup
+          hostPath:
+            path: /sys/fs/cgroup
+            type: Directory
