@@ -1,3 +1,26 @@
+# 1. 创建 Portainer 专属的服务账号 (ServiceAccount)
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: portainer-sa
+  namespace: default
+---
+# 2. 赋予集群管理员权限 (ClusterRoleBinding)
+# 让 portainer-sa 拥有 cluster-admin 权限，从而能够管理 K8s 资源
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: portainer-crb
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: portainer-sa
+    namespace: default
+---
+# 3. Deployment (绑定新的 ServiceAccount)
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,10 +38,10 @@ spec:
       labels:
         app: portainer
     spec:
-      # 1. 强制指定节点
-      nodeName: master1
+      # 核心修复：使用刚才创建的高权限 ServiceAccount
+      serviceAccountName: portainer-sa
       
-      # 2. 容忍 Master 污点，允许 Pod 运行
+      nodeName: master1
       tolerations:
         - key: "node-role.kubernetes.io/master"
           operator: "Exists"
@@ -49,16 +72,16 @@ spec:
             - name: docker-sock
               mountPath: /var/run/docker.sock
       volumes:
-        # 3. 使用 hostPath 直接挂载 master1 的本地目录（最稳妥，无需存储插件）
         - name: data
           hostPath:
             path: /var/lib/portainer
-            type: DirectoryOrCreate # 自动创建目录
+            type: DirectoryOrCreate
         - name: docker-sock
           hostPath:
             path: /var/run/docker.sock
             type: Socket
 ---
+# 4. Service
 apiVersion: v1
 kind: Service
 metadata:
