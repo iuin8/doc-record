@@ -8,7 +8,7 @@
 
 ## 前置知识
 
-核心机制基于 Linux namespace 穿透工具 `nsenter`，必须先理解 [nsenter 的 `-m` 分水岭](../../os/linux/process/nsenter.md#m-参数命令来源的分水岭) 才能正确使用本方案。
+核心机制基于 Linux namespace 穿透工具 `nsenter`，必须先理解 [nsenter 的 `-m` 分水岭](../../../../os/linux/process/nsenter#-m-参数命令来源的分水岭) 才能正确使用本方案。
 
 ## 架构
 
@@ -42,7 +42,7 @@ kubectl apply -f node-debug.yaml
 kubectl label node <node-name> debug=true
 ```
 
-?> 镜像使用 `nicolaka/netshoot`，集成了 `nsenter`、`tcpdump`、`iproute2`、`curl`、`jq`、`strace`。选择 netshoot 而非 alpine 的核心原因：[宿主机可能是精简系统，没装诊断工具](../../os/linux/process/nsenter.md#场景二精细穿透--借用容器工具诊断宿主机网络)。
+?> 镜像使用 `nicolaka/netshoot`，集成了 `nsenter`、`tcpdump`、`iproute2`、`curl`、`jq`、`strace`。选择 netshoot 而非 alpine 的核心原因：[宿主机可能是精简系统，没装诊断工具](../../../../os/linux/process/nsenter#场景二精细穿透--借用容器工具诊断宿主机网络)。
 
 ## 使用方式
 
