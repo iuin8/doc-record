@@ -1,81 +1,70 @@
 # ================= 基础配置 =================
 mode: rule
 allow-lan: true
-bind-address: '127.0.0.1' # 保证 API 仅本地访问
+bind-address: '127.0.0.1' 
 mixed-port: 7890
 log-level: info
 ipv6: false
+
+# ================= 网络性能与动态 IP 优化 =================
+# [核心] 开启 TCP 并发连接：域名解析出多个 IP 时同时发起握手，加速故障切换与连接建立
+tcp-concurrent: true
+
+# [核心] 缩短连接保活时间：让 Mihomo 更快释放旧的死连接，加速感知上游 IP 变化
+keep-alive-interval: 15   # 发送 Keep-Alive 探测包的间隔（秒）
+keep-alive-idle: 30       # 连接空闲多久后断开（秒）
+
+# 可选：伪装浏览器指纹，防止某些高级防火墙识别 Mihomo 的 TLS 握手特征
+# global-client-fingerprint: chrome 
 
 # ================= DNS 配置 =================
 dns:
   enable: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
-  # [核心加固] 保护 K8s/Docker 内部服务发现域名，防止被分配 Fake-IP
+  # [优化] 降低 DNS 缓存存活时间，加速感知上游代理 IP 变化
+  cache-alive: 60
   fake-ip-filter:
     - '*.lan'
     - '*.local'
     - '*.arpa'
-    - '*.svc'               # K8s Service 简写
-    - '*.svc.cluster.local' # K8s 内部完整域名
-    - 'kubernetes.default'  # K8s 默认 API 域名
-  respect-rules: true       # [生产必备] 让 DNS 解析严格遵循下方的 rules 分流规则
-  
+    - '*.svc'               
+    - '*.svc.cluster.local' 
+    - 'kubernetes.default'  
+  respect-rules: true       
   nameserver:
     - https://doh.pub/dns-query
     - https://dns.alidns.com/dns-query
   proxy-server-nameserver:
     - https://doh.pub/dns-query
-  
-  # [优化] 针对代理域名强制刷新解析
-  # nameserver-policy:
-  #   "+.xxx.xxx":
-  #     - https://doh.pub/dns-query
 
-# ================= Sniffer (嗅探器) =================
+# ================= Sniffer =================
 sniffer:
   enable: true
   sniff:
-    HTTP:
-      ports: [80, 8080-8880]
-      override-destination: true
-    TLS:
-      ports: [443, 8443]
+    HTTP: { ports: [80, 8080-8880], override-destination: true }
+    TLS: { ports: [443, 8443] }
 
-# ================= TUN 模式配置 (核心重构区) =================
+# ================= TUN 模式配置 (终极通用版) =================
 tun:
   enable: true
-  stack: gvisor # [生产必备] 彻底解决 system 栈在复杂网络下的日志刷屏问题
+  stack: gvisor 
   auto-route: true
   auto-detect-interface: true
-  strict-route: false 
+  strict-route: false # [关键] 保持 false，让 CNI 的精确路由优先于 TUN 的默认路由
   
   dns-hijack:
-    - "any:53" # 配合下方的 route-exclude-address，实现“外网劫持，内网放行”
+    - "any:53" 
     
-  # [严重警告] 绝对不要排除 docker0, cni0 等虚拟网卡！否则容器将无法走代理！
-  # exclude-interface: 
-  
   route-exclude-address:
-    # 1. 常规私有网段直连
-    - 127.0.0.0/8
-    - 10.0.0.0/8
-    - 172.16.0.0/12
-    - 192.168.0.0/16
-    - 100.64.0.0/10
-    
-    # 2. [K8s 专属] 必须根据您的集群实际情况修改以下 CIDR！
-    # 如果不加，Pod 之间互访、Pod 访问 CoreDNS 将被代理或丢弃，导致集群瘫痪
-    - 10.244.0.0/16  # TODO: 替换为您的 K8s Pod CIDR (Flannel/Calico 默认)
-    - 10.96.0.0/12   # TODO: 替换为您的 K8s Service CIDR (ClusterIP 网段)
-    
-    # 3. [宿主机保护] 防止 Kubelet 访问 API Server 被代理
-    # 如果您的 K8s API Server 暴露在公网 IP，请务必将宿主机公网 IP 加入此处
-    # - <您的宿主机公网IP>/32 
-
-# [关键] 连接超时与重试
-tcp-concurrent: true      # 开启并发连接，加速故障切换
-# global-client-fingerprint: chrome  # 可选
+    # [通用方案] 直接放行所有 RFC 1918 私有地址大段，自动覆盖所有 K8s/Docker 网段！
+    # 无论您的集群是 10.68.x.x, 10.244.x.x 还是 172.20.x.x，全部自动命中直连！
+    - 127.0.0.0/8        # 本地环回
+    - 10.0.0.0/8         # 覆盖所有 10.x.x.x (包含绝大多数 K8s Pod/Service CIDR)
+    - 172.16.0.0/12      # 覆盖 172.16.x.x ~ 172.31.x.x (包含 Docker 默认网桥及各类 K8s CIDR)
+    - 192.168.0.0/16     # 覆盖所有 192.168.x.x (常见家庭/企业局域网)
+    - 100.64.0.0/10      # 覆盖 CGNAT (某些云厂商托管 K8s 会使用此网段)
+    - 169.254.0.0/16     # 覆盖 Link-Local (AWS/GCP 等云元数据服务及某些 CNI 使用)
 
 # ================= 代理节点 =================
 proxies:
@@ -92,19 +81,20 @@ proxy-groups:
       - "Gateway-Proxy"
       - DIRECT
 
-# ================= 分流规则 =================
+# ================= 分流规则 (通用兜底版) =================
 rules:
-  # 1. 局域网与内部网络防回环直连 (最高优先级)
+  # 1. [通用] 内部域名强制直连 (所有 K8s 集群通用)
+  - DOMAIN-SUFFIX,cluster.local,DIRECT
+  - DOMAIN-SUFFIX,svc,DIRECT
+  - DOMAIN-KEYWORD,kubernetes,DIRECT
+
+  # 2. [通用] RFC 1918 私有网段直连 (替代具体的 K8s CIDR)
   - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
   - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
   - IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
   - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
   - IP-CIDR,100.64.0.0/10,DIRECT,no-resolve
-  
-  # 2. [K8s 专属] 内部域名强制直连
-  - DOMAIN-SUFFIX,cluster.local,DIRECT
-  - DOMAIN-SUFFIX,svc,DIRECT
-  - DOMAIN-KEYWORD,kubernetes,DIRECT
+  - IP-CIDR,169.254.0.0/16,DIRECT,no-resolve
 
   # 3. 常规防泄漏与 GeoIP 规则
   - IP-CIDR,224.0.0.0/4,REJECT,no-resolve
@@ -112,6 +102,8 @@ rules:
   - IP-CIDR6,fc00::/7,DIRECT,no-resolve
   - IP-CIDR6,fe80::/10,DIRECT,no-resolve
   - IP-CIDR6,fd00::/8,DIRECT,no-resolve
+  
+  # [终极兜底] GEOIP,private 包含了上述所有私有地址以及 IPv6 私有地址，确保万无一失
   - GEOIP,private,DIRECT,no-resolve
   
   # 4. 中国大陆直连
