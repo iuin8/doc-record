@@ -47,3 +47,26 @@ spec:
             path: /data/k8s/kasm-workspaces/profiles
           name: profiles
           type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations: {}
+  labels: {}
+  name: kasm-workspaces
+  namespace: default
+spec:
+  clusterIP: ""
+  externalName: ""
+  loadBalancerIP: ""
+  ports:
+    - name: web
+      port: 4443
+      protocol: TCP
+      targetPort: 4443
+  publishNotReadyAddresses: false
+  selector:
+    app: kasm-workspaces
+    pod-template-hash: 85575c5df8
+  sessionAffinity: None
+  type: ClusterIP
