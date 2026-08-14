@@ -1,0 +1,80 @@
+# ==========================================
+# 1. 基础与网络配置
+# ==========================================
+deploymentSize: "medium"
+publicAddr: "kasm.yourdomain.com" # 【必改 1】你的实际访问域名
+
+proxyService:
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  tls: true
+  backendProtocol: http
+  ingressClassName: "nginx" # 【必改 2】你的 Ingress Class
+  annotations:
+    # 生产级必加：防止 WebSocket 终端 60 秒断开
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.org/websocket-services: "kasm-prod-proxy"
+
+# ==========================================
+# 2. 证书自动化管理 (Cert-Manager 联动)
+# ==========================================
+certificate:
+  # 【核心】这里指定一个名字，Cert-Manager 会自动创建同名 Secret，Kasm 网关会自动挂载它
+  secretName: "kasm-prod-auto-tls" 
+  certManager:
+    enabled: true # 开启自动化
+    addWildCard: true
+    issuerName: "letsencrypt-prod" # 对应第一阶段创建的 Issuer 名字
+    issuerKind: "ClusterIssuer"
+    issuerGroup: "cert-manager.io"
+    annotations: {}
+    labels: {}
+
+# ==========================================
+# 3. 外部 PostgreSQL 对接
+# ==========================================
+database:
+  standalone: true # 【核心】设为 true，剥离 Chart 内置的单节点 DB
+  hostname: "your-pg-host.com" # 【必改 3】外部 PG 的地址 (IP 或域名)
+  port: 5432
+  kasmDbName: "kasm" # 确保你的 PG 里已经建好了这个库
+  kasmDbUser: "kasmapp" # 确保这个用户有该库的读写权限
+  kasmDbSecret:
+    name: "kasm-pg-secret" # 指向第二阶段创建的 Secret
+    key: "password"
+
+# ==========================================
+# 4. 数据库初始化与备份管理 (必须顶格写，和 database 平级！)
+# ==========================================
+# 生产级建议：关闭内置 DB 的初始化 Job，防止误操作
+dbManagement:
+  initialize: true # 首次部署设为 true，让 Kasm 自动建表；后续升级需按官方文档调整
+  # upgrade:
+  #   enable: false
+  #   oldDbBackupFileName: "kasm_dump.tar"
+  #   oldDbBackupPvc: "kasm-db-dump-pvc"
+  #   oldDbSecretsName: "kasm-secrets"
+  # backupCron:
+  #   enabled: false
+  #   pvcName: ""
+  #   schedule: ""
+  #   timeZone: ""
+  #   storageClass: ""
+  #   pvcSize: 0
+
+# ==========================================
+# 4. 外部 Redis 对接
+# ==========================================
+# 注：Kasm 1.18 控制面强依赖 Redis 做会话缓存。
+redis:
+  enabled: false # 【核心】禁用内置 Redis
+  # 外部 Redis 连接配置 (基于 Kasm Chart 标准字段)
+  hostname: "your-redis-host.com" # 【必改 4】外部 Redis 地址
+  port: 6379
+  # 如果 Redis 有密码，取消下面两行的注释并指向 Secret
+  # passwordSecret:
+  #   name: "kasm-redis-secret"
+  #   key: "password"

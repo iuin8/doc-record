@@ -1,0 +1,58 @@
+# values-production.yaml (互联网环境标准官方自签闭环版)
+
+# 1. 顶层全局内网/公网访问域名
+publicAddr: "kasm.yourcompany.local"
+
+# 2. 核心大招：激活官方自带的分布式证书签发集群
+certificates:
+  certManager:
+    enabled: true                     # 重点：开启内置自签组件
+  custom:
+    enabled: false                    # 关闭外部自定义导入
+  # 🌟 官方硬核强求项：有了联网环境，必须显式声明自签发机构（Self-Signed Issuer）
+  # 只有这样，模板内部在拼接 rdp-gw-cert 时才不会塌陷为空
+  issuer:
+    name: "kasm-prod-selfsigned-issuer"
+    kind: "ClusterIssuer"             # 声明为集群级别的签发器
+
+kasmApp:
+  # 外部高可用关系型数据库解耦
+  database:
+    embedded: false
+    host: "10.0.5.200"
+    port: 5432
+    user: "kasm_prod_user"
+    password: "YourSuperSecureProductionPassword"
+    name: "kasm_db"
+
+  # 外部高可用 Redis 缓存解耦
+  redis:
+    embedded: false
+    host: "10.0.5.201"
+    password: "YourSecureRedisPassword"
+
+  # 控制面高可用多实例容灾
+  api:
+    replicaCount: 3
+    resources:
+      limits:
+        cpu: "2"
+        memory: 4Gi
+      requests:
+        cpu: "1"
+        memory: 2Gi
+
+  # 企业级生产 Nginx Ingress 入口
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    hosts:
+      - host: "kasm.yourcompany.local"
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    # 联动配置 Ingress 层的 TLS 卸载。内置机制会在拉起后自动填充这个 Secret 的实体内容
+    tls:
+      - secretName: kasm-prod-proxy-cert
+        hosts:
+          - "kasm.yourcompany.local"
