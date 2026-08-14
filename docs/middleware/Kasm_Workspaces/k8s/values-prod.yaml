@@ -1,8 +1,5 @@
-# ==========================================
-# 1. 基础与网络配置
-# ==========================================
 deploymentSize: "medium"
-publicAddr: "kasm.yourdomain.com" # 【必改 1】你的实际访问域名
+publicAddr: "kasm.local" # 你的内网域名或IP
 
 proxyService:
   type: ClusterIP
@@ -11,46 +8,45 @@ ingress:
   enabled: true
   tls: true
   backendProtocol: http
-  ingressClassName: "nginx" # 【必改 2】你的 Ingress Class
+  ingressClassName: "nginx" # 【修改为你集群的 Ingress Class】
   annotations:
-    # 生产级必加：防止 WebSocket 终端 60 秒断开
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.org/websocket-services: "kasm-prod-proxy"
 
-# ==========================================
-# 2. 证书自动化管理 (Cert-Manager 联动)
-# ==========================================
+# 【核心 1】证书配置：彻底关掉自动化，使用物理注入
 certificate:
-  # 【核心】这里指定一个名字，Cert-Manager 会自动创建同名 Secret，Kasm 网关会自动挂载它
   secretName: "kasm-prod-auto-tls" 
   certManager:
-    enabled: false # 【临时关掉】
-    # enabled: true # 开启自动化
-    addWildCard: false  # 【核心修改】关掉通配符，使用单域名
-    # issuerName: "letsencrypt-prod" # 对应第一阶段创建的 Issuer 名字
-    # issuerKind: "ClusterIssuer"
-    # issuerGroup: "cert-manager.io"
-    # annotations: {}
-    # labels: {}
+    enabled: false
+    addWildCard: false
+    issuerName: ""
+    issuerKind: ""
+    issuerGroup: ""
+    annotations: {}
+    labels: {}
 
-# ==========================================
-# 3. 外部 PostgreSQL 对接
-# ==========================================
+# 【核心 2】外部 PG 配置：提供超管账号，触发自动建表
 database:
-  standalone: true # 【核心】设为 true，剥离 Chart 内置的单节点 DB
-  hostname: "your-pg-host.com" # 【必改 3】外部 PG 的地址 (IP 或域名)
+  standalone: true 
+  hostname: "pg-sql.middleware.svc.cluster.local" # 你的外部 PG 地址
   port: 5432
-  kasmDbName: "kasm" # 确保你的 PG 里已经建好了这个库
-  kasmDbUser: "kasmapp" # 确保这个用户有该库的读写权限
+  kasmDbName: "kasm" 
+  kasmDbUser: "kasmapp" 
+  
+  # 业务账号密码 (Kasm 日常连接用)
   kasmDbSecret:
-    name: "kasm-pg-secret" # 指向第二阶段创建的 Secret
+    name: "kasm-pg-secret" # 你之前创建的普通账号 secret
     key: "password"
 
-# ==========================================
-# 4. 数据库初始化与备份管理 (必须顶格写，和 database 平级！)
-# ==========================================
-# 生产级建议：关闭内置 DB 的初始化 Job，防止误操作
+  # 【绝杀配置】超管账号 (Kasm 初始化 Job 用它去建库、建表、建用户)
+  postgresMasterUser:
+    username: "postgres"
+    secret:
+      name: "kasm-pg-master-secret" # 刚才第一步创建的超管 Secret
+      key: "password"
+
+# 【核心 3】开启初始化，自动建表
 dbManagement:
   initialize: true # 首次部署设为 true，让 Kasm 自动建表；后续升级需按官方文档调整
   # upgrade:
@@ -73,7 +69,7 @@ dbManagement:
 redis:
   enabled: false # 【核心】禁用内置 Redis
   # 外部 Redis 连接配置 (基于 Kasm Chart 标准字段)
-  hostname: "your-redis-host.com" # 【必改 4】外部 Redis 地址
+  hostname: "redis.middleware.svc.cluster.local" # 【必改 4】外部 Redis 地址
   port: 6379
   # 如果 Redis 有密码，取消下面两行的注释并指向 Secret
   # passwordSecret:

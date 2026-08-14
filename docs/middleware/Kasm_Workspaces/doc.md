@@ -162,6 +162,23 @@ kubectl delete order --all -n kasm-prod
 helm upgrade kasm-prod kasmweb/kasm-helm -n kasm-prod -f values-prod.yaml
 ```
 
+清理旧环境并重新部署
+
+```bash
+# 1. 彻底删除旧环境
+helm uninstall kasm-prod -n kasm-prod
+kubectl delete namespace kasm-prod
+
+# 2. 重新创建命名空间
+kubectl create namespace kasm-prod
+
+# 3. 重新注入刚才的两个 Secret (超管密码和证书)
+# (请重新执行第一步中的 kubectl create secret 命令，因为 namespace 被删了)
+
+# 4. 终极安装 (加入 --timeout 15m 等待自动建表完成)
+helm install kasm-prod kasmweb/kasm-helm -n kasm-prod -f values-prod.yaml
+```
+
 ## ⚠️ 内网自签证书的“致命隐藏坑”（必看！）
 
 在内网使用自签证书访问 Kasm 时，极大概率会遇到 “登录成功，但打开 Ubuntu 桌面时一直黑屏或提示 Connection Failed”。
