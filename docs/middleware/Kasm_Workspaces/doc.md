@@ -82,6 +82,10 @@ kubectl wait --for=condition=Available deployment --all -n cert-manager --timeou
 kubectl apply -f issuer.yaml
 
 
+# 一键执行 Helm 安装
+# 1. 创建专属命名空间
+kubectl create namespace kasm-prod
+
 # 创建 PostgreSQL 密码 Secret：
 # 将 '你的PG密码' 替换为实际密码
 kubectl create secret generic kasm-pg-secret --from-literal=password='你的PG密码' -n kasm-prod
@@ -92,9 +96,6 @@ kubectl create secret generic kasm-redis-secret --from-literal=password='你的R
 # 生成生产级 values-prod.yaml
 # 新建 values-prod.yaml，复制以下经过官方 Schema 校验的结构。⚠️ 请仔细修改带有 【必改】 的 5 个地方。
 
-# 一键执行 Helm 安装
-# 1. 创建专属命名空间
-kubectl create namespace kasm-prod
 # 2. 添加/更新官方仓库
 helm repo add kasmweb https://helm.kasm.com
 helm repo update
@@ -123,3 +124,27 @@ kubectl logs -n kasm-prod job/kasm-prod-db-init-job | grep -i "password"
 kubectl get secret kasm-secrets -n kasm-prod -o jsonpath="{.data.admin_password}" | base64 --decode
 ```
 
+排查
+
+```bash
+# 查看 Certificate 资源的状态
+kubectl get certificate -n kasm-prod
+# 查看详细的失败原因：
+kubectl describe certificate kasm-prod-auto-tls -n kasm-prod
+kubectl describe certificate kasm-prod-cert-manager -n kasm-prod
+# 检查 ClusterIssuer 是否就绪：
+kubectl get clusterissuer letsencrypt-prod
+# 查看底层的 Order (订单) 状态（最准确）：
+kubectl get order -n kasm-prod
+# 拿到上面输出的那个 order 名字后，执行 describe：
+kubectl describe order <替换为上面查到的order名字> -n kasm-prod
+
+# 清理卡死的旧证书订单（重要！）
+# 删除卡住的 Certificate 资源 (它会自动重建)
+kubectl delete certificate kasm-prod-cert-manager -n kasm-prod
+# 删除残留的失败 Order
+kubectl delete order --all -n kasm-prod
+
+# 重新执行 Helm 升级(--wait --timeout 15m)
+helm upgrade kasm-prod kasmweb/kasm-helm -n kasm-prod -f values-prod.yaml
+```

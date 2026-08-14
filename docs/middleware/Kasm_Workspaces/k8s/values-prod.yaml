@@ -26,7 +26,7 @@ certificate:
   secretName: "kasm-prod-auto-tls" 
   certManager:
     enabled: true # 开启自动化
-    addWildCard: true
+    addWildCard: false  # 【核心修改】关掉通配符，使用单域名
     issuerName: "letsencrypt-prod" # 对应第一阶段创建的 Issuer 名字
     issuerKind: "ClusterIssuer"
     issuerGroup: "cert-manager.io"
