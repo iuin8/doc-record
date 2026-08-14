@@ -103,6 +103,19 @@ helm repo update
 helm install kasm-prod kasmweb/kasm-helm -n kasm-prod --create-namespace -f values-prod.yaml
 ```
 
+内网走自签证书
+
+```bash
+# 1. 生成自签证书
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=xxx.iuin.dev" -addext "subjectAltName=DNS:xxx.iuin.dev"
+
+# 2. 覆盖写入 Secret
+kubectl create secret tls kasm-prod-auto-tls --cert=tls.crt --key=tls.key -n kasm-prod  --dry-run=client -o yaml | kubectl apply -f -
+
+# 3. 触发 Helm 更新：
+helm upgrade kasm-prod kasmweb/kasm-helm -n kasm-prod -f values-prod.yaml
+```
+
 ```bash
 # 生产级验证与排错（SOP 闭环）
 # 验证证书是否自动签发成功：
@@ -147,4 +160,50 @@ kubectl delete order --all -n kasm-prod
 
 # 重新执行 Helm 升级(--wait --timeout 15m)
 helm upgrade kasm-prod kasmweb/kasm-helm -n kasm-prod -f values-prod.yaml
+```
+
+## ⚠️ 内网自签证书的“致命隐藏坑”（必看！）
+
+在内网使用自签证书访问 Kasm 时，极大概率会遇到 “登录成功，但打开 Ubuntu 桌面时一直黑屏或提示 Connection Failed”。
+原因：Kasm 的 VNC 桌面强依赖 WebRTC 技术。现代浏览器（Chrome/Edge）对自签证书的安全策略极其严格，会默默拦截 WebRTC 的 UDP 数据流，导致画面传不过来。
+
+终极解决办法（二选一）：
+方法 1：浏览器“物理”放行（最简单）
+在访问 Kasm 的那个 Chrome/Edge 标签页中，不要动鼠标，直接用键盘盲打输入以下这串字母（输入时屏幕上不会有显示）：
+
+```bash
+thisisunsafe
+# 敲完后，页面会自动刷新，WebRTC 就会被放行，桌面瞬间就能出来了！
+```
+
+方法 2：在 Kasm 后台关闭 WebRTC 强制要求（一劳永逸）
+
+用 admin 账号登录 Kasm 后台。
+左侧菜单导航到 Admin -> Settings -> Server。
+找到 WebRTC 相关的选项，将 WebRTC Fallback 开启，或者直接禁用 WebRTC（Disable WebRTC）。
+这样 Kasm 就会降级使用普通的 WebSocket 传输画面，虽然延迟比 WebRTC 高几毫秒，但在内网自签证书下绝对稳定，永不黑屏。
+
+
+## 看到 failed to create fsnotify watcher: too many open files 这个报错，是 K8s 节点（宿主机 Linux 内核）的文件监控句柄（inotify）被耗尽了！
+
+```bash
+# 临时生效（立刻解决崩溃）
+sudo sysctl -w fs.inotify.max_user_watches=1048576
+sudo sysctl -w fs.inotify.max_user_instances=1024
+```
+
+```bash
+# 永久固化（防止重启后失效）
+cat <<EOF | sudo tee /etc/sysctl.d/99-kasm-inotify.conf
+fs.inotify.max_user_watches=1048576
+fs.inotify.max_user_instances=1024
+EOF
+
+# 重新加载系统配置
+sudo sysctl --system
+
+# 重启 Kasm Pod（让它重新读取新内核参数）
+# 强制重启 kasm-prod 命名空间下的所有 Deployment 和 StatefulSet
+kubectl rollout restart deploy -n kasm-prod
+kubectl rollout restart statefulset -n kasm-prod
 ```

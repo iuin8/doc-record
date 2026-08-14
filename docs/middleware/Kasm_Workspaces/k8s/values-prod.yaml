@@ -25,13 +25,14 @@ certificate:
   # 【核心】这里指定一个名字，Cert-Manager 会自动创建同名 Secret，Kasm 网关会自动挂载它
   secretName: "kasm-prod-auto-tls" 
   certManager:
-    enabled: true # 开启自动化
+    enabled: false # 【临时关掉】
+    # enabled: true # 开启自动化
     addWildCard: false  # 【核心修改】关掉通配符，使用单域名
-    issuerName: "letsencrypt-prod" # 对应第一阶段创建的 Issuer 名字
-    issuerKind: "ClusterIssuer"
-    issuerGroup: "cert-manager.io"
-    annotations: {}
-    labels: {}
+    # issuerName: "letsencrypt-prod" # 对应第一阶段创建的 Issuer 名字
+    # issuerKind: "ClusterIssuer"
+    # issuerGroup: "cert-manager.io"
+    # annotations: {}
+    # labels: {}
 
 # ==========================================
 # 3. 外部 PostgreSQL 对接
