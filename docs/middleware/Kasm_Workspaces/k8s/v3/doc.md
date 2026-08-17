@@ -38,6 +38,8 @@ openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
 
 # 3. 验证扩展（必须看到 CA:FALSE、Digital Signature、TLS Web Server Authentication）
 openssl x509 -in tls.crt -noout -text | grep -A1 "Key Usage\|Basic Constraints"
+# 验证证书 (确认包含了 pdd.iuin.dev 和 10.0.5.167)
+openssl x509 -in tls.crt -noout -text | grep -E "Issuer:|Subject:|DNS:|IP Address:"
 
 # 热替换 K8s 里的 TLS Secret
 kubectl create secret tls kasm-prod-auto-tls \
@@ -72,6 +74,8 @@ kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storagec
 helm install kasm-prod kasmweb/kasm-helm \
   -n kasm-prod \
   -f values-prod.yaml
+# 修改 Kasm 配置后升级需执行以下命令
+# helm upgrade kasm-prod kasmweb/kasm-helm -n kasm-prod -f values-prod.yaml
 
 # 盯紧 Pod 状态：
 watch kubectl get pods -n kasm-prod
