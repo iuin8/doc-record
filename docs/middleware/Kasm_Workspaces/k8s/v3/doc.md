@@ -17,11 +17,40 @@ sudo sysctl --system
 # 1. 创建命名空间
 kubectl create namespace kasm-prod
 
-# 2. 生成自签证书(把 kasm.local 换成你实际想用的内网域名或 IP，把 10.68.85.58 换成你 Ingress 的内网 IP)
+# 1. 写一个“服务器证书”专用配置
+cat > kasm-server.cnf <<'EOF'
+[req]
+distinguished_name = dn
+prompt = no
+x509_extensions = v3_ext
+[dn]
+CN = kasm.local
+[v3_ext]
+basicConstraints = CA:FALSE
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = DNS:kasm.local, IP:10.0.5.167
+EOF
+
+# 2. 生成新证书（覆盖旧的 tls.key / tls.crt）
 openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
-  -keyout tls.key -out tls.crt \
-  -subj "/CN=kasm.local" \
-  -addext "subjectAltName=DNS:kasm.local,IP:10.68.85.58"
+  -keyout tls.key -out tls.crt -config kasm-server.cnf
+
+# 3. 验证扩展（必须看到 CA:FALSE、Digital Signature、TLS Web Server Authentication）
+openssl x509 -in tls.crt -noout -text | grep -A1 "Key Usage\|Basic Constraints"
+
+# 热替换 K8s 里的 TLS Secret
+kubectl create secret tls kasm-prod-auto-tls \
+  --cert=tls.crt --key=tls.key \
+  -n kasm-prod \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+# ingress-nginx 会自动监听 Secret 变化并热加载，无需重启。如果 10 秒后还不生效，执行 `kubectl rollout restart deploy -n ingress-nginx ingress-nginx-controller-nginx`。
+
+# 在 Mac 上验证新证书已生效
+openssl s_client -connect 10.0.5.167:32743 -servername kasm.local </dev/null 2>/dev/null | openssl x509 -noout -text | grep -A1 "Key Usage"
+# 确认输出里是 Digital Signature, Key Encipherment，而不是 Certificate Sign。
+
 
 # 3. 注入 K8s (名字必须和下面 values 里的一致)
 kubectl create secret tls kasm-prod-auto-tls \
