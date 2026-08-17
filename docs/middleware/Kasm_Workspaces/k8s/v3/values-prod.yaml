@@ -1,0 +1,50 @@
+deploymentSize: "medium"
+publicAddr: "kasm.local" # 【必改 1】你的内网域名或 IP
+
+proxyService:
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  tls: true
+  backendProtocol: http
+  ingressClassName: "nginx" # 【必改 2】你的 Ingress Class
+  annotations:
+    # 生产级必加：防止 WebSocket 桌面 60 秒断开
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.org/websocket-services: "kasm-prod-proxy"
+
+# 【核心 1】内置数据库配置 (生产级持久化)
+database:
+  standalone: false # 【核心】使用内置 PG，Kasm 自动搞定建表和 SSL
+  hostname: "kasm-db"
+  port: 5432
+  kasmDbName: "kasm"
+  kasmDbUser: "kasmapp"
+  storage:
+    storageClassName: "local-path" # 【必改 3】你的集群 StorageClass (如 alicloud-disk-ssd, ceph-rbd, standard)
+    pvcSize: 20 # 生产级至少给 20G
+    retentionPolicy:
+      whenDeleted: Retain # 防删库跑路
+      whenScaled: Retain
+
+# 【核心 2】证书配置 (彻底关掉外网自动化，使用刚才注入的自签证书)
+certificate:
+  secretName: "kasm-prod-auto-tls" 
+  certManager:
+    enabled: false
+    addWildCard: false
+    issuerName: ""
+    issuerKind: ""
+    issuerGroup: ""
+    annotations: {}
+    labels: {}
+
+# 【核心 3】开启自动初始化 (内置 DB 会自动建表)
+dbManagement:
+  initialize: true
+  upgrade:
+    enable: false
+  backupCron:
+    enabled: false
