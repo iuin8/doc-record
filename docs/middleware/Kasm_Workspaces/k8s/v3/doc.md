@@ -87,3 +87,20 @@ kubectl get secret --namespace kasm-prod kasm-prod-secrets -o jsonpath="{.data.a
 # 4. 解决内网 WebRTC 黑屏（必做）：
 # 登录后，点击左侧 Admin -> Settings -> Server，往下滚动找到 WebRTC 设置项，将 "Enable WebRTC" 取消勾选（或开启 WebRTC Fallback）。保存后，重新打开 Ubuntu 桌面，画面瞬间丝滑出现！
 ```
+
+## 让 Ingress 控制器直接“霸占” K8s 节点的 80/443 端口。
+
+```bash
+# 确认节点 443 端口未被占用
+sudo ss -tlnp | grep -E ':80|:443'
+
+# 开启 Ingress 的 hostNetwork（一键执行）
+# 1. 确保 Ingress 只有 1 个 Pod (防止两个 Pod 在同一个节点抢 443 端口导致崩溃)
+kubectl scale deploy ingress-nginx-controller-nginx -n ingress-nginx --replicas=1
+
+# 2. 开启 hostNetwork 并修正 DNS 策略
+kubectl patch deploy ingress-nginx-controller-nginx -n ingress-nginx --type=json -p='[
+  {"op":"add","path":"/spec/template/spec/hostNetwork","value":true},
+  {"op":"add","path":"/spec/template/spec/dnsPolicy","value":"ClusterFirstWithHostNet"}
+]'
+```
