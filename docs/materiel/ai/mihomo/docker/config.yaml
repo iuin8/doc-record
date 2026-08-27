@@ -20,6 +20,9 @@ keep-alive-idle: 30       # 连接空闲多久后断开（秒）
 # ================= DNS 配置 =================
 dns:
   enable: true
+  # use-hosts: true
+  # hosts:
+  #   pdd.iuin.dev: 10.0.5.167
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   # [优化] 降低 DNS 缓存存活时间，加速感知上游代理 IP 变化
@@ -31,6 +34,7 @@ dns:
     - '*.svc'               
     - '*.svc.cluster.local' 
     - 'kubernetes.default'  
+    - 'pdd.iuin.dev'
   respect-rules: true       
   nameserver:
     - https://doh.pub/dns-query
