@@ -1,0 +1,58 @@
+deploymentSize: "medium"
+publicAddr: "pdd.iuin.dev"          # 不带端口（hostNetwork 已占 443）
+
+proxyService:
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  tls: true
+  backendProtocol: http
+  ingressClassName: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.org/websocket-services: "kasm-prod-proxy"
+
+database:                            # 内置 DB，local-path 自动锚定节点，无需 nodeSelector
+  standalone: false
+  hostname: "kasm-db"
+  port: 5432
+  kasmDbName: "kasm"
+  kasmDbUser: "kasmapp"
+  storage:
+    storageClassName: "local-path"
+    pvcSize: 20
+    retentionPolicy:
+      whenDeleted: Retain            # 测试环境可改 Delete，清理更省事
+      whenScaled: Retain
+
+# ---- 证书块：certbot手动维护证书 用下面这段 ----
+# certificate:
+#   secretName: "kasm-prod-auto-tls"
+#   certManager:
+#     enabled: false
+#     addWildCard: false
+#     issuerName: ""
+#     issuerKind: ""
+#     issuerGroup: ""
+#     annotations: {}
+#     labels: {}
+# ---- 证书块：自动维护证书 则替换为 ----
+certificate:
+  secretName: "kasm-prod-auto-tls"
+  certManager:
+    enabled: true
+    addWildCard: false
+    issuerName: "letsencrypt-dns-prod"
+    issuerKind: "ClusterIssuer"
+    issuerGroup: "cert-manager.io"
+    annotations: {}
+    labels: {}
+
+dbManagement:                        # 严格按此结构，多一个字段都会触发 Schema 报错
+  initialize: true
+  upgrade:
+    enable: false
+  backupCron:
+    enabled: false
