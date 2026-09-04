@@ -16,7 +16,9 @@ secret: "your-strong-password" # TODO: 按实际调整密码
 
 # 开启本地 UI，mihomo 启动时会自动下载前端文件到 ./ui 目录
 external-ui: ui
+# 看自己喜欢选择合适的UI面板
 external-ui-url: "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip"
+# external-ui-url: "https://github.com/MetaCubeX/Yacd-meta/archive/refs/heads/gh-pages.zip"
 
 # 其他配置 ...
 ```
