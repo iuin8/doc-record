@@ -1,3 +1,10 @@
+external-controller: 0.0.0.0:19090
+secret: "your-strong-password" # TODO: 按实际调整密码
+
+# 开启本地 UI，mihomo 启动时会自动下载前端文件到 ./ui 目录
+external-ui: ui
+external-ui-url: "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip"
+
 # ================= 基础配置 =================
 mode: rule
 allow-lan: true
