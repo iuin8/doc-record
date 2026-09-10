@@ -15,10 +15,10 @@ RUN locale-gen en_US.UTF-8
 # 设置环境变量
 ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 LANGUAGE=en_US.UTF-8
 
-# 解压frp
-COPY ./frp_0.62.1_linux_amd64.tar.gz ./frp_0.62.1_linux_amd64.tar.gz
-RUN tar -xzf ./frp_0.62.1_linux_amd64.tar.gz && \
-    mv frp_0.62.1_linux_amd64 frp
+RUN wget -O ./frp_0.62.1_linux_amd64.tar.gz https://github.com/fatedier/frp/releases/download/v0.62.1/frp_0.62.1_linux_amd64.tar.gz && \
+    tar -xzf ./frp_0.62.1_linux_amd64.tar.gz && \
+    mv frp_0.62.1_linux_amd64 frp && \
+    rm -rf ./frp_0.62.1_linux_amd64.tar.gz
 
 # 创建包装服务
 RUN tee /www/frp/frpc.toml <<-'EOF'

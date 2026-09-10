@@ -12,9 +12,10 @@ RUN apt-get update && \
 RUN mkdir /var/run/sshd && \
     sed -i 's/#Port 22/Port 2222/' /etc/ssh/sshd_config
 
-COPY ./frp_0.62.1_linux_amd64.tar.gz ./frp_0.62.1_linux_amd64.tar.gz
-RUN tar -xzf ./frp_0.62.1_linux_amd64.tar.gz && \
-    mv frp_0.62.1_linux_amd64 frp
+RUN wget -O ./frp_0.62.1_linux_amd64.tar.gz https://github.com/fatedier/frp/releases/download/v0.62.1/frp_0.62.1_linux_amd64.tar.gz && \
+    tar -xzf ./frp_0.62.1_linux_amd64.tar.gz && \
+    mv frp_0.62.1_linux_amd64 frp && \
+    rm -rf ./frp_0.62.1_linux_amd64.tar.gz
 
 # 创建包装服务
 RUN tee /www/frp/frps.toml <<-'EOF'

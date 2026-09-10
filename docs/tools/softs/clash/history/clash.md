@@ -5,6 +5,15 @@
 
 - clash文件目录[内网服务器路径备忘](/root/vpn)
   - [本地备份文件](clash-linux-amd64-v1.18.0.gz)，解压命令`gzip -d clash-linux-amd64-v1.18.0.gz`
+  - 原版仓库 `Dreamacro/clash` 已于 2023 年归档，v1.18.0 官方下载地址现返回 404，该本地备份为当前可获取的唯一副本，不建议删除
+
+### 内核下载源
+
+- 原版 v1.18.0：官方 release 已下架，无可用的公开下载地址
+- 后继项目 mihomo（原 Clash Meta），版本号序列与原版一致，配置文件兼容
+  - v1.18.0：https://github.com/MetaCubeX/mihomo/releases/download/v1.18.0/mihomo-linux-amd64-v1.18.0.gz
+  - 最新发行版：https://github.com/MetaCubeX/mihomo/releases/latest
+  - 二进制名自 v1.17.0 起变更为 `mihomo`，使用时需注意路径适配
 - 补充参考链接(以前的链接不知道哪去了，新找了些补充下)
   - [clash-for-linux](https://github.com/ghostxu97/clash-for-linux)
   - [clash-for-linux](https://blog.iswiftai.com/posts/clash-linux/)

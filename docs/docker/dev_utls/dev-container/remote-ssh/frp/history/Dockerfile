@@ -30,14 +30,10 @@ RUN mkdir /var/run/sshd && \
     sed -i 's/#PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
 
 
-# RUN wget -O ./frp_0.62.1_linux_amd64.tar.gz https://github.com/fatedier/frp/releases/download/v0.62.1/frp_0.62.1_linux_amd64.tar.gz && \
-#     mkdir -p /www/frp && \
-#     tar -xzf ./frp_0.62.1_linux_amd64.tar.gz && \
-#     mv frp_0.62.1_linux_amd64 frp
-
-COPY ./frp_0.62.1_linux_amd64.tar.gz ./frp_0.62.1_linux_amd64.tar.gz
-RUN tar -xzf ./frp_0.62.1_linux_amd64.tar.gz && \
-    mv frp_0.62.1_linux_amd64 frp
+RUN wget -O ./frp_0.62.1_linux_amd64.tar.gz https://github.com/fatedier/frp/releases/download/v0.62.1/frp_0.62.1_linux_amd64.tar.gz && \
+    tar -xzf ./frp_0.62.1_linux_amd64.tar.gz && \
+    mv frp_0.62.1_linux_amd64 frp && \
+    rm -rf ./frp_0.62.1_linux_amd64.tar.gz
 
 # 创建包装服务
 RUN tee /www/frp/frpc.toml <<-'EOF'

@@ -8,8 +8,8 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY ./frp_0.62.1_linux_amd64.tar.gz ./frp_0.62.1_linux_amd64.tar.gz
-RUN tar -xzf ./frp_0.62.1_linux_amd64.tar.gz && \
+RUN wget -O ./frp_0.62.1_linux_amd64.tar.gz https://github.com/fatedier/frp/releases/download/v0.62.1/frp_0.62.1_linux_amd64.tar.gz && \
+    tar -xzf ./frp_0.62.1_linux_amd64.tar.gz && \
     mv frp_0.62.1_linux_amd64 frp && \
     rm -rf ./frp_0.62.1_linux_amd64.tar.gz
 

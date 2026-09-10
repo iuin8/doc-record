@@ -5,6 +5,22 @@
 
 已经安装了[cert-manager](https://github.com/183461750/doc-record/blob/4ed197082e57f368c4eebf6b91e9c1260f6ae8c5/k8s/docs/cert-manager/doc.md)
 
+## 安装包获取
+
+SkyWalking SWCK 0.9.0 发行包由 Apache 官方归档托管，仓库内不再保留二进制副本。
+
+- Apache 归档（推荐）：https://archive.apache.org/dist/skywalking/swck/0.9.0/skywalking-swck-0.9.0-bin.tgz
+- 镜像选择页：https://www.apache.org/dyn/closer.lua/skywalking/swck/0.9.0/skywalking-swck-0.9.0-bin.tgz
+
+下载与解压：
+
+```bash
+wget https://archive.apache.org/dist/skywalking/swck/0.9.0/skywalking-swck-0.9.0-bin.tgz
+tar -xzf skywalking-swck-0.9.0-bin.tgz
+```
+
+完整性校验（MD5）：`548cf3a09829bf0d32c564c7b31986ae`
+
 ## 安装skywalking-swck-operator
 
 [参考文档](https://github.com/apache/skywalking-swck/blob/master/docs/operator.md)
