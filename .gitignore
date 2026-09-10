@@ -33,3 +33,6 @@ graphify-out/.graphify_uncached.txt
 
 .claude/worktrees/
 .gstack/
+
+# WorkBuddy - 本地工作数据，不纳入版本控制
+.workbuddy/
