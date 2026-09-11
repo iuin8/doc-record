@@ -93,6 +93,7 @@ locales: {
 | KaTeX | 不迁移 | 全文无 LaTeX 公式（唯一出现的 `$$` 为 Shell 代码块中的 PID 变量），无实际影响 |
 | 公告栏 | 以页眉入口承接 | 原横幅内容为「给项目点星」，改为页眉 GitHub 社交图标与首页正文引导 |
 | AI 相关能力 | 已完成 | 构建期产出 `llms.txt`，页面提供复制原文与跳转 AI 的入口，见第十节 |
+| 编辑此页链接 | 已修复 | `editLink.baseUrl` 需指向仓库根目录，Starlight 会自行拼接条目的 filePath |
 
 ## 七、构建期告警
 
@@ -145,7 +146,9 @@ CI 环境无此限制，`pnpm install --frozen-lockfile` 可正常执行。
 | `llms.txt` | 站点索引，指向精简版与完整版纯文本 |
 | `llms-small.txt` | 去除非必要内容后的精简版，约 762 KB |
 | `llms-full.txt` | 全站正文，约 769 KB |
+| `/_llms-txt/<分类>.txt` | 按分类拆分的正文分卷，10 个 |
 | `/raw/<文档路径>.md` | 与页面同路径的 Markdown 原文，共 367 个端点 |
+| `robots.txt` | 显式放行主流 AI 检索与训练爬虫，并声明 sitemap |
 
 `llms.txt` 由 `starlight-llms-txt` 插件在构建期生成，内容源与页面一致，无需单独维护。
 `/raw/` 端点由 `src/pages/raw/[...slug].md.ts` 提供，读取 content collection 的 `entry.body`，
@@ -153,6 +156,20 @@ CI 环境无此限制，`pnpm install --frozen-lockfile` 可正常执行。
 
 原先的 Cloudflare AI Search 依赖 Docusaurus 的 React 挂载点，迁移成本高且只对站内检索有效。
 改为上述方案后，AI 侧可直接消费纯文本，不依赖页面 HTML 结构，也不绑定具体厂商。
+
+### 可发现性
+
+除 `llms.txt` 入口外，页面自身也声明了可被机器直接消费的表示形式：
+
+- `<link rel="alternate" type="text/markdown">` 指向当前页的原文端点，
+  AI 客户端无需解析 HTML 即可定位纯文本；
+- `schema.org` 的 `TechArticle` 结构化数据，包含标题、描述、语言与发布时间（有则填）；
+- `robots.txt` 中单独列出 GPTBot、ClaudeBot、PerplexityBot、Google-Extended 等
+  AI 爬虫并显式允许，同时声明 sitemap。
+
+分卷的目的是控制上下文长度：完整版 769 KB 已接近多数模型的上下文上限，
+按分类取用可将单次输入降到 9 KB 至 278 KB 区间。分卷路径由插件根据标签生成，
+分类标签使用英文以保证路径稳定，说明文字使用中文。
 
 ### 页面入口
 
