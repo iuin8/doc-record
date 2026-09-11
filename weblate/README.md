@@ -51,10 +51,46 @@ export WEBLATE_API_TOKEN=xxxx
 CREATE_PROJECT=false ./scripts/weblate-create-components.sh
 ```
 
-### 0.4 建立后需手工确认的配置
+### 0.4 手工建组件时的字段取值
+
+若不使用脚本而在网页端建组件，按目录逐个建立，每个组件填以下四项
+（`docker` 为例，其余目录替换目录名即可）：
+
+| 字段 | 取值 |
+| --- | --- |
+| 文件格式 | Markdown file（单语格式） |
+| 文件掩码 File mask | `src/content/docs/*/docker/**/*.md` |
+| 单语言译文基准文件 | `src/content/docs/docker/**/*.md` |
+| 新译文的模板 | `src/content/docs/docker/**/*.md` |
+| 语言代码风格 | BCP（连字符） |
+| 文件格式参数 | `markdown_merge_duplicates=True` |
+
+「选择需要导入的翻译文件」就是**文件掩码**这一项。仓库当前没有 `en`/`ja`/`zh-Hant`
+目录（站点上的 `/en` 等路径是 Starlight 的回退页，并非真实文件），
+因此自动检测列表为空，需要手动输入掩码而不是从下拉列表里选。
+
+`*` 是语言占位符。掩码写成 `src/content/docs/*/docker/**/*.md` 时，
+启动 `zh_Hant` 语言后会落到 `src/content/docs/zh-Hant/docker/...`，
+与 `astro.config.mjs` 的 `locales` 键一致；若语言代码风格不是 BCP，
+则会落到 `zh_Hant` 目录，构建时不会被识别。
+
+若提交时提示掩码未匹配到任何文件，先生成种子文件：
+
+```bash
+./scripts/weblate-seed-translations.sh en
+git add src/content/docs/en && git commit -m "chore: 为 Weblate 组件建立译文种子文件" && git push
+```
+
+组件创建成功并启动语言后，Weblate 会按模板为其余源文件生成译文，
+此时可删除这些空种子文件。
+
+### 0.5 建立后需手工确认的配置
 
 1. 各组件的语言代码风格为 **BCP（连字符）**，否则译文落到 `zh_Hant` 目录而非 `zh-Hant`；
-2. 文件格式的 front matter 字段显式声明 `title`、`description`；
+2. 在文件格式的**文件格式参数**中启用「翻译 front matter 的值」，
+   使 `title`、`description` 作为独立字符串进入翻译，而不是整块 YAML 被当一个单元；
+   表格较多的目录同时确认已启用「合并重复字符串」（脚本已设
+   `markdown_merge_duplicates=True`）；
 3. 启用插件：清理过时的字符串、压缩 Git 提交、发现未翻译文件；
 4. 启用机器翻译与 LLM 自动建议，用于生成译文初稿；
 5. 导入 `glossary/` 下的术语表并启用术语表强制检查。

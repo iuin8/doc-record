@@ -73,8 +73,10 @@ component_payload() {
   "vcs": "git",
   "file_format": "%s",
   "template": "src/content/docs/%s/**/*.md",
-  "filemask": "src/content/docs/*/%s/**/*.md"%s
-}' "$dir" "$slug" "$REPO" "$BRANCH" "$FILE_FORMAT" "$dir" "$dir" "$style_line"
+  "new_base": "src/content/docs/%s/**/*.md",
+  "filemask": "src/content/docs/*/%s/**/*.md",
+  "file_format_params": { "markdown_merge_duplicates": true }%s
+}' "$dir" "$slug" "$REPO" "$BRANCH" "$FILE_FORMAT" "$dir" "$dir" "$dir" "$style_line"
 }
 
 echo "==> 实例地址：${WEBLATE_URL}"
