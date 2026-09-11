@@ -69,10 +69,35 @@ CREATE_PROJECT=false ./scripts/weblate-create-components.sh
 目录（站点上的 `/en` 等路径是 Starlight 的回退页，并非真实文件），
 因此自动检测列表为空，需要手动输入掩码而不是从下拉列表里选。
 
-`*` 是语言占位符。掩码写成 `src/content/docs/*/docker/**/*.md` 时，
-启动 `zh_Hant` 语言后会落到 `src/content/docs/zh-Hant/docker/...`，
-与 `astro.config.mjs` 的 `locales` 键一致；若语言代码风格不是 BCP，
-则会落到 `zh_Hant` 目录，构建时不会被识别。
+`*` 是语言占位符，必须落在语言目录那一层。对照示例 `locale/*/LC_MESSAGES/django.po`：
+`*` 处在语言目录位置，后面是固定路径。本仓库的等价写法如下（14 个组件）：
+
+| 组件 slug | 文件掩码 | 文件数 |
+| --- | --- | --- |
+| `docker` | `src/content/docs/*/docker/**/*.md` | 178 |
+| `tools` | `src/content/docs/*/tools/**/*.md` | 53 |
+| `materiel` | `src/content/docs/*/materiel/**/*.md` | 42 |
+| `kubernetes` | `src/content/docs/*/kubernetes/**/*.md` | 26 |
+| `network` | `src/content/docs/*/network/**/*.md` | 21 |
+| `blog` | `src/content/docs/*/blog/**/*.md` | 14 |
+| `os` | `src/content/docs/*/os/**/*.md` | 11 |
+| `lang` | `src/content/docs/*/lang/**/*.md` | 7 |
+| `middleware` | `src/content/docs/*/middleware/**/*.md` | 7 |
+| `ai` | `src/content/docs/*/AI/**/*.md` | 5 |
+| `books` | `src/content/docs/*/books/**/*.md` | 1 |
+| `todos` | `src/content/docs/*/TODOs/**/*.md` | 1 |
+| `test` | `src/content/docs/*/test/**/*.md` | 1 |
+| `index` | `src/content/docs/*/index.md` | 1 |
+
+最后一行是**站点首页**：`src/content/docs/index.md` 位于根目录，不属于任何一级目录，
+按目录拆分的掩码覆盖不到，必须单独建一个组件，否则首页不会被翻译。
+
+各组件的「新译文的模板」与「单语言译文基准文件」填同一路径，即把掩码里的
+`*/` 一段去掉的形式，例如 `src/content/docs/docker/**/*.md`、
+`src/content/docs/index.md`。
+
+`test` 目录只有一个测试页，如不需要可从 `CONTENT_DIRS` 中移除
+（`CONTENT_DIRS="docker tools ..." ./scripts/weblate-create-components.sh`）。
 
 若提交时提示掩码未匹配到任何文件，先生成种子文件：
 

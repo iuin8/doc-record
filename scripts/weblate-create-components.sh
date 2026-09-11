@@ -43,6 +43,8 @@ BRANCH="${BRANCH:-main}"
 SOURCE_LANG="${SOURCE_LANG:-zh_Hans}"
 TARGET_LANGS="${TARGET_LANGS:-en ja zh_Hant}"
 CONTENT_DIRS="${CONTENT_DIRS:-AI TODOs blog books docker kubernetes lang materiel middleware network os test tools}"
+# 根级文档不在任何一级目录内，需单独建组件，默认含站点首页 index.md
+ROOT_FILES="${ROOT_FILES:-index.md}"
 SITE_URL="${SITE_URL:-https://doc-record.iuin888vip.icu}"
 FILE_FORMAT="${FILE_FORMAT:-markdown}"
 
@@ -59,24 +61,53 @@ slugify() {
 
 # with_style 为 yes 时附上 language_code_style；部分实例不接受该字段，失败后重试时去掉
 component_payload() {
-  local dir="$1" slug="$2" with_style="$3"
+  local name="$1" slug="$2" template="$3" new_base="$4" filemask="$5" with_style="$6"
   local style_line=""
   if [ "${with_style}" = "yes" ]; then
     style_line=',
   "language_code_style": "bcp"'
   fi
   printf '{
-  "name": "%s 文档",
+  "name": "%s",
   "slug": "%s",
   "repo": "%s",
   "branch": "%s",
   "vcs": "git",
   "file_format": "%s",
-  "template": "src/content/docs/%s/**/*.md",
-  "new_base": "src/content/docs/%s/**/*.md",
-  "filemask": "src/content/docs/*/%s/**/*.md",
+  "template": "%s",
+  "new_base": "%s",
+  "filemask": "%s",
   "file_format_params": { "markdown_merge_duplicates": true }%s
-}' "$dir" "$slug" "$REPO" "$BRANCH" "$FILE_FORMAT" "$dir" "$dir" "$dir" "$style_line"
+}' "$name" "$slug" "$REPO" "$BRANCH" "$FILE_FORMAT" \
+   "$template" "$new_base" "$filemask" "$style_line"
+}
+
+# 建立组件并补齐目标语言；掩码不含语言占位符时不会误匹配源文
+create_component() {
+  local name="$1" slug="$2" template="$3" new_base="$4" filemask="$5"
+
+  if api -X POST "${WEBLATE_URL}/api/projects/${PROJECT_SLUG}/components/" \
+    -d "$(component_payload "${name}" "${slug}" "${template}" "${new_base}" "${filemask}" yes)" \
+    >/dev/null 2>&1; then
+    echo "    组件已建立（语言代码风格 BCP）"
+  elif api -X POST "${WEBLATE_URL}/api/projects/${PROJECT_SLUG}/components/" \
+    -d "$(component_payload "${name}" "${slug}" "${template}" "${new_base}" "${filemask}" no)" \
+    >/dev/null 2>&1; then
+    echo "    组件已建立，但实例不接受 language_code_style 字段" >&2
+    echo "    请在组件设置中手动将语言代码风格调整为 BCP（连字符）" >&2
+  else
+    echo "    组件建立失败：若已存在可忽略，否则请检查令牌、仓库授权与路径是否存在" >&2
+    return 1
+  fi
+
+  for lang in ${TARGET_LANGS}; do
+    if api -X POST "${WEBLATE_URL}/api/components/${PROJECT_SLUG}/${slug}/translations/" \
+      -d "{\"language_code\":\"${lang}\"}" >/dev/null 2>&1; then
+      echo "    已添加语言 ${lang}"
+    else
+      echo "    语言 ${lang} 未自动添加，需在界面中启动该语言的翻译" >&2
+    fi
+  done
 }
 
 echo "==> 实例地址：${WEBLATE_URL}"
@@ -103,27 +134,22 @@ fi
 for dir in ${CONTENT_DIRS}; do
   slug="$(slugify "${dir}")"
   echo "==> 建立组件 ${slug}（源目录 ${dir}）"
-
-  if api -X POST "${WEBLATE_URL}/api/projects/${PROJECT_SLUG}/components/" \
-    -d "$(component_payload "${dir}" "${slug}" yes)" >/dev/null 2>&1; then
-    echo "    组件已建立（语言代码风格 BCP）"
-  elif api -X POST "${WEBLATE_URL}/api/projects/${PROJECT_SLUG}/components/" \
-    -d "$(component_payload "${dir}" "${slug}" no)" >/dev/null 2>&1; then
-    echo "    组件已建立，但实例不接受 language_code_style 字段" >&2
-    echo "    请在组件设置中手动将语言代码风格调整为 BCP（连字符）" >&2
-  else
-    echo "    组件建立失败：若已存在可忽略，否则请检查令牌、仓库授权与目录是否存在" >&2
-    continue
-  fi
-
-  for lang in ${TARGET_LANGS}; do
-    if api -X POST "${WEBLATE_URL}/api/components/${PROJECT_SLUG}/${slug}/translations/" \
-      -d "{\"language_code\":\"${lang}\"}" >/dev/null 2>&1; then
-      echo "    已添加语言 ${lang}"
-    else
-      echo "    语言 ${lang} 未自动添加，需在界面中启动该语言的翻译" >&2
-    fi
-  done
+  create_component "${dir} 文档" "${slug}" \
+    "src/content/docs/${dir}/**/*.md" \
+    "src/content/docs/${dir}/**/*.md" \
+    "src/content/docs/*/${dir}/**/*.md" || true
 done
 
-echo "==> 完成。请复核：语言代码风格、front matter 翻译字段、自动建议与质量检查插件。"
+# 根级文档（站点首页）不在任何一级目录内，需单独建组件，否则不会被翻译
+for file in ${ROOT_FILES}; do
+  base="${file%.md}"
+  slug="$(slugify "${base}")"
+  [ -n "${slug}" ] || continue
+  echo "==> 建立组件 ${slug}（根级文件 ${file}）"
+  create_component "${base} 文档" "${slug}" \
+    "src/content/docs/${file}" \
+    "src/content/docs/${file}" \
+    "src/content/docs/*/${file}" || true
+done
+
+echo "==> 完成。请复核：语言代码风格、front matter 翻译参数、自动建议与质量检查插件。"
