@@ -3,10 +3,36 @@
 本目录提供 Weblate 自建部署所需的配置与说明，用于承接站点内容的翻译工作流。
 决策背景见《2026-09-10-翻译平台迁移至 Weblate》。
 
-## 1. 准备环境
+## 1. 准备主机
 
-在一台具备 Docker 与 Docker Compose 的主机上（Oracle Cloud Always Free 的 ARM 实例、
-既有 x86 服务器或本机均可）执行：
+### 1.1 创建 Oracle Cloud Always Free 实例
+
+| 配置项 | 取值 |
+| --- | --- |
+| 形状 | `VM.Standard.A1.Flex`（ARM） |
+| 规格 | 2 OCPU + 12 GB 内存（免费额度上限为 4 OCPU + 24 GB，保留余量） |
+| 镜像 | Ubuntu 24.04 Minimal aarch64（官方镜像提供 ARM 构建） |
+| 启动卷 | 默认 46.8 GB 起，免费额度含 200 GB，可按需调大 |
+
+注意事项：
+
+- 注册需绑定信用卡用于身份验证，在免费额度内不产生费用；
+- 热门区域常出现 `Out of host capacity`，需要更换可用性域或稍后重试；
+- 长期空闲的实例存在被回收的可能，因此第 8 节的备份是必需的，不是可选项。
+
+### 1.2 安全组
+
+通过 Cloudflare Tunnel 发布时**不需要开放任何入站端口**，仅保留 SSH（22）用于运维。
+在 VCN 的安全列表中只放行 22 端口即可。
+
+### 1.3 安装 Docker
+
+```bash
+sudo apt update && sudo apt install -y docker-compose-plugin
+sudo usermod -aG docker "$USER"   # 重新登录后生效
+```
+
+### 1.4 部署文件
 
 ```bash
 cd weblate
@@ -23,15 +49,48 @@ docker compose up -d
 docker compose logs -f weblate
 ```
 
-实例默认监听 `127.0.0.1:8080`，需由反向代理终止 TLS 并转发。启用 HTTPS 时，
-在 `.env` 中放开 `WEBLATE_ENABLE_HTTPS` 与 `WEBLATE_SECURE_PROXY_SSL_HEADER` 两项。
+实例默认监听 `127.0.0.1:8080`，不对外暴露，由 Cloudflare Tunnel 发布。
 
-## 3. 连接仓库
+## 3. 通过 Cloudflare Tunnel 发布
+
+在主机上安装 cloudflared 并建立隧道，无需开放入站端口，也无需在公网暴露源站 IP：
+
+```bash
+curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg \
+  | sudo tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
+echo "deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared any main" \
+  | sudo tee /etc/apt/sources.list.d/cloudflared.list
+sudo apt update && sudo apt install -y cloudflared
+
+cloudflared tunnel login
+cloudflared tunnel create weblate
+cloudflared tunnel route dns weblate weblate.iuin888vip.icu
+```
+
+写入 `/etc/cloudflared/config.yml`：
+
+```yaml
+url: http://127.0.0.1:8080
+tunnel: weblate
+credentials-file: /root/.cloudflared/<隧道ID>.json
+```
+
+注册为系统服务：
+
+```bash
+sudo cloudflared service install
+sudo systemctl start cloudflared
+```
+
+建议在 Zero Trust 中为 `weblate.iuin888vip.icu` 配置访问策略，
+仅允许指定邮箱登录，避免管理界面直接暴露在公网。
+
+## 4. 连接仓库
 
 在 Weblate 中通过 GitHub App 授权 `doc-record` 仓库，或添加部署密钥。
 仓库以浅克隆拉取，历史中的大对象不会被下载。
 
-## 4. 建立项目与组件
+## 5. 建立项目与组件
 
 取得 API 令牌后执行仓库根目录的脚本：
 
@@ -54,7 +113,7 @@ export WEBLATE_API_TOKEN=xxxx
 掩码中的 `*` 对应语言代码。Starlight 的译文目录名为 `en`、`ja`、`zh-Hant`，
 因此组件的**语言代码风格必须设为 BCP（连字符）**，否则译文会落到 `zh_Hant` 目录。
 
-## 5. 组件建立后的配置
+## 6. 组件建立后的配置
 
 以下内容需在实例中确认，脚本无法覆盖：
 
@@ -63,7 +122,7 @@ export WEBLATE_API_TOKEN=xxxx
 3. 自动建议：启用机器翻译与 LLM 自动建议，用于生成译文初稿；
 4. 质量检查：启用术语表强制检查。
 
-## 6. 导入术语表
+## 7. 导入术语表
 
 `glossary/` 下按目标语言提供初始术语，在项目的术语表中逐个导入：
 
@@ -73,7 +132,7 @@ glossary/ja.csv        # 中文 → 日本語
 glossary/zh-Hant.csv   # 中文 → 繁體中文
 ```
 
-## 7. 界面文案
+## 8. 界面文案
 
 界面文案位于 `src/content/i18n/`，文件名使用 Starlight 的语言标记：
 `zh-CN.json`（源语言）、`en.json`、`ja.json`、`zh-TW.json`。
@@ -82,7 +141,29 @@ glossary/zh-Hant.csv   # 中文 → 繁體中文
 因此界面文案未纳入上述自动组件，需要单独建立组件并指定文件名映射。
 当前条目较少，建议人工维护。
 
-## 8. 验证闭环
+## 9. 备份
+
+免费实例存在被回收的可能，备份是必需的。在主机上按日执行：
+
+```bash
+# 数据库
+docker compose exec -T database pg_dump -U weblate weblate | gzip > /backup/weblate-$(date +%F).sql.gz
+
+# 数据目录（含译文仓库与配置）
+docker compose stop weblate
+tar -czf /backup/weblate-data-$(date +%F).tar.gz /var/lib/docker/volumes/weblate_weblate-data
+docker compose start weblate
+```
+
+将 `/backup` 下的文件同步到 R2：
+
+```bash
+rclone sync /backup r2:doc-record-backup/weblate
+```
+
+R2 中可配置生命周期规则，30 天后转入低频访问存储。恢复时先还原数据目录，再导入数据库转储。
+
+## 10. 验证闭环
 
 修改一处源文并提交，确认 Weblate 检测到变更；在 Weblate 中完成翻译后，
 译文应以提交或合并请求的形式回到仓库，且变更可追溯。
