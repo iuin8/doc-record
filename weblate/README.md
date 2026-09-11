@@ -59,6 +59,20 @@ CREATE_PROJECT=false ./scripts/weblate-create-components.sh
 4. 启用机器翻译与 LLM 自动建议，用于生成译文初稿；
 5. 导入 `glossary/` 下的术语表并启用术语表强制检查。
 
+### 0.6 导入术语表
+
+`glossary/` 下按目标语言提供初始术语，各 43 条：
+
+```text
+glossary/en.csv        # 中文 → English
+glossary/ja.csv        # 中文 → 日本語
+glossary/zh-Hant.csv   # 中文 → 繁體中文
+```
+
+文件为带表头的双列 CSV（`source,target`），UTF-8 无 BOM。
+在项目「术语表」中选择对应语言对后导入，格式选 **CSV file**（含表头），
+不要选 Simple CSV file——后者用于无表头的两列文件。
+
 ### 0.5 备份
 
 托管实例的备份由 Weblate 负责。译文最终以提交形式回到 Git 仓库，
