@@ -12,7 +12,9 @@
 # 可用环境变量覆盖默认值：
 #   CLOUDFLARE_ACCOUNT_ID  账户 ID
 #   INSTANCE_ID            实例名，需与 NLWeb Worker 的 RAG_ID 绑定一致
-#   SITE_URL               站点根地址
+#   SITEMAP_PATH           站点地图路径，默认 sitemap-ai.xml（仅根语言页面）
+#   RERANKING              是否启用重排，默认 false（免费额度下减少模型调用）
+#   REWRITE_QUERY          是否启用查询改写，默认 false（同上）
 #   EMBEDDING_MODEL        向量模型
 #   AI_SEARCH_MODEL        生成模型
 
@@ -23,8 +25,13 @@ set -euo pipefail
 CLOUDFLARE_ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID:-1e41ba8d32af254e50ca2f65292adfe1}"
 INSTANCE_ID="${INSTANCE_ID:-bold-union-4896}"
 SITE_URL="${SITE_URL:-https://doc-record.iuin888vip.icu}"
+# sitemap-ai.xml 由 src/pages/sitemap-ai.xml.ts 生成，仅含根语言页面，
+# 不含 /en /ja /zh-Hant 回退副本，避免索引内容成倍重复。
+SITEMAP_PATH="${SITEMAP_PATH:-sitemap-ai.xml}"
 EMBEDDING_MODEL="${EMBEDDING_MODEL:-@cf/baai/bge-m3}"
 AI_SEARCH_MODEL="${AI_SEARCH_MODEL:-@cf/qwen/qwen3-30b-a3b-fp8}"
+RERANKING="${RERANKING:-false}"
+REWRITE_QUERY="${REWRITE_QUERY:-false}"
 
 BASE="https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/ai-search"
 AUTH="Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"
@@ -67,8 +74,8 @@ else
 fi
 
 # 排除项说明：
-#   /raw/** 与 /_llms-txt/** 是给 AI 直接取用的纯文本副本，与页面内容重复；
-#   /en /ja /zh-Hant 目前是回退内容，与根语言页面一致，索引会成倍放大重复度。
+#   /raw/** 与 /_llms-txt/** 是给 AI 直接取用的纯文本副本，与页面内容重复。
+#   /en /ja /zh-Hant 为回退副本，主要依靠 sitemap-ai.xml 从源头排除；此处仅作兜底。
 body=$(
   cat <<EOF
 {
@@ -78,7 +85,7 @@ body=$(
     "web_crawler": {
       "parse_type": "sitemap",
       "parse_options": {
-        "specific_sitemaps": ["${SITE_URL}/sitemap-index.xml"]
+        "specific_sitemaps": ["${SITE_URL}/${SITEMAP_PATH}"]
       },
       "discover_options": {
         "source": "sitemaps",
@@ -97,8 +104,8 @@ body=$(
   "chunk_overlap": 100,
   "index_method": { "keyword": true, "vector": true },
   "max_num_results": 8,
-  "reranking": true,
-  "rewrite_query": true,
+  "reranking": ${RERANKING},
+  "rewrite_query": ${REWRITE_QUERY},
   "sync_interval": 3600
 }
 EOF
