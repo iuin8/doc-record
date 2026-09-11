@@ -1,12 +1,13 @@
 ---
 import AiActions from './AiActions.astro';
 import MermaidRenderer from './MermaidRenderer.astro';
+import { rawMarkdownPath } from '../lib/raw-path';
 
 const entry = Astro.locals.starlightRoute.entry;
 
 // 原文路径与页面 id 一一对应（slug 由文件路径去掉扩展名得到）
-const rawPath = entry.id ? `/raw/${entry.id}.md` : null;
-const absoluteUrl = rawPath ? new URL(rawPath, Astro.site).toString() : null;
+const rawPath = rawMarkdownPath(entry.id);
+const absoluteUrl = new URL(rawPath, Astro.site).toString();
 ---
 
 <div class="title-row">

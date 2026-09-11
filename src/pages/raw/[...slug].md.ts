@@ -1,5 +1,6 @@
 import type { APIRoute, GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
+import { rawMarkdownSlug } from '../../lib/raw-path';
 
 /**
  * 为每篇文档提供与页面同路径的 `.md` 原文。
@@ -10,12 +11,10 @@ import { getCollection } from 'astro:content';
  */
 export const getStaticPaths = (async () => {
   const entries = await getCollection('docs');
-  return entries
-    .filter((entry) => Boolean(entry.id))
-    .map((entry) => ({
-      params: { slug: entry.id },
-      props: { body: entry.body ?? '' },
-    }));
+  return entries.map((entry) => ({
+    params: { slug: rawMarkdownSlug(entry.id) },
+    props: { body: entry.body ?? '' },
+  }));
 }) satisfies GetStaticPaths;
 
 export const GET: APIRoute = ({ props }) =>

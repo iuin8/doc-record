@@ -1,0 +1,36 @@
+---
+import Default from '@astrojs/starlight/components/Head.astro';
+import { rawMarkdownPath } from '../lib/raw-path';
+
+const { entry, lang } = Astro.locals.starlightRoute;
+
+const site = Astro.site ?? new URL(Astro.url.origin);
+const title = entry.data.title;
+const description = entry.data.description;
+const publishedAt = entry.data.date;
+
+// 与页面同路径的 Markdown 原文，供 AI 客户端直接取用
+const rawUrl = new URL(rawMarkdownPath(entry.id), site).toString();
+const pageUrl = new URL(Astro.url.pathname, site).toString();
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: title,
+  ...(description ? { description } : {}),
+  url: pageUrl,
+  inLanguage: lang,
+  ...(publishedAt ? { datePublished: new Date(publishedAt).toISOString() } : {}),
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'Doc Record',
+    url: site.toString(),
+  },
+};
+---
+
+<Default {...Astro.props} />
+
+<link rel="alternate" type="text/markdown" href={rawUrl} title={`${title}（Markdown 原文）`} />
+<link rel="alternate" type="text/plain" href={new URL('/llms-full.txt', site)} title="全站纯文本" />
+<script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />

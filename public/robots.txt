@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+# 允许 AI 助手与大模型检索、引用本站内容
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: PerplexityBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: meta-externalagent
+User-agent: CCBot
+User-agent: Bytespider
+Allow: /
+
+Sitemap: https://doc-record.iuin888vip.icu/sitemap-index.xml

@@ -3,6 +3,28 @@ import starlight from '@astrojs/starlight';
 import starlightBlog from 'starlight-blog';
 import starlightLlmsTxt from 'starlight-llms-txt';
 
+// llms.txt 分卷：完整版约 769 KB，单次取用会占满上下文，
+// 按分类拆分后 AI 可只读取相关分卷，完整版作为回退。
+const llmsTxtOptions = {
+  details: '内容以 CommonMark 编写，代码块用围栏语法标注语言。上下文有限时优先取用下列分类分卷。',
+  customSets: [
+    { label: 'Docker', description: '容器构建、镜像、Compose 与开发环境', paths: ['docker/**'] },
+    { label: 'Kubernetes', description: '集群部署、运维与问题排查', paths: ['kubernetes/**'] },
+    { label: 'Operating System', description: 'Linux、Windows 等系统配置', paths: ['os/**'] },
+    { label: 'Middleware', description: '数据库、消息队列等中间件', paths: ['middleware/**'] },
+    {
+      label: 'Programming Languages',
+      description: '各类编程语言的使用与构建配置',
+      paths: ['lang/**'],
+    },
+    { label: 'Network', description: '网络配置、代理与穿透', paths: ['network/**'] },
+    { label: 'Tools', description: '开发工具与发布脚本', paths: ['tools/**'] },
+    { label: 'AI', description: 'AI 相关技术、MCP 与应用', paths: ['ai/**'] },
+    { label: 'Blog', description: '实践记录与问题复盘', paths: ['blog/**'] },
+    { label: 'Notes', description: '技术资料、读书笔记与待办', paths: ['materiel/**', 'books/**'] },
+  ],
+};
+
 export default defineConfig({
   site: 'https://doc-record.iuin888vip.icu',
 
@@ -46,14 +68,16 @@ export default defineConfig({
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/iuin8/doc-record' },
       ],
+      // Starlight 会用条目的 filePath（相对仓库根目录）拼接该前缀，因此这里指向仓库根目录
       editLink: {
-        baseUrl: 'https://github.com/iuin8/doc-record/edit/main/src/content/docs/',
+        baseUrl: 'https://github.com/iuin8/doc-record/edit/main/',
       },
       // 标题区附带「复制 Markdown / 用 AI 打开」操作，并按需加载 Mermaid
       components: {
         PageTitle: './src/components/PageTitle.astro',
+        Head: './src/components/Head.astro',
       },
-      plugins: [starlightBlog(), starlightLlmsTxt()],
+      plugins: [starlightBlog(), starlightLlmsTxt(llmsTxtOptions)],
     }),
   ],
 });
