@@ -22,7 +22,7 @@ ssh-copy-id -i ~/.ssh/id_ed25519_iu xxx.dev.iuin
 
 - 项目根目录下的build.gradle文件中添加以下内容
 
-```gradle
+```groovy
 // 项目根目录下的build.gradle文件中添加以下内容
 plugins {
     id 'io.github.iuin8.remote' version '0.1.36'
@@ -34,7 +34,7 @@ version = '3.0.0'
 
 - 项目根目录下的settings.gradle文件中添加以下内容
 
-```gradle
+```groovy
 // 项目根目录下的settings.gradle文件中添加以下内容
 //gradle插件仓库
 pluginManagement {

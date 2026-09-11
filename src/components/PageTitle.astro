@@ -1,0 +1,35 @@
+---
+import AiActions from './AiActions.astro';
+import MermaidRenderer from './MermaidRenderer.astro';
+
+const entry = Astro.locals.starlightRoute.entry;
+
+// 原文路径与页面 id 一一对应（slug 由文件路径去掉扩展名得到）
+const rawPath = entry.id ? `/raw/${entry.id}.md` : null;
+const absoluteUrl = rawPath ? new URL(rawPath, Astro.site).toString() : null;
+---
+
+<div class="title-row">
+  <h1 id="_top">{entry.data.title}</h1>
+  {rawPath && absoluteUrl && <AiActions rawPath={rawPath} absoluteUrl={absoluteUrl} />}
+</div>
+
+<MermaidRenderer />
+
+<style>
+  .title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+  }
+
+  h1 {
+    margin-top: 1rem;
+    font-size: var(--sl-text-h1);
+    line-height: var(--sl-line-height-headings);
+    font-weight: 600;
+    color: var(--sl-color-white);
+  }
+</style>

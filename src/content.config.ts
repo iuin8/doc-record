@@ -1,7 +1,8 @@
 import { readFile } from 'node:fs/promises';
 
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
 import type { Loader } from 'astro/loaders';
+import { z } from 'astro/zod';
 import { docsLoader } from '@astrojs/starlight/loaders';
 import { docsSchema } from '@astrojs/starlight/schema';
 import { blogSchema } from 'starlight-blog/schema';

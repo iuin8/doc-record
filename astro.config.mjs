@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightBlog from 'starlight-blog';
+import starlightLlmsTxt from 'starlight-llms-txt';
 
 export default defineConfig({
   site: 'https://doc-record.iuin888vip.icu',
@@ -48,7 +49,11 @@ export default defineConfig({
       editLink: {
         baseUrl: 'https://github.com/iuin8/doc-record/edit/main/src/content/docs/',
       },
-      plugins: [starlightBlog()],
+      // 标题区附带「复制 Markdown / 用 AI 打开」操作，并按需加载 Mermaid
+      components: {
+        PageTitle: './src/components/PageTitle.astro',
+      },
+      plugins: [starlightBlog(), starlightLlmsTxt()],
     }),
   ],
 });

@@ -88,12 +88,20 @@ locales: {
 | 博客 URL 变化 | 已处理 | 旧 slug 与大小写差异的路径已在 `astro.config.mjs` 的 `redirects` 中映射，共 11 条 |
 | 许可证声明 | 已完成 | `LICENSE` 与 `package.json` 统一为 MIT |
 | CI 验证 | 已通过 | GitHub Actions 构建 1m31s 成功，Pages 状态 `built` |
-| Cloudflare AI Search | 未迁移 | 依赖 Docusaurus 的 React 挂载点，需改写为 Astro 组件或岛屿 |
-| Mermaid | 未迁移 | 内容中仅 2 处使用，当前渲染为纯代码块 |
-| KaTeX | 未迁移 | 内容中无公式，暂无影响 |
-| 公告栏 | 未迁移 | 原 `announcementBar` 配置无对应结构 |
+| Cloudflare AI Search | 以 llms.txt 替代 | 站内搜索由 Pagefind 承担；面向 AI   改为输出 `llms.txt` 与原文端点，见第十节 |
+| Mermaid | 已完成 | 2 处代码块按需渲染，仅含图表的页面加载 Mermaid，见第十节 |
+| KaTeX | 不迁移 | 全文无 LaTeX 公式（唯一出现的 `$$` 为 Shell 代码块中的 PID 变量），无实际影响 |
+| 公告栏 | 以页眉入口承接 | 原横幅内容为「给项目点星」，改为页眉 GitHub 社交图标与首页正文引导 |
+| AI 相关能力 | 已完成 | 构建期产出 `llms.txt`，页面提供复制原文与跳转 AI 的入口，见第十节 |
 
-## 七、本地依赖安装的约束
+## 七、构建期告警
+
+- 高亮告警已清零。原有 `Dockerfile`、`ssh`、`gradle` 三种围栏语言不在 Shiki 支持范围内，
+  分别改为 `dockerfile`、`ssh-config`、`groovy`。后两者为对应语言的通用写法，不依赖框架扩展。
+- 构建期存在 43 条 `Entry docs → zh-Hant/... was not found` 提示。原因为繁体中文译文尚未产生，
+  Starlight 按回退策略展示默认语言内容。译文通过 Weblate 回流后该提示自动消失，不属于构建缺陷。
+
+## 八、本地依赖安装的约束
 
 本机 `pnpm install` 在链接阶段被文件代理拦截（`Brokered host mkdir requires an available runtime file rule`），该限制由注入 Node 进程的钩子产生，与 bash 沙箱开关无关。采取的处置：
 
@@ -102,7 +110,7 @@ locales: {
 
 CI 环境无此限制，`pnpm install --frozen-lockfile` 可正常执行。
 
-## 八、Markdown 元数据约定
+## 九、Markdown 元数据约定
 
 内容文件遵循「原生态优先」原则：作者创建 Markdown 时不需要为了通过构建而填写任何字段。
 
@@ -127,3 +135,34 @@ CI 环境无此限制，`pnpm install --frozen-lockfile` 可正常执行。
 
 上述字段在 Jekyll、Hugo、VitePress、MkDocs、Docusaurus 中含义一致，更换框架时无需改写内容。
 标题推导逻辑本身也是主流站点生成器的通用行为，因此该约定不引入框架锁定。
+
+## 十、面向 AI 的输出与按需渲染
+
+### 构建期产物
+
+| 产物 | 说明 |
+| --- | --- |
+| `llms.txt` | 站点索引，指向精简版与完整版纯文本 |
+| `llms-small.txt` | 去除非必要内容后的精简版，约 762 KB |
+| `llms-full.txt` | 全站正文，约 769 KB |
+| `/raw/<文档路径>.md` | 与页面同路径的 Markdown 原文，共 367 个端点 |
+
+`llms.txt` 由 `starlight-llms-txt` 插件在构建期生成，内容源与页面一致，无需单独维护。
+`/raw/` 端点由 `src/pages/raw/[...slug].md.ts` 提供，读取 content collection 的 `entry.body`，
+以 `text/markdown` 返回。该端点不进入 sitemap，不影响收录结构。
+
+原先的 Cloudflare AI Search 依赖 Docusaurus 的 React 挂载点，迁移成本高且只对站内检索有效。
+改为上述方案后，AI 侧可直接消费纯文本，不依赖页面 HTML 结构，也不绑定具体厂商。
+
+### 页面入口
+
+`src/components/PageTitle.astro` 覆写标题区，在其下追加 `AiActions.astro`：
+
+- 「复制 Markdown」从同源的 `/raw/` 端点取原文写入剪贴板，不经过第三方服务；
+- 「在 ChatGPT / Claude 中打开」以当前页面绝对地址为参数跳转，由用户自行提问。
+
+### Mermaid 按需渲染
+
+`MermaidRenderer.astro` 在客户端检测 `pre[data-language="mermaid"]`，存在时才动态载入 Mermaid
+并渲染为 SVG；切换主题时重新渲染。全站仅 2 篇文档含图表，其余页面不产生这部分脚本请求。
+`securityLevel` 设为 `strict`，图表中的 HTML 标签不会被解析。

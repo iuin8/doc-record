@@ -1,0 +1,81 @@
+---
+interface Props {
+  /** 当前页面对应的原始 Markdown 路径 */
+  rawPath: string;
+  absoluteUrl: string;
+}
+
+const { rawPath, absoluteUrl } = Astro.props;
+
+const prompt = `请阅读这份技术文档并回答我的问题：${absoluteUrl}`;
+const chatGptUrl = `https://chatgpt.com/?q=${encodeURIComponent(prompt)}`;
+const claudeUrl = `https://claude.ai/new?q=${encodeURIComponent(prompt)}`;
+---
+
+<div class="ai-actions">
+  <button type="button" class="ai-btn" data-raw={rawPath}>复制 Markdown</button>
+  <a class="ai-link" href={chatGptUrl} target="_blank" rel="noopener noreferrer">
+    在 ChatGPT 中打开
+  </a>
+  <a class="ai-link" href={claudeUrl} target="_blank" rel="noopener noreferrer">
+    在 Claude 中打开
+  </a>
+  <span class="ai-status" role="status" aria-live="polite"></span>
+</div>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.ai-btn');
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', async () => {
+      const status = button.parentElement?.querySelector('.ai-status');
+      if (!status) return;
+      try {
+        const response = await fetch(button.dataset.raw ?? '');
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        await navigator.clipboard.writeText(await response.text());
+        status.textContent = '已复制';
+      } catch {
+        status.textContent = '复制失败';
+      }
+      window.setTimeout(() => {
+        status.textContent = '';
+      }, 2000);
+    });
+  });
+</script>
+
+<style>
+  .ai-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-size: var(--sl-text-xs);
+  }
+
+  .ai-btn,
+  .ai-link {
+    padding: 0.25rem 0.6rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    background-color: transparent;
+    color: var(--sl-color-gray-2);
+    font-size: inherit;
+    line-height: 1.6;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .ai-btn:hover,
+  .ai-link:hover {
+    border-color: var(--sl-color-gray-3);
+    color: var(--sl-color-white);
+  }
+
+  .ai-status {
+    min-width: 3.5rem;
+    color: var(--sl-color-gray-3);
+  }
+</style>

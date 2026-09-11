@@ -61,7 +61,7 @@ Mihomo 通常以 **root** 权限运行（为了 TUN 模式等），而用户的 
 #### 场景 1：基础跳板机 (ProxyJump)
 
 **SSH Config (`~/.ssh/config`)**:
-```ssh
+```ssh-config
 Host bastion
   HostName 1.2.3.4
   User admin
@@ -86,7 +86,7 @@ proxies:
 #### 场景 2：Cloudflare Access (ProxyCommand)
 
 **SSH Config**:
-```ssh
+```ssh-config
 Host my-cf-server
   HostName ssh.example.com
   User root

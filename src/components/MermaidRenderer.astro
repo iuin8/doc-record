@@ -1,0 +1,73 @@
+---
+/**
+ * 按需渲染 Mermaid 图。
+ *
+ * 站点 368 篇文档中仅个别页面使用 Mermaid，因此不在构建期引入浏览器依赖，
+ * 而是在检测到 mermaid 代码块时才动态加载，其余页面保持零额外脚本。
+ * 作者侧仍是原生的 ```mermaid 围栏，多端渲染时退化为普通代码块。
+ */
+---
+
+<script>
+  /** 从 Expressive Code 的行结构中还原原始文本。 */
+  function readBlockContent(pre: Element): string {
+    const lines = pre.querySelectorAll('.ec-line .code');
+    if (lines.length > 0) {
+      return Array.from(lines)
+        .map((line) => line.textContent ?? '')
+        .join('\n');
+    }
+    return pre.querySelector('code')?.textContent ?? '';
+  }
+
+  function currentTheme(): 'dark' | 'default' {
+    return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'default';
+  }
+
+  async function renderAll() {
+    const blocks = document.querySelectorAll('pre[data-language="mermaid"]');
+    if (blocks.length === 0) return;
+
+    const { default: mermaid } = await import('mermaid');
+    mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: currentTheme() });
+
+    for (const [index, pre] of blocks.entries()) {
+      const code = readBlockContent(pre);
+      if (!code.trim()) continue;
+      try {
+        const { svg } = await mermaid.render(`mermaid-figure-${index}`, code);
+        const target = pre.closest('figure') ?? pre;
+        const wrapper = document.createElement('div');
+        wrapper.className = 'mermaid-figure not-content';
+        wrapper.innerHTML = svg;
+        target.replaceWith(wrapper);
+      } catch {
+        // 渲染失败时保留原始代码块，作者可直接看到图定义
+      }
+    }
+  }
+
+  renderAll();
+
+  // 主题切换后按新配色重新渲染
+  new MutationObserver(() => {
+    void renderAll();
+  }).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
+</script>
+
+<style is:global>
+  .mermaid-figure {
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+  }
+
+  .mermaid-figure svg {
+    max-width: 100%;
+    height: auto;
+  }
+</style>

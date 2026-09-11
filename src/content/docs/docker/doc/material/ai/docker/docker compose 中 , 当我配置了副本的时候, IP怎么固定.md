@@ -19,7 +19,7 @@
 
 2. 自定义Docker镜像：创建一个自定义的Docker镜像，该镜像在容器启动时可以设置固定的IP地址。可以在Dockerfile中添加相应的配置，例如使用ifconfig命令设置容器的IP地址[[3]](https://gist.github.com/olljanat/b96ed26583c452118313fc18e4a663c1)。
 
-   ````Dockerfile
+   ````dockerfile
    FROM ubuntu
    RUN apt-get update && apt-get install -y net-tools iputils-ping
    COPY start.sh /
