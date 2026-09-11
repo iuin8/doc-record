@@ -55,7 +55,7 @@ jobs:
 
       - name: 运行内容门禁（仅变更文件）
         if: steps.changes.outputs.files != ''
-        run: python3 scripts/check-content.py ${{ steps.changes.outputs.files }}
+        run: python3 scripts/check-content.py --require-languages ${{ steps.changes.outputs.files }}
 
       - name: 无内容变更
         if: steps.changes.outputs.files == ''

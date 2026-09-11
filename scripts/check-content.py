@@ -87,11 +87,24 @@ class Finding:
 
 
 def load_shiki_languages(repo_root: Path) -> set[str] | None:
-    """读取 Shiki 语言包目录，得到受支持的语言名集合。依赖缺失时返回 None。"""
-    langs_dir = repo_root / 'node_modules' / '@shikijs' / 'langs' / 'dist'
-    if not langs_dir.is_dir():
-        return None
-    return {path.stem for path in langs_dir.glob('*.mjs')}
+    """读取 Shiki 语言包目录，得到受支持的语言名集合。依赖缺失时返回 None。
+
+    包管理器不同，该目录的实际位置也不同：bun / npm 使用扁平布局，
+    pnpm 将传递依赖放在 `.pnpm` 下，因此逐个尝试候选路径。
+    """
+    candidates = (
+        'node_modules/@shikijs/langs/dist',
+        'node_modules/shiki/dist/langs',
+    )
+    for candidate in candidates:
+        langs_dir = repo_root / candidate
+        if langs_dir.is_dir():
+            return {path.stem for path in langs_dir.glob('*.mjs')}
+
+    for langs_dir in sorted(repo_root.glob('node_modules/.pnpm/@shikijs+langs*/node_modules/@shikijs/langs/dist')):
+        return {path.stem for path in langs_dir.glob('*.mjs')}
+
+    return None
 
 
 def iter_markdown_files(root: Path):
@@ -216,6 +229,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description='文档内容质量门禁')
     parser.add_argument('--root', default='src/content/docs', help='待检查的内容根目录')
     parser.add_argument('files', nargs='*', help='仅检查指定文件，缺省时全量检查')
+    parser.add_argument(
+        '--require-languages',
+        action='store_true',
+        help='找不到 Shiki 语言包时按失败处理，用于 CI 防止该检查被静默跳过',
+    )
     args = parser.parse_args()
 
     repo_root = Path(__file__).resolve().parent.parent
@@ -231,7 +249,11 @@ def main() -> int:
 
     languages = load_shiki_languages(repo_root)
     if languages is None:
-        print('未找到 Shiki 语言包，跳过代码块语言检查', file=sys.stderr)
+        message = '未找到 Shiki 语言包'
+        if args.require_languages:
+            print(f'{message}，代码块语言检查不可用', file=sys.stderr)
+            return 1
+        print(f'{message}，跳过代码块语言检查', file=sys.stderr)
 
     findings: list[Finding] = []
     private_address_files: set[Path] = set()
