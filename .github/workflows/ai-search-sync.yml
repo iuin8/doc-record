@@ -1,0 +1,33 @@
+name: AI Search Sync
+
+# Workers AI 的免费额度为每日 10,000 Neurons，于 00:00 UTC 重置。
+# 安排在重置之后触发同步，让索引任务在额度最充裕时执行。
+on:
+  schedule:
+    - cron: '17 1 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ai-search-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Trigger sync
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "${CLOUDFLARE_API_TOKEN}" ]; then
+            echo '::warning::未配置 CLOUDFLARE_API_TOKEN，跳过同步。'
+            exit 0
+          fi
+          chmod +x scripts/cloudflare-ai-search-sync.sh
+          ./scripts/cloudflare-ai-search-sync.sh

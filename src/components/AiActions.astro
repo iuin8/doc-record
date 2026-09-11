@@ -11,56 +11,223 @@ const t = Astro.locals.t;
 const prompt = `${t('aiActions.prompt')}${absoluteUrl}`;
 const chatGptUrl = `https://chatgpt.com/?q=${encodeURIComponent(prompt)}`;
 const claudeUrl = `https://claude.ai/new?q=${encodeURIComponent(prompt)}`;
+
+/**
+ * NLWeb 的 /ask 接口地址。
+ * 自建实例时可用 PUBLIC_NLWEB_ASK_URL 覆盖，无需改动代码。
+ */
+const askEndpoint =
+  import.meta.env.PUBLIC_NLWEB_ASK_URL ??
+  'https://bold-union-4896-nlweb.iuinin666.workers.dev/ask';
 ---
 
-<div class="ai-actions">
-  <button
-    type="button"
-    class="ai-btn"
-    data-raw={rawPath}
-    data-copied={t('aiActions.copied')}
-    data-failed={t('aiActions.copyFailed')}
+<div class="ai-block">
+  <div class="ai-actions">
+    <button
+      type="button"
+      class="ai-btn"
+      data-raw={rawPath}
+      data-copied={t('aiActions.copied')}
+      data-failed={t('aiActions.copyFailed')}
+    >
+      {t('aiActions.copy')}
+    </button>
+    <a class="ai-link" href={chatGptUrl} target="_blank" rel="noopener noreferrer">
+      {t('aiActions.openInChatGpt')}
+    </a>
+    <a class="ai-link" href={claudeUrl} target="_blank" rel="noopener noreferrer">
+      {t('aiActions.openInClaude')}
+    </a>
+    <button type="button" class="ai-btn ai-ask-toggle" aria-expanded="false">
+      {t('aiActions.ask')}
+    </button>
+    <span class="ai-status" role="status" aria-live="polite"></span>
+  </div>
+
+  <div
+    class="ai-ask"
+    hidden
+    data-endpoint={askEndpoint}
+    data-pending={t('aiActions.askPending')}
+    data-empty={t('aiActions.askEmpty')}
+    data-failed={t('aiActions.askFailed')}
+    data-sources={t('aiActions.askSources')}
   >
-    {t('aiActions.copy')}
-  </button>
-  <a class="ai-link" href={chatGptUrl} target="_blank" rel="noopener noreferrer">
-    {t('aiActions.openInChatGpt')}
-  </a>
-  <a class="ai-link" href={claudeUrl} target="_blank" rel="noopener noreferrer">
-    {t('aiActions.openInClaude')}
-  </a>
-  <span class="ai-status" role="status" aria-live="polite"></span>
+    <form class="ai-ask-form">
+      <input
+        class="ai-ask-input"
+        type="search"
+        name="query"
+        required
+        placeholder={t('aiActions.askPlaceholder')}
+      />
+      <button class="ai-btn" type="submit">{t('aiActions.askSubmit')}</button>
+    </form>
+    <div class="ai-ask-result" role="status" aria-live="polite"></div>
+  </div>
 </div>
 
 <script>
-  const buttons = document.querySelectorAll<HTMLButtonElement>('.ai-btn');
+  interface AskResult {
+    url?: string;
+    name?: string;
+    description?: string;
+  }
 
-  buttons.forEach((button) => {
-    button.addEventListener('click', async () => {
-      const status = button.parentElement?.querySelector('.ai-status');
-      if (!status) return;
-      try {
-        const response = await fetch(button.dataset.raw ?? '');
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        await navigator.clipboard.writeText(await response.text());
-        status.textContent = button.dataset.copied ?? '';
-      } catch {
-        status.textContent = button.dataset.failed ?? '';
+  interface AskMessage {
+    message_type?: string;
+    results?: AskResult[];
+    content?: string;
+    answer?: string;
+  }
+
+  /** 把 SSE 文本流切成完整的 `data:` 事件载荷。 */
+  function parseEvents(chunk: string): AskMessage[] {
+    const messages: AskMessage[] = [];
+    for (const block of chunk.split('\n\n')) {
+      for (const line of block.split('\n')) {
+        if (!line.startsWith('data:')) continue;
+        const payload = line.slice(5).trim();
+        if (!payload || payload === '[DONE]') continue;
+        try {
+          messages.push(JSON.parse(payload) as AskMessage);
+        } catch {
+          // 心跳或非 JSON 行直接忽略
+        }
       }
-      window.setTimeout(() => {
-        status.textContent = '';
-      }, 2000);
+    }
+    return messages;
+  }
+
+  function renderResult(container: HTMLElement, label: string, items: AskResult[]) {
+    container.replaceChildren();
+
+    if (items.length === 0) {
+      container.textContent = container.parentElement?.dataset.empty ?? '';
+      return;
+    }
+
+    const heading = document.createElement('p');
+    heading.className = 'ai-ask-sources';
+    heading.textContent = label;
+    container.append(heading);
+
+    const list = document.createElement('ol');
+    for (const item of items) {
+      if (!item.url) continue;
+      const entry = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = item.url;
+      link.textContent = item.name ?? item.url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      entry.append(link);
+      if (item.description) {
+        const text = document.createElement('p');
+        text.textContent = item.description;
+        entry.append(text);
+      }
+      list.append(entry);
+    }
+    container.append(list);
+  }
+
+  const blocks = document.querySelectorAll<HTMLElement>('.ai-block');
+
+  blocks.forEach((block) => {
+    const toggle = block.querySelector<HTMLButtonElement>('.ai-ask-toggle');
+    const panel = block.querySelector<HTMLElement>('.ai-ask');
+    const form = block.querySelector<HTMLFormElement>('.ai-ask-form');
+    const input = block.querySelector<HTMLInputElement>('.ai-ask-input');
+    const output = block.querySelector<HTMLElement>('.ai-ask-result');
+    const copyButton = block.querySelector<HTMLButtonElement>('.ai-actions .ai-btn');
+    const status = block.querySelector<HTMLElement>('.ai-status');
+    if (!toggle || !panel || !form || !input || !output) return;
+
+    toggle.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!expanded));
+      panel.hidden = expanded;
+      if (!expanded) input.focus();
+    });
+
+    if (copyButton && status) {
+      copyButton.addEventListener('click', async () => {
+        try {
+          const response = await fetch(copyButton.dataset.raw ?? '');
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          await navigator.clipboard.writeText(await response.text());
+          status.textContent = copyButton.dataset.copied ?? '';
+        } catch {
+          status.textContent = copyButton.dataset.failed ?? '';
+        }
+        window.setTimeout(() => {
+          status.textContent = '';
+        }, 2000);
+      });
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const query = input.value.trim();
+      if (!query) return;
+
+      output.textContent = panel.dataset.pending ?? '';
+      const collected: AskResult[] = [];
+      const notes: string[] = [];
+
+      try {
+        const response = await fetch(panel.dataset.endpoint ?? '', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query, mode: 'generate', site: 'all' }),
+        });
+        if (!response.ok || !response.body) throw new Error(`HTTP ${response.status}`);
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const boundary = buffer.lastIndexOf('\n\n');
+          if (boundary === -1) continue;
+          const complete = buffer.slice(0, boundary + 2);
+          buffer = buffer.slice(boundary + 2);
+
+          for (const message of parseEvents(complete)) {
+            if (message.results) collected.push(...message.results);
+            const text = message.answer ?? message.content;
+            if (typeof text === 'string' && text) notes.push(text);
+          }
+        }
+      } catch {
+        output.textContent = panel.dataset.failed ?? '';
+        return;
+      }
+
+      renderResult(output, panel.dataset.sources ?? '', collected);
+      if (notes.length > 0) {
+        const paragraph = document.createElement('p');
+        paragraph.textContent = notes.join(' ');
+        output.prepend(paragraph);
+      }
     });
   });
 </script>
 
 <style>
+  .ai-block {
+    margin-top: 1rem;
+  }
+
   .ai-actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
-    margin-top: 1rem;
     font-size: var(--sl-text-xs);
   }
 
@@ -83,8 +250,72 @@ const claudeUrl = `https://claude.ai/new?q=${encodeURIComponent(prompt)}`;
     color: var(--sl-color-white);
   }
 
+  .ai-btn[aria-expanded='true'] {
+    border-color: var(--sl-color-gray-3);
+    color: var(--sl-color-white);
+  }
+
   .ai-status {
     min-width: 3.5rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .ai-ask {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    font-size: var(--sl-text-xs);
+  }
+
+  .ai-ask-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .ai-ask-input {
+    flex: 1 1 16rem;
+    min-width: 0;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    background-color: transparent;
+    color: var(--sl-color-gray-2);
+    font: inherit;
+  }
+
+  .ai-ask-input:focus-visible {
+    outline: 2px solid var(--sl-color-accent);
+    outline-offset: 1px;
+  }
+
+  .ai-ask-result {
+    margin-top: 0.75rem;
+    color: var(--sl-color-gray-2);
+    line-height: 1.7;
+  }
+
+  .ai-ask-result :global(ol) {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .ai-ask-result :global(li) {
+    margin-bottom: 0.5rem;
+  }
+
+  .ai-ask-result :global(a) {
+    color: var(--sl-color-white);
+  }
+
+  .ai-ask-result :global(p) {
+    margin: 0.25rem 0 0;
+    color: var(--sl-color-gray-3);
+  }
+
+  .ai-ask-sources {
+    margin: 0 0 0.5rem;
     color: var(--sl-color-gray-3);
   }
 </style>

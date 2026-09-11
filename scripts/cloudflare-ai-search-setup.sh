@@ -28,7 +28,7 @@ SITE_URL="${SITE_URL:-https://doc-record.iuin888vip.icu}"
 # sitemap-ai.xml 由 src/pages/sitemap-ai.xml.ts 生成，仅含根语言页面，
 # 不含 /en /ja /zh-Hant 回退副本，避免索引内容成倍重复。
 SITEMAP_PATH="${SITEMAP_PATH:-sitemap-ai.xml}"
-EMBEDDING_MODEL="${EMBEDDING_MODEL:-@cf/baai/bge-m3}"
+EMBEDDING_MODEL="${EMBEDDING_MODEL:-@cf/qwen/qwen3-embedding-0.6b}"
 AI_SEARCH_MODEL="${AI_SEARCH_MODEL:-@cf/qwen/qwen3-30b-a3b-fp8}"
 RERANKING="${RERANKING:-false}"
 REWRITE_QUERY="${REWRITE_QUERY:-false}"
@@ -89,8 +89,8 @@ body=$(
       },
       "discover_options": {
         "source": "sitemaps",
-        "depth": 3,
-        "limit": 2000,
+        "depth": 1,
+        "limit": 100000,
         "include_external_links": false,
         "include_subdomains": false
       }
@@ -100,13 +100,13 @@ body=$(
   "embedding_model": "${EMBEDDING_MODEL}",
   "ai_search_model": "${AI_SEARCH_MODEL}",
   "chunk": true,
-  "chunk_size": 1200,
-  "chunk_overlap": 100,
+  "chunk_size": 1024,
+  "chunk_overlap": 10,
   "index_method": { "keyword": true, "vector": true },
-  "max_num_results": 8,
+  "max_num_results": 10,
   "reranking": ${RERANKING},
   "rewrite_query": ${REWRITE_QUERY},
-  "sync_interval": 3600
+  "sync_interval": 21600
 }
 EOF
 )

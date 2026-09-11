@@ -4,5 +4,12 @@
   "aiActions.copied": "已复制",
   "aiActions.copyFailed": "复制失败",
   "aiActions.openInChatGpt": "在 ChatGPT 中打开",
-  "aiActions.openInClaude": "在 Claude 中打开"
+  "aiActions.openInClaude": "在 Claude 中打开",
+  "aiActions.ask": "AI 问答",
+  "aiActions.askPlaceholder": "基于本站文档提问",
+  "aiActions.askSubmit": "提问",
+  "aiActions.askPending": "检索中",
+  "aiActions.askEmpty": "未检索到相关内容",
+  "aiActions.askFailed": "问答服务暂时不可用",
+  "aiActions.askSources": "参考来源"
 }

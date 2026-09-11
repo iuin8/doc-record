@@ -44,25 +44,68 @@ export CLOUDFLARE_API_TOKEN=xxxx
 | 配置 | 取值 | 原因 |
 | --- | --- | --- |
 | 数据源类型 | `web-crawler` | 站点为静态站，无对象存储清单可用 |
-| URL 发现 | `parse_type: sitemap` + `sitemap-index.xml` | 站点已在构建期产出 sitemap |
-| 向量模型 | `@cf/baai/bge-m3` | 支持中文的多语言模型 |
+| URL 发现 | `parse_type: sitemap` + `sitemap-ai.xml` | 仅含根语言页面，避免回退副本成倍重复 |
+| 向量模型 | `@cf/qwen/qwen3-embedding-0.6b` | 轻量多语言模型，索引成本低 |
 | 生成模型 | `@cf/qwen/qwen3-30b-a3b-fp8` | 中文表现较好，可用环境变量覆盖 |
 | 索引方式 | 关键词 + 向量双路 | 混合检索对技术文档中的命令与配置名更友好 |
-| 同步间隔 | 3600 秒 | 与 GitHub Pages 的发布节奏匹配 |
+| 分块 | 1024 字符，重叠 10 | 接口限制 `chunk_overlap ≤ 30` |
+| 同步间隔 | 21600 秒 | 与 GitHub Pages 的发布节奏匹配 |
 
 排除项：
 
 - `/raw/**`、`/_llms-txt/**`：面向 AI 的纯文本副本，与页面内容重复；
 - `/en/**`、`/ja/**`、`/zh-Hant/**`：译文尚未产生，这些路径当前是回退内容，
   与根语言页面完全一致。译文上线后需要从排除项中移除。
+  排除项对已入队的 URL 不生效，主要去重手段是 `sitemap-ai.xml`。
+
+### 3.1 为什么需要独立的站点地图
+
+`sitemap-index.xml` 指向的 `sitemap-0.xml` 含 1492 条 URL，其中约四分之三是
+`/en`、`/ja`、`/zh-Hant` 前缀的回退副本，正文与根语言页面完全一致。全量索引会带来
+两个问题：向量写入量放大约四倍，且 `max_num_results` 的返回名额被近义重复块占满，
+实际可提供的独立来源显著减少。
+
+`src/pages/sitemap-ai.xml.ts` 只收集根语言条目，构建产物为 367 条 URL。
+
+### 3.2 更换内容源需要重建实例
+
+修改 `specific_sitemaps` 不会重置已经入队的 URL 列表，正在进行的同步任务会继续
+消费旧队列。切换到新站点地图的可靠做法是删除实例后按新配置重新创建。
 
 ## 4. 额度说明
 
-Workers AI 的免费额度为每日 10,000 neurons，直接调用推理接口会在用尽后返回
-`code 4006`。AI Search 的爬取与问答同样依赖 Workers AI，因此：
+Workers AI 的免费额度为每日 **10,000 Neurons**，每日 **00:00 UTC** 重置。
+Workers Paid 计划同样只含这 10,000 Neurons，超出部分按 $0.011 / 1,000 Neurons 计费。
+用尽后推理接口返回 `code 4006`，AI Search 侧表现为
+`workers_ai_out_of_capacity_error`，索引任务持续失败、检索接口返回空结果。
 
-- 索引 370 篇文档与日常问答大概率需要 **Workers Paid** 计划（每月 5 美元起）；
-- 未升级时，同步任务与问答可能失败或返回空结果，这属于额度问题而非配置错误。
+已确认的现象：
+
+- 2026-09-11 08:30 UTC 直接调用 `@cf/qwen/qwen3-embedding-0.6b` 返回
+  `you have used up your daily free allocation of 10,000 neurons`；
+- 同期索引任务出现 87 次 `workers_ai_out_of_capacity_error`，`completed` 为 0。
+
+用尽的原因是此前的失控爬取：`sitemap-0.xml` 含 1492 条 URL，且实例被反复重建与重试，
+同一批内容多次进入嵌入流程。切换到 367 条的根语言站点地图后，单次全量索引的成本为：
+
+| 项目 | 取值 |
+| --- | --- |
+| 根语言文档 | 368 篇，合计约 49.7 万字符 |
+| 估算 token | 约 0.20 M |
+| 嵌入单价 | 1075 neurons / M input tokens |
+| 全量索引成本 | 约 214 neurons，占每日额度约 2% |
+| 单次问答成本 | 约 60 neurons（8 段上下文 + 800 token 输出） |
+
+因此**免费额度足够支撑日常索引与问答**，不必升级 Workers Paid。
+需要注意的反而是避免重复索引：内容源只用 `sitemap-ai.xml`，
+且不要频繁手动触发同步。
+
+应对方式：
+
+- 同步任务安排在额度重置之后执行，见 `.github/workflows/ai-search-sync.yml`
+  （每日 01:17 UTC，可手动触发）；
+- 仓库需要在 Settings → Secrets 中配置 `CLOUDFLARE_API_TOKEN`，
+  权限为 Account > AI Search:Edit 与 AI Search:Run。未配置时工作流跳过而不失败。
 
 ## 5. 站点接入
 

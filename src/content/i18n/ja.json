@@ -4,5 +4,12 @@
   "aiActions.copied": "コピーしました",
   "aiActions.copyFailed": "コピーに失敗しました",
   "aiActions.openInChatGpt": "ChatGPT で開く",
-  "aiActions.openInClaude": "Claude で開く"
+  "aiActions.openInClaude": "Claude で開く",
+  "aiActions.ask": "AI 質問",
+  "aiActions.askPlaceholder": "このドキュメントについて質問する",
+  "aiActions.askSubmit": "質問する",
+  "aiActions.askPending": "検索中",
+  "aiActions.askEmpty": "関連するコンテンツが見つかりませんでした",
+  "aiActions.askFailed": "Q&A サービスは一時的に利用できません",
+  "aiActions.askSources": "参照元"
 }
