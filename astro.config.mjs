@@ -6,7 +6,9 @@ import starlightLlmsTxt from 'starlight-llms-txt';
 // llms.txt 分卷：完整版约 769 KB，单次取用会占满上下文，
 // 按分类拆分后 AI 可只读取相关分卷，完整版作为回退。
 const llmsTxtOptions = {
-  details: '内容以 CommonMark 编写，代码块用围栏语法标注语言。上下文有限时优先取用下列分类分卷。',
+  details:
+    '内容以 CommonMark 编写，代码块用围栏语法标注语言。上下文有限时优先取用下列分类分卷。' +
+    '全文采用 MIT 许可证，可自由引用与再分发，引用时请注明来源与原文链接。',
   customSets: [
     { label: 'Docker', description: '容器构建、镜像、Compose 与开发环境', paths: ['docker/**'] },
     { label: 'Kubernetes', description: '集群部署、运维与问题排查', paths: ['kubernetes/**'] },
