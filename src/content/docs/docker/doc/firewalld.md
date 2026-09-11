@@ -1,7 +1,3 @@
----
-title: "firewalld防火墙相关配置"
----
-
 # firewalld防火墙相关配置
 
 - [阿里云开发者社区用户文章参考](https://developer.aliyun.com/article/292603)

@@ -1,7 +1,3 @@
----
-title: "systemctl管理Java进程无限重启问题"
----
-
 # systemctl管理Java进程无限重启问题
 
 ```bash

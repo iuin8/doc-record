@@ -1,7 +1,3 @@
----
-title: "使用Jenkins构建node项目"
----
-
 # 使用Jenkins构建node项目
 
 ## Jenkins配置

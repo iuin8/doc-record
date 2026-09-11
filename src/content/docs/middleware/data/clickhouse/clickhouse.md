@@ -1,7 +1,3 @@
----
-title: "clickhouse"
----
-
 # clickhouse
 
 ## 安装指定版本

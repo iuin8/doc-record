@@ -1,8 +1,3 @@
----
-title: "Node Debug"
-sidebar_position: 1
----
-
 # Node Debug
 
 通过 DaemonSet + `nsenter` 实现 Kubernetes 节点的**无 SSH 应急救援**。Pod 以最小权限（仅 `CAP_SYS_ADMIN`）运行，`kubectl exec` 进入后执行 `nsenter -t 1 -a` 即可穿透到宿主机上下文。

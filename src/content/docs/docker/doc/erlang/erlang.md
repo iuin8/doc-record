@@ -1,7 +1,3 @@
----
-title: "yum安装erlang"
----
-
 # yum安装erlang
 
 ```shell

@@ -1,7 +1,3 @@
----
-title: "TiDB dashboard"
----
-
 # TiDB dashboard 
 With Grafana v5.x or later, we can use provisioning feature to statically provision datasources and dashboards. No need to use scripts to configure Grafana.
 

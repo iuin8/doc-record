@@ -1,7 +1,3 @@
----
-title: "gradle使用"
----
-
 # gradle使用
 
 - 文章

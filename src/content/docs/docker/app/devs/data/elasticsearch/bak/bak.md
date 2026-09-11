@@ -1,7 +1,3 @@
----
-title: "bak"
----
-
 以下是使用Docker Swarm部署Elasticsearch集群的步骤：
 
 1. 环境准备：

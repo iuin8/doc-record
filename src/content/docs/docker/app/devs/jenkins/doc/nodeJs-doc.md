@@ -1,7 +1,3 @@
----
-title: "jenkins构建node项目"
----
-
 # jenkins构建node项目
 
 ## 安装插件

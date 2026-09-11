@@ -1,7 +1,3 @@
----
-title: "Kasm Workspaces使用记录"
----
-
 # Kasm Workspaces使用记录
 
 官方开源组织地址：https://github.com/kasmtech

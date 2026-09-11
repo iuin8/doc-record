@@ -1,7 +1,3 @@
----
-title: "nginx-ui"
----
-
 # nginx-ui
 
 [参考文章](https://mp.weixin.qq.com/s/sTsrkRqakj6X_iJAU2Nn3w)

@@ -1,7 +1,3 @@
----
-title: "clash使用记录"
----
-
 # clash使用记录
 
 ## Linux中使用clash

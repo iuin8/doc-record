@@ -1,7 +1,3 @@
----
-title: "goodlink使用记录(v2.1.8)"
----
-
 # goodlink使用记录(v2.1.8)
 
 [下载地址](https://gitee.com/konyshe/goodlink/releases/download/v2.1.8/goodlink-linux-amd64-cmd.zip)

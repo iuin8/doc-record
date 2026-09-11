@@ -1,8 +1,3 @@
----
-title: "nsenter"
-sidebar_position: 2
----
-
 # nsenter
 
 Linux namespace 穿透工具，以**指定进程的命名空间上下文**执行任意命令。在容器化和 Kubernetes 运维中，它是"不通过网络、直接潜入目标环境"的核心工具。

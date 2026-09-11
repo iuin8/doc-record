@@ -1,7 +1,3 @@
----
-title: "软件相关"
----
-
 # 软件相关
 
 ## Sonatype Nexus

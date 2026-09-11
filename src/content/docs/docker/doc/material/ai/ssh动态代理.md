@@ -1,7 +1,3 @@
----
-title: "ssh动态代理"
----
-
 以下是对命令 `ssh -o GatewayPorts=yes -D 2000 test-2023.intranet.company -NTfCg` 的逐项解析和完整说明：
 
 ---

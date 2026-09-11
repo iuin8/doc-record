@@ -1,7 +1,3 @@
----
-title: "ComfyUI"
----
-
 # ComfyUI
 
 ## 安装

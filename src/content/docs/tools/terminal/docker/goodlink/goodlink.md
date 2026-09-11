@@ -1,7 +1,3 @@
----
-title: "两台主机之间直连"
----
-
 # 两台主机之间直连
 
 [gitee仓库](https://gitee.com/konyshe/goodlink)

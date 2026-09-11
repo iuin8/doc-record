@@ -1,7 +1,3 @@
----
-title: "maxkb使用记录"
----
-
 # maxkb使用记录
 
 [官网安装目录](https://maxkb.cn/docs/installation/online_installtion/)

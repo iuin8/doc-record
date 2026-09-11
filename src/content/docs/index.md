@@ -1,7 +1,3 @@
----
-title: "Doc Record"
----
-
 # Doc Record
 
 欢迎来到文档中心！这里收集了各类技术文档和解决方案。

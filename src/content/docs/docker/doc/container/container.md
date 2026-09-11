@@ -1,7 +1,3 @@
----
-title: "docker容器记录"
----
-
 # docker容器记录
 
 启动busybox

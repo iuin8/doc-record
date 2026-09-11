@@ -1,7 +1,3 @@
----
-title: "export_http_proxy 转成 Mihomo 配置的 SOP"
----
-
 # export_http_proxy 转成 Mihomo 配置的 SOP
 
 基于 Mihomo（原 Clash.Meta）的官方文档规范，要将您的 `10.0.4.95:7897` 代理转换为 Mihomo 配置，最权威且“一次性解决所有流量”的方案是使用 **TUN 模式**。

@@ -1,7 +1,3 @@
----
-title: "systemctl管理Java进程"
----
-
 # systemctl管理Java进程
 
 [support-service.service文件地址](https://github.com/183461750/doc-record/blob/main/docs/lang/java/systemctl%E7%AE%A1%E7%90%86Java%E8%BF%9B%E7%A8%8B/support-service.service)

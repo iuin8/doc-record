@@ -1,7 +1,3 @@
----
-title: "idea中Preparing Docker SSH environment...是怎么准备环境的? 原理是啥? 我要如何操作才能通过ssh的方式在本地通过docker命令远程控制内网docker"
----
-
 # idea中Preparing Docker SSH environment...是怎么准备环境的? 原理是啥? 我要如何操作才能通过ssh的方式在本地通过docker命令远程控制内网docker
 
 在使用 IntelliJ IDEA 进行 Docker 开发时，IDEA 支持通过 SSH 连接到远程 Docker 环境。当你在 IDEA 中看到 “Preparing Docker SSH environment...” 这样的提示时，通常意味着 IDEA 正在设置通过 SSH 代理来与远程 Docker 宿主机进行通信。

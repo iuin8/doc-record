@@ -1,7 +1,3 @@
----
-title: "Redis相关记录"
----
-
 # Redis相关记录
 
 ## 导出Redis中的数据

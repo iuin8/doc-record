@@ -1,7 +1,3 @@
----
-title: "nacos"
----
-
 # nacos
 
 ## 快速开始

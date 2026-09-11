@@ -1,7 +1,3 @@
----
-title: "UpSnap使用记录"
----
-
 # UpSnap使用记录
 
 [代码仓库](https://github.com/seriousm4x/UpSnap.git)

@@ -1,7 +1,3 @@
----
-title: "telegraf是用记录"
----
-
 # telegraf是用记录
 
 [相关资料1](https://github.com/influxdata/sandbox.git)

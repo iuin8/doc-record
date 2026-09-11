@@ -1,7 +1,3 @@
----
-title: "frp+ssh+docker打通受限网络"
----
-
 # frp+ssh+docker打通受限网络
 
 目的: 解决客户环境只能使用jumpserver连接的限制

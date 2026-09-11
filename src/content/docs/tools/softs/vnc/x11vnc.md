@@ -1,7 +1,3 @@
----
-title: "x11vnc 配置"
----
-
 # x11vnc 配置
 
 ```bash

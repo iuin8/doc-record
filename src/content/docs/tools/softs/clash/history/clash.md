@@ -1,7 +1,3 @@
----
-title: "linux中使用clash记录"
----
-
 # linux中使用clash记录
 
 ## 安装clash-for-linux

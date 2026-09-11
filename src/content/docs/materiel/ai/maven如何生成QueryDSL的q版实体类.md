@@ -1,7 +1,3 @@
----
-title: "maven如何生成QueryDSL的q版实体类"
----
-
 # maven如何生成QueryDSL的q版实体类
 
 要使用Maven生成QueryDSL的Q类，您可以使用`maven-compiler-plugin`插件。以下是使用该插件生成Q类的步骤：

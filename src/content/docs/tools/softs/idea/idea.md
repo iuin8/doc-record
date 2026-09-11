@@ -1,7 +1,3 @@
----
-title: "idea使用记录"
----
-
 # idea使用记录
 
 ## plugins

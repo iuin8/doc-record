@@ -1,7 +1,3 @@
----
-title: "docker相关报错记录"
----
-
 # docker相关报错记录
 
 ## docker info 报warning

@@ -1,7 +1,3 @@
----
-title: "zk"
----
-
 ## zk集群 配置文件中配置含义
 ```shell
 vim zoo.cfg

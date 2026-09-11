@@ -1,7 +1,3 @@
----
-title: "timedatectl命令怎么同步网络时间"
----
-
 # timedatectl命令怎么同步网络时间
 
 要使用`timedatectl`命令同步网络时间，您可以按照以下步骤操作：

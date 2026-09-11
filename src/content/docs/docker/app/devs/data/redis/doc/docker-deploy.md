@@ -1,7 +1,3 @@
----
-title: "这里以 redis-node1 实例为例"
----
-
 ## 创建 6 个 Redis 容器
 ```shell
 docker create --name redis-node1 --net host -v /data/redis-data/node1:/data redis:5.0.5 --cluster-enabled yes --cluster-config-file nodes-node-1.conf --port 6379

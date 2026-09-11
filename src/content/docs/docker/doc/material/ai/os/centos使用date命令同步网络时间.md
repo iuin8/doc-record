@@ -1,7 +1,3 @@
----
-title: "centos使用date命令同步网络时间"
----
-
 # centos使用date命令同步网络时间
 
 在CentOS中，可以使用date命令来同步网络时间。下面是使用date命令同步网络时间的步骤：

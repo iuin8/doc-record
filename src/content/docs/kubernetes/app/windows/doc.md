@@ -1,7 +1,3 @@
----
-title: "容器版windows"
----
-
 # 容器版windows
 
 [GitHub地址](https://github.com/dockur/windows)

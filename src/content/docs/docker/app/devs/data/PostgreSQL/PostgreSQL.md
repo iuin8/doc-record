@@ -1,7 +1,3 @@
----
-title: "postgresql数据库相关文档"
----
-
 # postgresql数据库相关文档
 
 ## 部署

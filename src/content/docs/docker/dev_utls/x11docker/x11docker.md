@@ -1,7 +1,3 @@
----
-title: "x11docker"
----
-
 # x11docker
 
 ```bash

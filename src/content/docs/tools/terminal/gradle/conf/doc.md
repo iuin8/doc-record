@@ -1,7 +1,3 @@
----
-title: "gradle相关配置"
----
-
 # gradle相关配置
 
 ## 使用wrapper时

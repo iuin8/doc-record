@@ -1,7 +1,3 @@
----
-title: "设置开启启动(nfs-secure-server 可不需要)"
----
-
 ## 服务端安装NFS服务步骤：
 - 第一步：安装NFS和rpc。
 ```shell

@@ -1,7 +1,3 @@
----
-title: "设置宿主机ip"
----
-
 ## broker.conf
 ```
 # 设置宿主机ip

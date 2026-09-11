@@ -1,7 +1,3 @@
----
-title: "mysql开启集群的sql命令"
----
-
 ## 部署MySQL
 ```shell
 # mysql开启集群的sql命令

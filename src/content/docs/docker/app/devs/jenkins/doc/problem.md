@@ -1,7 +1,3 @@
----
-title: "jenkins部署相关问题记录"
----
-
 # jenkins部署相关问题记录
 
 ## 该jenkins实例似乎已离线

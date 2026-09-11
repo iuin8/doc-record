@@ -1,7 +1,3 @@
----
-title: "启动集群"
----
-
 # 启动集群
 docker stack deploy -c kafka-compose.yml kafka
 # 启动集群（two）

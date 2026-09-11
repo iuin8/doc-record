@@ -1,7 +1,3 @@
----
-title: "vscode"
----
-
 # vscode
 
 ## claude code

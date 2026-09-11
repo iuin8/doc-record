@@ -1,7 +1,3 @@
----
-title: "openP2P 文档"
----
-
 # openP2P 文档
 
 [openP2P 安装文档](https://console.openp2p.cn/install)

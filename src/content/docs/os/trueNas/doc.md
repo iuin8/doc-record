@@ -1,7 +1,3 @@
----
-title: "trueNas使用记录"
----
-
 # trueNas使用记录
 
 [官方下载地址(最新稳定版)](https://www.truenas.com/download-truenas-scale/)

@@ -1,7 +1,3 @@
----
-title: "可通过此方式创建库"
----
-
 ## 安装node_exporter
 ```shell
 1、wget https://github.com/prometheus/node_exporter/releases/download/v1.1.2/node_exporter-1.1.2.linux-amd64.tar.gz

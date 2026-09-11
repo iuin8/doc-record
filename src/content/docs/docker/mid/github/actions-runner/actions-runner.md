@@ -1,7 +1,3 @@
----
-title: "actions-runner"
----
-
 # actions-runner
 
 ## linux arm64版

@@ -1,7 +1,3 @@
----
-title: "localAI使用记录"
----
-
 # localAI使用记录
 
 [官网](https://localai.io)

@@ -1,7 +1,3 @@
----
-title: "dockerfile"
----
-
 # dockerfile
 
 ## maven使用dockerfile插件构建项目

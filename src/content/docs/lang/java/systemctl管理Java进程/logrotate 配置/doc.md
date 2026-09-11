@@ -1,7 +1,3 @@
----
-title: "logrotate配置"
----
-
 # logrotate配置
 
 [logrotate配置地址](https://github.com/183461750/doc-record/blob/main/docs/lang/java/systemctl%E7%AE%A1%E7%90%86Java%E8%BF%9B%E7%A8%8B/logrotate%20%E9%85%8D%E7%BD%AE/support-service)

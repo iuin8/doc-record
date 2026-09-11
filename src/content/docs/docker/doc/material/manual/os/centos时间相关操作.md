@@ -1,7 +1,3 @@
----
-title: "centos时间相关操作"
----
-
 # centos时间相关操作
 
 设置时区（CentOS 7）

@@ -1,7 +1,3 @@
----
-title: "logstash使用记录"
----
-
 # logstash使用记录
 
 ## 安装

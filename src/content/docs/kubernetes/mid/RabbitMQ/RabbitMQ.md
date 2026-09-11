@@ -1,7 +1,3 @@
----
-title: "RabbitMQ相关记录"
----
-
 # RabbitMQ相关记录
 
 ## 部署

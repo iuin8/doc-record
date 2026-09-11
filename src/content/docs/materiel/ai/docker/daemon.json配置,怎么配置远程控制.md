@@ -1,7 +1,3 @@
----
-title: "/etc/docker/daemon.json配置, 怎么配置远程控制"
----
-
 # /etc/docker/daemon.json配置, 怎么配置远程控制
 
 要在 Docker 中配置远程控制，你需要在 `/etc/docker/daemon.json` 文件中进行一些配置变更。这个文件用于配置 Docker 守护进程的的行为。以下是一些配置远程控制所需要设置的选项：

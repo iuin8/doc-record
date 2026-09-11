@@ -1,7 +1,3 @@
----
-title: "docker compose 中 , 当我配置了副本的时候, IP怎么固定"
----
-
 # docker compose 中 , 当我配置了副本的时候, IP怎么固定
 
 在Docker Compose中，当配置了副本（replicas）时，容器的IP地址是动态分配的，无法直接固定。然而，可以通过一些方法来实现类似固定IP的效果。

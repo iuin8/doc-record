@@ -1,7 +1,3 @@
----
-title: "mihomo配置智能分流SOP"
----
-
 # mihomo配置智能分流SOP
 
 thought Target: 32 tokens.

@@ -1,7 +1,3 @@
----
-title: "mysql ndb cluster相关文档"
----
-
 # mysql ndb cluster相关文档
 
 ## 相关链接

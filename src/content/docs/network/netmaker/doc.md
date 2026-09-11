@@ -1,7 +1,3 @@
----
-title: "netmaker使用记录"
----
-
 # netmaker使用记录
 
 [官网安装地址](https://www.netmaker.io/download)

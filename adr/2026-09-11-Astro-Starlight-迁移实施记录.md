@@ -85,13 +85,13 @@ locales: {
 
 | 事项 | 状态 | 说明 |
 | --- | --- | --- |
-| 博客 URL 变化 | 需确认 | 由 `/blog/<slug>` 变为 `/blog/<docs 下的相对路径>`，旧链接失效，建议后续补重定向 |
+| 博客 URL 变化 | 已处理 | 旧 slug 与大小写差异的路径已在 `astro.config.mjs` 的 `redirects` 中映射，共 11 条 |
+| 许可证声明 | 已完成 | `LICENSE` 与 `package.json` 统一为 MIT |
+| CI 验证 | 已通过 | GitHub Actions 构建 1m31s 成功，Pages 状态 `built` |
 | Cloudflare AI Search | 未迁移 | 依赖 Docusaurus 的 React 挂载点，需改写为 Astro 组件或岛屿 |
 | Mermaid | 未迁移 | 内容中仅 2 处使用，当前渲染为纯代码块 |
 | KaTeX | 未迁移 | 内容中无公式，暂无影响 |
 | 公告栏 | 未迁移 | 原 `announcementBar` 配置无对应结构 |
-| 许可证声明 | 待决策 | `LICENSE` 为 AGPL-3.0，`package.json` 为 ISC，两者需统一 |
-| CI 验证 | 待验证 | 工作流已改为 Astro 构建，尚未经 GitHub Actions 实跑 |
 
 ## 七、本地依赖安装的约束
 
@@ -101,3 +101,29 @@ locales: {
 - 本地 `node_modules` 由 `bun install` 生成，仅用于构建验证，`bun.lock` 已加入 `.gitignore`，不进入版本控制。
 
 CI 环境无此限制，`pnpm install --frozen-lockfile` 可正常执行。
+
+## 八、Markdown 元数据约定
+
+内容文件遵循「原生态优先」原则：作者创建 Markdown 时不需要为了通过构建而填写任何字段。
+
+### 约定
+
+1. **不要求 front matter**。页面标题由构建期从正文首个一级标题推导，无一级标题时回退为文件名；
+2. **`title` 为可选字段**。仅在需要与一级标题不同（例如侧边栏显示更短的名称）时才显式声明；
+3. **只使用跨框架通用字段**：`title`、`description`、`date`、`tags`、`authors`。
+   `sidebar_position`、`sidebar_label`、`slug`、`custom_edit_url` 等框架特有字段已从内容中移除；
+4. **正文只使用 CommonMark 与 GFM**。不使用 `:::note` 一类的框架指令，以保证多端渲染规则一致。
+
+### 实现
+
+`src/content.config.ts` 中包装了 Starlight 的 `docsLoader`：在加载阶段遍历条目，
+为未声明 `title` 的条目读取源文件、取首个一级标题并去除行内 Markdown 标记后写入 `data.title`。
+同时通过 `docsSchema({ extend })` 将 `title` 由必填降为可选。
+
+`scripts/strip-framework-frontmatter.py` 负责清理：移除 Docusaurus 特有字段，
+并剥离「仅含 `title` 且该标题与一级标题一致」的 front matter（共 351 个文件）。
+
+### 迁移兼容性
+
+上述字段在 Jekyll、Hugo、VitePress、MkDocs、Docusaurus 中含义一致，更换框架时无需改写内容。
+标题推导逻辑本身也是主流站点生成器的通用行为，因此该约定不引入框架锁定。

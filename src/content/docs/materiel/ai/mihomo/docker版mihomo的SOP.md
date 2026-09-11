@@ -1,7 +1,3 @@
----
-title: "docker版mihomo的SOP"
----
-
 # docker版mihomo的SOP
 
 可以。**Mihomo 完全支持以 Docker 方式运行，并且可以控制宿主机全局走 TUN 虚拟网卡。**

@@ -1,7 +1,3 @@
----
-title: "ClusterIssuer记录"
----
-
 # ClusterIssuer记录
 
 ```bash

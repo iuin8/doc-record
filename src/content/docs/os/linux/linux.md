@@ -1,7 +1,3 @@
----
-title: "Linux系统文档"
----
-
 # Linux系统文档
 
 ```bash

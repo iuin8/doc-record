@@ -1,7 +1,3 @@
----
-title: "python记录"
----
-
 # python记录
 
 ## 安装

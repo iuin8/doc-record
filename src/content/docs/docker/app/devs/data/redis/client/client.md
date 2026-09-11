@@ -1,7 +1,3 @@
----
-title: "redis 官方客户端"
----
-
 # redis 官方客户端
 
 ```shell

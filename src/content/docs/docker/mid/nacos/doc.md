@@ -1,7 +1,3 @@
----
-title: "nacos记录"
----
-
 # nacos记录
 
 ## docker部署

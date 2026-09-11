@@ -1,7 +1,3 @@
----
-title: "Jenkins插件相关记录"
----
-
 # Jenkins插件相关记录
 
 ## jenkins 创建用户角色项目权限

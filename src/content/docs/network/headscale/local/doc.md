@@ -1,7 +1,3 @@
----
-title: "headscale使用记录"
----
-
 # headscale使用记录
 
 [参考文章](https://icloudnative.io/posts/how-to-set-up-or-migrate-headscale/#headscale-%E6%98%AF%E4%BB%80%E4%B9%88)

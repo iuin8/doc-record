@@ -1,7 +1,3 @@
----
-title: "one-api使用记录"
----
-
 # one-api使用记录
 
 [GitHub地址](https://github.com/songquanpeng/one-api)

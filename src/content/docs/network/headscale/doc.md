@@ -1,7 +1,3 @@
----
-title: "headscale使用记录"
----
-
 # headscale使用记录
 
 [GitHub地址](https://github.com/juanfont/headscale)

@@ -1,7 +1,3 @@
----
-title: "构建tomcat应用的相关记录"
----
-
 # 构建tomcat应用的相关记录
 
 ```shell

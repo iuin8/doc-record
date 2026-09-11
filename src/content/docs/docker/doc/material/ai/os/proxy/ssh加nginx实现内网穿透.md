@@ -1,7 +1,3 @@
----
-title: "ssh加nginx实现内网穿透"
----
-
 # ssh加nginx实现内网穿透
 
 - 外网服务器nginx配置

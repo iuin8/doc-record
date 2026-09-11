@@ -1,7 +1,3 @@
----
-title: "openLLM"
----
-
 # openLLM
 
 [GitHub地址](https://github.com/bentoml/OpenLLM)

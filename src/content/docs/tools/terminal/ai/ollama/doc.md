@@ -1,7 +1,3 @@
----
-title: "ollama使用记录"
----
-
 # ollama使用记录
 
 [官网](https://ollama.com)

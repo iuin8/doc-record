@@ -1,7 +1,3 @@
----
-title: "springboot"
----
-
 ## springboot pom.xml配置
 ```xml
             <!-- Docker maven plugin start -->

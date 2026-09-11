@@ -1,7 +1,3 @@
----
-title: "samba"
----
-
 ```shell
 docker run -it \
 --name samba_docker \  #为新的容器命一个名，方便启动、停止、删除等操作，毕竟一长串字符不好输入

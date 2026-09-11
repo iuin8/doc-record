@@ -1,7 +1,3 @@
----
-title: "mq"
----
-
 # mq
 
 ## rocketmq

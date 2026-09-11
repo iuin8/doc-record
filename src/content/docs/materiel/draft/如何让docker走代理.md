@@ -1,7 +1,3 @@
----
-title: "如何让docker走代理"
----
-
 # 如何让docker走代理
 
 [参考本地文章](https://github.com/183461750/doc-record/blob/84e35bffe7f0f1fa2a6cf2dbe65cc0292a8c4540/materiel/ai/docker/%E5%A6%82%E4%BD%95%E8%AE%A9docker%E8%B5%B0%E4%BB%A3%E7%90%86.md)

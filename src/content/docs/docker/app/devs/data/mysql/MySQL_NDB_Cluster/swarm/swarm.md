@@ -1,7 +1,3 @@
----
-title: "docker swarm版部署文档"
----
-
 # docker swarm版部署文档
 
 ## 创建网络

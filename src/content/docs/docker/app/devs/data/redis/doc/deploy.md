@@ -1,7 +1,3 @@
----
-title: "deploy"
----
-
 ### 主redis服务配置
 ```
 /path/to/redis/config/master.conf

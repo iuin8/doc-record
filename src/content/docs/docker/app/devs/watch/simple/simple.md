@@ -1,7 +1,3 @@
----
-title: "监控配置  TODO"
----
-
 ## 访问地址
 ```shell
 http://ip:9100/metrics( 查看服务器的指标)

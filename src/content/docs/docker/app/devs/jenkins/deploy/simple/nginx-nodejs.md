@@ -1,7 +1,3 @@
----
-title: "使用Jenkins构建node项目"
----
-
 # 使用Jenkins构建node项目
 
 ## 环境变量

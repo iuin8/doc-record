@@ -1,7 +1,3 @@
----
-title: "jenkins的使用"
----
-
 # jenkins的使用
 
 ## helm方式部署

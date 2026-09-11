@@ -1,7 +1,3 @@
----
-title: "创建docker mongo.yml文件(执行一次就好了)"
----
-
 ## Jenkins配置
 ```shell
 

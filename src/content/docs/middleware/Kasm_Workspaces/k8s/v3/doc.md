@@ -1,7 +1,3 @@
----
-title: "kasm"
----
-
 # kasm
 
 ```bash

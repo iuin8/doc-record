@@ -1,7 +1,3 @@
----
-title: "Jenkins 相关使用记录"
----
-
 # Jenkins 相关使用记录
 
 ## maven配置settings.xml

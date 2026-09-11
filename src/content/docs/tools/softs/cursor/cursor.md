@@ -1,7 +1,3 @@
----
-title: "cursor"
----
-
 # cursor
 
 ## 修改机器码实现无限续杯(Cursor Free Trial Reset Tool)

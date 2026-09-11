@@ -1,7 +1,3 @@
----
-title: "--advertise-addr参数表示其它swarm中的worker节点使用此ip地址与manager联系。"
----
-
 ## 创建Swarm集群
 ```shell script
 docker swarm init --advertise-addr 192.168.31.43

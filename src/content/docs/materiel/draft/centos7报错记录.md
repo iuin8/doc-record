@@ -1,7 +1,3 @@
----
-title: "centos7报错记录"
----
-
 # centos7报错记录
 
 ## 解决 docker Failed to get D-Bus connection 报错

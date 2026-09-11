@@ -1,7 +1,3 @@
----
-title: "frp+ssh+docker打通受限网络(client)"
----
-
 # frp+ssh+docker打通受限网络(client)
 
 - [官方文档](https://gofrp.org/zh-cn/docs/overview/)

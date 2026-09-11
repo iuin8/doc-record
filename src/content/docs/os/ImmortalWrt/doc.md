@@ -1,7 +1,3 @@
----
-title: "ImmortalWrt使用记录"
----
-
 # ImmortalWrt使用记录
 
 [macos-m1-utm](https://downloads.immortalwrt.org/releases/24.10.4/targets/armsr/armv8/immortalwrt-24.10.4-armsr-armv8-generic-ext4-combined-efi.img.gz)

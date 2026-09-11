@@ -1,7 +1,3 @@
----
-title: "1、停止并删除旧版容器"
----
-
 ## Dockerfile
 ```shell
 FROM node:12-alpine as builder

@@ -1,7 +1,3 @@
----
-title: "重启服务"
----
-
 ## 配置docker镜像私服hosts
 ```shell
 whereis hosts

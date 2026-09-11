@@ -1,7 +1,3 @@
----
-title: "在idea中使用远程服务器中的docker进行debug远程容器中的Java程序"
----
-
 # 在idea中使用远程服务器中的docker进行debug远程容器中的Java程序
 
 > 好处: 使用远程docker容器减轻本地环境的压力, 减少在本地环境安装Java程序需要依赖的一些乱七八糟的工具(例如LibreOffice)

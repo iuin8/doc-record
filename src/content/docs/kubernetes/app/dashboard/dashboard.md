@@ -1,7 +1,3 @@
----
-title: "k8s dashboard"
----
-
 # k8s dashboard
 
 ## 部署 Dashboard UI

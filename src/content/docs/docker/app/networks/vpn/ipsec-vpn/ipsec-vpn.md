@@ -1,7 +1,3 @@
----
-title: "ipsec-vpn"
----
-
 # ipsec-vpn
 
 ## 什么是IPsec VPN？

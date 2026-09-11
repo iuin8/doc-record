@@ -1,7 +1,3 @@
----
-title: "headscale docker compose版使用记录"
----
-
 # headscale docker compose版使用记录
 
 ```bash

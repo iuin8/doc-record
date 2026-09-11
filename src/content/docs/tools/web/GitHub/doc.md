@@ -1,7 +1,3 @@
----
-title: "GitHub"
----
-
 # GitHub
 
 # gist

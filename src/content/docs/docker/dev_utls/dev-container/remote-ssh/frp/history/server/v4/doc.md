@@ -1,7 +1,3 @@
----
-title: "frps使用记录"
----
-
 # frps使用记录
 
 在v3的基础上, 加上了`tcpmuxHTTPConnectPort`参数, 用于一个端口支持多个ssh连接

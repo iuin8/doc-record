@@ -1,7 +1,3 @@
----
-title: "etcher使用记录"
----
-
 # etcher使用记录
 
 [GitHub地址](https://github.com/balena-io/etcher)

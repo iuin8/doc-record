@@ -1,7 +1,3 @@
----
-title: "macos"
----
-
 # macos
 
 ## FreeRDP

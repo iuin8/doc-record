@@ -1,7 +1,3 @@
----
-title: "docker内置DNS记录"
----
-
 # docker内置DNS记录
 
 - 相关文章

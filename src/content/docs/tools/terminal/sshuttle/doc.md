@@ -1,7 +1,3 @@
----
-title: "sshuttle"
----
-
 # sshuttle
 
 [github地址](https://github.com/sshuttle/sshuttle)

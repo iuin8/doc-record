@@ -1,7 +1,3 @@
----
-title: "配置 wifi"
----
-
 # 配置 wifi
 
 ```bash

@@ -1,7 +1,3 @@
----
-title: "使用记录"
----
-
 # 使用记录
 
 - [conda官网](https://docs.conda.io/en/latest/index.html)

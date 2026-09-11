@@ -1,7 +1,3 @@
----
-title: "headscale"
----
-
 # headscale
 
 ## 相关部署配置

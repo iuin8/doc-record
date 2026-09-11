@@ -1,7 +1,3 @@
----
-title: "远程登陆"
----
-
 # 远程登陆
 
 - Publish over SSH

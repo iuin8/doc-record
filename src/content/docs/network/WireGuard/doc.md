@@ -1,7 +1,3 @@
----
-title: "WireGuard使用记录"
----
-
 # WireGuard使用记录
 
 [官网安装地址](https://www.wireguard.com/install/)

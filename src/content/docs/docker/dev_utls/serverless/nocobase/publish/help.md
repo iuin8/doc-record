@@ -1,7 +1,3 @@
----
-title: "start-nocobase 帮助文档"
----
-
 # start-nocobase 帮助文档
 
 <description>

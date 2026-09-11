@@ -1,7 +1,3 @@
----
-title: "Nginx"
----
-
 # Nginx
 
 ## 构建nginx镜像

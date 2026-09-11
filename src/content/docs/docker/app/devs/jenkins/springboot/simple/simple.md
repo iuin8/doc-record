@@ -1,7 +1,3 @@
----
-title: "编辑Dockerfile文件"
----
-
 ## maven使用dockerfile插件构建项目
 - 参考项目[https://gitee.com/LFa/demo-test.git]
   

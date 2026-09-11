@@ -1,7 +1,3 @@
----
-title: "docker swarm networks"
----
-
 # docker swarm networks
 
 ## 网段冲突问题解决方案

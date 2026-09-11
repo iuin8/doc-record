@@ -1,7 +1,3 @@
----
-title: "netbird使用"
----
-
 # netbird使用
 
 - 使用docker安装

@@ -1,7 +1,3 @@
----
-title: "蒲公英vpn"
----
-
 # 蒲公英vpn
 
 [官网](https://pgy.oray.com)

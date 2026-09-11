@@ -1,7 +1,3 @@
----
-title: "sshuttle"
----
-
 # sshuttle
 
 ## 更智能的方案（推荐使用 sshuttle）
