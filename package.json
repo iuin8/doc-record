@@ -1,80 +1,29 @@
 {
   "name": "doc-record",
+  "type": "module",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "docusaurus": "docusaurus",
-    "start": "docusaurus start",
-    "build": "docusaurus build",
-    "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy",
-    "clear": "docusaurus clear",
-    "serve": "docusaurus serve",
-    "write-translations": "docusaurus write-translations",
-    "crowdin": "crowdin",
-    "crowdin:upload:download": "crowdin upload && crowdin download",
-    "crowdin:sync": "docusaurus write-translations && crowdin upload && crowdin download",
-    "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check"
   },
   "dependencies": {
-    "@crowdin/cli": "^4.14.1",
-    "@docusaurus/core": "^3.10.0",
-    "@docusaurus/preset-classic": "^3.10.0",
-    "@docusaurus/theme-mermaid": "^3.10.0",
-    "@easyops-cn/docusaurus-search-local": "^0.55.1",
-    "clsx": "^2.1.1",
-    "katex": "^0.16.25",
-    "prism-react-renderer": "^2.4.1",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "rehype-katex": "^7.0.1",
-    "rehype-prism-plus": "^2.0.1",
-    "remark-directive": "^4.0.0",
-    "remark-gfm": "^4.0.1",
-    "remark-math": "^6.0.0"
+    "@astrojs/markdown-remark": "^7.3.0",
+    "@astrojs/starlight": "^0.42.0",
+    "astro": "^7.3.2",
+    "starlight-blog": "^0.29.0"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.10.0",
-    "@docusaurus/tsconfig": "^3.10.0",
-    "@docusaurus/types": "^3.10.0",
+    "@astrojs/check": "^0.9.10",
     "typescript": "~5.9.3"
   },
-  "pnpm": {
-    "overrides": {
-      "webpack": "5.104.1",
-      "serialize-javascript": "7.0.5",
-      "picomatch": "4.0.4",
-      "qs": "6.14.2",
-      "yauzl": "3.2.1",
-      "follow-redirects": "1.16.0",
-      "tar": "7.5.13",
-      "node-forge": "1.4.0",
-      "path-to-regexp": "0.1.13",
-      "undici": "7.24.0"
-    }
-  },
-  "browserslist": {
-    "production": [
-      ">0.5%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 3 chrome version",
-      "last 3 firefox version",
-      "last 5 safari version"
-    ]
-  },
   "engines": {
-    "node": ">=20.18.1"
+    "node": ">=22.0.0"
   },
   "packageManager": "pnpm@10.26.2",
-  "description": "## 介绍",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
-  "author": "",
   "license": "ISC"
 }

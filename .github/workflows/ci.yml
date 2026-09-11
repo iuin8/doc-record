@@ -1,4 +1,4 @@
-name: Progressive Docusaurus Build
+name: Build and Deploy
 
 on:
   push:
@@ -16,9 +16,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Stage 1: Fast Build & Deploy
-  # 快速构建并部署，让用户第一时间看到内容（未翻译）
-  build-fast:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,23 +30,22 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: "20"
+          node-version: "22"
           cache: pnpm
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build Docusaurus (Fast)
+      - name: Build Astro
         run: pnpm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          name: github-pages-fast
-          path: ./build
+          path: ./dist
 
-  deploy-fast:
-    needs: build-fast
+  deploy:
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -57,64 +54,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
-        with:
-          artifact_name: github-pages-fast
-
-  # Stage 2: Crowdin Sync & Final Deploy
-  # 在快速部署完成后，执行耗时的翻译同步，并再次部署最终版本
-  build-final:
-    needs: deploy-fast
-    runs-on: ubuntu-latest
-    environment: github-pages  # 指定环境
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.26.2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "20"
-          cache: pnpm
-
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Generate Translations
-        # 生成默认语言的国际化配置(导航, 页脚等)
-        run: pnpm run write-translations
-
-      - name: Sync Crowdin
-        env:
-          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-        run: |
-          # Try to upload, but continue if it fails (e.g. no sources found)
-          pnpm run crowdin -- upload --token $CROWDIN_PERSONAL_TOKEN || true
-          # Always attempt to download
-          pnpm run crowdin -- download --token $CROWDIN_PERSONAL_TOKEN || true
-
-      - name: Build Docusaurus (Final)
-        run: pnpm run build
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
-        with:
-          name: github-pages-final
-          path: ./build
-
-  deploy-final:
-    needs: build-final
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
-        with:
-          artifact_name: github-pages-final

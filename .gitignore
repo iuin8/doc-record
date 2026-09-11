@@ -13,19 +13,19 @@ actions-runner/_diag/
 
 node_modules
 dist
+.astro/
 
 _site/
 .sass-cache/
 .jekyll-cache/
 .jekyll-metadata
 
+# 本地用 bun 安装依赖以绕开文件代理限制，bun.lock 不纳入版本控制
+bun.lock
+
 .frontmatter
 
-public/
 db.json
-
-.docusaurus/
-build/
 
 # Graphify - 产物提交到 git，仅忽略机器本地临时文件
 graphify-out/.graphify_python
