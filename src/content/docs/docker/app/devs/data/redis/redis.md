@@ -10,7 +10,7 @@ docker run --rm --link <你的Redis容器名或ID>:redis -it redis redis-cli -h 
 ```
 
 - 相关链接
-  - [数据导出](../../../../../middleware/data/redis/doc.md#导出redis中的数据)
+  - [数据导出](../../../../../middleware/data/redis/redis.md#导出redis中的数据)
   
 ## 监听命令
 

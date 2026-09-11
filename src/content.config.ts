@@ -3,8 +3,8 @@ import { readFile } from 'node:fs/promises';
 import { defineCollection } from 'astro:content';
 import type { Loader } from 'astro/loaders';
 import { z } from 'astro/zod';
-import { docsLoader } from '@astrojs/starlight/loaders';
-import { docsSchema } from '@astrojs/starlight/schema';
+import { docsLoader, i18nLoader } from '@astrojs/starlight/loaders';
+import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 import { blogSchema } from 'starlight-blog/schema';
 
 /** 首个一级标题，用于在未声明 title 时推导页面标题。 */
@@ -62,6 +62,20 @@ export const collections = {
       // title 降为可选：未声明时由 loader 从正文推导
       extend: (context) =>
         blogSchema(context).extend({ title: z.string().optional() }),
+    }),
+  }),
+  i18n: defineCollection({
+    loader: i18nLoader(),
+    schema: i18nSchema({
+      // 页面 AI 操作区的文案，随界面语言切换
+      extend: z.object({
+        'aiActions.prompt': z.string(),
+        'aiActions.copy': z.string(),
+        'aiActions.copied': z.string(),
+        'aiActions.copyFailed': z.string(),
+        'aiActions.openInChatGpt': z.string(),
+        'aiActions.openInClaude': z.string(),
+      }),
     }),
   }),
 };

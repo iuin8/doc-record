@@ -68,8 +68,8 @@ docker run \
     --pull=always \
     --add-host host.docker.internal:host-gateway \
     -e SANDBOX_USER_ID=$(id -u) \
-    -e LLM_API_KEY="sk-2fa37a46be454b349c8bab1e89eea58a" \
-    -e LLM_BASE_URL="https://dashscope.aliyuncs.com/api/v1/apps/f41f5b2eb89b49519d3458024a89257c/completion" \
+    -e LLM_API_KEY="sk-<替换为自己的密钥>" \
+    -e LLM_BASE_URL="https://dashscope.aliyuncs.com/api/v1/apps/<替换为自己的应用id>/completion" \
     -e WORKSPACE_MOUNT_PATH=$WORKSPACE_BASE \
     -v $WORKSPACE_BASE:/opt/workspace_base \
     -v /var/run/docker.sock:/var/run/docker.sock \

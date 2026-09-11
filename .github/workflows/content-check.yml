@@ -1,0 +1,62 @@
+name: Content Check
+
+on:
+  pull_request:
+    paths:
+      - 'src/content/docs/**'
+      - 'scripts/check-content.py'
+      - '.github/workflows/content-check.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: content-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  content-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 10.26.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      # 代码块语言检查需要读取 Shiki 的语言清单，因此依赖必须安装完整
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 收集变更的 Markdown 文件
+        id: changes
+        run: |
+          if [ -n "${{ github.base_ref }}" ]; then
+            git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+            base="origin/${{ github.base_ref }}"
+          else
+            base="HEAD~1"
+          fi
+          files=$(git diff --name-only --diff-filter=ACMR "$base" HEAD \
+            -- 'src/content/docs/**/*.md' 'src/content/docs/**/*.mdx' | tr '\n' ' ')
+          echo "files=$files" >> "$GITHUB_OUTPUT"
+          echo "待检查文件：$files"
+
+      - name: 运行内容门禁（仅变更文件）
+        if: steps.changes.outputs.files != ''
+        run: python3 scripts/check-content.py ${{ steps.changes.outputs.files }}
+
+      - name: 无内容变更
+        if: steps.changes.outputs.files == ''
+        run: echo '本次变更未涉及 Markdown 内容，跳过检查。'

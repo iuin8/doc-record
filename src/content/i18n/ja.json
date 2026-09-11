@@ -1,0 +1,8 @@
+{
+  "aiActions.prompt": "この技術ドキュメントを読んで、質問に答えてください：",
+  "aiActions.copy": "Markdown をコピー",
+  "aiActions.copied": "コピーしました",
+  "aiActions.copyFailed": "コピーに失敗しました",
+  "aiActions.openInChatGpt": "ChatGPT で開く",
+  "aiActions.openInClaude": "Claude で開く"
+}

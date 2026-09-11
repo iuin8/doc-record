@@ -14,4 +14,4 @@ redis-cli dump key > /tmp/redis_data.txt
 ```
 
 - 相关链接
-  - [docker数据导出](../../../docker/app/devs/data/redis/doc.md#数据导出)
+  - [docker数据导出](../../../docker/app/devs/data/redis/redis.md#数据导出)

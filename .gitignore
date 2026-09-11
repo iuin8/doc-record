@@ -23,6 +23,9 @@ _site/
 # 本地用 bun 安装依赖以绕开文件代理限制，bun.lock 不纳入版本控制
 bun.lock
 
+# Weblate 部署凭据
+weblate/.env
+
 .frontmatter
 
 db.json

@@ -1,0 +1,8 @@
+{
+  "aiActions.prompt": "请阅读这份技术文档并回答我的问题：",
+  "aiActions.copy": "复制 Markdown",
+  "aiActions.copied": "已复制",
+  "aiActions.copyFailed": "复制失败",
+  "aiActions.openInChatGpt": "在 ChatGPT 中打开",
+  "aiActions.openInClaude": "在 Claude 中打开"
+}

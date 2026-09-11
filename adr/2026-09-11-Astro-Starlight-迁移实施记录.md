@@ -183,3 +183,40 @@ CI 环境无此限制，`pnpm install --frozen-lockfile` 可正常执行。
 `MermaidRenderer.astro` 在客户端检测 `pre[data-language="mermaid"]`，存在时才动态载入 Mermaid
 并渲染为 SVG；切换主题时重新渲染。全站仅 2 篇文档含图表，其余页面不产生这部分脚本请求。
 `securityLevel` 设为 `strict`，图表中的 HTML 标签不会被解析。
+
+## 十一、内容质量门禁
+
+`scripts/check-content.py` 在合并前检查内容，由 `.github/workflows/content-check.yml`
+在 pull request 阶段对**变更文件**执行；全量检查通过 `pnpm run check:content` 手动触发。
+
+| 检查项 | 级别 | 说明 |
+| --- | --- | --- |
+| 代码块围栏语言 | 阻断 | 不在 Shiki 支持范围内会静默回退为纯文本 |
+| front matter 字段 | 阻断 | 只允许第九节列出的通用字段；`SKILL.md` 遵循 Agent Skills 规范，不参与检查 |
+| 本地引用是否存在 | 阻断 | 站内绝对路径按 `public/` 解析；`host:port` 形态不作为文件引用 |
+| 疑似密钥 | 阻断 | 私钥、AWS / GitHub / Slack / OpenAI 风格密钥；示例中的占位内容不命中 |
+| 内网地址 | 提示 | 运维文档中通常为示例配置，仅汇总计数，不阻断 |
+
+首轮全量检查发现并处置：
+
+- `openHands.md` 中存在可用的 DashScope API 密钥，已替换为占位符；
+  该密钥已进入 Git 历史，需另行轮换。
+- 2 处 Redis 文档交叉引用指向不存在的 `doc.md`，已修正为 `redis.md`。
+
+尚未修复的存量问题（目标文档缺失，需由作者补充内容）：
+
+| 位置 | 缺失引用 |
+| --- | --- |
+| `blog/docker/doc/material/manual/article/ssh.md:42` | `ssh动态代理` |
+| `docker/dev_utls/.../tomcat-war/tomcat-war.md:5` | `./has-font/Dockerfile` |
+| `kubernetes/kubernetes.md:106` | `./docs/temp/yum安装k8s.md` |
+| `kubernetes/kubernetes.md:138` | `./kuboard/doc.md` |
+| `tools/softs/clash/history/clash.md:5` | `/root/vpn` |
+
+## 十二、界面文案多语言
+
+AI 操作区的文案通过 Starlight 的 i18n 机制提供，位于 `src/content/i18n/`。
+
+文件名必须使用**语言标记**而非 locale 名：Starlight 读取 i18n 数据时以
+`defaultLocale.lang` 与 `locales[*].lang` 为键，因此源语言文件为 `zh-CN.json`，
+繁体为 `zh-TW.json`，而非 `root.json` 与 `zh-Hant.json`。

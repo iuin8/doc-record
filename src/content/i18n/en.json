@@ -1,0 +1,8 @@
+{
+  "aiActions.prompt": "Please read this technical document and answer my questions: ",
+  "aiActions.copy": "Copy Markdown",
+  "aiActions.copied": "Copied",
+  "aiActions.copyFailed": "Copy failed",
+  "aiActions.openInChatGpt": "Open in ChatGPT",
+  "aiActions.openInClaude": "Open in Claude"
+}

@@ -7,18 +7,27 @@ interface Props {
 
 const { rawPath, absoluteUrl } = Astro.props;
 
-const prompt = `请阅读这份技术文档并回答我的问题：${absoluteUrl}`;
+const t = Astro.locals.t;
+const prompt = `${t('aiActions.prompt')}${absoluteUrl}`;
 const chatGptUrl = `https://chatgpt.com/?q=${encodeURIComponent(prompt)}`;
 const claudeUrl = `https://claude.ai/new?q=${encodeURIComponent(prompt)}`;
 ---
 
 <div class="ai-actions">
-  <button type="button" class="ai-btn" data-raw={rawPath}>复制 Markdown</button>
+  <button
+    type="button"
+    class="ai-btn"
+    data-raw={rawPath}
+    data-copied={t('aiActions.copied')}
+    data-failed={t('aiActions.copyFailed')}
+  >
+    {t('aiActions.copy')}
+  </button>
   <a class="ai-link" href={chatGptUrl} target="_blank" rel="noopener noreferrer">
-    在 ChatGPT 中打开
+    {t('aiActions.openInChatGpt')}
   </a>
   <a class="ai-link" href={claudeUrl} target="_blank" rel="noopener noreferrer">
-    在 Claude 中打开
+    {t('aiActions.openInClaude')}
   </a>
   <span class="ai-status" role="status" aria-live="polite"></span>
 </div>
@@ -34,9 +43,9 @@ const claudeUrl = `https://claude.ai/new?q=${encodeURIComponent(prompt)}`;
         const response = await fetch(button.dataset.raw ?? '');
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         await navigator.clipboard.writeText(await response.text());
-        status.textContent = '已复制';
+        status.textContent = button.dataset.copied ?? '';
       } catch {
-        status.textContent = '复制失败';
+        status.textContent = button.dataset.failed ?? '';
       }
       window.setTimeout(() => {
         status.textContent = '';

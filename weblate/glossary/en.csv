@@ -1,0 +1,44 @@
+﻿source,target
+镜像,image
+容器,container
+挂载,mount
+卷,volume
+命名空间,namespace
+节点,node
+集群,cluster
+副本,replica
+服务,service
+部署,deployment
+编排,orchestration
+网络,network
+端口,port
+端口映射,port mapping
+代理,proxy
+内网穿透,NAT traversal
+防火墙,firewall
+网关,gateway
+负载均衡,load balancing
+健康检查,health check
+密钥,secret
+证书,certificate
+域名,domain
+守护进程,daemon
+进程,process
+权限,permission
+环境变量,environment variable
+配置文件,configuration file
+镜像源,mirror
+仓库,repository
+分支,branch
+提交,commit
+构建,build
+依赖,dependency
+插件,plugin
+缓存,cache
+索引,index
+备份,backup
+快照,snapshot
+监控,monitoring
+日志,log
+终端,terminal
+脚本,script
