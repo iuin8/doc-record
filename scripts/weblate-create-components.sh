@@ -61,12 +61,14 @@ slugify() {
 
 # with_style 为 yes 时附上 language_code_style；部分实例不接受该字段，失败后重试时去掉
 component_payload() {
-  local name="$1" slug="$2" template="$3" new_base="$4" filemask="$5" with_style="$6"
+  local name="$1" slug="$2" template="$3" filemask="$4" with_style="$5"
   local style_line=""
   if [ "${with_style}" = "yes" ]; then
     style_line=',
   "language_code_style": "bcp"'
   fi
+  # 不传 new_base：该字段是单语格式的「基准语言文件」，必须是仓库中存在的单个文件，
+  # 传入 glob 会被实例拒绝（提示文件不存在）。本仓库源文分散在多个文件，故留空。
   printf '{
   "name": "%s",
   "slug": "%s",
@@ -75,23 +77,22 @@ component_payload() {
   "vcs": "git",
   "file_format": "%s",
   "template": "%s",
-  "new_base": "%s",
   "filemask": "%s",
   "file_format_params": { "markdown_merge_duplicates": true }%s
 }' "$name" "$slug" "$REPO" "$BRANCH" "$FILE_FORMAT" \
-   "$template" "$new_base" "$filemask" "$style_line"
+   "$template" "$filemask" "$style_line"
 }
 
 # 建立组件并补齐目标语言；掩码不含语言占位符时不会误匹配源文
 create_component() {
-  local name="$1" slug="$2" template="$3" new_base="$4" filemask="$5"
+  local name="$1" slug="$2" template="$3" filemask="$4"
 
   if api -X POST "${WEBLATE_URL}/api/projects/${PROJECT_SLUG}/components/" \
-    -d "$(component_payload "${name}" "${slug}" "${template}" "${new_base}" "${filemask}" yes)" \
+    -d "$(component_payload "${name}" "${slug}" "${template}" "${filemask}" yes)" \
     >/dev/null 2>&1; then
     echo "    组件已建立（语言代码风格 BCP）"
   elif api -X POST "${WEBLATE_URL}/api/projects/${PROJECT_SLUG}/components/" \
-    -d "$(component_payload "${name}" "${slug}" "${template}" "${new_base}" "${filemask}" no)" \
+    -d "$(component_payload "${name}" "${slug}" "${template}" "${filemask}" no)" \
     >/dev/null 2>&1; then
     echo "    组件已建立，但实例不接受 language_code_style 字段" >&2
     echo "    请在组件设置中手动将语言代码风格调整为 BCP（连字符）" >&2
@@ -136,7 +137,6 @@ for dir in ${CONTENT_DIRS}; do
   echo "==> 建立组件 ${slug}（源目录 ${dir}）"
   create_component "${dir} 文档" "${slug}" \
     "src/content/docs/${dir}/**/*.md" \
-    "src/content/docs/${dir}/**/*.md" \
     "src/content/docs/*/${dir}/**/*.md" || true
 done
 
@@ -147,7 +147,6 @@ for file in ${ROOT_FILES}; do
   [ -n "${slug}" ] || continue
   echo "==> 建立组件 ${slug}（根级文件 ${file}）"
   create_component "${base} 文档" "${slug}" \
-    "src/content/docs/${file}" \
     "src/content/docs/${file}" \
     "src/content/docs/*/${file}" || true
 done

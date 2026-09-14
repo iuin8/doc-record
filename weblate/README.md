@@ -60,10 +60,15 @@ CREATE_PROJECT=false ./scripts/weblate-create-components.sh
 | --- | --- |
 | 文件格式 | Markdown file（单语格式） |
 | 文件掩码 File mask | `src/content/docs/*/docker/**/*.md` |
-| 单语言译文基准文件 | `src/content/docs/docker/**/*.md` |
 | 新译文的模板 | `src/content/docs/docker/**/*.md` |
+| 单语言译文基准文件 | **留空** |
 | 语言代码风格 | BCP（连字符） |
 | 文件格式参数 | `markdown_merge_duplicates=True` |
+
+「单语言译文基准文件」不要填内容。该字段是单语格式的**基准语言文件**，
+必须是仓库中真实存在的**单个文件**，用于源字符串质量闸道；本仓库源文分散在
+上百个文件里，没有这样的单文件，填 glob 会被拒绝并提示「文件不存在」。
+源字符串由「新译文的模板」提供，该字段支持 glob。
 
 「选择需要导入的翻译文件」就是**文件掩码**这一项。仓库当前没有 `en`/`ja`/`zh-Hant`
 目录（站点上的 `/en` 等路径是 Starlight 的回退页，并非真实文件），
@@ -92,9 +97,9 @@ CREATE_PROJECT=false ./scripts/weblate-create-components.sh
 最后一行是**站点首页**：`src/content/docs/index.md` 位于根目录，不属于任何一级目录，
 按目录拆分的掩码覆盖不到，必须单独建一个组件，否则首页不会被翻译。
 
-各组件的「新译文的模板」与「单语言译文基准文件」填同一路径，即把掩码里的
-`*/` 一段去掉的形式，例如 `src/content/docs/docker/**/*.md`、
-`src/content/docs/index.md`。
+各组件的「新译文的模板」填把掩码里 `*/` 一段去掉的形式，例如
+`src/content/docs/docker/**/*.md`、`src/content/docs/index.md`；
+「单语言译文基准文件」一律留空。
 
 `test` 目录只有一个测试页，如不需要可从 `CONTENT_DIRS` 中移除
 （`CONTENT_DIRS="docker tools ..." ./scripts/weblate-create-components.sh`）。
