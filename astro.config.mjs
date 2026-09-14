@@ -1,15 +1,10 @@
-import { readdirSync } from 'node:fs';
-import { join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightBlog from 'starlight-blog';
 import starlightLlmsTxt from 'starlight-llms-txt';
 
-// 全部内容位于默认语言目录下，llms.txt 分卷、重定向映射均以该前缀为基准。
+// 全部内容位于默认语言目录下，llms.txt 分卷均以该前缀为基准。
 const DEFAULT_LOCALE = 'zh-cn';
-const docsDir = fileURLToPath(new URL(`./src/content/docs/${DEFAULT_LOCALE}/`, import.meta.url));
 const inDefaultLocale = (path) => `${DEFAULT_LOCALE}/${path}`;
 
 // llms.txt 分卷：完整版约 769 KB，单次取用会占满上下文，
@@ -48,65 +43,15 @@ const llmsTxtOptions = {
   ],
 };
 
-/**
- * 递归收集默认语言目录下的 Markdown 源文件，换算为内容集合的条目 id。
- * 换算规则与 Astro 的 slug 生成保持一致：去扩展名、小写化、去掉尾部 `index`。
- */
-function collectDocIds(dir) {
-  return readdirSync(dir, { withFileTypes: true }).flatMap((dirent) => {
-    const full = join(dir, dirent.name);
-    if (dirent.isDirectory()) return collectDocIds(full);
-    if (!/\.mdx?$/.test(dirent.name)) return [];
-    const rel = relative(docsDir, full).replace(/\.mdx?$/, '').replace(/\\/g, '/');
-    return [`${DEFAULT_LOCALE}/${rel}`.replace(/\/index$/, '').toLowerCase()];
-  });
-}
-
-/**
- * 语言目录化后全站 URL 由 `/docker/...` 变为 `/zh-cn/docker/...`，
- * 此处为迁移前的每个页面生成一条重定向，避免已收录链接与外部引用失效。
- * 部署目标为 GitHub Pages，无服务端重写能力，Astro 会为每条重定向生成静态跳转页。
- */
-function localeRedirects() {
-  const redirects = {};
-  for (const id of collectDocIds(docsDir)) {
-    const suffix = id === DEFAULT_LOCALE ? '' : id.slice(DEFAULT_LOCALE.length + 1);
-    redirects[suffix ? `/${suffix}/` : '/'] = `/${id}/`;
-  }
-  return redirects;
-}
-
-// Docusaurus 时期对外分享过的博客短链接，目标按迁移后的语言前缀调整。
-// 未列出 slug 的文章，其默认路径与迁移后一致，由上面的批量映射覆盖。
-const legacyRedirects = {
-  '/blog/cpolar-ssh-container':
-    '/zh-cn/blog/docker/dev_utls/dev-container/remote-ssh/cpolar/article/doc',
-  '/blog/mihomo-ssh-alias':
-    '/zh-cn/blog/docker/dev_utls/dev-container/remote-ssh/clash/mihomo_ssh_config_alias_support',
-  '/blog/frp-ssh-clash':
-    '/zh-cn/blog/docker/dev_utls/dev-container/remote-ssh/frp/article/frp_ssh组合镜像以及clash打通网络',
-  '/blog/frp-ssh-clash-full':
-    '/zh-cn/blog/docker/dev_utls/dev-container/remote-ssh/frp/article/frp_ssh组合镜像以及clash打通网络full',
-  '/blog/frp-ssh-sshuttle':
-    '/zh-cn/blog/docker/dev_utls/dev-container/remote-ssh/frp/article/frp_ssh组合镜像以及sshuttle打通网络',
-  '/blog/docker-compose-healthcheck':
-    '/zh-cn/blog/docker/doc/article/docker-compose服务间依赖通过自定义健康检查实现顺序启动',
-  '/blog/ssh-manual': '/zh-cn/blog/docker/doc/material/manual/article/ssh',
-  '/blog/materiel/article/OutOfMemoryError_unable_to_create_new_native_Thread':
-    '/zh-cn/blog/materiel/article/outofmemoryerror_unable_to_create_new_native_thread',
-  '/blog/materiel/article/SSH远程端口转发配置指南_使用socat实现灵活的端口映射':
-    '/zh-cn/blog/materiel/article/ssh远程端口转发配置指南_使用socat实现灵活的端口映射',
-  '/blog/materiel/article/一键更换Linux优质的软件源和docker源':
-    '/zh-cn/blog/materiel/article/一键更换linux优质的软件源和docker源',
-  '/blog/page/2': '/zh-cn/blog/2',
-};
-
 export default defineConfig({
   site: 'https://doc-record.iuin888vip.icu',
 
-  // 迁移到语言目录后全站 URL 增加语言前缀，旧链接逐条 301 到新地址；
-  // Docusaurus 时期的短链接单独列出，优先于批量映射生效。
-  redirects: { ...localeRedirects(), ...legacyRedirects },
+  // 默认语言带前缀后框架不再生成站点根索引，此处补一条指向默认语言首页。
+  // 迁移前的 URL 不做逐条映射：新旧地址的兼容层会随内容演进而持续腐化，
+  // 已收录链接交由搜索引擎按 canonical 与新站点地图重新收敛。
+  redirects: {
+    '/': `/${DEFAULT_LOCALE}/`,
+  },
 
   integrations: [
     starlight({
