@@ -2,17 +2,17 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 
 /**
- * 供 AI 检索使用的站点地图，只收录根语言页面。
+ * 供 AI 检索使用的站点地图，只收录默认语言页面。
  *
- * 通用站点地图包含 en / ja / zh-Hant 的回退副本（内容尚未翻译，与根语言页面一致），
- * 直接用于索引会产生三倍重复内容，浪费算力并干扰检索结果。
+ * 站点已按语言目录组织，条目 id 自带语言前缀（`zh-cn/docker/...`），可直接拼成 URL。
+ * 未列入 `locales` 的语言不会生成回退副本，因此无需在此过滤重复内容。
  */
 export const GET: APIRoute = async ({ site }) => {
   const entries = await getCollection('docs');
   const base = (site ?? new URL('https://doc-record.iuin888vip.icu')).toString().replace(/\/$/, '');
 
   const urls = entries.map((entry) => {
-    const path = entry.id && entry.id !== 'index' ? `/${entry.id}/` : '/';
+    const path = entry.id ? `/${entry.id}/` : '/';
     return `  <url><loc>${base}${path}</loc></url>`;
   });
 

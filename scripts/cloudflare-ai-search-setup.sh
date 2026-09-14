@@ -75,7 +75,8 @@ fi
 
 # 排除项说明：
 #   /raw/** 与 /_llms-txt/** 是给 AI 直接取用的纯文本副本，与页面内容重复。
-#   /en /ja /zh-Hant 为回退副本，主要依靠 sitemap-ai.xml 从源头排除；此处仅作兜底。
+#   站点当前只声明存在译文的语言，未声明的语言不会生成回退副本，无需在此排除。
+#   后续新增语言且译文不全时，需在此补上对应前缀的排除项。
 body=$(
   cat <<EOF
 {
@@ -95,7 +96,7 @@ body=$(
         "include_subdomains": false
       }
     },
-    "exclude_items": ["/raw/**", "/_llms-txt/**", "/en/**", "/ja/**", "/zh-Hant/**"]
+    "exclude_items": ["/raw/**", "/_llms-txt/**"]
   },
   "embedding_model": "${EMBEDDING_MODEL}",
   "ai_search_model": "${AI_SEARCH_MODEL}",

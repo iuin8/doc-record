@@ -52,7 +52,7 @@ Docusaurus 3.10 已整体替换为 Astro 7 + Starlight 0.42，本地构建通过
 
 ## 四、语言配置
 
-采用 root locale 方案，`zh-Hans` 内容保持在 `src/content/docs/` 根，URL 不带语言前缀，与迁移前的 Docusaurus 行为一致：
+迁移当时采用 root locale 方案，`zh-Hans` 内容保持在 `src/content/docs/` 根，URL 不带语言前缀，与迁移前的 Docusaurus 行为一致：
 
 ```js
 defaultLocale: 'root',
@@ -63,6 +63,10 @@ locales: {
   ja: { label: '日本語', lang: 'ja' },
 },
 ```
+
+> 该配置已于 2026-09-11 调整：内容迁入 `src/content/docs/zh-cn/`，改为
+> `defaultLocale: 'zh-cn'`，全站 URL 增加 `/zh-cn/` 前缀。
+> 调整原因与配套改动见 `2026-09-10-翻译平台迁移至 Weblate.md` §13.4。
 
 `lang` 取值对齐 Starlight 内置的 UI 文案语言标识（`zh-CN`、`zh-TW`、`ja`），因此无需自建 `src/content/i18n/` 即可获得本地化界面文案。
 

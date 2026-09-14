@@ -53,19 +53,21 @@ export CLOUDFLARE_API_TOKEN=xxxx
 
 排除项：
 
-- `/raw/**`、`/_llms-txt/**`：面向 AI 的纯文本副本，与页面内容重复；
-- `/en/**`、`/ja/**`、`/zh-Hant/**`：译文尚未产生，这些路径当前是回退内容，
-  与根语言页面完全一致。译文上线后需要从排除项中移除。
-  排除项对已入队的 URL 不生效，主要去重手段是 `sitemap-ai.xml`。
+- `/raw/**`、`/_llms-txt/**`：面向 AI 的纯文本副本，与页面内容重复。
+
+内容迁移到语言目录后，全站 URL 带 `/zh-cn/` 前缀，`sitemap-ai.xml` 只收集该前缀下的
+条目，未声明的语言不会生成回退副本，因此不再需要按语言前缀排除。后续新增语言且译文
+不全时，需在 `exclude_items` 中补上对应前缀。
 
 ### 3.1 为什么需要独立的站点地图
 
-`sitemap-index.xml` 指向的 `sitemap-0.xml` 含 1492 条 URL，其中约四分之三是
+`sitemap-index.xml` 指向的 `sitemap-0.xml` 在迁移前含 1492 条 URL，其中约四分之三是
 `/en`、`/ja`、`/zh-Hant` 前缀的回退副本，正文与根语言页面完全一致。全量索引会带来
 两个问题：向量写入量放大约四倍，且 `max_num_results` 的返回名额被近义重复块占满，
 实际可提供的独立来源显著减少。
 
-`src/pages/sitemap-ai.xml.ts` 只收集根语言条目，构建产物为 367 条 URL。
+内容迁入 `src/content/docs/zh-cn/` 并只声明该语言后，回退副本不再生成，
+`sitemap-0.xml` 与 `sitemap-ai.xml` 的条目数已收敛到同一量级（约 373 条）。
 
 ### 3.2 更换内容源需要重建实例
 

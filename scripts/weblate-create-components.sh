@@ -21,14 +21,18 @@
 #   CREATE_PROJECT       是否创建项目，默认 true；托管场景可设为 false
 #   PROJECT_SLUG         项目标识，默认 doc-record
 #   REPO / BRANCH        仓库地址与分支
-#   SOURCE_LANG          源语言，默认 zh_Hans
+#   SOURCE_LANG          源语言，默认 zh_Hans（Weblate 的语言标识，与目录名无关）
+#   SOURCE_DIR           源文所在目录，默认 zh-cn，需与 astro.config.mjs 的 defaultLocale 一致
 #   TARGET_LANGS         目标语言，默认 en ja zh_Hant
-#   CONTENT_DIRS         需要建组件的一级目录
+#   CONTENT_DIRS         需要建组件的源目录下的子目录
 #   FILE_FORMAT          文件格式，默认 markdown（仓库当前无 .mdx 文件）
 #
 # 说明：组件建立后仍需在实例上确认两项设置（脚本会给出提示）：
 #   1. 语言代码风格需为 BCP（连字符），否则译文会写入 zh_Hant 而非 zh-Hant 目录；
 #   2. 文件格式的 front matter 字段需显式声明 title、description。
+#
+# 目录名与 locale 键的对应关系：Astro 会把内容集合的条目 id 小写化，
+# `astro.config.mjs` 中的 locale 键必须是译文目录名的小写形式。
 
 set -euo pipefail
 
@@ -41,9 +45,10 @@ PROJECT_SLUG="${PROJECT_SLUG:-doc-record}"
 REPO="${REPO:-https://github.com/iuin8/doc-record.git}"
 BRANCH="${BRANCH:-main}"
 SOURCE_LANG="${SOURCE_LANG:-zh_Hans}"
+SOURCE_DIR="${SOURCE_DIR:-zh-cn}"
 TARGET_LANGS="${TARGET_LANGS:-en ja zh_Hant}"
 CONTENT_DIRS="${CONTENT_DIRS:-AI TODOs blog books docker kubernetes lang materiel middleware network os test tools}"
-# 根级文档不在任何一级目录内，需单独建组件，默认含站点首页 index.md
+# 源目录下的根级文档不在任何子目录内，需单独建组件，默认含站点首页 index.md
 ROOT_FILES="${ROOT_FILES:-index.md}"
 SITE_URL="${SITE_URL:-https://doc-record.iuin888vip.icu}"
 FILE_FORMAT="${FILE_FORMAT:-markdown}"
@@ -139,18 +144,18 @@ for dir in ${CONTENT_DIRS}; do
   slug="$(slugify "${dir}")"
   echo "==> 建立组件 ${slug}（源目录 ${dir}）"
   create_component "${dir} 文档" "${slug}" \
-    "src/content/docs/${dir}/**/*.md" \
+    "src/content/docs/${SOURCE_DIR}/${dir}/**/*.md" \
     "src/content/docs/*/${dir}/**/*.md" || true
 done
 
-# 根级文档（站点首页）不在任何一级目录内，需单独建组件，否则不会被翻译
+# 源目录下的根级文档（站点首页）不在任何子目录内，需单独建组件，否则不会被翻译
 for file in ${ROOT_FILES}; do
   base="${file%.md}"
   slug="$(slugify "${base}")"
   [ -n "${slug}" ] || continue
   echo "==> 建立组件 ${slug}（根级文件 ${file}）"
   create_component "${base} 文档" "${slug}" \
-    "src/content/docs/${file}" \
+    "src/content/docs/${SOURCE_DIR}/${file}" \
     "src/content/docs/*/${file}" || true
 done
 
