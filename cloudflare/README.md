@@ -12,8 +12,8 @@
 | NLWeb Worker | `bold-union-4896-nlweb`，对外地址 `https://bold-union-4896-nlweb.iuinin666.workers.dev/` |
 | AI Search 实例 | `bold-union-4896`（由 NLWeb 的 `RAG_ID` 绑定决定，改名需同步改绑定） |
 
-NLWeb 自带聊天界面、`/ask` 接口与 MCP 支持，实例已在线但**索引为空**，
-需要先为 AI Search 实例配置内容源并触发同步。
+NLWeb 自带聊天界面、`/ask` 接口与 MCP 支持，实例已在线且**索引部分建成**，
+未完成全量覆盖的原因与调优方向见 `adr/2026-09-14-AI-Search-容量限流调优.md`。
 
 ## 2. 创建 API 令牌
 
@@ -48,7 +48,7 @@ export CLOUDFLARE_API_TOKEN=xxxx
 | 向量模型 | `@cf/qwen/qwen3-embedding-0.6b` | 轻量多语言模型，索引成本低 |
 | 生成模型 | `@cf/qwen/qwen3-30b-a3b-fp8` | 中文表现较好，可用环境变量覆盖 |
 | 索引方式 | 关键词 + 向量双路 | 混合检索对技术文档中的命令与配置名更友好 |
-| 分块 | 1024 字符，重叠 10 | 接口限制 `chunk_overlap ≤ 30` |
+| 分块 | 1024 token，重叠 10% | `chunk_size` 以 token 计，下限 64；`chunk_overlap` 为百分比，取值 0–30 |
 | 同步间隔 | 21600 秒 | 与 GitHub Pages 的发布节奏匹配 |
 
 排除项：
@@ -72,21 +72,38 @@ export CLOUDFLARE_API_TOKEN=xxxx
 修改 `specific_sitemaps` 不会重置已经入队的 URL 列表，正在进行的同步任务会继续
 消费旧队列。切换到新站点地图的可靠做法是删除实例后按新配置重新创建。
 
-## 4. 额度说明
+## 4. 额度与容量说明
 
-Workers AI 的免费额度为每日 **10,000 Neurons**，每日 **00:00 UTC** 重置。
-Workers Paid 计划同样只含这 10,000 Neurons，超出部分按 $0.011 / 1,000 Neurons 计费。
-用尽后推理接口返回 `code 4006`，AI Search 侧表现为
-`workers_ai_out_of_capacity_error`，索引任务持续失败、检索接口返回空结果。
+### 4.1 两类限制不可混为一谈
 
-已确认的现象：
+Workers AI 有两种性质不同的限制，均返回 HTTP 429，但语义相反：
+
+| 错误码 | 含义 | 重试是否有效 | 缓解方式 |
+| --- | --- | --- | --- |
+| 3036 | Account limited，当日免费额度已用尽 | 无效，次日 00:00 UTC 重置 | 控制用量或升级付费 |
+| 3040 | Out of capacity，当时无可用 GPU 承接请求 | 瞬时态，重试通常成功 | 错峰、降低并发、提升优先级 |
+
+免费额度为每日 **10,000 Neurons**，每日 **00:00 UTC** 重置。Workers Paid 计划同样只含
+这 10,000 Neurons，超出部分按 $0.011 / 1,000 Neurons 计费。
+
+AI Search 侧报告的 `workers_ai_out_of_capacity_error` 对应 **3040**（瞬时容量不足），
+**不是**额度耗尽。误判的代价在两侧均不对称：按 3036 处置会把可重试的 3040
+当作当日不可恢复而放弃；按 3040 处置则会让额度已空的请求反复重排到次日。
+
+### 4.2 已确认的现象
 
 - 2026-09-11 08:30 UTC 直接调用 `@cf/qwen/qwen3-embedding-0.6b` 返回
-  `you have used up your daily free allocation of 10,000 neurons`；
-- 同期索引任务出现 87 次 `workers_ai_out_of_capacity_error`，`completed` 为 0。
+  `you have used up your daily free allocation of 10,000 neurons`，属 3036；
+- 同期索引任务出现 87 次 `workers_ai_out_of_capacity_error`，`completed` 为 0，
+  属 3040。两者当天同时出现而成因不同，当时的记录把后者归因于前者，
+  该判读已于 2026-09-14 更正；
+- 2026-09-13 与 2026-09-14 两次同步的失败明细全部为
+  `workers_ai_out_of_capacity_error`，触发时点处于额度重置之后且同期无其他调用，
+  可排除 3036。
 
-用尽的原因是此前的失控爬取：`sitemap-0.xml` 含 1492 条 URL，且实例被反复重建与重试，
-同一批内容多次进入嵌入流程。切换到 367 条的根语言站点地图后，单次全量索引的成本为：
+2026-09-11 当天额度耗尽的原因仍为此前的失控爬取：`sitemap-0.xml` 含 1492 条 URL，
+且实例被反复重建与重试，同一批内容多次进入嵌入流程。切换到 367 条的根语言站点地图后，
+单次全量索引的成本为：
 
 | 项目 | 取值 |
 | --- | --- |
@@ -96,14 +113,19 @@ Workers Paid 计划同样只含这 10,000 Neurons，超出部分按 $0.011 / 1,0
 | 全量索引成本 | 约 214 neurons，占每日额度约 2% |
 | 单次问答成本 | 约 60 neurons（8 段上下文 + 800 token 输出） |
 
-因此**免费额度足够支撑日常索引与问答**，不必升级 Workers Paid。
-需要注意的反而是避免重复索引：内容源只用 `sitemap-ai.xml`，
-且不要频繁手动触发同步。
+额度充裕的结论仍然成立：全量索引约占每日额度 2%，即使每日重跑十次也仅约 20%。
+因此**额度并非当前瓶颈**，是否升级 Workers Paid 取决于是否需要提升容量队列优先级，
+而非需要更多额度。
 
-应对方式：
+### 4.3 应对方式
 
-- 同步任务安排在额度重置之后执行，见 `.github/workflows/ai-search-sync.yml`
-  （每日 01:17 UTC，可手动触发）；
+- 触发时机对 3040 的作用不在「是否在额度重置之后」，而在「是否避开免费层的嵌入高峰」；
+  推荐改为每日多轮、间隔均匀的小批量轮次，见
+  `adr/2026-09-14-AI-Search-容量限流调优.md` §5.4；
+- 索引策略建议按产能分阶段：先以关键词单路建立全量覆盖，条件具备后再补齐向量，
+  详见同一文档 §5.1；
+- 实例的 `sync_interval` 与外部工作流职责需要分离，避免同一批文件被两套机制反复重排；
+- 避免重复索引仍属必要：内容源只用 `sitemap-ai.xml`，且不要频繁手动触发同步；
 - 仓库需要在 Settings → Secrets 中配置 `CLOUDFLARE_API_TOKEN`，
   权限为 Account > AI Search:Edit 与 AI Search:Run。未配置时工作流跳过而不失败。
 
