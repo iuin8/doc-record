@@ -74,6 +74,23 @@ export CLOUDFLARE_API_TOKEN=xxxx
 修改 `specific_sitemaps` 不会重置已经入队的 URL 列表，正在进行的同步任务会继续
 消费旧队列。切换到新站点地图的可靠做法是删除实例后按新配置重新创建。
 
+重建入口有两个，凭据均为仓库密钥 `CLOUDFLARE_API_TOKEN`：
+
+```bash
+# 本地执行
+export CLOUDFLARE_API_TOKEN=xxxx
+RECREATE=true ./scripts/cloudflare-ai-search-setup.sh
+
+# 或在 GitHub Actions 手动触发 AI Search Recreate 工作流，
+# 需输入实例名 bold-union-4896 作为确认
+```
+
+脚本默认行为是更新配置（PUT），适用于模型、分块、排除项等不影响 URL 集合的调整；
+`RECREATE=true` 会先删除实例（含已入队 URL 与向量索引）再重新创建。
+
+站点 URL 整体增加 `/zh-cn/` 前缀后，索引中的旧地址已全部失效且不再有跳转，
+重建前检索结果会包含这些失效条目。重建时机应在新版本部署完成之后。
+
 ## 4. 额度与容量说明
 
 ### 4.1 两类限制不可混为一谈

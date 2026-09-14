@@ -1,0 +1,52 @@
+name: AI Search Recreate
+
+# 已入队 URL 列表不会随 specific_sitemaps 变更而重置，仅仅更新配置无法清除
+# 失效条目。站点 URL 结构整体调整后需要删除实例并重建，重建会从新的站点地图
+# 重新入队，代价是索引需重新生成（约 367 篇文档）。
+#
+# 常规的模型、分块、排除项等调整属于配置更新，走 cloudflare-ai-search-setup.sh
+# 的默认路径即可，无需重建。
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: '输入实例名以确认重建（bold-union-4896）'
+        required: true
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ai-search-recreate
+  cancel-in-progress: false
+
+jobs:
+  recreate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 校验确认输入
+        env:
+          CONFIRM: ${{ inputs.confirm }}
+        run: |
+          if [ "${CONFIRM}" != 'bold-union-4896' ]; then
+            echo '::error::确认输入与实例名不一致，终止重建。'
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: 重建实例
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          RECREATE: 'true'
+        run: |
+          if [ -z "${CLOUDFLARE_API_TOKEN}" ]; then
+            echo '::error::未配置 CLOUDFLARE_API_TOKEN，无法重建。'
+            exit 1
+          fi
+          chmod +x scripts/cloudflare-ai-search-setup.sh
+          ./scripts/cloudflare-ai-search-setup.sh

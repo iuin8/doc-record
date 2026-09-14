@@ -12,11 +12,16 @@
 # 可用环境变量覆盖默认值：
 #   CLOUDFLARE_ACCOUNT_ID  账户 ID
 #   INSTANCE_ID            实例名，需与 NLWeb Worker 的 RAG_ID 绑定一致
-#   SITEMAP_PATH           站点地图路径，默认 sitemap-ai.xml（仅根语言页面）
+#   SITEMAP_PATH           站点地图路径，默认 sitemap-ai.xml
+#   RECREATE               设为 true 时先删除实例再重建，默认 false
 #   RERANKING              是否启用重排，默认 false（免费额度下减少模型调用）
 #   REWRITE_QUERY          是否启用查询改写，默认 false（同上）
 #   EMBEDDING_MODEL        向量模型
 #   AI_SEARCH_MODEL        生成模型
+#
+# RECREATE 的适用场景：已入队 URL 列表不会随 `specific_sitemaps` 变更而重置，
+# 站点 URL 结构整体调整后，失效条目会继续占据检索名额，需删除实例后重建。
+# 更新配置（默认行为）适用于模型、分块、排除项等不影响 URL 集合的调整。
 
 set -euo pipefail
 
@@ -71,6 +76,18 @@ else
   echo "    实例不存在，将创建"
   method=POST
   url="${BASE}/instances"
+fi
+
+if [ "${RECREATE:-false}" = "true" ] && [ -n "$existing" ]; then
+  echo "==> RECREATE=true，删除实例 ${INSTANCE_ID}（含已入队 URL 与向量索引）"
+  if api -X DELETE "${BASE}/instances/${INSTANCE_ID}" >/dev/null 2>&1; then
+    echo "    已删除，将重新创建"
+    method=POST
+    url="${BASE}/instances"
+  else
+    echo "    删除失败，请确认令牌具备 AI Search:Edit 权限" >&2
+    exit 1
+  fi
 fi
 
 # 排除项说明：
