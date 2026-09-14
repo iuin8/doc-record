@@ -67,8 +67,10 @@ component_payload() {
     style_line=',
   "language_code_style": "bcp"'
   fi
-  # 不传 new_base：该字段是单语格式的「基准语言文件」，必须是仓库中存在的单个文件，
-  # 传入 glob 会被实例拒绝（提示文件不存在）。本仓库源文分散在多个文件，故留空。
+  # new_base 与 template 同为源文路径：
+  #   单语言译文模版语言文件（new_base）是字符串定义文件，即源字符串的来源；
+  #   新语种的翻译模版（template）用于生成新译文，官方文档要求文档翻译类格式
+  #   （Markdown 属此类）取 new_base 的值。
   printf '{
   "name": "%s",
   "slug": "%s",
@@ -76,11 +78,12 @@ component_payload() {
   "branch": "%s",
   "vcs": "git",
   "file_format": "%s",
+  "new_base": "%s",
   "template": "%s",
   "filemask": "%s",
   "file_format_params": { "markdown_merge_duplicates": true }%s
 }' "$name" "$slug" "$REPO" "$BRANCH" "$FILE_FORMAT" \
-   "$template" "$filemask" "$style_line"
+   "$template" "$template" "$filemask" "$style_line"
 }
 
 # 建立组件并补齐目标语言；掩码不含语言占位符时不会误匹配源文

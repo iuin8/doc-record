@@ -59,27 +59,31 @@ CREATE_PROJECT=false ./scripts/weblate-create-components.sh
 | 字段 | 取值 |
 | --- | --- |
 | 文件格式 | Markdown file（单语格式） |
-| 文件掩码 File mask | `src/content/docs/*/docker/**/*.md` |
-| 新译文的模板 | `src/content/docs/docker/**/*.md` |
-| 单语言译文基准文件 | **留空** |
+| 文件掩码 | `src/content/docs/*/docker/**/*.md` |
+| 单语言译文模版语言文件 | `src/content/docs/docker/**/*.md` |
+| 新语种的翻译模版 | `src/content/docs/docker/**/*.md`（与上一项相同） |
 | 语言代码风格 | BCP（连字符） |
 | 文件格式参数 | `markdown_merge_duplicates=True` |
 
-「单语言译文基准文件」不要填内容。该字段是单语格式的**基准语言文件**，
-必须是仓库中真实存在的**单个文件**，用于源字符串质量闸道；本仓库源文分散在
-上百个文件里，没有这样的单文件，填 glob 会被拒绝并提示「文件不存在」。
-源字符串由「新译文的模板」提供，该字段支持 glob。
+两个模板字段的语义按官方文档区分：
 
-#### 字段与报错的对应关系
+- **单语言译文模版语言文件**是「包含字符串定义的译文模板文件」，即**源字符串的来源**，
+  单语格式必须有它，清空会报「您不能在没有译文模版文件的情况下进行单语种翻译」；
+- **新语种的翻译模版**用于生成新译文文件，官方要求**文档翻译类格式**
+  （Markdown 属此类）取「单语言译文模版语言文件」的值，因此两者填同一个路径。
 
-两个字段名称相近，填错位置会得到看似矛盾的报错：
+#### 网页端填 glob 报「文件不存在」时的处理
 
-| 报错 | 实际缺失的字段 | 处理 |
-| --- | --- | --- |
-| 文件不存在 | 单语言译文基准文件 | 该字段填了 glob，清空即可 |
-| 您不能在没有译文模版文件的情况下进行单语种翻译 | 新译文的模板 | 填入源文路径 `src/content/docs/<目录>/**/*.md` |
+网页端对「单语言译文模版语言文件」按**单个实体文件**做存在性校验，
+而本仓库源文分散在上百个文件中，任何 glob 都会被判为不存在。
+该校验只存在于网页表单，**REST API 不校验**，因此改用脚本建组件即可：
 
-即：报错里出现的「译文模版文件」指的是**新译文的模板**，不是基准文件。
+```bash
+export WEBLATE_API_TOKEN=xxxx
+./scripts/weblate-create-components.sh
+```
+
+脚本通过 API 提交，两个模板字段都填源文 glob，可正常建立。
 
 「选择需要导入的翻译文件」就是**文件掩码**这一项。仓库当前没有 `en`/`ja`/`zh-Hant`
 目录（站点上的 `/en` 等路径是 Starlight 的回退页，并非真实文件），
@@ -108,9 +112,8 @@ CREATE_PROJECT=false ./scripts/weblate-create-components.sh
 最后一行是**站点首页**：`src/content/docs/index.md` 位于根目录，不属于任何一级目录，
 按目录拆分的掩码覆盖不到，必须单独建一个组件，否则首页不会被翻译。
 
-各组件的「新译文的模板」填把掩码里 `*/` 一段去掉的形式，例如
-`src/content/docs/docker/**/*.md`、`src/content/docs/index.md`；
-「单语言译文基准文件」一律留空。
+其余组件的两个模板字段都填把掩码里 `*/` 一段去掉的形式，例如
+`src/content/docs/docker/**/*.md`、`src/content/docs/index.md`。
 
 `test` 目录只有一个测试页，如不需要可从 `CONTENT_DIRS` 中移除
 （`CONTENT_DIRS="docker tools ..." ./scripts/weblate-create-components.sh`）。
