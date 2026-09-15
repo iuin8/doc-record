@@ -21,8 +21,7 @@
 #   CLOUDFLARE_ACCOUNT_ID  账户 ID
 #   INSTANCE_ID            实例名
 #   KEYWORD_MATCH_MODE     and | or，默认 or
-#   SCORE_THRESHOLD        0–1，默认 0.2（实例默认 0.4）
-#   CONTEXT_EXPANSION      0–3，默认 1（实例默认 0）
+#   SCORE_THRESHOLD        0-1，默认 0.2（实例默认 0.4）
 #   DRY_RUN                设为 1 时只打印变更对照，不写入
 
 set -euo pipefail
@@ -33,7 +32,6 @@ CLOUDFLARE_ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID:-1e41ba8d32af254e50ca2f65292adfe1
 INSTANCE_ID="${INSTANCE_ID:-bold-union-4896}"
 KEYWORD_MATCH_MODE="${KEYWORD_MATCH_MODE:-or}"
 SCORE_THRESHOLD="${SCORE_THRESHOLD:-0.2}"
-CONTEXT_EXPANSION="${CONTEXT_EXPANSION:-1}"
 DRY_RUN="${DRY_RUN:-0}"
 
 BASE="https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/ai-search/instances/${INSTANCE_ID}"
@@ -51,7 +49,6 @@ d = json.load(sys.stdin)["result"]
 ro = d.get("retrieval_options") or {}
 print("    keyword_match_mode:", ro.get("keyword_match_mode", "（未设置，回退为 and）"))
 print("    score_threshold:   ", d.get("score_threshold", "（未设置，回退为 0.4）"))
-print("    context_expansion: ", ro.get("context_expansion", d.get("context_expansion", "（未设置，回退为 0）")))
 print("    index_method:      ", d.get("index_method"))
 print("    retrieval_options: ", json.dumps(ro, ensure_ascii=False))
 '
@@ -61,7 +58,6 @@ echo "==> 拟写入"
 cat <<EOF
     retrieval_options.keyword_match_mode = ${KEYWORD_MATCH_MODE}
     score_threshold                      = ${SCORE_THRESHOLD}
-    context_expansion                    = ${CONTEXT_EXPANSION}
 EOF
 
 if [ "$DRY_RUN" = "1" ]; then
@@ -70,15 +66,13 @@ if [ "$DRY_RUN" = "1" ]; then
   exit 0
 fi
 
-# context_expansion 位于 retrieval_options 内：置于顶层时接口返回 2xx 但不落库
-# （回读为 None），与 score_threshold 的顶层位置不同。
+# context_expansion 只能作为单次请求参数传入（ai_search_options.retrieval），
+# 实例级写入会被接口静默丢弃：回读时 retrieval_options 只剩 keyword_match_mode。
+# NLWeb 的 /ask 不透传检索参数，因此该能力当前无法启用，脚本不再写入。
 body=$(
   cat <<EOF
 {
-  "retrieval_options": {
-    "keyword_match_mode": "${KEYWORD_MATCH_MODE}",
-    "context_expansion": ${CONTEXT_EXPANSION}
-  },
+  "retrieval_options": { "keyword_match_mode": "${KEYWORD_MATCH_MODE}" },
   "score_threshold": ${SCORE_THRESHOLD}
 }
 EOF
@@ -96,7 +90,6 @@ d = json.load(sys.stdin)["result"]
 ro = d.get("retrieval_options") or {}
 print("    keyword_match_mode:", ro.get("keyword_match_mode"))
 print("    score_threshold:   ", d.get("score_threshold"))
-print("    context_expansion: ", ro.get("context_expansion", d.get("context_expansion")))
 print("    retrieval_options: ", json.dumps(ro, ensure_ascii=False))
 '
 
