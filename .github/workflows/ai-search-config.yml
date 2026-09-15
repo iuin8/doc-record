@@ -11,11 +11,12 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: 'update：更新配置（默认）；recreate：删除实例后重建'
+        description: 'update：更新配置（默认）；tune：只调检索参数；recreate：删除实例后重建'
         required: true
         type: choice
         options:
           - update
+          - tune
           - recreate
         default: update
       confirm:
@@ -48,17 +49,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: 应用配置
+      - name: 应用配置或调整检索参数
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           MODE: ${{ inputs.mode }}
         run: |
           if [ -z "${CLOUDFLARE_API_TOKEN}" ]; then
-            echo '::error::未配置 CLOUDFLARE_API_TOKEN，无法应用配置。'
+            echo '::error::未配置 CLOUDFLARE_API_TOKEN，无法执行。'
             exit 1
           fi
-          if [ "${MODE}" = 'recreate' ]; then
-            export RECREATE=true
-          fi
-          chmod +x scripts/cloudflare-ai-search-setup.sh
-          ./scripts/cloudflare-ai-search-setup.sh
+          chmod +x scripts/cloudflare-ai-search-setup.sh scripts/cloudflare-ai-search-tune-retrieval.sh
+          case "${MODE}" in
+            recreate)
+              RECREATE=true ./scripts/cloudflare-ai-search-setup.sh
+              ;;
+            tune)
+              ./scripts/cloudflare-ai-search-tune-retrieval.sh
+              ;;
+            *)
+              ./scripts/cloudflare-ai-search-setup.sh
+              ;;
+          esac
