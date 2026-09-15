@@ -81,7 +81,19 @@ fi
 if [ "${RECREATE:-false}" = "true" ] && [ -n "$existing" ]; then
   echo "==> RECREATE=true，删除实例 ${INSTANCE_ID}（含已入队 URL 与向量索引）"
   if api -X DELETE "${BASE}/instances/${INSTANCE_ID}" >/dev/null 2>&1; then
-    echo "    已删除，将重新创建"
+    echo "    已提交删除，等待实例状态收敛后再创建"
+    deleted=false
+    for attempt in $(seq 1 30); do
+      sleep 10
+      if ! api "${BASE}/instances/${INSTANCE_ID}" >/dev/null 2>&1; then
+        echo "    实例已消失（第 ${attempt} 次检查）"
+        deleted=true
+        break
+      fi
+    done
+    if [ "$deleted" != "true" ]; then
+      echo "    删除后实例仍可查询，可能为接口延迟；继续尝试创建" >&2
+    fi
     method=POST
     url="${BASE}/instances"
   else
@@ -129,11 +141,13 @@ body=$(
 EOF
 )
 
-echo "==> 写入配置"
-if [ "$method" = "PUT" ]; then
-  api -X PUT "$url" -d "$body" >/dev/null
-else
-  api -X POST "$url" -d "$body" >/dev/null
+echo "==> 写入配置（${method} ${url}）"
+# 失败时输出接口返回体：AI Search 的错误细节只在响应里给出，
+# 丢弃后只能看到 curl 的退出码，无法定位是字段名还是取值的问题。
+if ! response="$(api -X "$method" "$url" -d "$body" 2>&1)"; then
+  echo "    写入失败，接口返回：" >&2
+  echo "$response" >&2
+  exit 1
 fi
 
 echo "==> 触发同步任务"
