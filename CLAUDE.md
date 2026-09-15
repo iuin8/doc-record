@@ -94,8 +94,10 @@ AI 问答调用 NLWeb 的 `/ask` 接口，默认地址为
 - `content-check.yml`：对变更的 Markdown 运行 `scripts/check-content.py`，需完整安装
   依赖以便读取 Shiki 的语言清单；
 - `ai-search-sync.yml`：周期性触发 Cloudflare AI Search 同步；
-- `ai-search-config.yml`：手动应用 Cloudflare AI Search 实例配置，
-  可选「更新配置」或「删除实例后重建」，重建需输入实例名确认。
+- `ai-search-config.yml`：手动操作 Cloudflare AI Search 实例，三种模式：
+  `update` 应用完整配置、`tune` 只调检索参数（不触发重索引，可传
+  `keyword_match_mode` 与 `score_threshold`）、`recreate` 删除实例后重建
+  （需输入实例名 `bold-union-4896` 确认）。
 
 ## 翻译
 

@@ -117,6 +117,33 @@ INDEX_VECTOR=true ./scripts/cloudflare-ai-search-setup.sh
 是否进入阶段 B 取决于嵌入产能是否宽松，判据为同步脚本输出的失败分类中
 容量类错误是否归零。
 
+### 3.4 检索侧参数
+
+`retrieval_options.keyword_match_mode` 与 `score_threshold` 只影响查询期行为，
+不触发重索引、不改数据源，可随时改回。
+
+| 参数 | 实例默认 | 当前取值 | 说明 |
+| --- | --- | --- | --- |
+| `retrieval_options.keyword_match_mode` | `and` | `or` | `and` 要求所有查询词共现于同一文档，索引未收敛时多词查询直接为空 |
+| `score_threshold` | 0.4 | 0.2 | 相关性下限，越低召回越宽、噪音越多 |
+
+调整入口（不触发重索引）：
+
+```bash
+# 本地执行
+export CLOUDFLARE_API_TOKEN=xxxx
+SCORE_THRESHOLD=0.2 KEYWORD_MATCH_MODE=or ./scripts/cloudflare-ai-search-tune-retrieval.sh
+
+# 或在 GitHub Actions 手动触发 AI Search Config 工作流，mode 选 tune
+```
+
+`context_expansion`（命中块向邻近块扩展）不在此列：它是单次请求参数
+（`ai_search_options.retrieval`），实例级写入会被接口静默丢弃——回读时
+`retrieval_options` 只剩 `keyword_match_mode`。NLWeb 的 `/ask` 不透传检索参数，
+因此该能力当前无法启用。
+
+实测对照见 `adr/2026-09-14-AI-Search-容量限流调优.md` §6.2。
+
 ## 4. 额度与容量说明
 
 ### 4.1 两类限制不可混为一谈
