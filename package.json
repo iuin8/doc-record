@@ -29,5 +29,10 @@
     "node": ">=22.0.0"
   },
   "packageManager": "pnpm@10.26.2",
-  "license": "MIT"
+  "license": "MIT",
+  "pnpm": {
+    "overrides": {
+      "lodash-es": "^4.18.1"
+    }
+  }
 }
