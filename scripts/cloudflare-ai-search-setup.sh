@@ -111,6 +111,9 @@ body=$(
 {
   "id": "${INSTANCE_ID}",
   "type": "web-crawler",
+  # source 为爬取源的根地址。API 文档将其标为可选，但创建 web-crawler 实例时
+  # 缺少该字段会被拒绝（错误码 7001：source is required for web-crawler instances）。
+  "source": "${SITE_URL}",
   "source_params": {
     "web_crawler": {
       "parse_type": "sitemap",
