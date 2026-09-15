@@ -142,13 +142,23 @@ EOF
 )
 
 echo "==> 写入配置（${method} ${url}）"
-# 失败时输出接口返回体：AI Search 的错误细节只在响应里给出，
-# 丢弃后只能看到 curl 的退出码，无法定位是字段名还是取值的问题。
-if ! response="$(api -X "$method" "$url" -d "$body" 2>&1)"; then
-  echo "    写入失败，接口返回：" >&2
-  echo "$response" >&2
-  exit 1
-fi
+# 不用 curl 的 -f：该选项在 HTTP 错误时丢弃响应体，而 AI Search 的校验细节
+# 只在响应体里给出，看不到就无法判断是哪个字段或取值被拒。
+result="$(
+  curl -sS -H "$AUTH" -H 'Content-Type: application/json' \
+    -X "$method" "$url" -d "$body" -w $'\n%{http_code}'
+)"
+status="$(printf '%s' "$result" | tail -n 1)"
+payload="$(printf '%s' "$result" | sed '$d')"
+
+case "$status" in
+  2*) ;;
+  *)
+    echo "    写入失败，HTTP ${status}，接口返回：" >&2
+    echo "$payload" >&2
+    exit 1
+    ;;
+esac
 
 echo "==> 触发同步任务"
 job="$(api -X POST "${BASE}/instances/${INSTANCE_ID}/jobs" 2>/dev/null || echo '')"
