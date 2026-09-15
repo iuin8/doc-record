@@ -11,12 +11,13 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: 'update：更新配置（默认）；tune：只调检索参数；recreate：删除实例后重建'
+        description: 'update：更新配置；tune：只调检索参数；probe：查询样本探测；recreate：删除重建'
         required: true
         type: choice
         options:
           - update
           - tune
+          - probe
           - recreate
         default: update
       confirm:
@@ -73,13 +74,16 @@ jobs:
             echo '::error::未配置 CLOUDFLARE_API_TOKEN，无法执行。'
             exit 1
           fi
-          chmod +x scripts/cloudflare-ai-search-setup.sh scripts/cloudflare-ai-search-tune-retrieval.sh
+          chmod +x scripts/cloudflare-ai-search-setup.sh scripts/cloudflare-ai-search-tune-retrieval.sh scripts/cloudflare-ai-search-probe.sh
           case "${MODE}" in
             recreate)
               RECREATE=true ./scripts/cloudflare-ai-search-setup.sh
               ;;
             tune)
               ./scripts/cloudflare-ai-search-tune-retrieval.sh
+              ;;
+            probe)
+              ./scripts/cloudflare-ai-search-probe.sh
               ;;
             *)
               ./scripts/cloudflare-ai-search-setup.sh
