@@ -166,13 +166,18 @@ esac
 
 echo "==> 触发同步任务"
 job="$(api -X POST "${BASE}/instances/${INSTANCE_ID}/jobs" 2>/dev/null || echo '')"
-job_id="$(echo "$job" | json_field result.id)"
+# 新建实例可能已自带一次同步，接口也可能暂时不可用；取不到任务 ID 时继续等待，
+# 交由下面的轮询与 cloudflare-ai-search-sync.sh 观测，不因此中断。
+job_id=""
+if [ -n "$job" ]; then
+  job_id="$(printf '%s' "$job" | json_field result.id || echo '')"
+fi
 echo "    任务 ID：${job_id:-（未返回，可在控制台查看）}"
 
 echo "==> 等待索引完成"
 for attempt in $(seq 1 30); do
   sleep 20
-  status="$(api "${BASE}/instances/${INSTANCE_ID}/jobs" 2>/dev/null |
+  status="$((api "${BASE}/instances/${INSTANCE_ID}/jobs" 2>/dev/null || echo '') |
     python3 -c "
 import sys, json
 try:
