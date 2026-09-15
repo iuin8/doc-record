@@ -83,7 +83,11 @@ locales: {
 7. **代码围栏语言大小写**：`Dockerfile`、`JavaScript` 等首字母大写的语言标识在 Shiki 中查不到，退化为纯文本。已统一为小写，高亮告警归零。
 8. **`.gitignore` 冲突**：旧规则含 `public/`（Jekyll 时代遗留），与 Astro 的静态资源目录同名，会导致新增静态文件被忽略。已移除该规则并补充 `.astro/`。
 
-相关脚本位于 `scripts/`：`migrate-content.py`、`normalize-frontmatter.py`、`ensure-title.py`、`backfill-blog-date.py`、`strip-blog-slug.py`。
+相关脚本曾位于 `scripts/`：`migrate-content.py`、`normalize-frontmatter.py`、`ensure-title.py`、`backfill-blog-date.py`、`strip-blog-slug.py`。
+
+> 2026-09-15：迁移已完成，上述一次性脚本连同 `strip-framework-frontmatter.py`
+> 一并删除，避免与常驻脚本混淆。需要重跑时可从提交历史取回，
+> 本节的处置记录一并说明各脚本当时的职责。
 
 ## 六、已知差异与待办
 
@@ -133,7 +137,7 @@ CI 环境无此限制，`pnpm install --frozen-lockfile` 可正常执行。
 为未声明 `title` 的条目读取源文件、取首个一级标题并去除行内 Markdown 标记后写入 `data.title`。
 同时通过 `docsSchema({ extend })` 将 `title` 由必填降为可选。
 
-`scripts/strip-framework-frontmatter.py` 负责清理：移除 Docusaurus 特有字段，
+`scripts/strip-framework-frontmatter.py`（已删除）曾负责清理：移除 Docusaurus 特有字段，
 并剥离「仅含 `title` 且该标题与一级标题一致」的 front matter（共 351 个文件）。
 
 ### 迁移兼容性

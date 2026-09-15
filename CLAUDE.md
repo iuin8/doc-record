@@ -100,7 +100,11 @@ AI 问答调用 NLWeb 的 `/ask` 接口，默认地址为
 翻译平台迁移至 Weblate 的工作已暂缓，原因与恢复条件见
 `adr/2026-09-10-翻译平台迁移至 Weblate.md`。组件与种子文件脚本
 （`scripts/weblate-create-components.sh`、`scripts/weblate-seed-translations.sh`）已就绪，
-源目录为 `src/content/docs/zh-cn/`。界面文案 `src/content/i18n/` 目前人工维护。
+源目录为 `src/content/docs/zh-cn/`。
+
+界面文案位于 `src/content/i18n/`，按 BCP-47 语言标记命名，目前人工维护。
+`locales` 只声明了 `zh-cn`，因此仅 `zh-CN.json` 会被加载；`en.json`、`ja.json`、
+`zh-TW.json` 为已完成的译文，保留供新增语言时直接复用，不属于无用文件。
 
 ## 约定
 

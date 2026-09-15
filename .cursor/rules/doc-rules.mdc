@@ -1,10 +1,24 @@
 ---
-description: 
-globs: 
-alwaysApply: false
+description: 本站的目录结构、语言约定与内容规范
+globs:
+  - 'src/**'
+  - 'astro.config.mjs'
+  - 'scripts/**'
+alwaysApply: true
 ---
 
-# Your rule content
+# 项目约定
 
-- You can @ files here
-- You can use markdown but dont have to
+`CLAUDE.md` 是唯一权威来源，包含目录结构、命令、语言约定与部署方式。
+修改配置或内容前先读该文件的「语言与 URL」「内容与 front matter」两节。
+
+以下两条约束来自框架实现，违反时不会报明确的错，需特别留意：
+
+1. `astro.config.mjs` 中 `locales` 的键必须与 `src/content/docs/` 下目录名的小写形式
+   一致。Astro 会把内容集合的 `entry.id` 整体小写化，键名含大写字母时该语言的页面
+   不会被生成。`lang` 另按 BCP-47 书写，例如目录 `zh-cn` 对应 `lang: 'zh-CN'`。
+2. 只声明已有译文目录的语言。Starlight 会为已声明但缺译文的语言复制一份源语言页面
+   作为回退，`starlight-blog` 在这类回退路由上无法解析条目 id，构建会直接失败。
+
+内容位于 `src/content/docs/zh-cn/`，站点 URL 由目录结构推导并带 `/zh-cn/` 前缀。
+新增语言时在 `locales` 追加条目即可，无需改动内容结构。
