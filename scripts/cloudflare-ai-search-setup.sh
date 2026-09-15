@@ -106,13 +106,14 @@ fi
 #   /raw/** 与 /_llms-txt/** 是给 AI 直接取用的纯文本副本，与页面内容重复。
 #   站点当前只声明存在译文的语言，未声明的语言不会生成回退副本，无需在此排除。
 #   后续新增语言且译文不全时，需在此补上对应前缀的排除项。
+# source 为爬取源的根地址。API 文档将其标为可选，但创建 web-crawler 实例时
+# 缺少该字段会被拒绝（错误码 7001：source is required for web-crawler instances）。
+# JSON 不支持注释，说明只能写在 heredoc 之外。
 body=$(
   cat <<EOF
 {
   "id": "${INSTANCE_ID}",
   "type": "web-crawler",
-  # source 为爬取源的根地址。API 文档将其标为可选，但创建 web-crawler 实例时
-  # 缺少该字段会被拒绝（错误码 7001：source is required for web-crawler instances）。
   "source": "${SITE_URL}",
   "source_params": {
     "web_crawler": {
