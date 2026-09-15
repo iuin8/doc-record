@@ -53,24 +53,43 @@ export CLOUDFLARE_API_TOKEN=xxxx
 
 排除项：
 
-- `/raw/**`、`/_llms-txt/**`：面向 AI 的纯文本副本，与页面内容重复；
-- `/en/**`、`/ja/**`、`/zh-Hant/**`：译文尚未产生，这些路径当前是回退内容，
-  与根语言页面完全一致。译文上线后需要从排除项中移除。
-  排除项对已入队的 URL 不生效，主要去重手段是 `sitemap-ai.xml`。
+- `/raw/**`、`/_llms-txt/**`：面向 AI 的纯文本副本，与页面内容重复。
+
+内容迁移到语言目录后，全站 URL 带 `/zh-cn/` 前缀，`sitemap-ai.xml` 只收集该前缀下的
+条目，未声明的语言不会生成回退副本，因此不再需要按语言前缀排除。后续新增语言且译文
+不全时，需在 `exclude_items` 中补上对应前缀。
 
 ### 3.1 为什么需要独立的站点地图
 
-`sitemap-index.xml` 指向的 `sitemap-0.xml` 含 1492 条 URL，其中约四分之三是
+`sitemap-index.xml` 指向的 `sitemap-0.xml` 在迁移前含 1492 条 URL，其中约四分之三是
 `/en`、`/ja`、`/zh-Hant` 前缀的回退副本，正文与根语言页面完全一致。全量索引会带来
 两个问题：向量写入量放大约四倍，且 `max_num_results` 的返回名额被近义重复块占满，
 实际可提供的独立来源显著减少。
 
-`src/pages/sitemap-ai.xml.ts` 只收集根语言条目，构建产物为 367 条 URL。
+内容迁入 `src/content/docs/zh-cn/` 并只声明该语言后，回退副本不再生成，
+`sitemap-0.xml` 与 `sitemap-ai.xml` 的条目数已收敛到同一量级（约 373 条）。
 
 ### 3.2 更换内容源需要重建实例
 
 修改 `specific_sitemaps` 不会重置已经入队的 URL 列表，正在进行的同步任务会继续
 消费旧队列。切换到新站点地图的可靠做法是删除实例后按新配置重新创建。
+
+重建入口有两个，凭据均为仓库密钥 `CLOUDFLARE_API_TOKEN`：
+
+```bash
+# 本地执行
+export CLOUDFLARE_API_TOKEN=xxxx
+RECREATE=true ./scripts/cloudflare-ai-search-setup.sh
+
+# 或在 GitHub Actions 手动触发 AI Search Recreate 工作流，
+# 需输入实例名 bold-union-4896 作为确认
+```
+
+脚本默认行为是更新配置（PUT），适用于模型、分块、排除项等不影响 URL 集合的调整；
+`RECREATE=true` 会先删除实例（含已入队 URL 与向量索引）再重新创建。
+
+站点 URL 整体增加 `/zh-cn/` 前缀后，索引中的旧地址已全部失效且不再有跳转，
+重建前检索结果会包含这些失效条目。重建时机应在新版本部署完成之后。
 
 ## 4. 额度与容量说明
 

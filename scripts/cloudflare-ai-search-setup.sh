@@ -12,11 +12,16 @@
 # 可用环境变量覆盖默认值：
 #   CLOUDFLARE_ACCOUNT_ID  账户 ID
 #   INSTANCE_ID            实例名，需与 NLWeb Worker 的 RAG_ID 绑定一致
-#   SITEMAP_PATH           站点地图路径，默认 sitemap-ai.xml（仅根语言页面）
+#   SITEMAP_PATH           站点地图路径，默认 sitemap-ai.xml
+#   RECREATE               设为 true 时先删除实例再重建，默认 false
 #   RERANKING              是否启用重排，默认 false（免费额度下减少模型调用）
 #   REWRITE_QUERY          是否启用查询改写，默认 false（同上）
 #   EMBEDDING_MODEL        向量模型
 #   AI_SEARCH_MODEL        生成模型
+#
+# RECREATE 的适用场景：已入队 URL 列表不会随 `specific_sitemaps` 变更而重置，
+# 站点 URL 结构整体调整后，失效条目会继续占据检索名额，需删除实例后重建。
+# 更新配置（默认行为）适用于模型、分块、排除项等不影响 URL 集合的调整。
 
 set -euo pipefail
 
@@ -73,9 +78,22 @@ else
   url="${BASE}/instances"
 fi
 
+if [ "${RECREATE:-false}" = "true" ] && [ -n "$existing" ]; then
+  echo "==> RECREATE=true，删除实例 ${INSTANCE_ID}（含已入队 URL 与向量索引）"
+  if api -X DELETE "${BASE}/instances/${INSTANCE_ID}" >/dev/null 2>&1; then
+    echo "    已删除，将重新创建"
+    method=POST
+    url="${BASE}/instances"
+  else
+    echo "    删除失败，请确认令牌具备 AI Search:Edit 权限" >&2
+    exit 1
+  fi
+fi
+
 # 排除项说明：
 #   /raw/** 与 /_llms-txt/** 是给 AI 直接取用的纯文本副本，与页面内容重复。
-#   /en /ja /zh-Hant 为回退副本，主要依靠 sitemap-ai.xml 从源头排除；此处仅作兜底。
+#   站点当前只声明存在译文的语言，未声明的语言不会生成回退副本，无需在此排除。
+#   后续新增语言且译文不全时，需在此补上对应前缀的排除项。
 body=$(
   cat <<EOF
 {
@@ -95,7 +113,7 @@ body=$(
         "include_subdomains": false
       }
     },
-    "exclude_items": ["/raw/**", "/_llms-txt/**", "/en/**", "/ja/**", "/zh-Hant/**"]
+    "exclude_items": ["/raw/**", "/_llms-txt/**"]
   },
   "embedding_model": "${EMBEDDING_MODEL}",
   "ai_search_model": "${AI_SEARCH_MODEL}",

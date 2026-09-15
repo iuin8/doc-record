@@ -65,8 +65,8 @@ CREATE_PROJECT=false ./scripts/weblate-create-components.sh
 | --- | --- |
 | 文件格式 | Markdown file（单语格式） |
 | 文件掩码 | `src/content/docs/*/docker/**/*.md` |
-| 单语言译文模版语言文件 | `src/content/docs/docker/**/*.md` |
-| 新语种的翻译模版 | `src/content/docs/docker/**/*.md`（与上一项相同） |
+| 单语言译文模版语言文件 | `src/content/docs/zh-cn/docker/**/*.md` |
+| 新语种的翻译模版 | `src/content/docs/zh-cn/docker/**/*.md`（与上一项相同） |
 | 语言代码风格 | BCP（连字符） |
 | 文件格式参数 | `markdown_merge_duplicates=True` |
 
@@ -91,8 +91,7 @@ export WEBLATE_API_TOKEN=xxxx
 脚本通过 API 提交，两个模板字段都填源文 glob，可正常建立。
 
 「选择需要导入的翻译文件」就是**文件掩码**这一项。仓库当前没有 `en`/`ja`/`zh-Hant`
-目录（站点上的 `/en` 等路径是 Starlight 的回退页，并非真实文件），
-因此自动检测列表为空，需要手动输入掩码而不是从下拉列表里选。
+目录，因此自动检测列表为空，需要手动输入掩码而不是从下拉列表里选。
 
 `*` 是语言占位符，必须落在语言目录那一层。对照示例 `locale/*/LC_MESSAGES/django.po`：
 `*` 处在语言目录位置，后面是固定路径。本仓库的等价写法如下（14 个组件）：
@@ -114,11 +113,11 @@ export WEBLATE_API_TOKEN=xxxx
 | `test` | `src/content/docs/*/test/**/*.md` | 1 |
 | `index` | `src/content/docs/*/index.md` | 1 |
 
-最后一行是**站点首页**：`src/content/docs/index.md` 位于根目录，不属于任何一级目录，
-按目录拆分的掩码覆盖不到，必须单独建一个组件，否则首页不会被翻译。
+最后一行是**站点首页**：`src/content/docs/zh-cn/index.md` 位于源语言目录根，
+不属于任何子目录，按目录拆分的掩码覆盖不到，必须单独建一个组件，否则首页不会被翻译。
 
-其余组件的两个模板字段都填把掩码里 `*/` 一段去掉的形式，例如
-`src/content/docs/docker/**/*.md`、`src/content/docs/index.md`。
+其余组件的两个模板字段都填把掩码里 `*/` 一段替换为源语言目录的形式，例如
+`src/content/docs/zh-cn/docker/**/*.md`、`src/content/docs/zh-cn/index.md`。
 
 `test` 目录只有一个测试页，如不需要可从 `CONTENT_DIRS` 中移除
 （`CONTENT_DIRS="docker tools ..." ./scripts/weblate-create-components.sh`）。
@@ -264,18 +263,20 @@ export WEBLATE_API_TOKEN=xxxx
 ./scripts/weblate-create-components.sh
 ```
 
-脚本按 `src/content/docs/` 下的一级目录逐个建立组件：
+脚本按源语言目录 `src/content/docs/zh-cn/` 下的子目录逐个建立组件：
 
 | 配置项 | 取值 |
 | --- | --- |
 | 文件格式 | Markdown file |
-| 源文模板 | `src/content/docs/<目录>/**/*.md` |
+| 源文模板 | `src/content/docs/zh-cn/<目录>/**/*.md` |
 | 译文掩码 | `src/content/docs/*/<目录>/**/*.md` |
 | 源语言 | `zh_Hans` |
 | 目标语言 | `en`、`ja`、`zh_Hant` |
 
-掩码中的 `*` 对应语言代码。Starlight 的译文目录名为 `en`、`ja`、`zh-Hant`，
-因此组件的**语言代码风格必须设为 BCP（连字符）**，否则译文会落到 `zh_Hant` 目录。
+掩码中的 `*` 对应语言代码。Weblate 的语言代码风格设为 **BCP（连字符）**后，
+译文目录为 `en`、`ja`、`zh-Hant`。Astro 会把内容集合的条目 id 小写化，
+因此 `astro.config.mjs` 中对应语言的 locale 键须写作目录名的小写形式
+（`en`、`ja`、`zh-hant`），否则 Starlight 判定不出该语言的条目、页面不会生成。
 
 ## 6. 组件建立后的配置
 

@@ -52,7 +52,7 @@ Docusaurus 3.10 已整体替换为 Astro 7 + Starlight 0.42，本地构建通过
 
 ## 四、语言配置
 
-采用 root locale 方案，`zh-Hans` 内容保持在 `src/content/docs/` 根，URL 不带语言前缀，与迁移前的 Docusaurus 行为一致：
+迁移当时采用 root locale 方案，`zh-Hans` 内容保持在 `src/content/docs/` 根，URL 不带语言前缀，与迁移前的 Docusaurus 行为一致：
 
 ```js
 defaultLocale: 'root',
@@ -63,6 +63,10 @@ locales: {
   ja: { label: '日本語', lang: 'ja' },
 },
 ```
+
+> 该配置已于 2026-09-11 调整：内容迁入 `src/content/docs/zh-cn/`，改为
+> `defaultLocale: 'zh-cn'`，全站 URL 增加 `/zh-cn/` 前缀。
+> 调整原因与配套改动见 `2026-09-10-翻译平台迁移至 Weblate.md` §13.4。
 
 `lang` 取值对齐 Starlight 内置的 UI 文案语言标识（`zh-CN`、`zh-TW`、`ja`），因此无需自建 `src/content/i18n/` 即可获得本地化界面文案。
 
@@ -79,7 +83,11 @@ locales: {
 7. **代码围栏语言大小写**：`Dockerfile`、`JavaScript` 等首字母大写的语言标识在 Shiki 中查不到，退化为纯文本。已统一为小写，高亮告警归零。
 8. **`.gitignore` 冲突**：旧规则含 `public/`（Jekyll 时代遗留），与 Astro 的静态资源目录同名，会导致新增静态文件被忽略。已移除该规则并补充 `.astro/`。
 
-相关脚本位于 `scripts/`：`migrate-content.py`、`normalize-frontmatter.py`、`ensure-title.py`、`backfill-blog-date.py`、`strip-blog-slug.py`。
+相关脚本曾位于 `scripts/`：`migrate-content.py`、`normalize-frontmatter.py`、`ensure-title.py`、`backfill-blog-date.py`、`strip-blog-slug.py`。
+
+> 2026-09-15：迁移已完成，上述一次性脚本连同 `strip-framework-frontmatter.py`
+> 一并删除，避免与常驻脚本混淆。需要重跑时可从提交历史取回，
+> 本节的处置记录一并说明各脚本当时的职责。
 
 ## 六、已知差异与待办
 
@@ -129,7 +137,7 @@ CI 环境无此限制，`pnpm install --frozen-lockfile` 可正常执行。
 为未声明 `title` 的条目读取源文件、取首个一级标题并去除行内 Markdown 标记后写入 `data.title`。
 同时通过 `docsSchema({ extend })` 将 `title` 由必填降为可选。
 
-`scripts/strip-framework-frontmatter.py` 负责清理：移除 Docusaurus 特有字段，
+`scripts/strip-framework-frontmatter.py`（已删除）曾负责清理：移除 Docusaurus 特有字段，
 并剥离「仅含 `title` 且该标题与一级标题一致」的 front matter（共 351 个文件）。
 
 ### 迁移兼容性

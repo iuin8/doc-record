@@ -1,6 +1,6 @@
 # doc-record
 
-[![zread](https://img.shields.io/badge/Ask_Zread-_.svg?style=flat&color=00b0aa&labelColor=000000&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuOTYxNTYgMS42MDAxSDIuMjQxNTZDMS44ODgxIDEuNjAwMSAxLjYwMTU2IDEuODg2NjQgMS42MDE1NiAyLjI0MDFWNC45NjAxQzEuNjAxNTYgNS4zMTM1NiAxLjg4ODEgNS42MDAxIDIuMjQxNTYgNS42MDAxSDQuOTYxNTZDNS4zMTUwMiA1LjYwMDEgNS42MDE1NiA1LjMxMzU2IDUuNjAxNTYgNC45NjAxVjIuMjQwMUM1LjYwMTU2IDEuODg2NjQgNS4zMTUwMiAxLjYwMDEgNC45NjE1NiAxLjYwMDFaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00Ljk2MTU2IDEwLjM5OTlIMi4yNDE1NkMxLjg4ODEgMTAuMzk5OSAxLjYwMTU2IDEwLjY4NjQgMS42MDE1NiAxMS4wMzk5VjEzLjc1OTlDMS42MDE1NiAxNC4xMTM0IDEuODg4MSAxNC4zOTk5IDIuMjQxNTYgMTQuMzk5OUg0Ljk2MTU2QzUuMzE1MDIgMTQuMzk5OSA1LjYwMTU2IDE0LjExMzQgNS42MDE1NiAxMy43NTk5VjExLjAzOTlDNS42MDE1NiAxMC42ODY0IDUuMzE1MDIgMTAuMzk5OSA0Ljk2MTU2IDEwLjM5OTlaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik0xMy43NTg0IDEuNjAwMUgxMS4wMzg0QzEwLjY4NSAxLjYwMDEgMTAuMzk4NCAxLjg4NjY0IDEwLjM5ODQgMi4yNDAxVjQuOTYwMUMxMC4zOTg0IDUuMzEzNTYgMTAuNjg1IDUuNjAwMSAxMS4wMzg0IDUuNjAwMUgxMy43NTg0QzE0LjExMTkgNS42MDAxIDE0LjM5ODQgNS4zMTM1NiAxNC4zOTg0IDQuOTYwMVYyLjI0MDFDMTQuMzk4NCAxLjg4NjY0IDE0LjExMTkgMS42MDAxIDEzLjc1ODQgMS42MDAxWiIgZmlsbD0iI2ZmZiIvPgo8cGF0aCBkPSJNNCAxMkwxMiA0TDQgMTJaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00IDEyTDEyIDQiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K&logoColor=ffffff)](https://zread.ai/iuin8/doc-record) [![Crowdin](https://badges.crowdin.net/doc-record/localized.svg)](https://crowdin.com/project/doc-record) [![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/iuin8/doc-record)
+[![zread](https://img.shields.io/badge/Ask_Zread-_.svg?style=flat&color=00b0aa&labelColor=000000&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuOTYxNTYgMS42MDAxSDIuMjQxNTZDMS44ODgxIDEuNjAwMSAxLjYwMTU2IDEuODg2NjQgMS42MDE1NiAyLjI0MDFWNC45NjAxQzEuNjAxNTYgNS4zMTM1NiAxLjg4ODEgNS42MDAxIDIuMjQxNTYgNS42MDAxSDQuOTYxNTZDNS4zMTUwMiA1LjYwMDEgNS42MDE1NiA1LjMxMzU2IDUuNjAxNTYgNC45NjAxVjIuMjQwMUM1LjYwMTU2IDEuODg2NjQgNS4zMTUwMiAxLjYwMDEgNC45NjE1NiAxLjYwMDFaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00Ljk2MTU2IDEwLjM5OTlIMi4yNDE1NkMxLjg4ODEgMTAuMzk5OSAxLjYwMTU2IDEwLjY4NjQgMS42MDE1NiAxMS4wMzk5VjEzLjc1OTlDMS42MDE1NiAxNC4xMTM0IDEuODg4MSAxNC4zOTk5IDIuMjQxNTYgMTQuMzk5OUg0Ljk2MTU2QzUuMzE1MDIgMTQuMzk5OSA1LjYwMTU2IDE0LjExMzQgNS42MDE1NiAxMy43NTk5VjExLjAzOTlDNS42MDE1NiAxMC42ODY0IDUuMzE1MDIgMTAuMzk5OSA0Ljk2MTU2IDEwLjM5OTlaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik0xMy43NTg0IDEuNjAwMUgxMS4wMzg0QzEwLjY4NSAxLjYwMDEgMTAuMzk4NCAxLjg4NjY0IDEwLjM5ODQgMi4yNDAxVjQuOTYwMUMxMC4zOTg0IDUuMzEzNTYgMTAuNjg1IDUuNjAwMSAxMS4wMzg0IDUuNjAwMUgxMy43NTg0QzE0LjExMTkgNS42MDAxIDE0LjM5ODQgNS4zMTM1NiAxNC4zOTg0IDQuOTYwMVYyLjI0MDFDMTQuMzk4NCAxLjg4NjY0IDE0LjExMTkgMS42MDAxIDEzLjc1ODQgMS42MDAxWiIgZmlsbD0iI2ZmZiIvPgo8cGF0aCBkPSJNNCAxMkwxMiA0TDQgMTJaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00IDEyTDEyIDQiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K&logoColor=ffffff)](https://zread.ai/iuin8/doc-record) [![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/iuin8/doc-record)
 
 > 提示：点击上方Zread徽章可跳转到本仓库的 AI 问答页（Zread），支持搜索与提问，快速获取结构化指引。
 > [AI 问答入口(zread)](https://zread.ai/iuin8/doc-record)
@@ -26,62 +26,24 @@
 
 用途：在 Claude Code 中把 Cloudflare AI Search 作为 MCP server 使用，直接搜索已接入该索引的内容。
 
-相关文档：`docs/AI/mcp/modelcontextprotocol/servers/cloudflare-ai-search/doc.md`
+相关文档：`src/content/docs/zh-cn/ai/mcp/modelcontextprotocol/servers/cloudflare-ai-search/doc.md`
 
 ## 安装
 
 ```bash
-npx create-docusaurus@latest doc-record classic
-cd doc-record
 pnpm install
-pnpm start
+pnpm dev
 ```
 
-- 生成侧边栏
-  - [相关文档](./generate_sidebar.md)
-    - 目前使用方法三
+- 侧边栏由 `src/content/docs/zh-cn/` 的目录结构自动推导，无需手动生成
+- 目录结构、语言约定与全部命令见 `CLAUDE.md`
 
-```bash
-# 启动项目
-pnpm start
-```
+## 部署
 
-## github pages
+推送 main 后由 `.github/workflows/ci.yml` 构建并部署到 GitHub Pages，
+自定义域名 `https://doc-record.iuin888vip.icu`。
 
-### 自定义host
-
-[github设置路径](https://github.com/183461750/doc-record/settings/actions/runners/new?arch=arm64&os=osx)
-
-> PS: 以下命令均在项目根目录下操作的(别再根目录操作了, 文件太多, 系统都要卡住了...)
-
-Download
-
-```bash
-# Create a folder
-$ mkdir actions-runner && cd actions-runner
-Copied!# Download the latest runner package
-$ curl -o actions-runner-osx-arm64-2.320.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.320.0/actions-runner-osx-arm64-2.320.0.tar.gz
-Copied! # Optional: Validate the hash
-$ echo "14e2600c07ad76a1c9f6d9e498edf14f1c63f7f7f8d55de0653e450f64caa854  actions-runner-osx-arm64-2.320.0.tar.gz" | shasum -a 256 -c
-Copied! # Extract the installer
-$ tar xzf ./actions-runner-osx-arm64-2.320.0.tar.gz
-```
-
-Configure
-
-```bash
-# Create the runner and start the configuration experience
-$ ./config.sh --url https://github.com/183461750/doc-record --token AJCNPVOFCKIXJHNU4XPGEX3HCO3O4
-Copied!# Last step, run it!
-$ ./run.sh
-```
-
-Using your self-hosted runner
-
-```bash
-# Use this YAML in your workflow file for each job
-runs-on: self-hosted
-```
+站点 URL 由内容目录推导，默认语言带 `/zh-cn/` 前缀。
 
 ## 使用到的vscode插件
 
@@ -92,17 +54,17 @@ runs-on: self-hosted
 ### 内容创作者（人类）
 
 ```bash
-1. 专注在_docs目录编写Markdown
+1. 在 src/content/docs/zh-cn/ 对应分类目录下编写 Markdown
 2. 使用分类文件夹组织文档
-3. 保持Front Matter简洁
+3. Front Matter 保持简洁，title 未声明时由首个一级标题推导
 ```
 
 ### AI开发助手
 
 ```bash
-1. 维护_docs目录结构稳定性
+1. 维护 src/content/docs/zh-cn/ 目录结构的稳定性
 2. 自动优化知识呈现方式
-3. 确保所有文档URL永久可用
+3. 目录结构调整会改变 URL，需同步评估对已收录链接的影响
 ```
 
 ## 备注
@@ -132,13 +94,13 @@ runs-on: self-hosted
 
 ## 使用到的项目
 
-- [docusaurus](https://docusaurus.io/)
+- [Astro](https://astro.build/) — 静态站点生成
+- [Starlight](https://starlight.astro.build/) — 文档主题、导航与搜索
+- [starlight-blog](https://github.com/HiDeoo/starlight-blog) — 博客列表与 RSS
+- [starlight-llms-txt](https://github.com/HiDeoo/starlight-llms-txt) — llms.txt 与分类分卷
+- [Cloudflare AI Search](https://developers.cloudflare.com/ai-search/) — 检索增强问答，配置见 `cloudflare/README.md`
 
 ## TODO
 
-- 接入AI搜索
-  - [官方搜索相关文档](https://docusaurus.io/docs/search)
-  - [参考页面](https://docs.orama.com/cloud/data-sources/native-integrations/docusaurus)
-- 接入AI翻译能力
-  - crowdin.com
-  - https://docusaurus.io/zh-CN/docs/i18n/crowdin
+- 翻译工作流：托管 Weblate 的组件模板字段不接受 glob，暂缓实施，
+  原因与恢复条件见 `adr/2026-09-10-翻译平台迁移至 Weblate.md`

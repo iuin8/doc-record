@@ -1,8 +1,9 @@
 /**
  * 生成文档对应的 Markdown 原文路径。
  *
- * 站点根索引（`src/content/docs/index.md`）在 content collection 中的 id 为空字符串，
- * 直接拼接会得到 `/raw/.md`，因此统一回退为 `index`。
+ * 内容集合的条目 id 即语言前缀加相对路径，站点索引的 id 为语言键本身（`zh-cn`），
+ * 因此可直接拼接。目录迁移前站点索引位于集合根、id 为空串，此处曾需要回退为 `index`；
+ * 现结构下该分支不再触发，保留是为兼容 id 缺失的情形。
  */
 export function rawMarkdownPath(id: string): string {
   return `/raw/${id || 'index'}.md`;
