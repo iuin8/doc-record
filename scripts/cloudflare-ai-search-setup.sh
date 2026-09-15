@@ -21,6 +21,8 @@
 #   INDEX_KEYWORD          是否建立关键词索引，默认 true
 #   INDEX_VECTOR           是否建立向量索引，默认 false（分阶段索引的当前阶段）
 #   KEYWORD_TOKENIZER      关键词分词器，默认 trigram
+#   RETRIEVAL_MATCH_MODE   检索期关键词匹配模式，and | or，默认 or
+#   SCORE_THRESHOLD        相关性下限，0-1，默认 0.2（实例默认 0.4）
 #
 # RECREATE 的适用场景：已入队 URL 列表不会随 `specific_sitemaps` 变更而重置，
 # 站点 URL 结构整体调整后，失效条目会继续占据检索名额，需删除实例后重建。
@@ -50,6 +52,12 @@ REWRITE_QUERY="${REWRITE_QUERY:-false}"
 INDEX_KEYWORD="${INDEX_KEYWORD:-true}"
 INDEX_VECTOR="${INDEX_VECTOR:-false}"
 KEYWORD_TOKENIZER="${KEYWORD_TOKENIZER:-trigram}"
+# 检索侧参数与 cloudflare-ai-search-tune-retrieval.sh 的默认值保持一致：
+# 完整配置写入是整体替换，此处若缺失会被重置回实例默认（and / 0.4）。
+# 取值理由见 adr/2026-09-14-AI-Search-容量限流调优.md §5.6。
+# context_expansion 不在此列：实例级写入会被接口静默丢弃，只能作为单次请求参数传入。
+RETRIEVAL_MATCH_MODE="${RETRIEVAL_MATCH_MODE:-or}"
+SCORE_THRESHOLD="${SCORE_THRESHOLD:-0.2}"
 
 BASE="https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/ai-search"
 AUTH="Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"
@@ -154,6 +162,8 @@ body=$(
   "chunk_overlap": 10,
   "index_method": { "keyword": ${INDEX_KEYWORD}, "vector": ${INDEX_VECTOR} },
   "keyword_tokenizer": "${KEYWORD_TOKENIZER}",
+  "retrieval_options": { "keyword_match_mode": "${RETRIEVAL_MATCH_MODE}" },
+  "score_threshold": ${SCORE_THRESHOLD},
   "max_num_results": 10,
   "reranking": ${RERANKING},
   "rewrite_query": ${REWRITE_QUERY},

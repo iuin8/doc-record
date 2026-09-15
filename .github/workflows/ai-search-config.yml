@@ -11,11 +11,12 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: 'update：更新配置（默认）；recreate：删除实例后重建'
+        description: 'update：更新配置（默认）；tune：只调检索参数；recreate：删除实例后重建'
         required: true
         type: choice
         options:
           - update
+          - tune
           - recreate
         default: update
       confirm:
@@ -23,6 +24,19 @@ on:
         required: false
         type: string
         default: ''
+      keyword_match_mode:
+        description: 'tune 模式：关键词匹配模式'
+        required: false
+        type: choice
+        options:
+          - or
+          - and
+        default: or
+      score_threshold:
+        description: 'tune 模式：相关性下限（0-1，越小召回越宽）'
+        required: false
+        type: string
+        default: '0.2'
 
 permissions:
   contents: read
@@ -48,17 +62,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: 应用配置
+      - name: 应用配置或调整检索参数
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           MODE: ${{ inputs.mode }}
+          KEYWORD_MATCH_MODE: ${{ inputs.keyword_match_mode }}
+          SCORE_THRESHOLD: ${{ inputs.score_threshold }}
         run: |
           if [ -z "${CLOUDFLARE_API_TOKEN}" ]; then
-            echo '::error::未配置 CLOUDFLARE_API_TOKEN，无法应用配置。'
+            echo '::error::未配置 CLOUDFLARE_API_TOKEN，无法执行。'
             exit 1
           fi
-          if [ "${MODE}" = 'recreate' ]; then
-            export RECREATE=true
-          fi
-          chmod +x scripts/cloudflare-ai-search-setup.sh
-          ./scripts/cloudflare-ai-search-setup.sh
+          chmod +x scripts/cloudflare-ai-search-setup.sh scripts/cloudflare-ai-search-tune-retrieval.sh
+          case "${MODE}" in
+            recreate)
+              RECREATE=true ./scripts/cloudflare-ai-search-setup.sh
+              ;;
+            tune)
+              ./scripts/cloudflare-ai-search-tune-retrieval.sh
+              ;;
+            *)
+              ./scripts/cloudflare-ai-search-setup.sh
+              ;;
+          esac
