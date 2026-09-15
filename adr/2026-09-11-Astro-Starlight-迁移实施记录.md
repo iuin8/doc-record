@@ -93,7 +93,7 @@ locales: {
 
 | 事项 | 状态 | 说明 |
 | --- | --- | --- |
-| 博客 URL 变化 | 已处理 | 旧 slug 与大小写差异的路径已在 `astro.config.mjs` 的 `redirects` 中映射，共 11 条 |
+| 旧站 URL 收敛 | 已处理 | 不做逐条兼容映射：`redirects` 仅保留 `/` → `/zh-cn/`（默认语言带前缀后框架不再生成站点根索引）。旧地址交由搜索引擎按 canonical 与新站点地图重新收敛，2026-09-15 移除全部 11 条旧链接映射 |
 | 许可证声明 | 已完成 | `LICENSE` 与 `package.json` 统一为 MIT |
 | CI 验证 | 已通过 | GitHub Actions 构建 1m31s 成功，Pages 状态 `built` |
 | Cloudflare AI Search | 以 llms.txt 替代 | 站内搜索由 Pagefind 承担；面向 AI   改为输出 `llms.txt` 与原文端点，见第十节 |
@@ -103,12 +103,21 @@ locales: {
 | AI 相关能力 | 已完成 | 构建期产出 `llms.txt`，页面提供复制原文与跳转 AI 的入口，见第十节 |
 | 编辑此页链接 | 已修复 | `editLink.baseUrl` 需指向仓库根目录，Starlight 会自行拼接条目的 filePath |
 
+> 2026-09-15 复核：表中「旧站 URL 收敛」一行的 11 条映射已移除，站点不保留旧 URL 兼容层；
+> 「Cloudflare AI Search」一行记录的是迁移当时的状态，此后已改回由 Cloudflare AI Search
+> 提供 `/ask` 语义问答，`llms.txt` 与 `/raw` 原文端点保留，
+> 见 `adr/2026-09-11-面向-AI-的检索方案选型.md`。
+
 ## 七、构建期告警
 
 - 高亮告警已清零。原有 `Dockerfile`、`ssh`、`gradle` 三种围栏语言不在 Shiki 支持范围内，
   分别改为 `dockerfile`、`ssh-config`、`groovy`。后两者为对应语言的通用写法，不依赖框架扩展。
 - 构建期存在 43 条 `Entry docs → zh-Hant/... was not found` 提示。原因为繁体中文译文尚未产生，
   Starlight 按回退策略展示默认语言内容。译文通过 Weblate 回流后该提示自动消失，不属于构建缺陷。
+
+  > 2026-09-15 复核：`locales` 已收敛为仅 `zh-cn`，回退副本不再生成，该类提示已消失。
+  > 当前构建仅剩一条 `[content] Entry docs → 404 was not found.`，出自 Starlight 内置 404 路由
+  > 对 `404` 条目的探测；产物中已生成带站点样式的中文 404 页，无需处理。
 
 ## 八、本地依赖安装的约束
 
