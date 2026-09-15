@@ -81,7 +81,19 @@ fi
 if [ "${RECREATE:-false}" = "true" ] && [ -n "$existing" ]; then
   echo "==> RECREATE=true，删除实例 ${INSTANCE_ID}（含已入队 URL 与向量索引）"
   if api -X DELETE "${BASE}/instances/${INSTANCE_ID}" >/dev/null 2>&1; then
-    echo "    已删除，将重新创建"
+    echo "    已提交删除，等待实例状态收敛后再创建"
+    deleted=false
+    for attempt in $(seq 1 30); do
+      sleep 10
+      if ! api "${BASE}/instances/${INSTANCE_ID}" >/dev/null 2>&1; then
+        echo "    实例已消失（第 ${attempt} 次检查）"
+        deleted=true
+        break
+      fi
+    done
+    if [ "$deleted" != "true" ]; then
+      echo "    删除后实例仍可查询，可能为接口延迟；继续尝试创建" >&2
+    fi
     method=POST
     url="${BASE}/instances"
   else
@@ -94,11 +106,15 @@ fi
 #   /raw/** 与 /_llms-txt/** 是给 AI 直接取用的纯文本副本，与页面内容重复。
 #   站点当前只声明存在译文的语言，未声明的语言不会生成回退副本，无需在此排除。
 #   后续新增语言且译文不全时，需在此补上对应前缀的排除项。
+# source 为爬取源的根地址。API 文档将其标为可选，但创建 web-crawler 实例时
+# 缺少该字段会被拒绝（错误码 7001：source is required for web-crawler instances）。
+# JSON 不支持注释，说明只能写在 heredoc 之外。
 body=$(
   cat <<EOF
 {
   "id": "${INSTANCE_ID}",
   "type": "web-crawler",
+  "source": "${SITE_URL}",
   "source_params": {
     "web_crawler": {
       "parse_type": "sitemap",
@@ -129,22 +145,39 @@ body=$(
 EOF
 )
 
-echo "==> 写入配置"
-if [ "$method" = "PUT" ]; then
-  api -X PUT "$url" -d "$body" >/dev/null
-else
-  api -X POST "$url" -d "$body" >/dev/null
-fi
+echo "==> 写入配置（${method} ${url}）"
+# 不用 curl 的 -f：该选项在 HTTP 错误时丢弃响应体，而 AI Search 的校验细节
+# 只在响应体里给出，看不到就无法判断是哪个字段或取值被拒。
+result="$(
+  curl -sS -H "$AUTH" -H 'Content-Type: application/json' \
+    -X "$method" "$url" -d "$body" -w $'\n%{http_code}'
+)"
+status="$(printf '%s' "$result" | tail -n 1)"
+payload="$(printf '%s' "$result" | sed '$d')"
+
+case "$status" in
+  2*) ;;
+  *)
+    echo "    写入失败，HTTP ${status}，接口返回：" >&2
+    echo "$payload" >&2
+    exit 1
+    ;;
+esac
 
 echo "==> 触发同步任务"
 job="$(api -X POST "${BASE}/instances/${INSTANCE_ID}/jobs" 2>/dev/null || echo '')"
-job_id="$(echo "$job" | json_field result.id)"
+# 新建实例可能已自带一次同步，接口也可能暂时不可用；取不到任务 ID 时继续等待，
+# 交由下面的轮询与 cloudflare-ai-search-sync.sh 观测，不因此中断。
+job_id=""
+if [ -n "$job" ]; then
+  job_id="$(printf '%s' "$job" | json_field result.id || echo '')"
+fi
 echo "    任务 ID：${job_id:-（未返回，可在控制台查看）}"
 
 echo "==> 等待索引完成"
 for attempt in $(seq 1 30); do
   sleep 20
-  status="$(api "${BASE}/instances/${INSTANCE_ID}/jobs" 2>/dev/null |
+  status="$((api "${BASE}/instances/${INSTANCE_ID}/jobs" 2>/dev/null || echo '') |
     python3 -c "
 import sys, json
 try:
