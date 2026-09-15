@@ -117,6 +117,11 @@ INDEX_VECTOR=true ./scripts/cloudflare-ai-search-setup.sh
 是否进入阶段 B 取决于嵌入产能是否宽松，判据为同步脚本输出的失败分类中
 容量类错误是否归零。
 
+**分词器字段位置**：`keyword_tokenizer` 必须写在 `indexing_options` 内。
+置于顶层时接口返回 2xx 但静默丢弃，实例回读始终为 `porter`。
+porter 是英文词级分词，对无空格的中文基本无效，表现为英文与标识符可命中、
+纯中文查询全部落空。详见 `adr/2026-09-14-AI-Search-容量限流调优.md` §6.3。
+
 ### 3.4 检索侧参数
 
 `retrieval_options.keyword_match_mode` 与 `score_threshold` 只影响查询期行为，
