@@ -13,12 +13,21 @@ const chatGptUrl = `https://chatgpt.com/?q=${encodeURIComponent(prompt)}`;
 const claudeUrl = `https://claude.ai/new?q=${encodeURIComponent(prompt)}`;
 
 /**
- * NLWeb 的 /ask 接口地址。
- * 自建实例时可用 PUBLIC_NLWEB_ASK_URL 覆盖，无需改动代码。
+ * 问答链路有两套，取决于是否配置了自建生成端。
+ *
+ * 配置 PUBLIC_AI_ANSWER_URL 时走「浏览器端 Pagefind 召回 + 自建生成端」：
+ * Pagefind 索引在构建期生成，中文分词可用，召回在客户端完成且不消耗
+ * Workers AI 额度，生成端只负责依据片段作答。
+ *
+ * 未配置时回退到 NLWeb 的 /ask：英文与标识符可用，含中文的查询会被
+ * NLWeb 侧过滤，见 adr/2026-09-14-AI-Search-容量限流调优.md §6.3。
  */
-const askEndpoint =
+const answerEndpoint = import.meta.env.PUBLIC_AI_ANSWER_URL ?? '';
+const nlwebEndpoint =
   import.meta.env.PUBLIC_NLWEB_ASK_URL ??
   'https://bold-union-4896-nlweb.iuinin666.workers.dev/ask';
+const useLocalRecall = Boolean(answerEndpoint);
+const askEndpoint = useLocalRecall ? answerEndpoint : nlwebEndpoint;
 ---
 
 <div class="ai-block">
@@ -48,6 +57,7 @@ const askEndpoint =
     class="ai-ask"
     hidden
     data-endpoint={askEndpoint}
+    data-recall={String(useLocalRecall)}
     data-pending={t('aiActions.askPending')}
     data-empty={t('aiActions.askEmpty')}
     data-failed={t('aiActions.askFailed')}
@@ -81,6 +91,25 @@ const askEndpoint =
     answer?: string;
   }
 
+  /** 交给生成端的片段。URL 需为绝对地址，生成端据此校验片段归属。 */
+  interface AnswerContext {
+    url: string;
+    title: string;
+    text: string;
+  }
+
+  interface PagefindResultData {
+    url: string;
+    content: string;
+    excerpt: string;
+    meta?: { title?: string };
+  }
+
+  interface PagefindModule {
+    init(): Promise<void>;
+    search(query: string): Promise<{ results: { data(): Promise<PagefindResultData> }[] }>;
+  }
+
   /** 把 SSE 文本流切成完整的 `data:` 事件载荷。 */
   function parseEvents(chunk: string): AskMessage[] {
     const messages: AskMessage[] = [];
@@ -99,37 +128,136 @@ const askEndpoint =
     return messages;
   }
 
-  function renderResult(container: HTMLElement, label: string, items: AskResult[]) {
-    container.replaceChildren();
+  function stripMarkup(text: string): string {
+    return text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  }
 
-    if (items.length === 0) {
-      container.textContent = container.parentElement?.dataset.empty ?? '';
+  function buildSources(label: string, items: AskResult[]): DocumentFragment {
+    const fragment = document.createDocumentFragment();
+
+    if (items.length > 0) {
+      const heading = document.createElement('p');
+      heading.className = 'ai-ask-sources';
+      heading.textContent = label;
+      fragment.append(heading);
+
+      const list = document.createElement('ol');
+      for (const item of items) {
+        if (!item.url) continue;
+        const entry = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = item.url;
+        link.textContent = item.name ?? item.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        entry.append(link);
+        if (item.description) {
+          const text = document.createElement('p');
+          text.textContent = item.description;
+          entry.append(text);
+        }
+        list.append(entry);
+      }
+      fragment.append(list);
+    }
+
+    return fragment;
+  }
+
+  /**
+   * 浏览器端召回。Pagefind 索引由构建期生成，中文分词可用；
+   * `astro dev` 下没有该产物，调用会失败并由调用方回退或提示。
+   */
+  async function localRecall(query: string, limit = 6) {
+    const modulePath = '/pagefind/pagefind.js';
+    const pagefind = (await import(/* @vite-ignore */ modulePath)) as unknown as PagefindModule;
+    await pagefind.init();
+    const search = await pagefind.search(query);
+    const picked = await Promise.all(search.results.slice(0, limit).map((result) => result.data()));
+
+    const hits: AskResult[] = [];
+    const contexts: AnswerContext[] = [];
+    for (const item of picked) {
+      const url = new URL(item.url, window.location.origin).href;
+      const title = item.meta?.title ?? item.url;
+      hits.push({ url, name: title, description: stripMarkup(item.excerpt ?? '') });
+      contexts.push({ url, title, text: stripMarkup(item.content ?? '') });
+    }
+    return { hits, contexts };
+  }
+
+  /** 逐段读取 SSE，把解析出的消息交给调用方。 */
+  async function readStream(response: Response, onMessage: (message: AskMessage) => void) {
+    if (!response.body) throw new Error('empty body');
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const boundary = buffer.lastIndexOf('\n\n');
+      if (boundary === -1) continue;
+      const complete = buffer.slice(0, boundary + 2);
+      buffer = buffer.slice(boundary + 2);
+      for (const message of parseEvents(complete)) onMessage(message);
+    }
+  }
+
+  /** 本地召回 + 自建生成端：中文查询可用。 */
+  async function askWithLocalRecall(panel: HTMLElement, output: HTMLElement, query: string) {
+    const { hits, contexts } = await localRecall(query);
+
+    if (hits.length === 0) {
+      output.textContent = panel.dataset.empty ?? '';
       return;
     }
 
-    const heading = document.createElement('p');
-    heading.className = 'ai-ask-sources';
-    heading.textContent = label;
-    container.append(heading);
+    output.replaceChildren();
+    const answer = document.createElement('p');
+    answer.className = 'ai-ask-answer';
+    output.append(answer);
+    output.append(buildSources(panel.dataset.sources ?? '', hits));
 
-    const list = document.createElement('ol');
-    for (const item of items) {
-      if (!item.url) continue;
-      const entry = document.createElement('li');
-      const link = document.createElement('a');
-      link.href = item.url;
-      link.textContent = item.name ?? item.url;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      entry.append(link);
-      if (item.description) {
-        const text = document.createElement('p');
-        text.textContent = item.description;
-        entry.append(text);
-      }
-      list.append(entry);
-    }
-    container.append(list);
+    const response = await fetch(panel.dataset.endpoint ?? '', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, contexts }),
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    await readStream(response, (message) => {
+      const text = message.answer ?? message.content;
+      if (typeof text === 'string' && text) answer.textContent += text;
+    });
+
+    if (!answer.textContent) answer.textContent = panel.dataset.empty ?? '';
+  }
+
+  /** 回退路径：NLWeb 自行检索并生成，中文查询会被其过滤。 */
+  async function askNlweb(panel: HTMLElement, output: HTMLElement, query: string) {
+    const collected: AskResult[] = [];
+    const notes: string[] = [];
+
+    const response = await fetch(panel.dataset.endpoint ?? '', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, mode: 'generate', site: 'all' }),
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    await readStream(response, (message) => {
+      if (message.results) collected.push(...message.results);
+      const text = message.answer ?? message.content;
+      if (typeof text === 'string' && text) notes.push(text);
+    });
+
+    output.replaceChildren();
+    const answer = document.createElement('p');
+    answer.textContent = notes.join(' ');
+    output.append(answer);
+    output.append(buildSources(panel.dataset.sources ?? '', collected));
   }
 
   const blocks = document.querySelectorAll<HTMLElement>('.ai-block');
@@ -173,46 +301,15 @@ const askEndpoint =
       if (!query) return;
 
       output.textContent = panel.dataset.pending ?? '';
-      const collected: AskResult[] = [];
-      const notes: string[] = [];
 
       try {
-        const response = await fetch(panel.dataset.endpoint ?? '', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query, mode: 'generate', site: 'all' }),
-        });
-        if (!response.ok || !response.body) throw new Error(`HTTP ${response.status}`);
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = '';
-
-        for (;;) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
-          const boundary = buffer.lastIndexOf('\n\n');
-          if (boundary === -1) continue;
-          const complete = buffer.slice(0, boundary + 2);
-          buffer = buffer.slice(boundary + 2);
-
-          for (const message of parseEvents(complete)) {
-            if (message.results) collected.push(...message.results);
-            const text = message.answer ?? message.content;
-            if (typeof text === 'string' && text) notes.push(text);
-          }
+        if (panel.dataset.recall === 'true') {
+          await askWithLocalRecall(panel, output, query);
+        } else {
+          await askNlweb(panel, output, query);
         }
       } catch {
         output.textContent = panel.dataset.failed ?? '';
-        return;
-      }
-
-      renderResult(output, panel.dataset.sources ?? '', collected);
-      if (notes.length > 0) {
-        const paragraph = document.createElement('p');
-        paragraph.textContent = notes.join(' ');
-        output.prepend(paragraph);
       }
     });
   });
@@ -312,6 +409,11 @@ const askEndpoint =
   .ai-ask-result :global(p) {
     margin: 0.25rem 0 0;
     color: var(--sl-color-gray-3);
+  }
+
+  .ai-ask-answer {
+    margin: 0 0 0.75rem;
+    white-space: pre-wrap;
   }
 
   .ai-ask-sources {
