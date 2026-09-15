@@ -161,7 +161,7 @@ body=$(
   "chunk_size": 1024,
   "chunk_overlap": 10,
   "index_method": { "keyword": ${INDEX_KEYWORD}, "vector": ${INDEX_VECTOR} },
-  "keyword_tokenizer": "${KEYWORD_TOKENIZER}",
+  "indexing_options": { "keyword_tokenizer": "${KEYWORD_TOKENIZER}" },
   "retrieval_options": { "keyword_match_mode": "${RETRIEVAL_MATCH_MODE}" },
   "score_threshold": ${SCORE_THRESHOLD},
   "max_num_results": 10,
@@ -190,6 +190,27 @@ case "$status" in
     exit 1
     ;;
 esac
+
+# keyword_tokenizer 位于 indexing_options 内：置于顶层时接口返回 2xx 但不落库
+# （回读仍为默认的 porter）。porter 是英文词级分词，对无空格的中文基本无效，
+# 表现为英文与标识符可命中、纯中文查询全部落空。
+# retrieval_options 同理，只接受 keyword_match_mode，不接受 context_expansion。
+# 写入后回读确认，避免字段再次被静默丢弃。
+echo "==> 回读确认"
+curl -fsS "${BASE}/instances/${INSTANCE_ID}" -H "$AUTH" 2>/dev/null | python3 -c '
+import sys, json
+try:
+    d = json.load(sys.stdin)["result"]
+except Exception:
+    print("    （回读失败，请在控制台确认）")
+    sys.exit(0)
+io = d.get("indexing_options") or {}
+ro = d.get("retrieval_options") or {}
+print("    index_method:      ", d.get("index_method"))
+print("    keyword_tokenizer: ", io.get("keyword_tokenizer", "（未设置，回退为 porter）"))
+print("    keyword_match_mode:", ro.get("keyword_match_mode", "（未设置，回退为 and）"))
+print("    score_threshold:   ", d.get("score_threshold", "（未设置，回退为 0.4）"))
+' || true
 
 echo "==> 触发同步任务"
 job="$(api -X POST "${BASE}/instances/${INSTANCE_ID}/jobs" 2>/dev/null || echo '')"

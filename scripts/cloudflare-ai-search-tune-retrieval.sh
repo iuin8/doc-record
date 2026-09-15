@@ -51,6 +51,9 @@ print("    keyword_match_mode:", ro.get("keyword_match_mode", "（未设置，�
 print("    score_threshold:   ", d.get("score_threshold", "（未设置，回退为 0.4）"))
 print("    index_method:      ", d.get("index_method"))
 print("    retrieval_options: ", json.dumps(ro, ensure_ascii=False))
+# keyword_tokenizer 位于 indexing_options 内；置于顶层时接口返回 2xx 但不落库，
+# 打印实际取值可确认当前生效的分词器。
+print("    indexing_options:  ", json.dumps(d.get("indexing_options"), ensure_ascii=False))
 '
 
 echo
