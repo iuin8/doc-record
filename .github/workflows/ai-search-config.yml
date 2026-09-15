@@ -1,0 +1,64 @@
+name: AI Search Config
+
+# 应用 AI Search 实例配置，默认走更新（PUT），适用于模型、分块、索引方式、
+# 排除项等不影响 URL 集合的调整。
+#
+# 已入队 URL 列表不会随 `specific_sitemaps` 变更而重置，仅仅更新配置无法清除
+# 失效条目。站点 URL 结构整体调整后需要删除实例并重建（mode=recreate），
+# 重建会从新的站点地图重新入队，代价是索引需重新生成（约 367 篇文档）。
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'update：更新配置（默认）；recreate：删除实例后重建'
+        required: true
+        type: choice
+        options:
+          - update
+          - recreate
+        default: update
+      confirm:
+        description: 'recreate 模式下需输入实例名以确认（bold-union-4896）'
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ai-search-config
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 校验确认输入
+        env:
+          MODE: ${{ inputs.mode }}
+          CONFIRM: ${{ inputs.confirm }}
+        run: |
+          if [ "${MODE}" = 'recreate' ] && [ "${CONFIRM}" != 'bold-union-4896' ]; then
+            echo '::error::recreate 模式需要输入实例名 bold-union-4896 作为确认，终止执行。'
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: 应用配置
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          MODE: ${{ inputs.mode }}
+        run: |
+          if [ -z "${CLOUDFLARE_API_TOKEN}" ]; then
+            echo '::error::未配置 CLOUDFLARE_API_TOKEN，无法应用配置。'
+            exit 1
+          fi
+          if [ "${MODE}" = 'recreate' ]; then
+            export RECREATE=true
+          fi
+          chmod +x scripts/cloudflare-ai-search-setup.sh
+          ./scripts/cloudflare-ai-search-setup.sh

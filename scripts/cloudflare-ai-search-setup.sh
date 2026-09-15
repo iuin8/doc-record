@@ -18,10 +18,19 @@
 #   REWRITE_QUERY          是否启用查询改写，默认 false（同上）
 #   EMBEDDING_MODEL        向量模型
 #   AI_SEARCH_MODEL        生成模型
+#   INDEX_KEYWORD          是否建立关键词索引，默认 true
+#   INDEX_VECTOR           是否建立向量索引，默认 false（分阶段索引的当前阶段）
+#   KEYWORD_TOKENIZER      关键词分词器，默认 trigram
 #
 # RECREATE 的适用场景：已入队 URL 列表不会随 `specific_sitemaps` 变更而重置，
 # 站点 URL 结构整体调整后，失效条目会继续占据检索名额，需删除实例后重建。
 # 更新配置（默认行为）适用于模型、分块、排除项等不影响 URL 集合的调整。
+#
+# 分阶段索引：向量索引依赖 Workers AI 的嵌入产能，免费层在高峰期持续返回
+# 错误码 3040（out of capacity），实测多次全量同步的完成率长期为 0。
+# 关键词索引构建 BM25 倒排表，不经过嵌入模型，因此先以关键词单路建立全量覆盖；
+# 待产能宽松后，再用 INDEX_VECTOR=true 切换到双路，由增量补齐向量。
+# 切换 index_method 会触发全量重索引，两个阶段的切换都会重建一次索引。
 
 set -euo pipefail
 
@@ -37,6 +46,10 @@ EMBEDDING_MODEL="${EMBEDDING_MODEL:-@cf/qwen/qwen3-embedding-0.6b}"
 AI_SEARCH_MODEL="${AI_SEARCH_MODEL:-@cf/qwen/qwen3-30b-a3b-fp8}"
 RERANKING="${RERANKING:-false}"
 REWRITE_QUERY="${REWRITE_QUERY:-false}"
+# 关键词单路为分阶段索引的当前阶段，见文件头的分阶段说明。
+INDEX_KEYWORD="${INDEX_KEYWORD:-true}"
+INDEX_VECTOR="${INDEX_VECTOR:-false}"
+KEYWORD_TOKENIZER="${KEYWORD_TOKENIZER:-trigram}"
 
 BASE="https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/ai-search"
 AUTH="Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"
@@ -108,6 +121,9 @@ fi
 #   后续新增语言且译文不全时，需在此补上对应前缀的排除项。
 # source 为爬取源的根地址。API 文档将其标为可选，但创建 web-crawler 实例时
 # 缺少该字段会被拒绝（错误码 7001：source is required for web-crawler instances）。
+# keyword_tokenizer 取 trigram 而非默认的 porter：porter 是词级分词加 Porter 词干提取，
+# 面向英文自然语言；本站内容为中文技术文档，含大量命令、配置项、报错串与标识符，
+# 字符级子串匹配对此类字面串更直接。
 # JSON 不支持注释，说明只能写在 heredoc 之外。
 body=$(
   cat <<EOF
@@ -136,7 +152,8 @@ body=$(
   "chunk": true,
   "chunk_size": 1024,
   "chunk_overlap": 10,
-  "index_method": { "keyword": true, "vector": true },
+  "index_method": { "keyword": ${INDEX_KEYWORD}, "vector": ${INDEX_VECTOR} },
+  "keyword_tokenizer": "${KEYWORD_TOKENIZER}",
   "max_num_results": 10,
   "reranking": ${RERANKING},
   "rewrite_query": ${REWRITE_QUERY},

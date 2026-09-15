@@ -37,6 +37,8 @@ SITEMAP_URL="${SITEMAP_URL:-https://doc-record.iuin888vip.icu/sitemap-ai.xml}"
 # 1.66 取自 dist/raw 下 367 篇原文的实测估算：合计 493,614 字符，
 # 按 chunk_size 1024 / overlap 10% 切分约得 611 块。
 # 内容规模或分块参数变更后需要重算该系数。
+# 关键词单路（index_method.vector=false）下不产生向量，覆盖率以「完成」条目数
+# 占站点地图条目数的比例为准，向量数仅作参考输出。
 AVG_CHUNKS_PER_DOC="${AVG_CHUNKS_PER_DOC:-1.66}"
 
 BASE="https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/ai-search/instances/${INSTANCE_ID}"
@@ -83,10 +85,16 @@ print("    失败:   ", data.get("error"))
 print("    向量数: ", vectors)
 
 docs = int(os.environ.get("EXPECTED_DOCS") or 0)
+completed = data.get("completed") or 0
 if docs > 0:
+    print(f"    文档覆盖: {completed / docs:.1%}（完成 {completed} / 站点地图 {docs}）")
     avg = float(os.environ.get("AVG_CHUNKS") or 0)
-    total = docs * avg
-    print(f"    覆盖率:   {vectors / total:.1%}（对照 {docs} 篇，按每篇 {avg} 块估算 {total:.0f} 块）")
+    if avg > 0:
+        total = docs * avg
+        print(
+            f"    向量覆盖: {vectors / total:.1%}（{vectors} / 估算 {total:.0f} 块，"
+            f"按每篇 {avg} 块；关键词单路时恒为 0）"
+        )
 else:
     print("    覆盖率:   （站点地图不可达，已跳过估算）")
 
@@ -104,6 +112,8 @@ if capacity and not other:
     print("    瓶颈在 Workers AI 嵌入侧瞬时容量，与当日额度无关。")
     print("    适用手段：错峰多轮、切换索引关键词单路、提升容量优先级。")
     print("    参见 adr/2026-09-14-AI-Search-容量限流调优.md §5。")
+    print("    若实例已切到关键词单路仍有此类失败，则瓶颈在 toMarkdown 转换环节，")
+    print("    需改为 R2 直喂 Markdown（同文档 §5.3）。")
 elif other:
     print("    存在未分类错误，需要先确认其性质再决定处置方式。")
 else:

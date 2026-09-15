@@ -12,8 +12,9 @@
 | NLWeb Worker | `bold-union-4896-nlweb`，对外地址 `https://bold-union-4896-nlweb.iuinin666.workers.dev/` |
 | AI Search 实例 | `bold-union-4896`（由 NLWeb 的 `RAG_ID` 绑定决定，改名需同步改绑定） |
 
-NLWeb 自带聊天界面、`/ask` 接口与 MCP 支持，实例已在线且**索引部分建成**，
-未完成全量覆盖的原因与调优方向见 `adr/2026-09-14-AI-Search-容量限流调优.md`。
+NLWeb 自带聊天界面、`/ask` 接口与 MCP 支持，实例已在线。索引方式于 2026-09-15 切换为
+关键词单路，原因与分阶段安排见 §3.3，容量限制的归因见 §4 与
+`adr/2026-09-14-AI-Search-容量限流调优.md`。
 
 ## 2. 创建 API 令牌
 
@@ -47,7 +48,7 @@ export CLOUDFLARE_API_TOKEN=xxxx
 | URL 发现 | `parse_type: sitemap` + `sitemap-ai.xml` | 仅含根语言页面，避免回退副本成倍重复 |
 | 向量模型 | `@cf/qwen/qwen3-embedding-0.6b` | 轻量多语言模型，索引成本低 |
 | 生成模型 | `@cf/qwen/qwen3-30b-a3b-fp8` | 中文表现较好，可用环境变量覆盖 |
-| 索引方式 | 关键词 + 向量双路 | 混合检索对技术文档中的命令与配置名更友好 |
+| 索引方式 | 关键词单路 + `trigram` 分词 | 向量索引受 Workers AI 嵌入产能限制，先以关键词建立全量覆盖，见 §3.3 |
 | 分块 | 1024 token，重叠 10% | `chunk_size` 以 token 计，下限 64；`chunk_overlap` 为百分比，取值 0–30 |
 | 同步间隔 | 21600 秒 | 与 GitHub Pages 的发布节奏匹配 |
 
@@ -81,15 +82,40 @@ export CLOUDFLARE_API_TOKEN=xxxx
 export CLOUDFLARE_API_TOKEN=xxxx
 RECREATE=true ./scripts/cloudflare-ai-search-setup.sh
 
-# 或在 GitHub Actions 手动触发 AI Search Recreate 工作流，
-# 需输入实例名 bold-union-4896 作为确认
+# 或在 GitHub Actions 手动触发 AI Search Config 工作流，
+# mode 选 recreate，并输入实例名 bold-union-4896 作为确认
 ```
 
-脚本默认行为是更新配置（PUT），适用于模型、分块、排除项等不影响 URL 集合的调整；
-`RECREATE=true` 会先删除实例（含已入队 URL 与向量索引）再重新创建。
+脚本默认行为是更新配置（PUT），适用于模型、分块、索引方式、排除项等不影响
+URL 集合的调整；`RECREATE=true` 会先删除实例（含已入队 URL 与向量索引）再重新创建。
 
 站点 URL 整体增加 `/zh-cn/` 前缀后，索引中的旧地址已全部失效且不再有跳转，
 重建前检索结果会包含这些失效条目。重建时机应在新版本部署完成之后。
+
+### 3.3 分阶段索引：先关键词，后向量
+
+向量索引依赖 Workers AI 的嵌入产能。免费层在高峰期的容量限制（错误码 3040）使
+全量同步的完成率长期为 0：2026-09-15 03:05 UTC 的一次同步中，队列 207、
+失败 160，其中 159 条为容量不足，向量数为 0。
+
+关键词索引构建 BM25 倒排表，不经过嵌入模型，因此不受该限制约束。索引分两个阶段：
+
+| 阶段 | `index_method` | `keyword_tokenizer` | 目标 | 检索能力 |
+| --- | --- | --- | --- | --- |
+| A（当前） | `{keyword: true, vector: false}` | `trigram` | 全站覆盖 | 关键词与子串匹配，无语义召回 |
+| B | `{keyword: true, vector: true}` | `trigram` | 增量补齐向量 | 关键词与语义混合检索 |
+
+切换方式（脚本已提供对应环境变量，切换会触发一次全量重索引）：
+
+```bash
+# 阶段 B：在关键词索引之上补入向量
+export CLOUDFLARE_API_TOKEN=xxxx
+INDEX_VECTOR=true ./scripts/cloudflare-ai-search-setup.sh
+```
+
+阶段 A 的代价是失去语义召回：「容器怎么固定 IP」这类不出现关键词的问法仍会落空。
+是否进入阶段 B 取决于嵌入产能是否宽松，判据为同步脚本输出的失败分类中
+容量类错误是否归零。
 
 ## 4. 额度与容量说明
 
@@ -141,8 +167,9 @@ AI Search 侧报告的 `workers_ai_out_of_capacity_error` 对应 **3040**（瞬�
 - 触发时机对 3040 的作用不在「是否在额度重置之后」，而在「是否避开免费层的嵌入高峰」；
   推荐改为每日多轮、间隔均匀的小批量轮次，见
   `adr/2026-09-14-AI-Search-容量限流调优.md` §5.4；
-- 索引策略建议按产能分阶段：先以关键词单路建立全量覆盖，条件具备后再补齐向量，
-  详见同一文档 §5.1；
+- 索引策略已按产能分阶段执行：2026-09-15 起 `index_method` 为关键词单路
+  （`keyword: true, vector: false`），先建立全量覆盖；条件具备后再补齐向量，
+  步骤见 §3.3，决策过程见 `adr/2026-09-14-AI-Search-容量限流调优.md` §5.1；
 - 实例的 `sync_interval` 与外部工作流职责需要分离，避免同一批文件被两套机制反复重排；
 - 避免重复索引仍属必要：内容源只用 `sitemap-ai.xml`，且不要频繁手动触发同步；
 - 仓库需要在 Settings → Secrets 中配置 `CLOUDFLARE_API_TOKEN`，
