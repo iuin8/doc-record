@@ -26,6 +26,18 @@ AI Search 的接口要求令牌具备 **AI Search:Edit** 与 **AI Search:Run** �
 3. Permissions 中添加两项：
    - Account > **AI Search** > Edit
    - Account > **AI Search** > Run
+
+部署问答生成端（§5）还需要另外三项：
+
+   - Account > **Workers Scripts** > Edit
+   - Account > **Account Settings** > Read
+   - User > **Memberships** > Read
+
+缺少 Workers Scripts 权限时 `wrangler deploy` 报
+`A request to the Cloudflare API (.../workers/services/...) failed` 与
+`Authentication error [code: 10000]`；缺少 Memberships 权限时会提示
+`Unable to get membership roles`。
+
 4. 其余权限保持默认（不需要 Zone 权限即可完成索引配置）；
 5. 创建后复制令牌值。
 
@@ -212,6 +224,53 @@ AI Search 侧报告的 `workers_ai_out_of_capacity_error` 对应 **3040**（瞬�
 索引验证通过后，在页面 AI 操作区增加一个「AI 问答」入口，
 跳转到 NLWeb 聊天界面并预填当前页地址作为上下文。
 该入口沿用现有 i18n 文案机制，需同步补充四种语言的文案。
+
+### 5.1 问答的两条链路
+
+| 链路 | 召回位置 | 中文 | 说明 |
+| --- | --- | --- | --- |
+| 自建生成端（`cloudflare/ai-answer`） | 浏览器端 Pagefind | 可用 | 配置 `PUBLIC_AI_ANSWER_URL` 后启用，当前推荐 |
+| NLWeb `/ask` | AI Search 关键词索引 | 不可用 | 未配置生成端时的回退 |
+
+自建链路的分工：**召回在浏览器端完成，Worker 只做生成**。原因是 AI Search 的
+关键词索引对中文不分词（trigram 同样无效），纯中文查询召回恒为 0；
+NLWeb 的 `/ask` 还会在检索层有结果时把含中文的查询过滤为空，见
+`adr/2026-09-14-AI-Search-容量限流调优.md` §6.3。
+
+站点构建产物中的 Pagefind 索引中文分词可用，实测同一查询的召回数：
+
+| 查询 | Pagefind（浏览器端） | AI Search 检索接口 |
+| --- | --- | --- |
+| `持久化` | 4 | 0 |
+| `集群部署` | 16 | 0 |
+
+流程：页面 `import('/pagefind/pagefind.js')` 取回 top-K 片段 → 连同问题
+提交给生成端 → 生成端用 Workers AI 作答并流式返回，页面渲染答案与来源链接。
+
+成本：召回读静态文件，不消耗 Workers AI 额度；生成每次约 60 Neurons，
+在每日 10,000 Neurons 的免费额度内。Workers Free 计划含 100,000 请求/日，
+单账户可部署 100 个 Worker，均无需付费。
+
+### 5.2 部署生成端
+
+```bash
+cd cloudflare/ai-answer
+export CLOUDFLARE_API_TOKEN=xxxx
+npx wrangler deploy
+```
+
+推送 main 且 `cloudflare/ai-answer/**` 变更时，
+`deploy-ai-answer.yml` 会自动部署（凭据为仓库密钥 `CLOUDFLARE_API_TOKEN`）。
+
+部署成功后把端点地址（形如 `https://doc-record-ai-answer.iuinin666.workers.dev`）
+配置为构建期环境变量 `PUBLIC_AI_ANSWER_URL`，页面即切换到本地召回链路。
+
+### 5.3 生成端的防护
+
+- 仅接受来自 `ALLOWED_ORIGIN` 的跨域请求，预检请求独立处理；
+- 限制请求体大小、片段数量（6）与单片段长度（1500 字符），控制 prompt 规模；
+- 片段 URL 必须以站点域名开头，避免被当作通用生成代理；
+- 未携带有效片段时返回 400，不进入生成阶段。
 
 ## 6. Weblate 与 Cloudflare 的分工
 
