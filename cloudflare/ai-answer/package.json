@@ -1,0 +1,13 @@
+{
+  "name": "doc-record-ai-answer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "站点问答的生成端：接收前端召回的片段，调用 Workers AI 生成带来源标注的答案",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

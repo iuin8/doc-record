@@ -1,0 +1,16 @@
+name = "doc-record-ai-answer"
+main = "src/index.js"
+compatibility_date = "2026-09-15"
+
+# Workers AI 绑定：生成阶段使用该绑定，检索由浏览器端的 Pagefind 完成。
+[ai]
+binding = "AI"
+
+[vars]
+# 允许调用该端点的站点来源。设为 "*" 表示不限制，仅调试时使用。
+ALLOWED_ORIGIN = "https://doc-record.iuin888vip.icu"
+GENERATION_MODEL = "@cf/qwen/qwen3-30b-a3b-fp8"
+
+# 观察性：日志自动进入 Cloudflare 的 Workers Logs。
+[observability]
+enabled = true

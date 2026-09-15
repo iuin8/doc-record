@@ -1,0 +1,45 @@
+name: Deploy AI Answer Worker
+
+# 站点问答的生成端。召回在浏览器端由 Pagefind 完成，此 Worker 只负责生成，
+# 因此部署的是无状态代码，变更即发布。
+#
+# 凭据使用仓库密钥 CLOUDFLARE_API_TOKEN（与 AI Search 系列工作流共用），
+# 未配置时跳过而不失败，与既有约定一致。
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'cloudflare/ai-answer/**'
+      - '.github/workflows/deploy-ai-answer.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-ai-answer
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - name: Deploy Worker
+        working-directory: cloudflare/ai-answer
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "${CLOUDFLARE_API_TOKEN}" ]; then
+            echo "::warning::未配置 CLOUDFLARE_API_TOKEN，跳过部署。"
+            exit 0
+          fi
+          npx --yes wrangler@4 deploy
