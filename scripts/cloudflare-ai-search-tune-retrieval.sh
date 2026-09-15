@@ -51,8 +51,9 @@ d = json.load(sys.stdin)["result"]
 ro = d.get("retrieval_options") or {}
 print("    keyword_match_mode:", ro.get("keyword_match_mode", "（未设置，回退为 and）"))
 print("    score_threshold:   ", d.get("score_threshold", "（未设置，回退为 0.4）"))
-print("    context_expansion: ", d.get("context_expansion", "（未设置，回退为 0）"))
+print("    context_expansion: ", ro.get("context_expansion", d.get("context_expansion", "（未设置，回退为 0）")))
 print("    index_method:      ", d.get("index_method"))
+print("    retrieval_options: ", json.dumps(ro, ensure_ascii=False))
 '
 
 echo
@@ -69,12 +70,16 @@ if [ "$DRY_RUN" = "1" ]; then
   exit 0
 fi
 
+# context_expansion 位于 retrieval_options 内：置于顶层时接口返回 2xx 但不落库
+# （回读为 None），与 score_threshold 的顶层位置不同。
 body=$(
   cat <<EOF
 {
-  "retrieval_options": { "keyword_match_mode": "${KEYWORD_MATCH_MODE}" },
-  "score_threshold": ${SCORE_THRESHOLD},
-  "context_expansion": ${CONTEXT_EXPANSION}
+  "retrieval_options": {
+    "keyword_match_mode": "${KEYWORD_MATCH_MODE}",
+    "context_expansion": ${CONTEXT_EXPANSION}
+  },
+  "score_threshold": ${SCORE_THRESHOLD}
 }
 EOF
 )
@@ -91,7 +96,8 @@ d = json.load(sys.stdin)["result"]
 ro = d.get("retrieval_options") or {}
 print("    keyword_match_mode:", ro.get("keyword_match_mode"))
 print("    score_threshold:   ", d.get("score_threshold"))
-print("    context_expansion: ", d.get("context_expansion"))
+print("    context_expansion: ", ro.get("context_expansion", d.get("context_expansion")))
+print("    retrieval_options: ", json.dumps(ro, ensure_ascii=False))
 '
 
 echo
