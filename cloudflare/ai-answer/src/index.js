@@ -29,7 +29,8 @@ const SYSTEM_PROMPT = [
   '你是 Doc Record 技术文档站点的问答助手。',
   '只依据提供的片段回答问题，不要引入片段之外的信息。',
   '回答使用简体中文，保持简洁，优先给出结论与关键命令或配置项。',
-  '每个结论后在句末标注来源编号，形如 [1]；多个来源可并列，形如 [1][2]。',
+  '每个结论后在句末标注来源编号，编号取自片段开头的 [n] 标记，必须写出具体数字，形如 [1]；'
+    + '不得输出空的 []。多个来源并列形如 [1][2]。',
   '若片段中没有能够支撑答案的内容，直接回答“未在文档中找到相关内容”，不要编造。',
 ].join('');
 
@@ -88,6 +89,8 @@ function toAnswerStream(upstream) {
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
   let buffer = '';
+  // 上游首个分片常带换行等前导空白，直接透传会让答案开头出现空行。
+  let started = false;
 
   return upstream.pipeThrough(
     new TransformStream({
@@ -109,7 +112,10 @@ function toAnswerStream(upstream) {
             continue;
           }
           if (typeof text === 'string' && text) {
-            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content: text })}\n\n`));
+            const outgoing = started ? text : text.replace(/^\s+/, '');
+            if (!outgoing) continue;
+            started = true;
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content: outgoing })}\n\n`));
           }
         }
       },
