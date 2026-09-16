@@ -29,9 +29,10 @@ const SYSTEM_PROMPT = [
   '你是 Doc Record 技术文档站点的问答助手。',
   '只依据提供的片段回答问题，不要引入片段之外的信息。',
   '回答使用简体中文，保持简洁，优先给出结论与关键命令或配置项。',
-  '每个结论后在句末标注来源编号，编号取自片段开头的 [n] 标记，必须写出具体数字，形如 [1]；'
-    + '不得输出空的 []。多个来源并列形如 [1][2]。',
+  '每个结论后在句末标注来源编号，编号取自片段开头的 [n] 标记，'
+    + '写成方括号加数字的形式，例如 [1]；多个来源并列写作 [1][2]。',
   '若片段中没有能够支撑答案的内容，直接回答“未在文档中找到相关内容”，不要编造。',
+  '输出示例：Redis 支持 RDB 与 AOF 两种持久化方式 [1][2]。',
 ].join('');
 
 /** 汇总 CORS 响应头，预检请求直接复用。 */
@@ -75,7 +76,9 @@ function buildPrompt(query, contexts) {
     .map((item, index) => {
       const title = normalize(item.title) || item.url;
       const body = normalize(item.text).slice(0, MAX_CONTEXT_CHARS);
-      return `[${index + 1}] ${title}\n${body}`;
+      // 片段正文常自带序号，编号需与正文区分，否则模型会把两者混淆
+      // （实测把正文的 4. 输出成 .，编号输出成空的 []）。
+      return `片段 [${index + 1}]：${title}\n${body}`;
     })
     .join('\n\n');
   return `问题：${query}\n\n片段：\n${blocks}`;
