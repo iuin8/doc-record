@@ -7,13 +7,14 @@ name: Deploy AI Answer Worker
 # （Workers Scripts:Edit 等）与 AI Search 系列工作流不同，拆成独立令牌可以
 # 避免为同一枚令牌叠加过多权限。未配置该变量时回退到 CLOUDFLARE_API_TOKEN。
 # 两者都未配置时跳过而不失败，与既有约定一致。
+#
+# 说明：常规部署已改由 Cloudflare Workers Builds 的 Git 集成接管
+# （见 cloudflare/README.md §5.2），该路径由 Cloudflare 侧持有 GitHub 授权，
+# 不需要仓库保存部署令牌。本工作流降级为手动兜底，故不随推送自动触发——
+# 当前仓库密钥缺 Workers Scripts:Edit 与 User:Memberships:Read 两项权限，
+# 自动触发会以 Authentication error [code: 10000] 失败，只产生噪音。
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'cloudflare/ai-answer/**'
-      - '.github/workflows/deploy-ai-answer.yml'
   workflow_dispatch:
 
 permissions:

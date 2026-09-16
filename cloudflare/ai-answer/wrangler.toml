@@ -7,7 +7,8 @@ compatibility_date = "2026-09-15"
 binding = "AI"
 
 [vars]
-# 允许调用该端点的站点来源。设为 "*" 表示不限制，仅调试时使用。
+# 允许调用该端点的站点来源，多个来源用逗号分隔，按相等比较匹配。
+# 设为 "*" 表示不限制，仅调试时使用。
 ALLOWED_ORIGIN = "https://doc-record.iuin888vip.icu"
 GENERATION_MODEL = "@cf/qwen/qwen3-30b-a3b-fp8"
 

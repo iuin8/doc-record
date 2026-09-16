@@ -27,27 +27,23 @@ AI Search 的接口要求令牌具备 **AI Search:Edit** 与 **AI Search:Run** �
    - Account > **AI Search** > Edit
    - Account > **AI Search** > Run
 
-部署问答生成端（§5）还需要另外三项：
+问答生成端（§5）的常规部署由 Workers Builds 的 Git 集成完成，不需要令牌。
+只有走 GitHub Actions 手动兜底时才需要另外三项：
 
    - Account > **Workers Scripts** > Edit
    - Account > **Account Settings** > Read
    - User > **Memberships** > Read
 
 缺少 Workers Scripts 权限时 `wrangler deploy` 报
-`A request to the Cloudflare API (.../workers/services/...) failed` 与
+`A request to the Cloudflare API (.../workers/scripts/...) failed` 与
 `Authentication error [code: 10000]`；缺少 Memberships 权限时会提示
 `Unable to get membership roles`。
-
-**推荐做法**：不要在 AI Search 的令牌上继续叠加权限，而是新建一枚专用令牌——
-在令牌创建页选择内置模板 **Edit Cloudflare Workers**，作用域限定到
-账户 `Fa`（`1e41ba8d32af254e50ca2f65292adfe1`），然后作为仓库密钥
-`CLOUDFLARE_WORKERS_API_TOKEN` 保存。部署工作流优先读取该变量，
-未配置时回退到 `CLOUDFLARE_API_TOKEN`。
 
 > 排查提示：编辑 Cloudflare 令牌的权限不会改变令牌值，因此仓库密钥的
 > `updated_at` 不会变化。可用
 > `gh api repos/iuin8/doc-record/actions/secrets` 查看该时间戳：
 > 若时间戳未变而部署仍报 10000，说明所缺权限没有真正加到令牌上。
+> 本仓库的 `CLOUDFLARE_API_TOKEN` 即处于该状态，故部署已改用 §5.2 的路径。
 
 4. 其余权限保持默认（不需要 Zone 权限即可完成索引配置）；
 5. 创建后复制令牌值。
@@ -264,21 +260,42 @@ NLWeb 的 `/ask` 还会在检索层有结果时把含中文的查询过滤为空
 
 ### 5.2 部署生成端
 
-```bash
-cd cloudflare/ai-answer
-export CLOUDFLARE_API_TOKEN=xxxx
-npx wrangler deploy
-```
+部署由 **Cloudflare Workers Builds 的 Git 集成**完成：Cloudflare 侧持有 GitHub
+授权，推送后自行构建并部署，仓库侧无需保存任何部署令牌。免费计划每月 3,000
+构建分钟（[Workers Builds 限制](https://developers.cloudflare.com/workers/ci-cd/builds/limits-and-pricing/)），
+本 Worker 单次构建约一分钟，额度充裕。
 
-推送 main 且 `cloudflare/ai-answer/**` 变更时，
-`deploy-ai-answer.yml` 会自动部署（凭据为仓库密钥 `CLOUDFLARE_API_TOKEN`）。
+配置步骤（Cloudflare Dashboard）：
+
+1. 进入 **Workers & Pages** → **Create** → 选择导入既有仓库；
+2. 选择仓库 `iuin8/doc-record`；首次连接时按提示授权 Cloudflare 的 GitHub 集成；
+3. 构建配置按下表填写：
+
+   | 配置项 | 取值 |
+   | --- | --- |
+   | Production branch | `main` |
+   | Root directory | `cloudflare/ai-answer` |
+   | Build command | `npm install` |
+   | Deploy command | `npx wrangler deploy` |
+
+4. 保存后即触发首次部署。后续 `cloudflare/ai-answer/**` 变更并推送到 `main` 时自动重新部署。
+
+`ALLOWED_ORIGIN` 与 `GENERATION_MODEL` 已在 `wrangler.toml` 的 `[vars]` 中声明，
+Workers AI 绑定由 `[ai]` 声明，均随部署生效，无需在 Dashboard 另行配置环境变量。
+
+建议关闭 Pull Request 预览部署：本 Worker 无预览价值，且会占用构建分钟。
 
 部署成功后把端点地址（形如 `https://doc-record-ai-answer.iuinin666.workers.dev`）
 配置为构建期环境变量 `PUBLIC_AI_ANSWER_URL`，页面即切换到本地召回链路。
 
+**手动兜底**：`.github/workflows/deploy-ai-answer.yml` 保留为手动触发（`workflow_dispatch`），
+需仓库密钥具备 §2 所列三项权限。当前密钥不具备，因此该工作流不随推送自动运行。
+
 ### 5.3 生成端的防护
 
 - 仅接受来自 `ALLOWED_ORIGIN` 的跨域请求，预检请求独立处理；
+  取值为逗号分隔的来源清单，按相等比较匹配（前缀匹配会被同前缀的第三方域名绕过）。
+  站点若同时经其他域名访问，需在该清单中补齐；
 - 限制请求体大小、片段数量（6）与单片段长度（1500 字符），控制 prompt 规模；
 - 片段 URL 必须以站点域名开头，避免被当作通用生成代理；
 - 未携带有效片段时返回 400，不进入生成阶段。
