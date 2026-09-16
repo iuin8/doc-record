@@ -275,10 +275,30 @@ NLWeb 的 `/ask` 还会在检索层有结果时把含中文的查询过滤为空
    | --- | --- |
    | Production branch | `main` |
    | Root directory | `cloudflare/ai-answer` |
-   | Build command | `npm install` |
-   | Deploy command | `npx wrangler deploy` |
+   | Build command | 留空 |
+   | Deploy command | `npx --yes wrangler@4 deploy` |
 
-4. 保存后即触发首次部署。后续 `cloudflare/ai-answer/**` 变更并推送到 `main` 时自动重新部署。
+4. 在 **Settings → Build → Variables and Secrets** 增加一个构建变量：
+
+   | 变量 | 取值 |
+   | --- | --- |
+   | `SKIP_DEPENDENCY_INSTALL` | `true` |
+
+5. 保存后即触发首次部署。后续 `cloudflare/ai-answer/**` 变更并推送到 `main` 时自动重新部署。
+
+**为什么必须跳过自动依赖安装。** 构建环境按仓库根 `package.json` 的
+`packageManager`（`pnpm@10.26.2`）判定包管理器，却在 Root directory 内执行安装命令。
+而 `cloudflare/ai-answer/` 下没有 pnpm 锁文件，安装阶段即失败：
+
+```
+Detected the following tools from environment: pnpm@10.26.2, nodejs@22.23.2
+Installing project dependencies: pnpm install --frozen-lockfile
+ERR_PNPM_NO_LOCKFILE  Cannot install with "frozen-lockfile" because pnpm-lock.yaml is absent
+Failed: error occurred while installing tools or dependencies
+```
+
+本 Worker 没有运行时依赖，构建阶段无需安装任何内容：跳过自动安装后，
+`npx` 自行拉取 wrangler 完成部署。
 
 **必须创建 Workers 项目，不能创建 Pages 项目。** 导入流程同时覆盖两类项目，
 判别依据是配置项里出现 **Deploy command**（Workers）还是 **Build output directory**
