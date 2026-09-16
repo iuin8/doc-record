@@ -280,6 +280,32 @@ NLWeb 的 `/ask` 还会在检索层有结果时把含中文的查询过滤为空
 
 4. 保存后即触发首次部署。后续 `cloudflare/ai-answer/**` 变更并推送到 `main` 时自动重新部署。
 
+**必须创建 Workers 项目，不能创建 Pages 项目。** 导入流程同时覆盖两类项目，
+判别依据是配置项里出现 **Deploy command**（Workers）还是 **Build output directory**
+（Pages）。Pages 项目不会向构建环境注入 Workers 部署凭据，`npx wrangler deploy`
+会以认证失败告终。
+
+**备选配置**：若 Root directory 未按预期生效（构建日志中出现找不到 `wrangler.toml`
+一类提示），改用不依赖该字段的写法：
+
+| 配置项 | 取值 |
+| --- | --- |
+| Root directory | 留空 |
+| Build command | 留空 |
+| Deploy command | `npx --yes wrangler@4 deploy --config cloudflare/ai-answer/wrangler.toml` |
+
+wrangler 以 `--config` 指向的文件所在目录为项目根，`main` 与 `[vars]` 仍按
+`cloudflare/ai-answer/` 解析，且无需 `npm install`——`npx` 自行拉取 wrangler。
+
+**本地预检**：配置本身是否可被 wrangler 正确解析，无需令牌即可验证：
+
+```bash
+cd cloudflare/ai-answer && npx wrangler deploy --dry-run
+```
+
+输出应列出 `env.AI`、两个变量与约 6.7 KiB 的 Total Upload。此步报错说明问题在配置；
+此步通过而部署仍失败，则失败环节在构建环境或上传凭据，需查 Cloudflare 侧的构建日志。
+
 `ALLOWED_ORIGIN` 与 `GENERATION_MODEL` 已在 `wrangler.toml` 的 `[vars]` 中声明，
 Workers AI 绑定由 `[ai]` 声明，均随部署生效，无需在 Dashboard 另行配置环境变量。
 
