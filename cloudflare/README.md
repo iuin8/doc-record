@@ -27,23 +27,24 @@ AI Search 的接口要求令牌具备 **AI Search:Edit** 与 **AI Search:Run** �
    - Account > **AI Search** > Edit
    - Account > **AI Search** > Run
 
-问答生成端（§5）的常规部署由 Workers Builds 的 Git 集成完成，不需要令牌。
-只有走 GitHub Actions 手动兜底时才需要另外三项：
+部署问答生成端（§5.2）需要另外三项：
 
    - Account > **Workers Scripts** > Edit
    - Account > **Account Settings** > Read
    - User > **Memberships** > Read
 
+其中 **Memberships 属于 User 分组**，不在 Account 分组内：令牌创建页的权限分
+Account / Zone / User 三组，只在前两组添加会漏掉这一项。
+
 缺少 Workers Scripts 权限时 `wrangler deploy` 报
 `A request to the Cloudflare API (.../workers/scripts/...) failed` 与
 `Authentication error [code: 10000]`；缺少 Memberships 权限时会提示
-`Unable to get membership roles`。
+`Unable to get membership roles`。三项齐备后部署可在约一分钟内完成。
 
 > 排查提示：编辑 Cloudflare 令牌的权限不会改变令牌值，因此仓库密钥的
 > `updated_at` 不会变化。可用
 > `gh api repos/iuin8/doc-record/actions/secrets` 查看该时间戳：
-> 若时间戳未变而部署仍报 10000，说明所缺权限没有真正加到令牌上。
-> 本仓库的 `CLOUDFLARE_API_TOKEN` 即处于该状态，故部署已改用 §5.2 的路径。
+> 时间戳不变并不代表权限未生效，判断依据是重新部署是否仍报 10000。
 
 4. 其余权限保持默认（不需要 Zone 权限即可完成索引配置）；
 5. 创建后复制令牌值。
@@ -260,62 +261,46 @@ NLWeb 的 `/ask` 还会在检索层有结果时把含中文的查询过滤为空
 
 ### 5.2 部署生成端
 
-部署由 **Cloudflare Workers Builds 的 Git 集成**完成：Cloudflare 侧持有 GitHub
-授权，推送后自行构建并部署，仓库侧无需保存任何部署令牌。免费计划每月 3,000
-构建分钟（[Workers Builds 限制](https://developers.cloudflare.com/workers/ci-cd/builds/limits-and-pricing/)），
-本 Worker 单次构建约一分钟，额度充裕。
+部署由 `.github/workflows/deploy-ai-answer.yml` 完成，凭据为仓库密钥
+`CLOUDFLARE_API_TOKEN`（优先取专用的 `CLOUDFLARE_WORKERS_API_TOKEN`），
+所需三项权限见 §2。工作流为手动触发：
 
-配置步骤（Cloudflare Dashboard）：
-
-1. 进入 **Workers & Pages** → **Create** → 选择导入既有仓库；
-2. 选择仓库 `iuin8/doc-record`；首次连接时按提示授权 Cloudflare 的 GitHub 集成；
-3. 构建配置按下表填写：
-
-   | 配置项 | 取值 |
-   | --- | --- |
-   | Production branch | `main` |
-   | Root directory | `cloudflare/ai-answer` |
-   | Build command | 留空 |
-   | Deploy command | `npx --yes wrangler@4 deploy` |
-
-4. 在 **Settings → Build → Variables and Secrets** 增加一个构建变量：
-
-   | 变量 | 取值 |
-   | --- | --- |
-   | `SKIP_DEPENDENCY_INSTALL` | `true` |
-
-5. 保存后即触发首次部署。后续 `cloudflare/ai-answer/**` 变更并推送到 `main` 时自动重新部署。
-
-**为什么必须跳过自动依赖安装。** 构建环境按仓库根 `package.json` 的
-`packageManager`（`pnpm@10.26.2`）判定包管理器，却在 Root directory 内执行安装命令。
-而 `cloudflare/ai-answer/` 下没有 pnpm 锁文件，安装阶段即失败：
-
-```
-Detected the following tools from environment: pnpm@10.26.2, nodejs@22.23.2
-Installing project dependencies: pnpm install --frozen-lockfile
-ERR_PNPM_NO_LOCKFILE  Cannot install with "frozen-lockfile" because pnpm-lock.yaml is absent
-Failed: error occurred while installing tools or dependencies
+```bash
+gh workflow run deploy-ai-answer.yml --repo iuin8/doc-record --ref main
 ```
 
-本 Worker 没有运行时依赖，构建阶段无需安装任何内容：跳过自动安装后，
-`npx` 自行拉取 wrangler 完成部署。
+当前线上端点为 `https://doc-record-ai-answer.iuinin666.workers.dev`，
+已在 `.github/workflows/ci.yml` 的构建步骤中配置为 `PUBLIC_AI_ANSWER_URL`，
+页面构建后即切换到本地召回链路。地址非机密，端点侧另有来源校验。
 
-**必须创建 Workers 项目，不能创建 Pages 项目。** 导入流程同时覆盖两类项目，
-判别依据是配置项里出现 **Deploy command**（Workers）还是 **Build output directory**
-（Pages）。Pages 项目不会向构建环境注入 Workers 部署凭据，`npx wrangler deploy`
-会以认证失败告终。
+`ALLOWED_ORIGIN` 与 `GENERATION_MODEL` 已在 `wrangler.toml` 的 `[vars]` 中声明，
+Workers AI 绑定由 `[ai]` 声明，均随部署生效，无需在 Dashboard 另行配置。
 
-**备选配置**：若 Root directory 未按预期生效（构建日志中出现找不到 `wrangler.toml`
-一类提示），改用不依赖该字段的写法：
+**生成不用流式。** `qwen3-30b-a3b-fp8` 在流式输出下会吞掉数字：实测
+「Redis 的默认监听端口为 6379」输出为「…为 []」，正文序号「4.」输出为「.」，
+来源编号同样退化为 `[]`。改为 `stream: false` 后同一查询输出
+「Redis 的默认监听端口为 6379 [1]。」，数字与编号均正确。代价是失去逐字输出，
+用户需等待完整答案；答案受 `max_tokens: 800` 约束，等待时间在可接受范围。
+
+**备选路径：Workers Builds 的 Git 集成。** 仓库密钥不具备 Workers 部署权限时，
+可改由 Cloudflare 侧持有 GitHub 授权自行部署，不需要令牌，免费计划每月 3,000
+构建分钟（[Workers Builds 限制](https://developers.cloudflare.com/workers/ci-cd/builds/limits-and-pricing/)）。
+Dashboard 配置：
 
 | 配置项 | 取值 |
 | --- | --- |
-| Root directory | 留空 |
+| Production branch | `main` |
+| Root directory | `cloudflare/ai-answer` |
 | Build command | 留空 |
-| Deploy command | `npx --yes wrangler@4 deploy --config cloudflare/ai-answer/wrangler.toml` |
+| Deploy command | `npx --yes wrangler@4 deploy` |
 
-wrangler 以 `--config` 指向的文件所在目录为项目根，`main` 与 `[vars]` 仍按
-`cloudflare/ai-answer/` 解析，且无需 `npm install`——`npx` 自行拉取 wrangler。
+另需在 **Settings → Build → Variables and Secrets** 增加 `SKIP_DEPENDENCY_INSTALL=true`。
+构建环境按仓库根 `package.json` 的 `packageManager`（`pnpm@10.26.2`）判定包管理器，
+却在 Root directory 内执行安装命令，而该目录没有 pnpm 锁文件，安装阶段即报
+`ERR_PNPM_NO_LOCKFILE`。本 Worker 无运行时依赖，跳过安装后由 `npx` 自行拉取 wrangler。
+
+两条路径争用同一个 Worker 名称，**只保留一条**：采用 GitHub Actions 时，
+需断开 Workers Builds 中已连接的仓库，否则推送 `main` 会触发重复部署。
 
 **本地预检**：配置本身是否可被 wrangler 正确解析，无需令牌即可验证：
 
@@ -325,17 +310,6 @@ cd cloudflare/ai-answer && npx wrangler deploy --dry-run
 
 输出应列出 `env.AI`、两个变量与约 6.7 KiB 的 Total Upload。此步报错说明问题在配置；
 此步通过而部署仍失败，则失败环节在构建环境或上传凭据，需查 Cloudflare 侧的构建日志。
-
-`ALLOWED_ORIGIN` 与 `GENERATION_MODEL` 已在 `wrangler.toml` 的 `[vars]` 中声明，
-Workers AI 绑定由 `[ai]` 声明，均随部署生效，无需在 Dashboard 另行配置环境变量。
-
-建议关闭 Pull Request 预览部署：本 Worker 无预览价值，且会占用构建分钟。
-
-部署成功后把端点地址（形如 `https://doc-record-ai-answer.iuinin666.workers.dev`）
-配置为构建期环境变量 `PUBLIC_AI_ANSWER_URL`，页面即切换到本地召回链路。
-
-**手动兜底**：`.github/workflows/deploy-ai-answer.yml` 保留为手动触发（`workflow_dispatch`），
-需仓库密钥具备 §2 所列三项权限。当前密钥不具备，因此该工作流不随推送自动运行。
 
 ### 5.3 生成端的防护
 

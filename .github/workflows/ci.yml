@@ -38,6 +38,10 @@ jobs:
 
       - name: Build Astro
         run: pnpm run build
+        env:
+          # 站点问答的生成端地址。非空时页面切换到「浏览器端 Pagefind 召回 +
+          # 自建生成端」链路，为空则回退到 NLWeb。地址非机密，端点侧另有来源校验。
+          PUBLIC_AI_ANSWER_URL: https://doc-record-ai-answer.iuinin666.workers.dev
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
