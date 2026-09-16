@@ -198,11 +198,14 @@ export default {
       { role: 'user', content: buildPrompt(query, contexts) },
     ];
 
-    let upstream;
+    let result;
     try {
-      upstream = await env.AI.run(model, {
+      result = await env.AI.run(model, {
         messages,
-        stream: true,
+        // 该模型在流式输出下会吞掉数字：实测把「6379」输出为 []，
+        // 正文序号「4.」输出为「.」，来源编号「[1]」同样变成 []。
+        // 改为一次性返回，牺牲逐字输出换取内容正确。
+        stream: false,
         max_tokens: 800,
       });
     } catch (error) {
@@ -211,13 +214,15 @@ export default {
       return jsonError('generation unavailable', 502, headers);
     }
 
-    // 上游可能直接返回完整文本（未流式），此时包装成单个事件。
-    if (!(upstream instanceof ReadableStream)) {
-      const text =
-        (typeof upstream === 'string' && upstream) ||
-        upstream?.response ||
-        upstream?.result?.response ||
-        '';
+    const raw =
+      (typeof result === 'string' && result) ||
+      result?.response ||
+      result?.result?.response ||
+      '';
+    const text = String(raw).replace(/^\s+/, '');
+
+    // 上游返回完整文本时包装成单个事件，保持前端的解析方式不变。
+    if (!(result instanceof ReadableStream)) {
       const body = new ReadableStream({
         start(controller) {
           const encoder = new TextEncoder();
@@ -229,6 +234,6 @@ export default {
       return new Response(body, { headers: sseHeaders(effectiveOrigin) });
     }
 
-    return new Response(toAnswerStream(upstream), { headers: sseHeaders(effectiveOrigin) });
+    return new Response(toAnswerStream(result), { headers: sseHeaders(effectiveOrigin) });
   },
 };
