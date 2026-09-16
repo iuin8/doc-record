@@ -127,8 +127,14 @@ export default {
 
     // 未携带 Origin 的浏览器请求按同源处理，直接回显来源；
     // 配置了白名单时，只对该来源回显，其余来源拒绝。
+    // 白名单按逗号分隔逐项做相等比较：前缀匹配会被
+    // https://doc-record.iuin888vip.icu.evil.com 这类同前缀域名绕过。
+    const allowed = allowedOrigin
+      .split(',')
+      .map((value) => value.trim())
+      .filter(Boolean);
     const effectiveOrigin =
-      allowedOrigin === '*' || !origin || origin.startsWith(allowedOrigin) ? origin || '*' : null;
+      allowed.includes('*') || !origin ? origin || '*' : allowed.includes(origin) ? origin : null;
     if (effectiveOrigin === null) {
       return jsonError('Origin not allowed', 403, corsHeaders(''));
     }
