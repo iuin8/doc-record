@@ -38,6 +38,17 @@ AI Search 的接口要求令牌具备 **AI Search:Edit** 与 **AI Search:Run** �
 `Authentication error [code: 10000]`；缺少 Memberships 权限时会提示
 `Unable to get membership roles`。
 
+**推荐做法**：不要在 AI Search 的令牌上继续叠加权限，而是新建一枚专用令牌——
+在令牌创建页选择内置模板 **Edit Cloudflare Workers**，作用域限定到
+账户 `Fa`（`1e41ba8d32af254e50ca2f65292adfe1`），然后作为仓库密钥
+`CLOUDFLARE_WORKERS_API_TOKEN` 保存。部署工作流优先读取该变量，
+未配置时回退到 `CLOUDFLARE_API_TOKEN`。
+
+> 排查提示：编辑 Cloudflare 令牌的权限不会改变令牌值，因此仓库密钥的
+> `updated_at` 不会变化。可用
+> `gh api repos/iuin8/doc-record/actions/secrets` 查看该时间戳：
+> 若时间戳未变而部署仍报 10000，说明所缺权限没有真正加到令牌上。
+
 4. 其余权限保持默认（不需要 Zone 权限即可完成索引配置）；
 5. 创建后复制令牌值。
 

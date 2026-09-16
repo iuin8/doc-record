@@ -3,8 +3,10 @@ name: Deploy AI Answer Worker
 # 站点问答的生成端。召回在浏览器端由 Pagefind 完成，此 Worker 只负责生成，
 # 因此部署的是无状态代码，变更即发布。
 #
-# 凭据使用仓库密钥 CLOUDFLARE_API_TOKEN（与 AI Search 系列工作流共用），
-# 未配置时跳过而不失败，与既有约定一致。
+# 凭据优先使用 CLOUDFLARE_WORKERS_API_TOKEN：部署 Worker 所需的权限
+# （Workers Scripts:Edit 等）与 AI Search 系列工作流不同，拆成独立令牌可以
+# 避免为同一枚令牌叠加过多权限。未配置该变量时回退到 CLOUDFLARE_API_TOKEN。
+# 两者都未配置时跳过而不失败，与既有约定一致。
 
 on:
   push:
@@ -36,7 +38,7 @@ jobs:
       - name: Deploy Worker
         working-directory: cloudflare/ai-answer
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_WORKERS_API_TOKEN || secrets.CLOUDFLARE_API_TOKEN }}
         run: |
           if [ -z "${CLOUDFLARE_API_TOKEN}" ]; then
             echo "::warning::未配置 CLOUDFLARE_API_TOKEN，跳过部署。"
