@@ -218,6 +218,33 @@ const askEndpoint = useLocalRecall ? answerEndpoint : nlwebEndpoint;
   }
 
   /**
+   * 取覆盖查询词最多的窗口作为片段。
+   *
+   * 页面正文常达数千字符，而生成端只接收前 1500 字符。命中位置靠后时直接取开头
+   * 会把相关内容整个切掉：nsenter 页正文 3062 字符，「持久化」位于第 2822 位，
+   * 取开头导致模型只能回答「未在文档中找到相关内容」。
+   */
+  function bestWindow(text: string, terms: string[]): string {
+    const size = 1500;
+    if (text.length <= size || terms.length === 0) return text.slice(0, size);
+    const step = 500;
+    let best = text.slice(0, size);
+    let bestScore = -1;
+    for (let start = 0; start + size <= text.length + step; start += step) {
+      const window = text.slice(start, start + size);
+      let score = 0;
+      for (const term of terms) {
+        if (window.toLowerCase().includes(term.toLowerCase())) score += 1;
+      }
+      if (score > bestScore) {
+        bestScore = score;
+        best = window;
+      }
+    }
+    return best;
+  }
+
+  /**
    * 浏览器端召回。Pagefind 索引由构建期生成，中文分词可用；
    * `astro dev` 下没有该产物，调用会失败并由调用方回退或提示。
    */
@@ -226,6 +253,7 @@ const askEndpoint = useLocalRecall ? answerEndpoint : nlwebEndpoint;
     const pagefind = (await import(/* @vite-ignore */ modulePath)) as unknown as PagefindModule;
     await pagefind.init();
 
+    const terms = splitTerms(query);
     let found: PagefindHit[] = (await pagefind.search(query)).results.slice(0, limit);
 
     // Pagefind 对多个词要求同时命中同一文档，因此长句里只要有一个词与文档无关，
@@ -233,7 +261,6 @@ const askEndpoint = useLocalRecall ? answerEndpoint : nlwebEndpoint;
     // 「nsenter」「持久」分别有 3 条与 4 条命中。故整句无结果时改为
     // 按词分别检索，再融合排名。
     if (found.length === 0) {
-      const terms = splitTerms(query);
       if (terms.length > 0) {
         const lists: string[][] = [];
         const pool = new Map<string, PagefindHit>();
@@ -259,7 +286,8 @@ const askEndpoint = useLocalRecall ? answerEndpoint : nlwebEndpoint;
       const url = new URL(item.url, window.location.origin).href;
       const title = item.meta?.title ?? item.url;
       hits.push({ url, name: title, description: stripMarkup(item.excerpt ?? '') });
-      contexts.push({ url, title, text: stripMarkup(item.content ?? '') });
+      const text = stripMarkup(item.content ?? '');
+      contexts.push({ url, title, text: bestWindow(text, terms.length > 0 ? terms : [query]) });
     }
     return { hits, contexts };
   }
