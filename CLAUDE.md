@@ -75,7 +75,8 @@ pnpm check:content    # 内容门禁（代码块语言、内部结构、内网�
 | `/raw/<entry id>.md` | 每篇文档的 Markdown 原文，页面通过 `alternate` 链接暴露 |
 | `/llms.txt`、`/_llms-txt/*.txt` | 全站索引与分类分卷，供上下文有限的客户端按需取用 |
 | `/sitemap-ai.xml` | 只收录默认语言页面的站点地图，供 Cloudflare AI Search 抓取 |
-| `AiActions.astro` | 页面上的「复制 Markdown / 在 ChatGPT 或 Claude 中打开 / AI 问答」 |
+| `AiActions.astro` | 文档标题区的「复制 Markdown / 在 ChatGPT 或 Claude 中打开」，只作用于当前文档 |
+| `AiAsk.astro` | 全站问答的右下角悬浮入口，经 `PageFrame.astro` 挂到每个页面 |
 
 AI 问答调用 NLWeb 的 `/ask` 接口，默认地址为
 `https://bold-union-4896-nlweb.iuinin666.workers.dev/ask`，

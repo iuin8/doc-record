@@ -67,7 +67,7 @@ export const collections = {
   i18n: defineCollection({
     loader: i18nLoader(),
     schema: i18nSchema({
-      // 页面 AI 操作区的文案，随界面语言切换
+      // 页面 AI 操作区与全站问答悬浮入口的文案，随界面语言切换
       extend: z.object({
         'aiActions.prompt': z.string(),
         'aiActions.copy': z.string(),
@@ -75,13 +75,16 @@ export const collections = {
         'aiActions.copyFailed': z.string(),
         'aiActions.openInChatGpt': z.string(),
         'aiActions.openInClaude': z.string(),
-        'aiActions.ask': z.string(),
-        'aiActions.askPlaceholder': z.string(),
-        'aiActions.askSubmit': z.string(),
-        'aiActions.askPending': z.string(),
-        'aiActions.askEmpty': z.string(),
-        'aiActions.askFailed': z.string(),
-        'aiActions.askSources': z.string(),
+        'aiAsk.label': z.string(),
+        'aiAsk.title': z.string(),
+        'aiAsk.hint': z.string(),
+        'aiAsk.close': z.string(),
+        'aiAsk.placeholder': z.string(),
+        'aiAsk.submit': z.string(),
+        'aiAsk.pending': z.string(),
+        'aiAsk.empty': z.string(),
+        'aiAsk.failed': z.string(),
+        'aiAsk.sources': z.string(),
       }),
     }),
   }),
