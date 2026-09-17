@@ -1,7 +1,7 @@
 /*
- * starlight-theme-black 侧边栏补丁。
+ * starlight-theme-black 布局补丁。
  *
- * Black 的 SidebarSublist 覆盖组件存在两处与深层目录结构不匹配的样式：
+ * Black 的覆盖组件与默认取值存在几处与本站结构、阅读习惯不匹配的样式：
  *
  * 1. `.entry-link` 固定 `height: 30px`。条目标题为较长的中文（或长英文串）
  *    时换行成多行，容器高度不随之增长，溢出文字与相邻条目叠压。
@@ -13,9 +13,26 @@
  *    文字会被压成竖排。此处收紧嵌套层的内边距，并补一条纵向参考线
  *    标示层级归属（缩进减小后仍能看出结构）。
  *
+ * 3. 侧边栏内容区不铺满容器。`.sidebar-content` 是 flex 子项且未设宽度，
+ *    实际渲染为内容自然宽度（约 224px），而 aside 列宽 300px，右侧留出
+ *    一整块空白，分组标题的折叠箭头也挤在文字旁。此处强制铺满。
+ *
+ * 4. 正文列宽偏窄。Black 默认 `--sl-content-width` 为 40rem（640px），
+ *    本站代码块多为长命令，列宽收得比较紧。放宽到 48rem：正文列与
+ *    右侧目录列按 Starlight 的公式分配剩余空间，`max-width` 保证
+ *    窄视口下不溢出。
+ *
  * 本文件未分层，优先级高于 Black 位于 `@layer black` 内的样式；
  * SidebarSublist 的样式是组件 scoped 的（未分层），故依赖特异性取胜。
  */
+
+:root {
+  --sl-content-width: calc(var(--spacing) * 192);
+}
+
+#starlight__sidebar .sidebar-content {
+  width: 100%;
+}
 
 #starlight__sidebar .entry-link {
   height: auto;

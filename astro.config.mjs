@@ -100,7 +100,7 @@ export default defineConfig({
         PageFrame: './src/components/PageFrame.astro',
         ThemeSelect: './src/components/ThemeSelect.astro',
       },
-      customCss: ['./src/styles/palettes.css', './src/styles/black-sidebar.css'],
+      customCss: ['./src/styles/palettes.css', './src/styles/black-layout.css'],
       // 必须传配置对象：插件对参数做 zod 校验，不传会报 expected object。
       // 标题区的 MarkdownActions 默认开启。
       // 侧边栏分组用折叠交互（useDropdowns）：本站目录层级最深达五层，
