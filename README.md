@@ -100,6 +100,21 @@ pnpm dev
 - [starlight-llms-txt](https://github.com/HiDeoo/starlight-llms-txt) — llms.txt 与分类分卷
 - [Cloudflare AI Search](https://developers.cloudflare.com/ai-search/) — 检索增强问答，配置见 `cloudflare/README.md`
 
+## 本地开发
+
+依赖以 pnpm 管理（Node >= 22），`pnpm-lock.yaml` 入库存档：
+
+```bash
+pnpm install
+pnpm dev            # 开发服务器
+pnpm build          # 构建
+pnpm check:content  # 内容门禁
+pnpm test:e2e       # Playwright 端到端测试（自动构建后起 preview 服务）
+```
+
+`pnpm install` 在部分环境会被安全策略拦截，此时可用 `pnpm install --lockfile-only`
+生成锁文件后用 `bun install` 装本地依赖；`bun.lock` 不入库，依赖树仍以 pnpm 锁文件为准。
+
 ## TODO
 
 - 翻译工作流：托管 Weblate 的组件模板字段不接受 glob，暂缓实施，
