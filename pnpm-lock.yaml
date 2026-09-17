@@ -32,6 +32,9 @@ importers:
       starlight-llms-txt:
         specifier: ^0.11.0
         version: 0.11.0(@astrojs/markdown-satteri@0.4.1)(@astrojs/starlight@0.42.0(@astrojs/markdown-remark@7.3.1)(astro@7.3.2(@astrojs/markdown-remark@7.3.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(yaml@2.9.0))(typescript@5.9.3))(astro@7.3.2(@astrojs/markdown-remark@7.3.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(yaml@2.9.0))
+      starlight-theme-black:
+        specifier: ^0.7.1
+        version: 0.7.1(@astrojs/starlight@0.42.0(@astrojs/markdown-remark@7.3.1)(astro@7.3.2(@astrojs/markdown-remark@7.3.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(yaml@2.9.0))(typescript@5.9.3))
     devDependencies:
       '@astrojs/check':
         specifier: ^0.9.10
@@ -2388,6 +2391,12 @@ packages:
     peerDependencies:
       '@astrojs/starlight': '>=0.41.0'
       astro: ^7.0.0
+
+  starlight-theme-black@0.7.1:
+    resolution: {integrity: sha512-AWfrsHcPETyDsyMtBLSsUZ4HZMLcsUfF+JGNX4X/zIyOL9eU5cFi/nsJ/rf0CxjPMpe+ljZcrumdefEgQnhSoQ==}
+    engines: {node: '>=22.12.0'}
+    peerDependencies:
+      '@astrojs/starlight': '>=0.41'
 
   string-width@7.2.0:
     resolution: {integrity: sha512-tsaTIkKW9b4N+AEj+SVA+WhJzV7/zMhcSu78mLKWSk7cXMOSHsBKFWUs0fWwq8QyK3MgJBQRX6Gbi4kYbdvGkQ==}
@@ -5858,6 +5867,10 @@ snapshots:
     transitivePeerDependencies:
       - '@astrojs/markdown-satteri'
       - supports-color
+
+  starlight-theme-black@0.7.1(@astrojs/starlight@0.42.0(@astrojs/markdown-remark@7.3.1)(astro@7.3.2(@astrojs/markdown-remark@7.3.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(yaml@2.9.0))(typescript@5.9.3)):
+    dependencies:
+      '@astrojs/starlight': 0.42.0(@astrojs/markdown-remark@7.3.1)(astro@7.3.2(@astrojs/markdown-remark@7.3.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(yaml@2.9.0))(typescript@5.9.3)
 
   string-width@7.2.0:
     dependencies:

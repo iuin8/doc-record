@@ -1,10 +1,4 @@
 {
-  "aiActions.prompt": "この技術ドキュメントを読んで、質問に答えてください：",
-  "aiActions.copy": "Markdown をコピー",
-  "aiActions.copied": "コピーしました",
-  "aiActions.copyFailed": "コピーに失敗しました",
-  "aiActions.openInChatGpt": "ChatGPT で開く",
-  "aiActions.openInClaude": "Claude で開く",
   "aiAsk.label": "AI 質問",
   "aiAsk.title": "AI 質問",
   "aiAsk.hint": "サイト全体のドキュメントを検索し、該当箇所をもとに回答します。",

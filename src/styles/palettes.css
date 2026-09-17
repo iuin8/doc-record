@@ -1,115 +1,92 @@
 /*
- * 可选的配色方案。
+ * 可切换的配色方案，基于 starlight-theme-black 的变量体系。
  *
- * 为什么不是装主题包：Starlight 的社区主题都以 plugin 形式把同一批
- * `--sl-color-*` 变量写进全局，多装几个会互相覆盖，无法在运行时切换。
- * 而配色本质上就是一组变量值，按 `html[data-palette]` 分组即可天然隔离，
- * 也不引入运行时依赖。
+ * Black 把所有 `--sl-color-*` 映射到自己的源变量（`--gray-1..7`、
+ * `--background`、`--foreground`、`--border` 等），因此只需覆盖这些源变量，
+ * 派生的 Starlight 变量会随之变化。语义色（orange / green / blue / purple / red）
+ * 沿用 Black 的取值，配色差异体现在中性阶与背景上。
  *
- * 只覆盖 gray 阶、black / white 与 accent：`--sl-color-bg*`、
- * `--sl-color-hairline*` 等均由这些变量派生，无需逐个改写。
+ * Black 的样式全部位于 `@layer black` 内，而本文件未分层 —— 未分层样式的
+ * 优先级高于任何分层样式，因此这里的覆盖无需依赖选择器特异性即可生效。
  *
- * 取值来自公开调色板：Vitesse（VS Code）、Nord、Flexoki。
+ * 取值来自公开调色板：Vitesse（VS Code）、Nord、Flexoki，色相与彩度按
+ * Black 的中性阶亮度序列重新映射，保持原有的明暗关系。
  */
 
-:root[data-palette='vitesse'],
-[data-palette='vitesse'] ::backdrop {
-  --sl-color-white: hsl(0, 0%, 100%);
-  --sl-color-gray-1: hsl(43, 12%, 91%);
-  --sl-color-gray-2: hsl(43, 6%, 74%);
-  --sl-color-gray-3: hsl(43, 5%, 54%);
-  --sl-color-gray-4: hsl(43, 6%, 35%);
-  --sl-color-gray-5: hsl(43, 8%, 23%);
-  --sl-color-gray-6: hsl(43, 10%, 16%);
-  --sl-color-black: hsl(40, 8%, 9%);
-
-  --sl-color-accent-low: hsl(38, 45%, 22%);
-  --sl-color-accent: hsl(38, 62%, 55%);
-  --sl-color-accent-high: hsl(38, 75%, 82%);
+:root[data-theme='dark'][data-palette='vitesse'] {
+  --background: oklch(14.5% 0.01 56);
+  --foreground: oklch(96% 0.008 70);
+  --gray-1: oklch(96% 0.008 70);
+  --gray-2: oklch(87% 0.01 68);
+  --gray-3: oklch(71% 0.012 66);
+  --gray-4: oklch(56% 0.014 64);
+  --gray-5: oklch(38% 0.016 60);
+  --gray-6: oklch(27% 0.014 58);
+  --gray-7: oklch(21% 0.012 56);
 }
 
-:root[data-theme='light'][data-palette='vitesse'],
-[data-theme='light'][data-palette='vitesse'] ::backdrop {
-  --sl-color-white: hsl(43, 20%, 12%);
-  --sl-color-gray-1: hsl(43, 12%, 20%);
-  --sl-color-gray-2: hsl(43, 10%, 30%);
-  --sl-color-gray-3: hsl(43, 6%, 42%);
-  --sl-color-gray-4: hsl(43, 5%, 56%);
-  --sl-color-gray-5: hsl(43, 8%, 76%);
-  --sl-color-gray-6: hsl(43, 14%, 92%);
-  --sl-color-black: hsl(43, 30%, 98%);
-
-  --sl-color-accent-low: hsl(38, 70%, 92%);
-  --sl-color-accent: hsl(32, 70%, 45%);
-  --sl-color-accent-high: hsl(30, 75%, 32%);
+:root[data-theme='light'][data-palette='vitesse'] {
+  --background: oklch(100% 0.004 75);
+  --foreground: oklch(15% 0.01 56);
+  --gray-1: oklch(21% 0.012 56);
+  --gray-2: oklch(27% 0.014 58);
+  --gray-3: oklch(38% 0.016 60);
+  --gray-4: oklch(56% 0.014 64);
+  --gray-5: oklch(71% 0.012 66);
+  --gray-6: oklch(87% 0.01 68);
+  --gray-7: oklch(96% 0.008 70);
 }
 
-:root[data-palette='nord'],
-[data-palette='nord'] ::backdrop {
-  --sl-color-white: hsl(0, 0%, 100%);
-  --sl-color-gray-1: hsl(220, 33%, 96%);
-  --sl-color-gray-2: hsl(218, 30%, 92%);
-  --sl-color-gray-3: hsl(219, 28%, 88%);
-  --sl-color-gray-4: hsl(220, 16%, 36%);
-  --sl-color-gray-5: hsl(220, 17%, 27%);
-  --sl-color-gray-6: hsl(220, 16%, 22%);
-  --sl-color-black: hsl(220, 16%, 16%);
-
-  --sl-color-accent-low: hsl(210, 30%, 25%);
-  --sl-color-accent: hsl(210, 34%, 63%);
-  --sl-color-accent-high: hsl(210, 40%, 85%);
+:root[data-theme='dark'][data-palette='nord'] {
+  --background: oklch(16% 0.016 260);
+  --foreground: oklch(93% 0.008 260);
+  --gray-1: oklch(96% 0.006 260);
+  --gray-2: oklch(88% 0.01 258);
+  --gray-3: oklch(72% 0.014 256);
+  --gray-4: oklch(57% 0.016 254);
+  --gray-5: oklch(39% 0.018 252);
+  --gray-6: oklch(28% 0.016 252);
+  --gray-7: oklch(22% 0.014 250);
 }
 
-:root[data-theme='light'][data-palette='nord'],
-[data-theme='light'][data-palette='nord'] ::backdrop {
-  --sl-color-white: hsl(220, 16%, 16%);
-  --sl-color-gray-1: hsl(220, 16%, 22%);
-  --sl-color-gray-2: hsl(220, 17%, 27%);
-  --sl-color-gray-3: hsl(220, 16%, 36%);
-  --sl-color-gray-4: hsl(219, 20%, 60%);
-  --sl-color-gray-5: hsl(218, 28%, 88%);
-  --sl-color-gray-6: hsl(220, 30%, 93%);
-  --sl-color-black: hsl(220, 33%, 96%);
-
-  --sl-color-accent-low: hsl(210, 45%, 92%);
-  --sl-color-accent: hsl(213, 32%, 52%);
-  --sl-color-accent-high: hsl(213, 40%, 35%);
+:root[data-theme='light'][data-palette='nord'] {
+  --background: oklch(100% 0.004 260);
+  --foreground: oklch(16% 0.016 260);
+  --gray-1: oklch(22% 0.014 250);
+  --gray-2: oklch(28% 0.016 252);
+  --gray-3: oklch(39% 0.018 252);
+  --gray-4: oklch(57% 0.016 254);
+  --gray-5: oklch(72% 0.014 256);
+  --gray-6: oklch(88% 0.01 258);
+  --gray-7: oklch(96% 0.006 260);
 }
 
-:root[data-palette='flexoki'],
-[data-palette='flexoki'] ::backdrop {
-  --sl-color-white: hsl(48, 60%, 98%);
-  --sl-color-gray-1: hsl(45, 15%, 90%);
-  --sl-color-gray-2: hsl(45, 10%, 78%);
-  --sl-color-gray-3: hsl(45, 6%, 60%);
-  --sl-color-gray-4: hsl(45, 7%, 32%);
-  --sl-color-gray-5: hsl(40, 4%, 20%);
-  --sl-color-gray-6: hsl(30, 6%, 14%);
-  --sl-color-black: hsl(30, 8%, 8%);
-
-  --sl-color-accent-low: hsl(43, 40%, 22%);
-  --sl-color-accent: hsl(43, 78%, 45%);
-  --sl-color-accent-high: hsl(43, 75%, 80%);
+:root[data-theme='dark'][data-palette='flexoki'] {
+  --background: oklch(14% 0.012 80);
+  --foreground: oklch(92% 0.01 80);
+  --gray-1: oklch(95% 0.01 80);
+  --gray-2: oklch(86% 0.014 78);
+  --gray-3: oklch(70% 0.018 76);
+  --gray-4: oklch(55% 0.02 74);
+  --gray-5: oklch(37% 0.02 72);
+  --gray-6: oklch(26% 0.018 70);
+  --gray-7: oklch(20% 0.016 68);
 }
 
-:root[data-theme='light'][data-palette='flexoki'],
-[data-theme='light'][data-palette='flexoki'] ::backdrop {
-  --sl-color-white: hsl(30, 8%, 10%);
-  --sl-color-gray-1: hsl(45, 6%, 22%);
-  --sl-color-gray-2: hsl(43, 5%, 30%);
-  --sl-color-gray-3: hsl(43, 4%, 42%);
-  --sl-color-gray-4: hsl(43, 6%, 55%);
-  --sl-color-gray-5: hsl(45, 12%, 85%);
-  --sl-color-gray-6: hsl(48, 35%, 94%);
-  --sl-color-black: hsl(48, 60%, 98%);
-
-  --sl-color-accent-low: hsl(43, 65%, 90%);
-  --sl-color-accent: hsl(35, 90%, 35%);
-  --sl-color-accent-high: hsl(35, 90%, 26%);
+:root[data-theme='light'][data-palette='flexoki'] {
+  --background: oklch(99% 0.006 85);
+  --foreground: oklch(14% 0.014 78);
+  --gray-1: oklch(20% 0.016 68);
+  --gray-2: oklch(26% 0.018 70);
+  --gray-3: oklch(37% 0.02 72);
+  --gray-4: oklch(55% 0.02 74);
+  --gray-5: oklch(70% 0.018 76);
+  --gray-6: oklch(86% 0.014 78);
+  --gray-7: oklch(95% 0.01 80);
 }
 
 /*
- * 切换器。与 Starlight 自带的亮/暗切换并排，样式沿用其圆形图标按钮。
+ * 切换器。与 Black 自带的亮/暗切换并排，沿用其圆形图标按钮的尺寸与配色语义。
  * 菜单用 popover：无须自行管理焦点与层级，Esc 关闭由浏览器负责。
  */
 .palette-select {
@@ -118,95 +95,100 @@
 }
 
 .palette-select-trigger {
+  all: unset;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  border: 0;
-  border-radius: 50%;
-  background-color: transparent;
-  color: var(--sl-color-gray-2);
+  border-radius: calc(var(--radius) - 2px);
   cursor: pointer;
+  color: color-mix(in oklab, var(--foreground) 76%, var(--muted-foreground));
+  transition:
+    color 0.15s,
+    background-color 0.15s;
 }
 
 .palette-select-trigger:hover,
 .palette-select-trigger[aria-expanded='true'] {
-  color: var(--sl-color-white);
+  color: var(--accent-foreground);
+  background-color: color-mix(in oklab, var(--accent) 80%, transparent);
 }
 
 .palette-select-trigger:focus-visible {
-  outline: 2px solid var(--sl-color-accent);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
+}
+
+.palette-select-trigger svg {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  pointer-events: none;
 }
 
 .palette-select-menu {
   position: absolute;
   inset-inline-end: 0;
   inset-block-start: calc(100% + 0.35rem);
-  z-index: var(--sl-z-index-navbar);
+  z-index: 50;
   min-width: 11rem;
   margin: 0;
-  padding: 0.35rem;
-  border: 1px solid var(--sl-color-hairline-light);
-  border-radius: 0.5rem;
-  background-color: var(--sl-color-bg-nav);
-  box-shadow: var(--sl-shadow-md);
-  list-style: none;
+  padding: 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--popover-background);
+  color: var(--popover-foreground);
+  box-shadow: var(--shadow-md);
 }
 
 .palette-select-item {
+  all: unset;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   width: 100%;
-  padding: 0.35rem 0.5rem;
-  border: 0;
-  border-radius: 0.35rem;
-  background-color: transparent;
-  color: var(--sl-color-gray-2);
-  font: inherit;
-  font-size: var(--sl-text-xs);
-  text-align: start;
+  padding: 0.4rem 0.5rem;
+  border-radius: calc(var(--radius) * 0.6);
+  color: var(--foreground);
+  font-size: 0.875rem;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .palette-select-item:hover {
-  background-color: var(--sl-color-gray-6);
-  color: var(--sl-color-white);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 
-.palette-select-item[aria-current='true'] {
-  color: var(--sl-color-white);
-}
-
-/* 菜单项里的色点，用该方案自身的变量着色，避免再写一份色值。 */
 .palette-select-swatch {
   width: 0.85rem;
   height: 0.85rem;
   border-radius: 50%;
-  border: 1px solid var(--sl-color-gray-4);
-  background-color: var(--sl-swatch, var(--sl-color-accent));
+  border: 1px solid var(--border);
+  background-color: var(--sl-swatch);
   flex-shrink: 0;
 }
 
 .palette-select-item[aria-current='true'] .palette-select-swatch {
-  box-shadow: 0 0 0 2px var(--sl-color-bg-nav), 0 0 0 3px var(--sl-color-accent);
+  box-shadow:
+    0 0 0 2px var(--popover-background),
+    0 0 0 3px var(--ring);
 }
 
-/* 各方案的色点：无属性时落在 :root 上取默认，带属性时取该方案的 accent。 */
+/* 色点直接用各方案自身的取值，避免再维护一份色值。 */
 .palette-select-item[data-value='default'] {
-  --sl-swatch: hsl(224, 100%, 60%);
+  --sl-swatch: oklch(20.5% 0 0);
 }
 
 .palette-select-item[data-value='vitesse'] {
-  --sl-swatch: hsl(38, 62%, 55%);
+  --sl-swatch: oklch(38% 0.016 60);
 }
 
 .palette-select-item[data-value='nord'] {
-  --sl-swatch: hsl(210, 34%, 63%);
+  --sl-swatch: oklch(39% 0.018 252);
 }
 
 .palette-select-item[data-value='flexoki'] {
-  --sl-swatch: hsl(43, 78%, 45%);
+  --sl-swatch: oklch(37% 0.02 72);
 }

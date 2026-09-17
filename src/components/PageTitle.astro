@@ -1,36 +1,15 @@
 ---
-import AiActions from './AiActions.astro';
+/**
+ * 标题区沿用 Black 主题的 PageTitle：它自带描述、上一页/下一页按钮，
+ * 以及 MarkdownActions（复制整页 + 在 ChatGPT / Claude / v0 / Scira 中打开），
+ * 与原先自研的 AiActions 功能重叠，故 AiActions 已移除。
+ *
+ * Black 检测到已有覆盖时会跳过，这里手动渲染它的版本并保留 Mermaid 按需加载。
+ */
+import BlackPageTitle from 'starlight-theme-black/overrides/PageTitle.astro';
 import MermaidRenderer from './MermaidRenderer.astro';
-import { rawMarkdownPath } from '../lib/raw-path';
-
-const entry = Astro.locals.starlightRoute.entry;
-
-// 原文路径与页面 id 一一对应（slug 由文件路径去掉扩展名得到）
-const rawPath = rawMarkdownPath(entry.id);
-const absoluteUrl = new URL(rawPath, Astro.site).toString();
 ---
 
-<div class="title-row">
-  <h1 id="_top">{entry.data.title}</h1>
-  {rawPath && absoluteUrl && <AiActions rawPath={rawPath} absoluteUrl={absoluteUrl} />}
-</div>
+<BlackPageTitle />
 
 <MermaidRenderer />
-
-<style>
-  .title-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem 1rem;
-  }
-
-  h1 {
-    margin-top: 1rem;
-    font-size: var(--sl-text-h1);
-    line-height: var(--sl-line-height-headings);
-    font-weight: 600;
-    color: var(--sl-color-white);
-  }
-</style>

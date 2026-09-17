@@ -1,5 +1,12 @@
 ---
-import Default from '@astrojs/starlight/components/Head.astro';
+/**
+ * 在 Black 主题的 Head 之上补本项目的元信息。
+ *
+ * Black 覆盖 Head 是为了注入 Geist 字体（--font-geist / --font-geist-mono）
+ * 并渲染 Starlight 的 head 条目；检测到已有覆盖时它会跳过，因此这里必须
+ * 手动渲染它的版本，否则字体与部分 head 条目会丢失。
+ */
+import BlackHead from 'starlight-theme-black/overrides/Head.astro';
 import { rawMarkdownPath } from '../lib/raw-path';
 
 const { entry, lang } = Astro.locals.starlightRoute;
@@ -29,7 +36,7 @@ const structuredData = {
 };
 ---
 
-<Default {...Astro.props} />
+<BlackHead />
 
 <link rel="alternate" type="text/markdown" href={rawUrl} title={`${title}（Markdown 原文）`} />
 <link rel="alternate" type="text/plain" href={new URL('/llms-full.txt', site)} title="全站纯文本" />

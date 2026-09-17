@@ -1,10 +1,4 @@
 {
-  "aiActions.prompt": "Please read this technical document and answer my questions: ",
-  "aiActions.copy": "Copy Markdown",
-  "aiActions.copied": "Copied",
-  "aiActions.copyFailed": "Copy failed",
-  "aiActions.openInChatGpt": "Open in ChatGPT",
-  "aiActions.openInClaude": "Open in Claude",
   "aiAsk.label": "AI Q&A",
   "aiAsk.title": "AI Q&A",
   "aiAsk.hint": "Searches the entire site, then answers from the matching passages.",
