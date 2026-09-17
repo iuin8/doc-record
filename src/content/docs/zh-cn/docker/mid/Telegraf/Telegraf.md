@@ -1,4 +1,6 @@
-# telegraf是用记录
+---
+title: "telegraf是用记录"
+---
 
 [相关资料1](https://github.com/influxdata/sandbox.git)
 [相关资料2](https://github.com/LinShunKang/MyPerf4J/wiki/Telegraf_)

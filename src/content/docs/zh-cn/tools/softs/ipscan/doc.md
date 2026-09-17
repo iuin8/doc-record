@@ -1,4 +1,6 @@
-# ipscan使用记录
+---
+title: "ipscan使用记录"
+---
 
 [GitHub地址](https://github.com/angryip/ipscan)
 

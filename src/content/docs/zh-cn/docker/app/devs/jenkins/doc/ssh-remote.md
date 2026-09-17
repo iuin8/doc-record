@@ -1,4 +1,6 @@
-# 远程登陆
+---
+title: "远程登陆"
+---
 
 - Publish over SSH
 - 配置私钥登陆

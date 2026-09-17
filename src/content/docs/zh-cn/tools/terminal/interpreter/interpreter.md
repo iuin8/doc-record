@@ -1,4 +1,6 @@
-# interpreter
+---
+title: "interpreter"
+---
 
 [官方文档](https://docs.openinterpreter.com/getting-started/introduction)
 

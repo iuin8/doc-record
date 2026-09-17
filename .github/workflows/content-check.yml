@@ -48,14 +48,25 @@ jobs:
           else
             base="HEAD~1"
           fi
-          files=$(git diff --name-only --diff-filter=ACMR "$base" HEAD \
-            -- 'src/content/docs/**/*.md' 'src/content/docs/**/*.mdx' | tr '\n' ' ')
-          echo "files=$files" >> "$GITHUB_OUTPUT"
-          echo "待检查文件：$files"
+          # core.quotepath=false 保留中文文件名原样输出；-z 以 NUL 分隔，
+          # 文件名中的空格、引号与中文不会被转义或拆断。
+          # 文件列表经 heredoc 以多行形式写入 step output
+          {
+            echo 'files<<EOF'
+            git -c core.quotepath=false diff --name-only -z --diff-filter=ACMR "$base" HEAD \
+              -- 'src/content/docs/**/*.md' 'src/content/docs/**/*.mdx' | tr '\0' '\n'
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
 
+      # 文件名含空格与中文，必须以 NUL 分隔传参（xargs -0），避免按空白拆断；
+      # git 路径本身不含换行，换行分隔 → NUL 的转换是安全的。
+      # 文件列表经 env 传入而非 ${{ }} 内联：内容中可能含反引号等字符，
+      # 内联会被 shell 解释（既有文件名 `--recurse-submodules` 曾触发）
       - name: 运行内容门禁（仅变更文件）
         if: steps.changes.outputs.files != ''
-        run: python3 scripts/check-content.py --require-languages ${{ steps.changes.outputs.files }}
+        env:
+          FILES: ${{ steps.changes.outputs.files }}
+        run: printf '%s\n' "$FILES" | tr '\n' '\0' | xargs -0 python3 scripts/check-content.py --require-languages
 
       - name: 无内容变更
         if: steps.changes.outputs.files == ''

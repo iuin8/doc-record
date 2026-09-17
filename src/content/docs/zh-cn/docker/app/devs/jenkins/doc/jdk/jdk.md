@@ -1,4 +1,6 @@
-# jenkins中使用jdk
+---
+title: "jenkins中使用jdk"
+---
 
 - 下载到指定位置
 

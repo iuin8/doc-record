@@ -2,9 +2,6 @@
 date: 2024-08-27
 title: "一键更换Linux优质的软件源和docker源"
 ---
-
-# 一键更换Linux优质的软件源和docker源
-
 [参考文章](https://mp.weixin.qq.com/s/XlluE2SDzyNjTjg-_kRdyw)
 
 [镜像地址](https://linuxmirrors.cn/)

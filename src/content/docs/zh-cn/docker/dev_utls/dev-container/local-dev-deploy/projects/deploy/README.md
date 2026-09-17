@@ -1,4 +1,6 @@
-# deploy
+---
+title: "deploy"
+---
 
 ## deploy_to_docker.sh使用方式
 

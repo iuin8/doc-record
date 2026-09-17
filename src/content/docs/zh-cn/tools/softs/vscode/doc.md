@@ -1,4 +1,6 @@
-# vscode
+---
+title: "vscode"
+---
 
 ## claude code
 

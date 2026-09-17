@@ -1,4 +1,6 @@
-# logstash使用记录
+---
+title: "logstash使用记录"
+---
 
 ## 安装
 

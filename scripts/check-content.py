@@ -10,6 +10,8 @@
 3. 相对链接与图片引用指向的文件是否存在（站内绝对路径按 `public/` 解析）
 4. 是否包含疑似密钥（阻断）；内网地址仅汇总提示，不阻断
 
+另有两项提示：正文以一级标题开头、以及内网地址，均只提示不阻断。
+
 用法：
 
     python3 scripts/check-content.py                 # 全量检查
@@ -45,11 +47,12 @@ FRAMEWORK_SPECIFIC_FIELDS = {
 # Shiki 语言表中无对应条目、但 Expressive Code 可识别的通用别名
 LANGUAGE_ALIASES = {'text', 'txt', 'plain', 'plaintext', 'ansi'}
 
-# 不参与 front matter 通用字段检查的文件：
+# 不参与 front matter 与正文标题提示的文件：
 #   - SKILL.md 遵循 Agent Skills 规范，其 name / description 字段由该规范定义，
-#     不属于站点内容的元数据约定
+#     不属于站点内容的元数据约定，正文一级标题同样按该规范编写
 #   - index.mdx 是各目录的索引页，`template` / `hero` 属站点级布局配置而非
-#     内容元数据，随站点生成器而变；这类文件的正文仍受其他检查项约束
+#     内容元数据，随站点生成器而变
+#   这类文件的正文仍受其他检查项约束
 SKIP_FRONTMATTER_CHECK = {'SKILL.md', 'index.mdx'}
 
 SECRET_PATTERNS: tuple[tuple[str, str], ...] = (
@@ -73,6 +76,8 @@ PRIVATE_ADDRESS_PATTERN = re.compile(
 
 FENCE_PATTERN = re.compile(r'^\s{0,3}(`{3,}|~{3,})(.*)$')
 FRONTMATTER_FIELD_PATTERN = re.compile(r'^([A-Za-z_][\w-]*):')
+# 正文一级标题：页面标题区已渲染同一文案，正文再写会被构建期移除
+BODY_H1_PATTERN = re.compile(r'^#\s+\S')
 LINK_PATTERN = re.compile(r'!?\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)')
 # host:port 形态的目标不是文件引用，例如 localhost:8080
 HOST_PORT_PATTERN = re.compile(r'^[A-Za-z0-9][\w.-]*:\d+(?:/|$)')
@@ -177,6 +182,51 @@ def find_broken_local_links(
     return problems
 
 
+def frontmatter_title(lines: list[str]) -> str | None:
+    """front matter 中声明的 title，未声明时返回 None。"""
+    if not lines or lines[0].strip() != '---':
+        return None
+    for index in range(1, len(lines)):
+        if lines[index].strip() in ('---', '...'):
+            break
+        match = re.match(r'^title:\s*(.+?)\s*$', lines[index])
+        if match:
+            return match.group(1).strip().strip('"\'')
+    return None
+
+
+def body_start_line(lines: list[str]) -> int:
+    """正文起始行号：无 front matter 时为 0，否则为其结束行的下一行。"""
+    if not lines or lines[0].strip() != '---':
+        return 0
+    for index in range(1, len(lines)):
+        if lines[index].strip() in ('---', '...'):
+            return index + 1
+    return 0
+
+
+def find_body_h1(lines: list[str]) -> list[tuple[int, str, str]]:
+    """提示正文以一级标题开头的文档。
+
+    页面标题区已渲染同一文案：一级标题与页面标题一致时构建期移除该标题
+    （见 src/plugins/remark-strip-duplicate-h1.ts）；不一致时会与标题区
+    并列显示，通常应降级为二级标题。二者都不影响构建，故仅提示。
+    """
+    title = frontmatter_title(lines)
+    for index in range(body_start_line(lines), len(lines)):
+        line = lines[index].strip()
+        if not line:
+            continue
+        match = BODY_H1_PATTERN.match(line)
+        if match:
+            heading_text = match.group(0).lstrip('#').strip()
+            # 未声明 title 时页面标题正是由该标题推导而来，同样会被移除
+            kind = 'chapter' if title is not None and title != heading_text else 'repeated'
+            return [(index + 1, line, kind)]
+        break
+    return []
+
+
 def find_private_key(lines: list[str]) -> list[tuple[int, str]]:
     """识别真实私钥：PEM 头后存在成段的 base64 正文，且不含占位标记。"""
     problems: list[tuple[int, str]] = []
@@ -216,6 +266,17 @@ def check_file(path: Path, languages: set[str] | None, repo_root: Path) -> list[
 
     for line_number, target in find_broken_local_links(path, lines, repo_root):
         findings.append(Finding(relative, line_number, 'error', f'本地引用不存在：{target}'))
+
+    if path.name not in SKIP_FRONTMATTER_CHECK:
+        for line_number, heading, kind in find_body_h1(lines):
+            message = (
+                '正文以一级标题开头，与页面标题重复，构建期自动移除；'
+                '建议改为声明 front matter 的 `title`'
+                if kind == 'repeated'
+                else '正文首个标题为一级标题，会与页面标题区并列显示；'
+                '如为章节标题建议降级为二级标题'
+            )
+            findings.append(Finding(relative, line_number, 'warning', f'{heading}：{message}'))
 
     for line_number, message in find_private_key(lines):
         findings.append(Finding(relative, line_number, 'error', message))
@@ -272,7 +333,12 @@ def main() -> int:
                 private_address_count += 1
                 private_address_files.add(relative)
 
-    for item in findings:
+    errors = [item for item in findings if item.level == 'error']
+    warnings = [item for item in findings if item.level != 'error']
+
+    for item in errors:
+        print(item)
+    for item in warnings:
         print(item)
 
     if private_address_count:
@@ -282,10 +348,10 @@ def main() -> int:
         )
 
     print(
-        f'已检查 {len(targets)} 个文件，错误 {len(findings)} 项，'
-        f'内网地址提示 {private_address_count} 项。'
+        f'已检查 {len(targets)} 个文件，错误 {len(errors)} 项，'
+        f'提示 {len(warnings)} 项，内网地址提示 {private_address_count} 项。'
     )
-    return 1 if findings else 0
+    return 1 if errors else 0
 
 
 if __name__ == '__main__':

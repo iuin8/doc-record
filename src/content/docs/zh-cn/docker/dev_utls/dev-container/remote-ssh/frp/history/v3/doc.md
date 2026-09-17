@@ -1,4 +1,6 @@
-# frp使用记录
+---
+title: "frp使用记录"
+---
 
 - [服务端docker-compose.yml](https://github.com/183461750/doc-record/blob/main/docs/docker/dev_utls/dev-container/remote-ssh/frp/server/simple/docker-compose.yml)
 - [客户端docker-compose.yml](https://github.com/183461750/doc-record/blob/main/docs/docker/dev_utls/dev-container/remote-ssh/frp/v3/simple/docker-compose.yml)

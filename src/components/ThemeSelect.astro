@@ -4,10 +4,14 @@
  * 旁边并排挂出配色切换器。
  *
  * Black 检测到已有覆盖时会跳过，因此这里手动渲染它的版本。
+ * starlight-blog 同理：其 header-end 导航链接由 ThemeSelect 覆盖注入，
+ * 检测到已有覆盖后跳过，需在此手动渲染，否则导航栏丢失博客入口。
  */
 import BlackThemeSelect from 'starlight-theme-black/overrides/ThemeSelect.astro';
+import BlogThemeSelect from 'starlight-blog/components/ThemeSelect.astro';
 import PaletteSelect from './PaletteSelect.astro';
 ---
 
 <BlackThemeSelect />
+<BlogThemeSelect />
 <PaletteSelect />

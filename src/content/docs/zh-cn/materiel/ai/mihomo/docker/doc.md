@@ -1,4 +1,6 @@
-# mihomo docker 配置
+---
+title: "mihomo docker 配置"
+---
 
 > 宿主机, Docker容器和k8s容器内部都能够正常走代理访问国外网络的通用版本
 

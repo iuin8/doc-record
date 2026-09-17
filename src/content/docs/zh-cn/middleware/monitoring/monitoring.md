@@ -1,4 +1,6 @@
-# 监控
+---
+title: "监控"
+---
 
 ## alarm-settings.yml
 

@@ -25,7 +25,26 @@ pnpm build            # 构建生产版本
 pnpm preview          # 本地预览构建结果
 pnpm check            # Astro 类型检查
 pnpm check:content    # 内容门禁（代码块语言、内部结构、内网地址）
+pnpm test:e2e         # Playwright 端到端测试（自动构建后起 preview 服务）
 ```
+
+## 包管理器
+
+项目以 **pnpm** 为标准：`pnpm-lock.yaml` 入库，CI 用 `--frozen-lockfile` 安装
+（缓存命中时约 2 秒），贡献者统一使用 pnpm 以保证依赖树一致。
+
+本机环境若 `pnpm install` 在链接阶段被安全策略拦截，可改用 bun 安装依赖：
+
+```bash
+pnpm install --lockfile-only   # 只生成锁文件，写库仍以 pnpm-lock.yaml 为准
+bun install                    # 生成本地 node_modules
+bun run dev                    # 或 bun run build / bunx playwright test
+```
+
+`bun.lock` 已在 `.gitignore` 中：它只是本机安装产物，不参与版本控制，
+以免与 `pnpm-lock.yaml` 双轨漂移。切换包管理器需同时调整锁文件策略、
+`pnpm.overrides` 与三个 workflow，变更成本高于收益（实测 `astro build`
+bun 14.1s / pnpm 15.1s，CI 安装已无瓶颈）。
 
 ## 目录结构
 

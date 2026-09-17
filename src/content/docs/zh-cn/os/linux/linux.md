@@ -1,4 +1,6 @@
-# Linux系统文档
+---
+title: "Linux系统文档"
+---
 
 ```bash
 # 获取系统IP

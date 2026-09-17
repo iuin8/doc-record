@@ -1,4 +1,6 @@
-# 查询pgsql数据库中所有表数据量的sql
+---
+title: "查询pgsql数据库中所有表数据量的sql"
+---
 
 以下是查询 PostgreSQL 数据库中所有表数据量的 SQL 语句的示例：
 

@@ -1,4 +1,6 @@
-# wren ai
+---
+title: "wren ai"
+---
 
 [github地址](https://github.com/Canner/WrenAI)
 

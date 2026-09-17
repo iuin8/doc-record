@@ -1,4 +1,6 @@
-# cert-manager使用记录
+---
+title: "cert-manager使用记录"
+---
 
 [参考地址](https://cert-manager.io/docs/installation/)
 

@@ -1,4 +1,6 @@
-# Syncthing使用记录
+---
+title: "Syncthing使用记录"
+---
 
 [官网](https://syncthing.net/downloads/)
 

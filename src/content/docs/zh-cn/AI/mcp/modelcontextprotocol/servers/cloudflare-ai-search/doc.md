@@ -1,4 +1,6 @@
-# Cloudflare AI Search MCP 使用记录
+---
+title: "Cloudflare AI Search MCP 使用记录"
+---
 
 [官方文档](https://developers.cloudflare.com/ai-search/api/search/mcp/)
 

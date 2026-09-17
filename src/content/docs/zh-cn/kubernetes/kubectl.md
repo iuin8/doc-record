@@ -1,4 +1,6 @@
-# kubectl使用记录
+---
+title: "kubectl使用记录"
+---
 
 ## 初级应用
 

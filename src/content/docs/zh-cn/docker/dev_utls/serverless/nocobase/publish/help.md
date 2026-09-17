@@ -1,4 +1,6 @@
-# start-nocobase 帮助文档
+---
+title: "start-nocobase 帮助文档"
+---
 
 <description>
 

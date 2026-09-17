@@ -1,4 +1,6 @@
-# headscale docker compose版使用记录
+---
+title: "headscale docker compose版使用记录"
+---
 
 ```bash
 # 端口8888是服务端口(通过cpolar代理8888端口 -> https://5d37b78.r3.cpolar.top)

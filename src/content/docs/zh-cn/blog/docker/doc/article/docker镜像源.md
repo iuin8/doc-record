@@ -2,9 +2,6 @@
 date: 2024-05-22
 title: docker镜像源
 ---
-
-# docker镜像源
-
 [参考文章](https://developer.aliyun.com/article/653081)
 
 <!-- truncate -->

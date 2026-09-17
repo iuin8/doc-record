@@ -4,6 +4,11 @@ import starlightBlog from 'starlight-blog';
 import starlightLlmsTxt from 'starlight-llms-txt';
 import starlightThemeBlack from 'starlight-theme-black';
 
+// 正文首个一级标题与页面标题重复时，在构建期移除该标题节点。
+// 文档由多人维护，无法要求每篇都声明 front matter，故在渲染管线兜底，
+// 详见 src/plugins/remark-strip-duplicate-h1.ts。
+import { remarkStripDuplicateH1 } from './src/plugins/remark-strip-duplicate-h1.ts';
+
 // 全部内容位于默认语言目录下，llms.txt 分卷均以该前缀为基准。
 const DEFAULT_LOCALE = 'zh-cn';
 const inDefaultLocale = (path) => `${DEFAULT_LOCALE}/${path}`;
@@ -46,6 +51,10 @@ const llmsTxtOptions = {
 
 export default defineConfig({
   site: 'https://doc-record.iuin888vip.icu',
+
+  markdown: {
+    remarkPlugins: [remarkStripDuplicateH1],
+  },
 
   // 默认语言带前缀后框架不再生成站点根索引，此处补一条指向默认语言首页。
   // 迁移前的 URL 不做逐条映射：新旧地址的兼容层会随内容演进而持续腐化，
@@ -91,10 +100,16 @@ export default defineConfig({
         PageFrame: './src/components/PageFrame.astro',
         ThemeSelect: './src/components/ThemeSelect.astro',
       },
-      customCss: ['./src/styles/palettes.css'],
+      customCss: ['./src/styles/palettes.css', './src/styles/black-sidebar.css'],
       // 必须传配置对象：插件对参数做 zod 校验，不传会报 expected object。
-      // 传空对象即取默认值（标题区的 MarkdownActions 默认开启）。
-      plugins: [starlightBlog(), starlightLlmsTxt(llmsTxtOptions), starlightThemeBlack({})],
+      // 标题区的 MarkdownActions 默认开启。
+      // 侧边栏分组用折叠交互（useDropdowns）：本站目录层级最深达五层，
+      // Black 默认全部平铺展开，长标题在窄侧边栏里会相互叠压。
+      plugins: [
+        starlightBlog(),
+        starlightLlmsTxt(llmsTxtOptions),
+        starlightThemeBlack({ sidebar: { useDropdowns: true } }),
+      ],
     }),
   ],
 });

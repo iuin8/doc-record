@@ -1,4 +1,6 @@
-# yum安装erlang
+---
+title: "yum安装erlang"
+---
 
 ```shell
 

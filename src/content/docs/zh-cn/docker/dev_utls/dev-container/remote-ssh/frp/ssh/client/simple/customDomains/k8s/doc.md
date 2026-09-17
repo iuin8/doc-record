@@ -1,4 +1,6 @@
-# K8s Jumpbox 容器 SSH 配置说明
+---
+title: "K8s Jumpbox 容器 SSH 配置说明"
+---
 
 > authorized_keys挂载后权限不对导致ssh忽略authorized_keys的问题
 

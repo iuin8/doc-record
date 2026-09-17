@@ -2,9 +2,6 @@
 date: 2024-06-05
 title: "java.lang.OutOfMemoryError : unable to create new native Thread"
 ---
-
-# java.lang.OutOfMemoryError : unable to create new native Thread
-
 <!-- truncate -->
 
 ```bash

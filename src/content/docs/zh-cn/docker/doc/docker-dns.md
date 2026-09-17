@@ -1,4 +1,6 @@
-# docker内置DNS记录
+---
+title: "docker内置DNS记录"
+---
 
 - 相关文章
   - [Docker DNS](https://www.hwchiu.com/docs/2023/kind-network)

@@ -1,4 +1,6 @@
-# ClusterIssuer记录
+---
+title: "ClusterIssuer记录"
+---
 
 ```bash
 # 安装

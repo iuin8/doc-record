@@ -1,4 +1,6 @@
-# 蒲公英vpn
+---
+title: "蒲公英vpn"
+---
 
 [官网](https://pgy.oray.com)
 

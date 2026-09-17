@@ -1,4 +1,6 @@
-# vscode remote ssh
+---
+title: "vscode remote ssh"
+---
 
 ## glibc >= 2.28, libstdc++ >= 3.4.25
 
