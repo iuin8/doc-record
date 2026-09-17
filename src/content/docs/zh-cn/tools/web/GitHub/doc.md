@@ -2,7 +2,7 @@
 title: "GitHub"
 ---
 
-# gist
+## gist
 
 简单来说，GitHub Gist 是 GitHub 提供的一个“代码片段（Snippet）寄存站”。Gist 就像是一个便签本，专门用来随手记录和分享单份文件、代码片段或小工具配置。
 

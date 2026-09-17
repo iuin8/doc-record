@@ -21,6 +21,16 @@ test('文档页标题唯一（正文 H1 不与页面标题重复）', async ({ p
   await expect(page.locator('main h1')).toHaveCount(1);
 });
 
+// 夹具：src/content/docs/zh-cn/test/no-frontmatter.md 不声明 front matter，
+// 标题由 loader 从正文首个 H1 推导，该 H1 由 remark 插件在构建期移除
+test('未声明 front matter 的文档标题唯一', async ({ page }) => {
+  await page.goto('/zh-cn/test/no-frontmatter/');
+  await expect(page.locator('main h1')).toHaveCount(1);
+  await expect(page.locator('main h1')).toHaveText('无 front matter 的文档');
+  // 正文的二级标题仍正常渲染
+  await expect(page.locator('main h2').filter({ hasText: '二级标题' })).toBeVisible();
+});
+
 test('博客页可访问且导航栏含博客入口', async ({ page }) => {
   await page.goto(BLOG_PAGE);
   await expect(page).toHaveTitle(/Doc Record/);
