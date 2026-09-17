@@ -175,15 +175,25 @@ const askEndpoint = useLocalRecall ? answerEndpoint : nlwebEndpoint;
     return ctor ? new ctor('zh', { granularity: 'word' }) : null;
   }
 
-  /** 把长句拆成可独立检索的词，剔除虚词与单字。 */
+  /**
+   * 把长句拆成可独立检索的词，剔除虚词与单字。
+   *
+   * 单字一律剔除：中文单字由 `一-鿿` 判定，拉丁字母与数字单字由末位规则判定。
+   * 拉丁单字必须剔除——Pagefind 对单字母有命中，`qqqzzzxxy` 被切成 `q`/`z`/`x`/`y`
+   * 后各自都能召回，融合结果全是噪声。
+   */
   function splitTerms(query: string): string[] {
     const segmenter = createSegmenter();
     const parts = segmenter
       ? [...segmenter.segment(query)].map((item) => item.segment)
       : query.split(/\s+/);
-    return [...new Set(parts)]
-      .map((term) => term.trim())
-      .filter((term) => term.length > 0 && !STOP_TERMS.has(term) && !/^[一-鿿]$/.test(term));
+    return [...new Set(parts)].map((term) => term.trim()).filter(isSearchableTerm);
+  }
+
+  function isSearchableTerm(term: string): boolean {
+    if (term.length === 0 || STOP_TERMS.has(term)) return false;
+    if (/^[一-鿿]$/.test(term)) return false;
+    return !/^[a-z0-9]$/i.test(term);
   }
 
   /**
