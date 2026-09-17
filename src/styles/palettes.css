@@ -1,0 +1,212 @@
+/*
+ * 可选的配色方案。
+ *
+ * 为什么不是装主题包：Starlight 的社区主题都以 plugin 形式把同一批
+ * `--sl-color-*` 变量写进全局，多装几个会互相覆盖，无法在运行时切换。
+ * 而配色本质上就是一组变量值，按 `html[data-palette]` 分组即可天然隔离，
+ * 也不引入运行时依赖。
+ *
+ * 只覆盖 gray 阶、black / white 与 accent：`--sl-color-bg*`、
+ * `--sl-color-hairline*` 等均由这些变量派生，无需逐个改写。
+ *
+ * 取值来自公开调色板：Vitesse（VS Code）、Nord、Flexoki。
+ */
+
+:root[data-palette='vitesse'],
+[data-palette='vitesse'] ::backdrop {
+  --sl-color-white: hsl(0, 0%, 100%);
+  --sl-color-gray-1: hsl(43, 12%, 91%);
+  --sl-color-gray-2: hsl(43, 6%, 74%);
+  --sl-color-gray-3: hsl(43, 5%, 54%);
+  --sl-color-gray-4: hsl(43, 6%, 35%);
+  --sl-color-gray-5: hsl(43, 8%, 23%);
+  --sl-color-gray-6: hsl(43, 10%, 16%);
+  --sl-color-black: hsl(40, 8%, 9%);
+
+  --sl-color-accent-low: hsl(38, 45%, 22%);
+  --sl-color-accent: hsl(38, 62%, 55%);
+  --sl-color-accent-high: hsl(38, 75%, 82%);
+}
+
+:root[data-theme='light'][data-palette='vitesse'],
+[data-theme='light'][data-palette='vitesse'] ::backdrop {
+  --sl-color-white: hsl(43, 20%, 12%);
+  --sl-color-gray-1: hsl(43, 12%, 20%);
+  --sl-color-gray-2: hsl(43, 10%, 30%);
+  --sl-color-gray-3: hsl(43, 6%, 42%);
+  --sl-color-gray-4: hsl(43, 5%, 56%);
+  --sl-color-gray-5: hsl(43, 8%, 76%);
+  --sl-color-gray-6: hsl(43, 14%, 92%);
+  --sl-color-black: hsl(43, 30%, 98%);
+
+  --sl-color-accent-low: hsl(38, 70%, 92%);
+  --sl-color-accent: hsl(32, 70%, 45%);
+  --sl-color-accent-high: hsl(30, 75%, 32%);
+}
+
+:root[data-palette='nord'],
+[data-palette='nord'] ::backdrop {
+  --sl-color-white: hsl(0, 0%, 100%);
+  --sl-color-gray-1: hsl(220, 33%, 96%);
+  --sl-color-gray-2: hsl(218, 30%, 92%);
+  --sl-color-gray-3: hsl(219, 28%, 88%);
+  --sl-color-gray-4: hsl(220, 16%, 36%);
+  --sl-color-gray-5: hsl(220, 17%, 27%);
+  --sl-color-gray-6: hsl(220, 16%, 22%);
+  --sl-color-black: hsl(220, 16%, 16%);
+
+  --sl-color-accent-low: hsl(210, 30%, 25%);
+  --sl-color-accent: hsl(210, 34%, 63%);
+  --sl-color-accent-high: hsl(210, 40%, 85%);
+}
+
+:root[data-theme='light'][data-palette='nord'],
+[data-theme='light'][data-palette='nord'] ::backdrop {
+  --sl-color-white: hsl(220, 16%, 16%);
+  --sl-color-gray-1: hsl(220, 16%, 22%);
+  --sl-color-gray-2: hsl(220, 17%, 27%);
+  --sl-color-gray-3: hsl(220, 16%, 36%);
+  --sl-color-gray-4: hsl(219, 20%, 60%);
+  --sl-color-gray-5: hsl(218, 28%, 88%);
+  --sl-color-gray-6: hsl(220, 30%, 93%);
+  --sl-color-black: hsl(220, 33%, 96%);
+
+  --sl-color-accent-low: hsl(210, 45%, 92%);
+  --sl-color-accent: hsl(213, 32%, 52%);
+  --sl-color-accent-high: hsl(213, 40%, 35%);
+}
+
+:root[data-palette='flexoki'],
+[data-palette='flexoki'] ::backdrop {
+  --sl-color-white: hsl(48, 60%, 98%);
+  --sl-color-gray-1: hsl(45, 15%, 90%);
+  --sl-color-gray-2: hsl(45, 10%, 78%);
+  --sl-color-gray-3: hsl(45, 6%, 60%);
+  --sl-color-gray-4: hsl(45, 7%, 32%);
+  --sl-color-gray-5: hsl(40, 4%, 20%);
+  --sl-color-gray-6: hsl(30, 6%, 14%);
+  --sl-color-black: hsl(30, 8%, 8%);
+
+  --sl-color-accent-low: hsl(43, 40%, 22%);
+  --sl-color-accent: hsl(43, 78%, 45%);
+  --sl-color-accent-high: hsl(43, 75%, 80%);
+}
+
+:root[data-theme='light'][data-palette='flexoki'],
+[data-theme='light'][data-palette='flexoki'] ::backdrop {
+  --sl-color-white: hsl(30, 8%, 10%);
+  --sl-color-gray-1: hsl(45, 6%, 22%);
+  --sl-color-gray-2: hsl(43, 5%, 30%);
+  --sl-color-gray-3: hsl(43, 4%, 42%);
+  --sl-color-gray-4: hsl(43, 6%, 55%);
+  --sl-color-gray-5: hsl(45, 12%, 85%);
+  --sl-color-gray-6: hsl(48, 35%, 94%);
+  --sl-color-black: hsl(48, 60%, 98%);
+
+  --sl-color-accent-low: hsl(43, 65%, 90%);
+  --sl-color-accent: hsl(35, 90%, 35%);
+  --sl-color-accent-high: hsl(35, 90%, 26%);
+}
+
+/*
+ * 切换器。与 Starlight 自带的亮/暗切换并排，样式沿用其圆形图标按钮。
+ * 菜单用 popover：无须自行管理焦点与层级，Esc 关闭由浏览器负责。
+ */
+.palette-select {
+  position: relative;
+  display: inline-flex;
+}
+
+.palette-select-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 50%;
+  background-color: transparent;
+  color: var(--sl-color-gray-2);
+  cursor: pointer;
+}
+
+.palette-select-trigger:hover,
+.palette-select-trigger[aria-expanded='true'] {
+  color: var(--sl-color-white);
+}
+
+.palette-select-trigger:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
+}
+
+.palette-select-menu {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-start: calc(100% + 0.35rem);
+  z-index: var(--sl-z-index-navbar);
+  min-width: 11rem;
+  margin: 0;
+  padding: 0.35rem;
+  border: 1px solid var(--sl-color-hairline-light);
+  border-radius: 0.5rem;
+  background-color: var(--sl-color-bg-nav);
+  box-shadow: var(--sl-shadow-md);
+  list-style: none;
+}
+
+.palette-select-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.35rem 0.5rem;
+  border: 0;
+  border-radius: 0.35rem;
+  background-color: transparent;
+  color: var(--sl-color-gray-2);
+  font: inherit;
+  font-size: var(--sl-text-xs);
+  text-align: start;
+  cursor: pointer;
+}
+
+.palette-select-item:hover {
+  background-color: var(--sl-color-gray-6);
+  color: var(--sl-color-white);
+}
+
+.palette-select-item[aria-current='true'] {
+  color: var(--sl-color-white);
+}
+
+/* 菜单项里的色点，用该方案自身的变量着色，避免再写一份色值。 */
+.palette-select-swatch {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 50%;
+  border: 1px solid var(--sl-color-gray-4);
+  background-color: var(--sl-swatch, var(--sl-color-accent));
+  flex-shrink: 0;
+}
+
+.palette-select-item[aria-current='true'] .palette-select-swatch {
+  box-shadow: 0 0 0 2px var(--sl-color-bg-nav), 0 0 0 3px var(--sl-color-accent);
+}
+
+/* 各方案的色点：无属性时落在 :root 上取默认，带属性时取该方案的 accent。 */
+.palette-select-item[data-value='default'] {
+  --sl-swatch: hsl(224, 100%, 60%);
+}
+
+.palette-select-item[data-value='vitesse'] {
+  --sl-swatch: hsl(38, 62%, 55%);
+}
+
+.palette-select-item[data-value='nord'] {
+  --sl-swatch: hsl(210, 34%, 63%);
+}
+
+.palette-select-item[data-value='flexoki'] {
+  --sl-swatch: hsl(43, 78%, 45%);
+}

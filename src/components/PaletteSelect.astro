@@ -1,0 +1,108 @@
+---
+/**
+ * 配色方案切换器。与 Starlight 自带的亮/暗切换是正交的两个维度：
+ * 后者切 light / dark，本组件切配色。
+ *
+ * 菜单用 popover API 开关，Esc 关闭与层级由浏览器负责，无需自行管理焦点。
+ */
+const t = Astro.locals.t;
+
+const options = [
+  { value: 'default', label: t('palette.default') },
+  { value: 'vitesse', label: 'Vitesse' },
+  { value: 'nord', label: 'Nord' },
+  { value: 'flexoki', label: 'Flexoki' },
+];
+---
+
+<div class="palette-select">
+  <button
+    type="button"
+    class="palette-select-trigger"
+    popovertarget="palette-select-menu"
+    aria-expanded="false"
+    title={t('palette.label')}
+    aria-label={t('palette.label')}
+  >
+    <svg
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 2.7l5.7 5.7a8 8 0 1 1-11.4 0z"></path>
+    </svg>
+  </button>
+
+  <div id="palette-select-menu" popover class="palette-select-menu">
+    {
+      options.map((option) => (
+        <button
+          type="button"
+          class="palette-select-item"
+          data-value={option.value}
+          aria-current="false"
+        >
+          <span class="palette-select-swatch" aria-hidden="true"></span>
+          {option.label}
+        </button>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  /** 与 Head 中的预置脚本保持一致的键名。 */
+  const STORAGE_KEY = 'sl-palette';
+
+  document.querySelectorAll<HTMLElement>('.palette-select').forEach((select) => {
+    const trigger = select.querySelector<HTMLButtonElement>('.palette-select-trigger');
+    const menu = select.querySelector<HTMLElement>('.palette-select-menu');
+    const items = select.querySelectorAll<HTMLButtonElement>('.palette-select-item');
+    if (!trigger || !menu) return;
+
+    const apply = (value: string, persist: boolean) => {
+      if (value === 'default') delete document.documentElement.dataset.palette;
+      else document.documentElement.dataset.palette = value;
+
+      if (persist) {
+        try {
+          if (value === 'default') localStorage.removeItem(STORAGE_KEY);
+          else localStorage.setItem(STORAGE_KEY, value);
+        } catch {
+          // 隐私模式下写入会抛错，此时仅本次会话生效
+        }
+      }
+
+      items.forEach((item) => {
+        item.setAttribute('aria-current', String(item.dataset.value === value));
+      });
+    };
+
+    // 配色已由 Head 中的预置脚本应用到 <html>，这里只同步选中态。
+    let current = 'default';
+    try {
+      current = localStorage.getItem(STORAGE_KEY) ?? 'default';
+    } catch {
+      current = 'default';
+    }
+    apply(current, false);
+
+    items.forEach((item) => {
+      item.addEventListener('click', () => {
+        apply(item.dataset.value ?? 'default', true);
+        menu.hidePopover();
+      });
+    });
+
+    menu.addEventListener('toggle', (event) => {
+      const open = (event as ToggleEvent).newState === 'open';
+      trigger.setAttribute('aria-expanded', String(open));
+    });
+  });
+</script>

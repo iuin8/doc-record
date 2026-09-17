@@ -34,3 +34,16 @@ const structuredData = {
 <link rel="alternate" type="text/markdown" href={rawUrl} title={`${title}（Markdown 原文）`} />
 <link rel="alternate" type="text/plain" href={new URL('/llms-full.txt', site)} title="全站纯文本" />
 <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+
+<!--
+  配色必须在首屏绘制前落到 <html>，否则会先闪一下默认色再跳变。
+  因此用 is:inline 同步执行，不进打包流程。键名与 PaletteSelect 一致。
+-->
+<script is:inline>
+  try {
+    var saved = localStorage.getItem('sl-palette');
+    if (saved && saved !== 'default') document.documentElement.dataset.palette = saved;
+  } catch (error) {
+    // 隐私模式下读取会抛错，按默认配色渲染
+  }
+</script>

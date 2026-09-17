@@ -79,11 +79,14 @@ export default defineConfig({
       // 标题区附带「复制 Markdown / 用 AI 打开」操作，并按需加载 Mermaid。
       // 全站问答检索的是全站索引，不针对当前文档，故不放在标题区，
       // 改由 PageFrame 挂一个悬浮入口，任意页面都可发起提问。
+      // ThemeSelect 旁挂出配色切换器，见 src/styles/palettes.css。
       components: {
         PageTitle: './src/components/PageTitle.astro',
         Head: './src/components/Head.astro',
         PageFrame: './src/components/PageFrame.astro',
+        ThemeSelect: './src/components/ThemeSelect.astro',
       },
+      customCss: ['./src/styles/palettes.css'],
       plugins: [starlightBlog(), starlightLlmsTxt(llmsTxtOptions)],
     }),
   ],

@@ -14,5 +14,7 @@
   "aiAsk.pending": "Searching",
   "aiAsk.empty": "No relevant content found",
   "aiAsk.failed": "The Q&A service is temporarily unavailable",
-  "aiAsk.sources": "Sources"
+  "aiAsk.sources": "Sources",
+  "palette.label": "Color scheme",
+  "palette.default": "Default"
 }

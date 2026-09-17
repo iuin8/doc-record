@@ -14,5 +14,7 @@
   "aiAsk.pending": "検索中",
   "aiAsk.empty": "関連するコンテンツが見つかりませんでした",
   "aiAsk.failed": "Q&A サービスは一時的に利用できません",
-  "aiAsk.sources": "参照元"
+  "aiAsk.sources": "参照元",
+  "palette.label": "カラースキーム",
+  "palette.default": "デフォルト"
 }

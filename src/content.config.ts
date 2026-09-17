@@ -85,6 +85,8 @@ export const collections = {
         'aiAsk.empty': z.string(),
         'aiAsk.failed': z.string(),
         'aiAsk.sources': z.string(),
+        'palette.label': z.string(),
+        'palette.default': z.string(),
       }),
     }),
   }),

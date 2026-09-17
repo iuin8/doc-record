@@ -1,0 +1,12 @@
+---
+/**
+ * 在亮/暗切换旁挂出配色切换器。
+ * 覆盖 ThemeSelect 而不是 SocialIcons：两者在 header 中相邻，
+ * 前者是「外观」类控件，语义上更合适。
+ */
+import Default from '@astrojs/starlight/components/ThemeSelect.astro';
+import PaletteSelect from './PaletteSelect.astro';
+---
+
+<Default {...Astro.props} />
+<PaletteSelect />

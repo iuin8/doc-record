@@ -14,5 +14,7 @@
   "aiAsk.pending": "檢索中",
   "aiAsk.empty": "未檢索到相關內容",
   "aiAsk.failed": "問答服務暫時無法使用",
-  "aiAsk.sources": "參考來源"
+  "aiAsk.sources": "參考來源",
+  "palette.label": "配色方案",
+  "palette.default": "預設"
 }
