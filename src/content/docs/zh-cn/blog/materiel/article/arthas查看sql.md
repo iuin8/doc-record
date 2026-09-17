@@ -2,9 +2,6 @@
 date: 2024-09-05
 title: "arthas查看sql"
 ---
-
-# arthas查看sql
-
 [参考文章](http://codefun007.xyz/a/article_detail/2392.htm)
 
 <!-- truncate -->

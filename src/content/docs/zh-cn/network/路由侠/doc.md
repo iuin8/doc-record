@@ -1,4 +1,6 @@
-# 路由侠使用记录
+---
+title: "路由侠使用记录"
+---
 
 [官网docker使用地址](https://help.luyouxia.com/docker.html)
 [官网管理后台](https://www.luyouxia.com/console/)

@@ -1,4 +1,6 @@
-# mac开启nfs
+---
+title: "mac开启nfs"
+---
 
 在Mac上开启NFS服务，可以按照以下步骤进行：
 

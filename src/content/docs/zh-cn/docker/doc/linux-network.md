@@ -1,4 +1,6 @@
-# linux网络笔记
+---
+title: "linux网络笔记"
+---
 
 ## linux网卡的开启
 

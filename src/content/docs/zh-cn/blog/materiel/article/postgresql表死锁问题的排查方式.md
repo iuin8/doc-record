@@ -2,9 +2,6 @@
 date: 2024-06-05
 title: "postgresql表死锁问题的排查方式_PostgreSQL_脚本之家"
 ---
-
-# postgresql表死锁问题的排查方式_PostgreSQL_脚本之家
-
 > ## Excerpt
 > 这篇文章主要介绍了postgresql表死锁问题的排查方式，具有很好的参考价值，希望对大家有所帮助。一起跟随小编过来看看吧
 

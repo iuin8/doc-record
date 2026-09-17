@@ -1,4 +1,6 @@
-# 配置 wifi
+---
+title: "配置 wifi"
+---
 
 ```bash
 # 检查是否安装了 wpad 或 hostapd

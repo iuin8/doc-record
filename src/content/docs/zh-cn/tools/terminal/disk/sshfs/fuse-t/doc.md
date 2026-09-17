@@ -1,4 +1,6 @@
-# fuse-t
+---
+title: "fuse-t"
+---
 
 用于替代macfuse
 

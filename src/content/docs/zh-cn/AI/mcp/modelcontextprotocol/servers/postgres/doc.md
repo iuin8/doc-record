@@ -1,4 +1,6 @@
-# postgres使用记录
+---
+title: "postgres使用记录"
+---
 
 [官方文档](https://github.com/modelcontextprotocol/servers/tree/main/src/postgres)
 

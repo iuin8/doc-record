@@ -2,9 +2,6 @@
 title: Algolia DocSearch 配置指南
 description: 如何为Docusaurus网站配置Algolia搜索功能
 ---
-
-# Algolia DocSearch 配置指南
-
 ## 简介
 
 Algolia DocSearch 是一个强大的文档搜索服务，可以为技术文档网站提供高质量的搜索体验。本指南将帮助你为 Docusaurus 网站配置 Algolia 搜索功能。

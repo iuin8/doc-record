@@ -1,4 +1,6 @@
-# docker-compose部署hadoop集群
+---
+title: "docker-compose部署hadoop集群"
+---
 
 ## 创建网络
 

@@ -1,4 +1,6 @@
-# filepizza使用记录
+---
+title: "filepizza使用记录"
+---
 
 [GitHub地址](https://github.com/kern/filepizza)
 

@@ -1,4 +1,6 @@
-# MiniUPnP工具使用记录
+---
+title: "MiniUPnP工具使用记录"
+---
 
 [github地址](https://github.com/miniupnp/miniupnp)
 

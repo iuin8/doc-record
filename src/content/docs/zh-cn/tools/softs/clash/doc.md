@@ -1,4 +1,6 @@
-# clash使用记录
+---
+title: "clash使用记录"
+---
 
 ## Linux中使用clash
 

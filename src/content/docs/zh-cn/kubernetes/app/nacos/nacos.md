@@ -1,4 +1,6 @@
-# nacos使用记录
+---
+title: "nacos使用记录"
+---
 
 - [参考](https://nacos.io/en/docs/latest/quickstart/quick-start-kubernetes/)
 

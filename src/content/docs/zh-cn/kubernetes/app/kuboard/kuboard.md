@@ -1,4 +1,6 @@
-# kuboard使用
+---
+title: "kuboard使用"
+---
 
 ## 使用helm的方式部署
 

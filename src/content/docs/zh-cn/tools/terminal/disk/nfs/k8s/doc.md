@@ -1,4 +1,6 @@
-# k8s NFS 挂载
+---
+title: "k8s NFS 挂载"
+---
 
 ## 安装 NFS 服务端
 

@@ -1,4 +1,6 @@
-# mysql ndb cluster相关文档
+---
+title: "mysql ndb cluster相关文档"
+---
 
 ## 相关链接
 

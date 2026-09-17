@@ -1,4 +1,6 @@
-# mihomo配置智能分流SOP
+---
+title: "mihomo配置智能分流SOP"
+---
 
 thought Target: 32 tokens.
 是的，**Mihomo 以 Docker 方式运行完全可以实现宿主机全局 TUN 代理**。

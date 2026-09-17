@@ -1,4 +1,6 @@
-# docker容器没权限问题
+---
+title: "docker容器没权限问题"
+---
 
 1. 创建docker容器时，指定`--privileged`参数
 

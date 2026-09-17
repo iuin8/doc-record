@@ -1,4 +1,6 @@
-# ssh+docker打通受限网络
+---
+title: "ssh+docker打通受限网络"
+---
 
 [官网文档(SSH Tunnel Gateway)](https://gofrp.org/zh-cn/docs/features/common/ssh/)
 

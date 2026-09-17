@@ -1,4 +1,6 @@
-# java hprof文件如何导出
+---
+title: "java hprof文件如何导出"
+---
 
 在 Java 中，要导出 `hprof` 文件可以通过以下几种方式：
 

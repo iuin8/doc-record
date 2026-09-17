@@ -1,4 +1,6 @@
-# k8s dashboard
+---
+title: "k8s dashboard"
+---
 
 ## 部署 Dashboard UI
 

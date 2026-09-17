@@ -1,4 +1,6 @@
-# mihomo docker 配置
+---
+title: "mihomo docker 配置"
+---
 
 ## 关于本地内网IP用域名的问题
 

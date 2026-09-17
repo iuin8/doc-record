@@ -1,4 +1,6 @@
-# postgresql数据库相关文档
+---
+title: "postgresql数据库相关文档"
+---
 
 ## 部署
 

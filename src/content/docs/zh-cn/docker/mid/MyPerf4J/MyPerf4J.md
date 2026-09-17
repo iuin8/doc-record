@@ -1,4 +1,6 @@
-# MyPerf4J是用记录
+---
+title: "MyPerf4J是用记录"
+---
 
 [github地址](https://github.com/LinShunKang/MyPerf4J)
 

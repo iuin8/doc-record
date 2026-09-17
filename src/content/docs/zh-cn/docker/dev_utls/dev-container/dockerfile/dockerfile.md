@@ -1,4 +1,6 @@
-# dockerfile文件相关记录
+---
+title: "dockerfile文件相关记录"
+---
 
 ## 开启ssh的centos发行版
 

@@ -1,4 +1,6 @@
-# TigerVNC
+---
+title: "TigerVNC"
+---
 
 ```bash
 # 安装TigerVNC服务器和密码工具

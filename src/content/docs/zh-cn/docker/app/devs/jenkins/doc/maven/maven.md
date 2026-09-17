@@ -1,4 +1,6 @@
-# Jenkins使用maven
+---
+title: "Jenkins使用maven"
+---
 
 - 下载到指定位置
   

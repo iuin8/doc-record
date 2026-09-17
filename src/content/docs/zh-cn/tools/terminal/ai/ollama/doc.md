@@ -1,4 +1,6 @@
-# ollama使用记录
+---
+title: "ollama使用记录"
+---
 
 [官网](https://ollama.com)
 

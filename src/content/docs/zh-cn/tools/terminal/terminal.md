@@ -1,4 +1,6 @@
-# 命令行使用记录文档
+---
+title: "命令行使用记录文档"
+---
 
 ## asdf工具(The Multiple Runtime Version Manager多运行时版本管理器)
 

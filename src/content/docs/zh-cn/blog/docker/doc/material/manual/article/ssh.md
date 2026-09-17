@@ -2,9 +2,6 @@
 title: ssh
 date: 2024-05-22
 ---
-
-# ssh
-
 <!-- truncate -->
 
 - [SSH 隧道简明教程](https://www.lixueduan.com/posts/linux/07-ssh-tunnel/)

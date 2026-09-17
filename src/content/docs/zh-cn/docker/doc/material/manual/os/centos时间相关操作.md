@@ -1,4 +1,6 @@
-# centos时间相关操作
+---
+title: "centos时间相关操作"
+---
 
 设置时区（CentOS 7）
 先执行命令timedatectl status|grep 'Time zone'查看当前时区，如果不是中国时区（Asia/Shanghai），则需要先设置为中国时区，否则时区不同会存在时差。

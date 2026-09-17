@@ -1,4 +1,6 @@
-# maven使用记录
+---
+title: "maven使用记录"
+---
 
 ## 一键删除maven仓库无效jar包脚本
 

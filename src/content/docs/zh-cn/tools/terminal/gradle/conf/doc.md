@@ -1,4 +1,6 @@
-# gradle相关配置
+---
+title: "gradle相关配置"
+---
 
 ## 使用wrapper时
 

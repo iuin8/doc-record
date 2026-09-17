@@ -1,4 +1,6 @@
-# Docker Swarm 节点标签管理
+---
+title: "Docker Swarm 节点标签管理"
+---
 
 ## 查看节点标签
 

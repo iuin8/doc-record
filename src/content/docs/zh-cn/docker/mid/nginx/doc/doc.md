@@ -1,4 +1,6 @@
-# Nginx
+---
+title: "Nginx"
+---
 
 ## 构建nginx镜像
 

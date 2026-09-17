@@ -1,4 +1,6 @@
-# java 启动 相关记录
+---
+title: "java 启动 相关记录"
+---
 
 - [参考文章](http://www.javashuo.com/article/p-mdhxsxqr-eq.html)
 

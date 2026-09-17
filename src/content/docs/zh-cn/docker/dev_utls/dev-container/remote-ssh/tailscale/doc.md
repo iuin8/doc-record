@@ -1,4 +1,6 @@
-# headscale
+---
+title: "headscale"
+---
 
 ## 相关部署配置
 

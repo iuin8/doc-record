@@ -1,4 +1,6 @@
-# skywalking使用记录
+---
+title: "skywalking使用记录"
+---
 
 ## 安装
 

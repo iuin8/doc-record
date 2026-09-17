@@ -1,4 +1,6 @@
-# 部署docker-registry相关文档
+---
+title: "部署docker-registry相关文档"
+---
 
 ## 使用Nginx代理
 

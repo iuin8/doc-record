@@ -1,4 +1,6 @@
-# netbird使用
+---
+title: "netbird使用"
+---
 
 - 使用docker安装
 

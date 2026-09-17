@@ -1,4 +1,6 @@
-# 构建tomcat应用的相关记录
+---
+title: "构建tomcat应用的相关记录"
+---
 
 ```shell
 # 第四版(swarm+私服)
