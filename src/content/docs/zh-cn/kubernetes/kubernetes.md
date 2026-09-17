@@ -105,7 +105,7 @@ docker run -d \
 
 ### yum安装k8s
 
-- [文档详情地址](./docs/temp/yum安装k8s.md)(PS: AI提供的内容，还未测试过)
+- 文档详情地址（PS: AI提供的内容，还未测试过；原文引用的 ./docs/temp/yum安装k8s.md 不在仓库内）
 
 ## helm命令
 
@@ -137,7 +137,7 @@ minikube dashboard
 
 ## kuboard可视化界面
 
-- [也可以使用helm方式部署](./kuboard/doc.md)
+- 也可以使用helm方式部署（原文引用的 ./kuboard/doc.md 不在仓库内）
 - docker 方式安装
 
 ```bash

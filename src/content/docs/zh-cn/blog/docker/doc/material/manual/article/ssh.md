@@ -36,7 +36,7 @@ Host mac.intranet.company
 # ssh mac.intranet.company 看是否联通
 ```
 
-- [ssh动态代理](ssh动态代理)
+- [ssh动态代理](../../../../../../docker/doc/material/ai/ssh动态代理.md)
 
 ```bash
 # 登录服务器10.0.1.233

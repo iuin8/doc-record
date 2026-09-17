@@ -4,7 +4,7 @@ title: "linux中使用clash记录"
 
 ## 安装clash-for-linux
 
-- clash文件目录[内网服务器路径备忘](/root/vpn)
+- clash文件目录（内网服务器路径备忘：/root/vpn，仓库内无对应文件）
   - [本地备份文件](clash-linux-amd64-v1.18.0.gz)，解压命令`gzip -d clash-linux-amd64-v1.18.0.gz`
   - 原版仓库 `Dreamacro/clash` 已于 2023 年归档，v1.18.0 官方下载地址现返回 404，该本地备份为当前可获取的唯一副本，不建议删除
 
