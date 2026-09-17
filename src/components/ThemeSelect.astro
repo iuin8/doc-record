@@ -1,0 +1,13 @@
+---
+/**
+ * 亮/暗切换沿用 Black 主题的按钮（单按钮循环 auto → dark → light），
+ * 旁边并排挂出配色切换器。
+ *
+ * Black 检测到已有覆盖时会跳过，因此这里手动渲染它的版本。
+ */
+import BlackThemeSelect from 'starlight-theme-black/overrides/ThemeSelect.astro';
+import PaletteSelect from './PaletteSelect.astro';
+---
+
+<BlackThemeSelect />
+<PaletteSelect />

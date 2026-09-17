@@ -1,5 +1,12 @@
 ---
-import Default from '@astrojs/starlight/components/Head.astro';
+/**
+ * 在 Black 主题的 Head 之上补本项目的元信息。
+ *
+ * Black 覆盖 Head 是为了注入 Geist 字体（--font-geist / --font-geist-mono）
+ * 并渲染 Starlight 的 head 条目；检测到已有覆盖时它会跳过，因此这里必须
+ * 手动渲染它的版本，否则字体与部分 head 条目会丢失。
+ */
+import BlackHead from 'starlight-theme-black/overrides/Head.astro';
 import { rawMarkdownPath } from '../lib/raw-path';
 
 const { entry, lang } = Astro.locals.starlightRoute;
@@ -29,8 +36,21 @@ const structuredData = {
 };
 ---
 
-<Default {...Astro.props} />
+<BlackHead />
 
 <link rel="alternate" type="text/markdown" href={rawUrl} title={`${title}（Markdown 原文）`} />
 <link rel="alternate" type="text/plain" href={new URL('/llms-full.txt', site)} title="全站纯文本" />
 <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+
+<!--
+  配色必须在首屏绘制前落到 <html>，否则会先闪一下默认色再跳变。
+  因此用 is:inline 同步执行，不进打包流程。键名与 PaletteSelect 一致。
+-->
+<script is:inline>
+  try {
+    var saved = localStorage.getItem('sl-palette');
+    if (saved && saved !== 'default') document.documentElement.dataset.palette = saved;
+  } catch (error) {
+    // 隐私模式下读取会抛错，按默认配色渲染
+  }
+</script>

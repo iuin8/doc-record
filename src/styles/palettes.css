@@ -1,0 +1,194 @@
+/*
+ * 可切换的配色方案，基于 starlight-theme-black 的变量体系。
+ *
+ * Black 把所有 `--sl-color-*` 映射到自己的源变量（`--gray-1..7`、
+ * `--background`、`--foreground`、`--border` 等），因此只需覆盖这些源变量，
+ * 派生的 Starlight 变量会随之变化。语义色（orange / green / blue / purple / red）
+ * 沿用 Black 的取值，配色差异体现在中性阶与背景上。
+ *
+ * Black 的样式全部位于 `@layer black` 内，而本文件未分层 —— 未分层样式的
+ * 优先级高于任何分层样式，因此这里的覆盖无需依赖选择器特异性即可生效。
+ *
+ * 取值来自公开调色板：Vitesse（VS Code）、Nord、Flexoki，色相与彩度按
+ * Black 的中性阶亮度序列重新映射，保持原有的明暗关系。
+ */
+
+:root[data-theme='dark'][data-palette='vitesse'] {
+  --background: oklch(14.5% 0.01 56);
+  --foreground: oklch(96% 0.008 70);
+  --gray-1: oklch(96% 0.008 70);
+  --gray-2: oklch(87% 0.01 68);
+  --gray-3: oklch(71% 0.012 66);
+  --gray-4: oklch(56% 0.014 64);
+  --gray-5: oklch(38% 0.016 60);
+  --gray-6: oklch(27% 0.014 58);
+  --gray-7: oklch(21% 0.012 56);
+}
+
+:root[data-theme='light'][data-palette='vitesse'] {
+  --background: oklch(100% 0.004 75);
+  --foreground: oklch(15% 0.01 56);
+  --gray-1: oklch(21% 0.012 56);
+  --gray-2: oklch(27% 0.014 58);
+  --gray-3: oklch(38% 0.016 60);
+  --gray-4: oklch(56% 0.014 64);
+  --gray-5: oklch(71% 0.012 66);
+  --gray-6: oklch(87% 0.01 68);
+  --gray-7: oklch(96% 0.008 70);
+}
+
+:root[data-theme='dark'][data-palette='nord'] {
+  --background: oklch(16% 0.016 260);
+  --foreground: oklch(93% 0.008 260);
+  --gray-1: oklch(96% 0.006 260);
+  --gray-2: oklch(88% 0.01 258);
+  --gray-3: oklch(72% 0.014 256);
+  --gray-4: oklch(57% 0.016 254);
+  --gray-5: oklch(39% 0.018 252);
+  --gray-6: oklch(28% 0.016 252);
+  --gray-7: oklch(22% 0.014 250);
+}
+
+:root[data-theme='light'][data-palette='nord'] {
+  --background: oklch(100% 0.004 260);
+  --foreground: oklch(16% 0.016 260);
+  --gray-1: oklch(22% 0.014 250);
+  --gray-2: oklch(28% 0.016 252);
+  --gray-3: oklch(39% 0.018 252);
+  --gray-4: oklch(57% 0.016 254);
+  --gray-5: oklch(72% 0.014 256);
+  --gray-6: oklch(88% 0.01 258);
+  --gray-7: oklch(96% 0.006 260);
+}
+
+:root[data-theme='dark'][data-palette='flexoki'] {
+  --background: oklch(14% 0.012 80);
+  --foreground: oklch(92% 0.01 80);
+  --gray-1: oklch(95% 0.01 80);
+  --gray-2: oklch(86% 0.014 78);
+  --gray-3: oklch(70% 0.018 76);
+  --gray-4: oklch(55% 0.02 74);
+  --gray-5: oklch(37% 0.02 72);
+  --gray-6: oklch(26% 0.018 70);
+  --gray-7: oklch(20% 0.016 68);
+}
+
+:root[data-theme='light'][data-palette='flexoki'] {
+  --background: oklch(99% 0.006 85);
+  --foreground: oklch(14% 0.014 78);
+  --gray-1: oklch(20% 0.016 68);
+  --gray-2: oklch(26% 0.018 70);
+  --gray-3: oklch(37% 0.02 72);
+  --gray-4: oklch(55% 0.02 74);
+  --gray-5: oklch(70% 0.018 76);
+  --gray-6: oklch(86% 0.014 78);
+  --gray-7: oklch(95% 0.01 80);
+}
+
+/*
+ * 切换器。与 Black 自带的亮/暗切换并排，沿用其圆形图标按钮的尺寸与配色语义。
+ * 菜单用 popover：无须自行管理焦点与层级，Esc 关闭由浏览器负责。
+ */
+.palette-select {
+  position: relative;
+  display: inline-flex;
+}
+
+.palette-select-trigger {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: calc(var(--radius) - 2px);
+  cursor: pointer;
+  color: color-mix(in oklab, var(--foreground) 76%, var(--muted-foreground));
+  transition:
+    color 0.15s,
+    background-color 0.15s;
+}
+
+.palette-select-trigger:hover,
+.palette-select-trigger[aria-expanded='true'] {
+  color: var(--accent-foreground);
+  background-color: color-mix(in oklab, var(--accent) 80%, transparent);
+}
+
+.palette-select-trigger:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.palette-select-trigger svg {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  pointer-events: none;
+}
+
+.palette-select-menu {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-start: calc(100% + 0.35rem);
+  z-index: 50;
+  min-width: 11rem;
+  margin: 0;
+  padding: 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--popover-background);
+  color: var(--popover-foreground);
+  box-shadow: var(--shadow-md);
+}
+
+.palette-select-item {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  border-radius: calc(var(--radius) * 0.6);
+  color: var(--foreground);
+  font-size: 0.875rem;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.palette-select-item:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.palette-select-swatch {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background-color: var(--sl-swatch);
+  flex-shrink: 0;
+}
+
+.palette-select-item[aria-current='true'] .palette-select-swatch {
+  box-shadow:
+    0 0 0 2px var(--popover-background),
+    0 0 0 3px var(--ring);
+}
+
+/* 色点直接用各方案自身的取值，避免再维护一份色值。 */
+.palette-select-item[data-value='default'] {
+  --sl-swatch: oklch(20.5% 0 0);
+}
+
+.palette-select-item[data-value='vitesse'] {
+  --sl-swatch: oklch(38% 0.016 60);
+}
+
+.palette-select-item[data-value='nord'] {
+  --sl-swatch: oklch(39% 0.018 252);
+}
+
+.palette-select-item[data-value='flexoki'] {
+  --sl-swatch: oklch(37% 0.02 72);
+}

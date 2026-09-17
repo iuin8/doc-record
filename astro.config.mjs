@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightBlog from 'starlight-blog';
 import starlightLlmsTxt from 'starlight-llms-txt';
+import starlightThemeBlack from 'starlight-theme-black';
 
 // 全部内容位于默认语言目录下，llms.txt 分卷均以该前缀为基准。
 const DEFAULT_LOCALE = 'zh-cn';
@@ -79,12 +80,21 @@ export default defineConfig({
       // 标题区附带「复制 Markdown / 用 AI 打开」操作，并按需加载 Mermaid。
       // 全站问答检索的是全站索引，不针对当前文档，故不放在标题区，
       // 改由 PageFrame 挂一个悬浮入口，任意页面都可发起提问。
+      // ThemeSelect 旁挂出配色切换器，见 src/styles/palettes.css。
+      //
+      // starlight-theme-black 会覆盖 Head / Hero / PageTitle / ThemeSelect
+      // 等组件；检测到已有覆盖时它会跳过并告警，此时需在自己的覆盖里手动
+      // 渲染 `starlight-theme-black/overrides/<X>.astro`，已在对应组件中处理。
       components: {
         PageTitle: './src/components/PageTitle.astro',
         Head: './src/components/Head.astro',
         PageFrame: './src/components/PageFrame.astro',
+        ThemeSelect: './src/components/ThemeSelect.astro',
       },
-      plugins: [starlightBlog(), starlightLlmsTxt(llmsTxtOptions)],
+      customCss: ['./src/styles/palettes.css'],
+      // 必须传配置对象：插件对参数做 zod 校验，不传会报 expected object。
+      // 传空对象即取默认值（标题区的 MarkdownActions 默认开启）。
+      plugins: [starlightBlog(), starlightLlmsTxt(llmsTxtOptions), starlightThemeBlack({})],
     }),
   ],
 });
