@@ -91,10 +91,16 @@ export default defineConfig({
         PageFrame: './src/components/PageFrame.astro',
         ThemeSelect: './src/components/ThemeSelect.astro',
       },
-      customCss: ['./src/styles/palettes.css'],
+      customCss: ['./src/styles/palettes.css', './src/styles/black-sidebar.css'],
       // 必须传配置对象：插件对参数做 zod 校验，不传会报 expected object。
-      // 传空对象即取默认值（标题区的 MarkdownActions 默认开启）。
-      plugins: [starlightBlog(), starlightLlmsTxt(llmsTxtOptions), starlightThemeBlack({})],
+      // 标题区的 MarkdownActions 默认开启。
+      // 侧边栏分组用折叠交互（useDropdowns）：本站目录层级最深达五层，
+      // Black 默认全部平铺展开，长标题在窄侧边栏里会相互叠压。
+      plugins: [
+        starlightBlog(),
+        starlightLlmsTxt(llmsTxtOptions),
+        starlightThemeBlack({ sidebar: { useDropdowns: true } }),
+      ],
     }),
   ],
 });

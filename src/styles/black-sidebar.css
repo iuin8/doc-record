@@ -1,0 +1,48 @@
+/*
+ * starlight-theme-black 侧边栏补丁。
+ *
+ * Black 的 SidebarSublist 覆盖组件存在两处与深层目录结构不匹配的样式：
+ *
+ * 1. `.entry-link` 固定 `height: 30px`。条目标题为较长的中文（或长英文串）
+ *    时换行成多行，容器高度不随之增长，溢出文字与相邻条目叠压。
+ *    此处改为 `min-height` 并放开换行；用 `#starlight__sidebar` 前缀
+ *    提升特异性，确保覆盖其组件 scoped 样式。
+ *
+ * 2. 嵌套分组的水平占用随层级线性增长。Black 每层分组容器有 0.5rem 的
+ *    两侧内边距，本站目录最深五层，到达末层时标题可用宽度已不足，
+ *    文字会被压成竖排。此处收紧嵌套层的内边距，并补一条纵向参考线
+ *    标示层级归属（缩进减小后仍能看出结构）。
+ *
+ * 本文件未分层，优先级高于 Black 位于 `@layer black` 内的样式；
+ * SidebarSublist 的样式是组件 scoped 的（未分层），故依赖特异性取胜。
+ */
+
+#starlight__sidebar .entry-link {
+  height: auto;
+  min-height: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+/* 点击命中区随内容自适应：Black 用固定 14rem 的绝对定位元素铺满整行，
+   换行后反而小于可见文字，这里同步放开。 */
+#starlight__sidebar .entry-link > .entry-link-inner {
+  width: 100%;
+}
+
+/* 嵌套分组：每层水平占用从 Black 原值的约 2.1rem 收紧到 1rem。 */
+#starlight__sidebar li .accordion-content,
+#starlight__sidebar li .container-group-link {
+  position: relative;
+  margin-inline-start: 0.5rem;
+  padding-inline-start: 0.25rem;
+  border-inline-start: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+}
+
+#starlight__sidebar li .accordion-content .container-sidebar-entry,
+#starlight__sidebar li .container-group-link .container-sidebar-entry {
+  padding-inline: 0.25rem;
+}
+
