@@ -1,0 +1,18 @@
+---
+/**
+ * 挂载全站问答的悬浮入口。
+ *
+ * 该入口需出现在每个页面，故挂在页面框架上：框架覆盖只做透传，不重写布局。
+ * 覆盖 PageFrame 而不是 Page —— 后者还承载 head、主题与 print 样式。
+ */
+import Default from '@astrojs/starlight/components/PageFrame.astro';
+import AiAsk from './AiAsk.astro';
+---
+
+<Default>
+  <slot name="header" slot="header" />
+  <slot name="sidebar" slot="sidebar" />
+  <slot />
+</Default>
+
+<AiAsk />

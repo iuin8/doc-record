@@ -5,11 +5,14 @@
   "aiActions.copyFailed": "Copy failed",
   "aiActions.openInChatGpt": "Open in ChatGPT",
   "aiActions.openInClaude": "Open in Claude",
-  "aiActions.ask": "AI Q&A",
-  "aiActions.askPlaceholder": "Ask about this documentation",
-  "aiActions.askSubmit": "Ask",
-  "aiActions.askPending": "Searching",
-  "aiActions.askEmpty": "No relevant content found",
-  "aiActions.askFailed": "The Q&A service is temporarily unavailable",
-  "aiActions.askSources": "Sources"
+  "aiAsk.label": "AI Q&A",
+  "aiAsk.title": "AI Q&A",
+  "aiAsk.hint": "Searches the entire site, then answers from the matching passages.",
+  "aiAsk.close": "Close",
+  "aiAsk.placeholder": "Ask across the whole site",
+  "aiAsk.submit": "Ask",
+  "aiAsk.pending": "Searching",
+  "aiAsk.empty": "No relevant content found",
+  "aiAsk.failed": "The Q&A service is temporarily unavailable",
+  "aiAsk.sources": "Sources"
 }
