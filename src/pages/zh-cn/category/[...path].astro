@@ -1,0 +1,126 @@
+---
+/**
+ * 分类目录索引页。
+ *
+ * 内容目录（src/content/docs/zh-cn/**）下只有文档，没有目录索引页，
+ * 因此 /zh-cn/docker/ 这类目录路径本身不存在。首页的分类入口若直接
+ * 指向目录根，会得到 404。
+ *
+ * 这里按目录动态生成索引页：列出该目录下的直接子目录与直接子文档，
+ * 链接分别指向下一级索引页与文档本身。目录数量近六百，逐个写
+ * index.md 既不现实也会把索引页灌进内容集合（进而进入搜索与
+ * llms.txt），故放在 src/pages 下独立路由，与内容集合分离。
+ */
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { DOCS_LOCALE as LOCALE, TOP_LEVEL_TITLES } from '../../../lib/category';
+
+interface Directory {
+  /** 相对默认语言目录的路径，例如 docker/app */
+  path: string;
+  subdirectories: string[];
+  documents: CollectionEntry<'docs'>[];
+}
+
+export async function getStaticPaths() {
+  const docs = await getCollection('docs');
+  const directories = new Map<string, Directory>();
+
+  const ensure = (path: string): Directory => {
+    let directory = directories.get(path);
+    if (!directory) {
+      directory = { path, subdirectories: [], documents: [] };
+      directories.set(path, directory);
+    }
+    return directory;
+  };
+
+  for (const doc of docs) {
+    const parts = doc.id.split('/');
+    if (parts[0] !== LOCALE) continue;
+    // 最后一段是文件名（目录索引为 index），其余为所属目录
+    const directoriesOfDoc = parts.slice(1, -1);
+    if (directoriesOfDoc.length === 0) continue;
+
+    // 每一级祖先目录都登记下一级子目录
+    for (let depth = 1; depth <= directoriesOfDoc.length; depth += 1) {
+      const path = directoriesOfDoc.slice(0, depth).join('/');
+      ensure(path);
+      if (depth > 1) {
+        const parent = ensure(directoriesOfDoc.slice(0, depth - 1).join('/'));
+        const child = directoriesOfDoc[depth - 1]!;
+        if (!parent.subdirectories.includes(child)) parent.subdirectories.push(child);
+      }
+    }
+
+    // 目录索引文件本身不作为该目录下的文档列出
+    if (parts[parts.length - 1] === 'index') continue;
+    ensure(directoriesOfDoc.join('/')).documents.push(doc);
+  }
+
+  return [...directories.values()].map((directory) => ({
+    params: { path: directory.path },
+    props: { directory },
+  }));
+}
+
+interface Props {
+  directory: Directory;
+}
+
+const { directory } = Astro.props;
+const segments = directory.path.split('/');
+const name = segments[segments.length - 1]!;
+const title = segments.length === 1 ? (TOP_LEVEL_TITLES[name] ?? name) : name;
+
+const subdirectoryEntries = directory.subdirectories
+  .map((child) => ({
+    name: child,
+    href: `/${LOCALE}/category/${[...segments, child].join('/')}/`,
+  }))
+  .sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
+
+const documentEntries = directory.documents
+  .map((doc) => ({
+    title: doc.data.title,
+    href: `/${doc.id}/`,
+  }))
+  .sort((a, b) => a.title.localeCompare(b.title, 'zh-CN'));
+---
+
+<StarlightPage
+  frontmatter={{
+    title,
+    description: `${title} 分类下的子分类与文档`,
+  }}
+>
+  {
+    subdirectoryEntries.length > 0 && (
+      <>
+        <h2>子分类</h2>
+        <CardGrid>
+          {subdirectoryEntries.map((entry) => (
+            <LinkCard title={entry.name} href={entry.href} />
+          ))}
+        </CardGrid>
+      </>
+    )
+  }
+
+  {
+    documentEntries.length > 0 && (
+      <>
+        <h2>文档</h2>
+        <ul>
+          {documentEntries.map((entry) => (
+            <li>
+              <a href={entry.href}>{entry.title}</a>
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+</StarlightPage>

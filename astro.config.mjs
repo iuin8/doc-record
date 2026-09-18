@@ -83,6 +83,11 @@ export default defineConfig({
       },
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/iuin8/doc-record' },
+        // starlight-blog 会自动补一个 RSS 图标，但它按 `site + base + 前缀`
+        // 拼接地址，不含默认语言的路径前缀，本站 defaultLocale 也带前缀，
+        // 拼出的地址是 404。显式声明正确地址：插件检测到已有 rss 图标后
+        // 不再注入自己的那条。
+        { icon: 'rss', label: 'RSS', href: '/zh-cn/blog/rss.xml' },
       ],
       // Starlight 会用条目的 filePath（相对仓库根目录）拼接该前缀，因此这里指向仓库根目录
       editLink: {
