@@ -10,7 +10,7 @@ export const DOCS_LOCALE = 'zh-cn';
 
 /** 顶层目录的展示名，其余层级沿用目录名。 */
 export const TOP_LEVEL_TITLES: Record<string, string> = {
-  AI: 'AI',
+  ai: 'AI',
   blog: '博客',
   books: '读书笔记',
   docker: 'Docker',
