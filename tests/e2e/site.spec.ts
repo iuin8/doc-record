@@ -7,7 +7,8 @@ import { expect, test } from '@playwright/test';
  * 的回归，用例针对这两类问题设置断言，防止后续改动再次引入。
  */
 
-const DOC_PAGE = '/zh-cn/docker/app/firefox/firefox/';
+// 取深层路径：七级目录 + 长中文标题，能同时覆盖侧边栏折叠、截断与缩进封顶
+const DOC_PAGE = '/zh-cn/docker/app/devs/data/elasticsearch/v1/test/test/';
 const BLOG_PAGE = '/zh-cn/blog/';
 
 test('首页可访问且渲染 landing 区块', async ({ page }) => {
@@ -36,23 +37,49 @@ test('博客页可访问且导航栏含博客入口', async ({ page }) => {
   await expect(page).toHaveTitle(/Doc Record/);
 });
 
-test('侧边栏条目容器高度随内容增长，无叠压', async ({ page }) => {
+test('侧边栏长标题两行内截断，悬浮展开且相邻条目无叠压', async ({ page }) => {
   await page.goto(DOC_PAGE);
   const sidebar = page.locator('#starlight__sidebar');
   await expect(sidebar).toBeVisible();
 
   // 回归断言：Black 的 .entry-link 曾固定 height:30px，长中文标题换行后
-  // 溢出部分与相邻条目叠压。要求每个条目的容器高度不小于内容高度。
-  const entries = sidebar.locator('.entry-link');
+  // 溢出部分与相邻条目叠压。后续引入了两行截断策略，截断是预期行为，
+  // 改为断言：截断不超过两行、悬浮可展开完整标题、条目之间不叠压。
+  const entries = sidebar.locator('.entry-link:visible');
   const count = await entries.count();
   expect(count).toBeGreaterThan(0);
-  for (let index = 0; index < count; index += 1) {
-    const entry = entries.nth(index);
-    const { scrollHeight, clientHeight } = await entry.evaluate((el) => ({
-      scrollHeight: el.scrollHeight,
-      clientHeight: el.clientHeight,
-    }));
-    expect.soft(clientHeight, `第 ${index + 1} 个侧边栏条目内容被截断`).toBeGreaterThanOrEqual(scrollHeight);
+
+  const heights = await entries.evaluateAll((els) =>
+    els.map((el) => ({
+      top: el.getBoundingClientRect().top,
+      bottom: el.getBoundingClientRect().bottom,
+      h: el.clientHeight,
+      sh: el.scrollHeight,
+      lineHeight: parseFloat(getComputedStyle(el).lineHeight) || 20,
+    })),
+  );
+
+  // 截断条目的容器高度不超过两行（line-height 为 normal 时以 64px 兜底）
+  for (const [index, item] of heights.entries()) {
+    const limit = Math.max(item.lineHeight * 2 + 16, 64);
+    expect.soft(item.h, `第 ${index + 1} 个条目截断超过两行`).toBeLessThanOrEqual(limit);
+  }
+
+  // 可见条目之间不发生纵向叠压
+  const sorted = [...heights].sort((a, b) => a.top - b.top);
+  for (let index = 1; index < sorted.length; index += 1) {
+    expect
+      .soft(sorted[index].top, `第 ${index + 1} 个可见条目与上一条目叠压`)
+      .toBeGreaterThanOrEqual(sorted[index - 1].bottom - 1);
+  }
+
+  // 存在截断条目时，悬浮应解除截断并展示完整标题（不再有溢出内容）
+  const clampedIndex = heights.findIndex((item) => item.sh > item.h + 1);
+  if (clampedIndex >= 0) {
+    const target = entries.nth(clampedIndex);
+    await target.hover();
+    const after = await target.evaluate((el) => ({ h: el.clientHeight, sh: el.scrollHeight }));
+    expect.soft(after.h, '悬浮后条目仍被截断').toBeGreaterThanOrEqual(after.sh);
   }
 });
 
