@@ -10,6 +10,7 @@ import BlackHead from 'starlight-theme-black/overrides/Head.astro';
 import { rawMarkdownPath } from '../lib/raw-path';
 
 const { entry, lang } = Astro.locals.starlightRoute;
+const route = Astro.locals.starlightRoute;
 
 const site = Astro.site ?? new URL(Astro.url.origin);
 const title = entry.data.title;
@@ -19,6 +20,25 @@ const publishedAt = entry.data.date;
 // 与页面同路径的 Markdown 原文，供 AI 客户端直接取用
 const rawUrl = new URL(rawMarkdownPath(entry.id), site).toString();
 const pageUrl = new URL(Astro.url.pathname, site).toString();
+
+// starlight-blog 注入的 RSS 发现链接与其 social 图标一样缺少默认语言的
+// 路径前缀（按 site + base + 前缀拼接），指向不存在的地址。这里替换为
+// 实际产物路径，避免 RSS 阅读器与搜索引擎取到 404。
+const RSS_FEED_PATH = '/zh-cn/blog/rss.xml';
+if (Array.isArray(route.head)) {
+  route.head = route.head.filter(
+    (item) => !(item?.tag === 'link' && item.attrs?.type === 'application/rss+xml'),
+  );
+  route.head.push({
+    tag: 'link',
+    attrs: {
+      rel: 'alternate',
+      type: 'application/rss+xml',
+      title: 'Blog',
+      href: RSS_FEED_PATH,
+    },
+  });
+}
 
 const structuredData = {
   '@context': 'https://schema.org',

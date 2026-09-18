@@ -7,7 +7,7 @@ hero:
   tagline: 容器、集群、操作系统、网络与开发工具的实践记录
   actions:
     - text: 从 Docker 开始
-      link: /zh-cn/docker/
+      link: /zh-cn/category/docker/
       icon: right-arrow
       variant: primary
     - text: 在 GitHub 上查看
@@ -16,36 +16,36 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 
 ## 主要分类
 
 <CardGrid stagger>
-  <Card title="Docker" icon="document" href="/zh-cn/docker/">
+  <LinkCard title="Docker" icon="document" href="/zh-cn/category/docker/">
     容器构建、镜像、Compose 与开发环境
-  </Card>
-  <Card title="Kubernetes" icon="puzzle" href="/zh-cn/kubernetes/">
+  </LinkCard>
+  <LinkCard title="Kubernetes" icon="puzzle" href="/zh-cn/category/kubernetes/">
     集群部署、运维与问题排查
-  </Card>
-  <Card title="操作系统" icon="laptop" href="/zh-cn/os/">
+  </LinkCard>
+  <LinkCard title="操作系统" icon="laptop" href="/zh-cn/category/os/">
     Linux、Windows 等系统的配置与使用
-  </Card>
-  <Card title="中间件" icon="setting" href="/zh-cn/middleware/">
+  </LinkCard>
+  <LinkCard title="中间件" icon="setting" href="/zh-cn/category/middleware/">
     数据库、消息队列等中间件的部署与调优
-  </Card>
-  <Card title="编程语言" icon="approve-check" href="/zh-cn/lang/">
+  </LinkCard>
+  <LinkCard title="编程语言" icon="approve-check" href="/zh-cn/category/lang/">
     各类编程语言的使用与构建配置
-  </Card>
-  <Card title="网络" icon="random" href="/zh-cn/network/">
+  </LinkCard>
+  <LinkCard title="网络" icon="random" href="/zh-cn/category/network/">
     网络配置、代理与内网穿透
-  </Card>
-  <Card title="工具" icon="pencil" href="/zh-cn/tools/">
+  </LinkCard>
+  <LinkCard title="工具" icon="pencil" href="/zh-cn/category/tools/">
     开发工具与发布脚本
-  </Card>
-  <Card title="AI" icon="rocket" href="/zh-cn/AI/">
+  </LinkCard>
+  <LinkCard title="AI" icon="rocket" href="/zh-cn/category/AI/">
     AI 相关技术、MCP 与应用
-  </Card>
-  <Card title="资料" icon="open-book" href="/zh-cn/materiel/">
+  </LinkCard>
+  <LinkCard title="资料" icon="open-book" href="/zh-cn/category/materiel/">
     技术资料与学习笔记
-  </Card>
+  </LinkCard>
 </CardGrid>
