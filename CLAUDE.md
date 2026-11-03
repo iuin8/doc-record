@@ -19,7 +19,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 常用命令
 
 ```bash
-pnpm install          # 安装依赖（Node >= 22）
+pnpm install          # 安装依赖（Node >= 22.23.4，Astro 7.4.2 起的要求）
 pnpm dev              # 启动开发服务器
 pnpm build            # 构建生产版本
 pnpm preview          # 本地预览构建结果
@@ -30,6 +30,18 @@ pnpm check:content    # 内容门禁（代码块语言、内部结构、内网�
 pnpm test:e2e         # Playwright 端到端测试（自动构建后起 preview 服务）
 pnpm test:recall      # 召回质量门禁（金标准问题，期望页面须落在召回前 3 条）
 ```
+
+构建耗时排查用 `pnpm build --timings`（Astro 7 内置，无需改配置），输出各阶段占比与
+最慢页面。2026-11 基线：1,122 条路由 / 735 个 HTML 页面，总 21.3s；其中 Starlight
+组件渲染 12.0s，而 Markdown 插件仅 28ms、`astro:markdown` 57ms —— 瓶颈在页面渲染，
+不在 Markdown 管线，因此不要为提速去换 Sätteri 管线（会牵动 `src/plugins/` 两个
+remark 插件）。llms 产物合计约 5.2s（`llms-small` 2.0s + `llms-full` 1.6s + 11 个
+分卷约 1.6s），原因是插件对**每条** llms 路由都重渲染全部条目；要砍就自写路由复用一次
+渲染结果，属已知上限，当前不做。
+
+Astro 7 会检测到 AI agent 并把 dev server 转后台托管、日志结构化输出
+（`node_modules/astro/dist/cli/agent.js`，依 `am-i-vibing` 判定，Windows 除外）。
+agent 侧不要前台跑 `pnpm dev` 等输出，用后台任务启动后再读日志。
 
 ## 包管理器
 
